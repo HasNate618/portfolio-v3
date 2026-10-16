@@ -46,3 +46,16 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Rendered markdown inside the chat transcript. */
+.markdown p { margin: 0.5rem 0; }
+.markdown p:first-child { margin-top: 0; }
+.markdown p:last-child { margin-bottom: 0; }
+.markdown strong { color: var(--color-accent); font-weight: 600; }
+.markdown em { font-style: italic; }
+.markdown code { background-color: rgba(226, 232, 240, 0.1); border-radius: 4px; padding: 0.1rem 0.35rem; font-size: 0.9em; font-family: ui-monospace, monospace; }
+.markdown pre { overflow-x: auto; border: 1px solid var(--color-rule); border-radius: 8px; padding: 0.75rem 1rem; background-color: rgba(0, 0, 0, 0.35); }
+.markdown pre code { background-color: transparent; padding: 0; }
+.markdown ul, .markdown ol { margin: 0.5rem 0; padding-left: 1.5rem; }
+.markdown li { margin: 0.25rem 0; }
+.markdown a { color: var(--color-accent); text-decoration: underline; }

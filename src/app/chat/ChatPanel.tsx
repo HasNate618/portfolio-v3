@@ -1,11 +1,15 @@
 "use client";
 
+import MarkdownIt from "markdown-it";
+
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { splitStreamBuffer, parseFollowupsRaw } from "@/lib/tts/stream-delimiters";
 
 type Message = { role: "user" | "assistant"; content: string };
 type Status = "idle" | "loading" | "rate-limited" | "error";
+
+const md = new MarkdownIt({ html: false, linkify: false, typographer: false });
 
 /**
  * The only client component on the site. Everything it knows is also reachable
@@ -125,9 +129,10 @@ export function ChatPanel({ starters }: { starters: string[] }) {
               <p className="text-xs font-bold uppercase tracking-widest text-muted">
                 {message.role === "user" ? "You" : "Assistant"}
               </p>
-              <p className="mt-2 max-w-[68ch] whitespace-pre-wrap leading-relaxed">
-                {message.content}
-              </p>
+              <div
+                className="markdown mt-2 max-w-[68ch] leading-relaxed text-fg"
+                dangerouslySetInnerHTML={{ __html: message.content ? md.render(message.content) : "" }}
+              />
             </li>
           ))}
         </ol>
