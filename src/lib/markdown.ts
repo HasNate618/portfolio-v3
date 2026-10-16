@@ -1,5 +1,6 @@
 import MarkdownIt from "markdown-it";
 import { getProject } from "@/data/site";
+import { modelTableHtml } from "@/lib/tables";
 
 /**
  * Content files never restate a figure that site.ts owns. They write
@@ -44,33 +45,45 @@ md.renderer.rules.heading_open = (tokens, idx, options, _env, self) => {
 };
 
 /**
- * A fence whose info string is `diagram` becomes an accessible figure: the ASCII
- * is hidden from assistive tech and the leading `alt:` line becomes the caption.
- * Diagrams live in content files, so the pipeline owns this rather than a
- * component. A diagram without an alt line throws, for the same reason an
- * unknown stat throws: a silent accessibility gap is the failure mode.
+ * Fenced directives. A fence's info string selects a renderer:
+ *   `diagram`  - accessible figure, with a required leading `alt:` line
+ *   `models X` - the model table for project X, with a required `caption:` line
+ *   anything else - an ordinary code block
+ * Structured content stays in content files, and the pipeline owns the markup.
  */
 md.renderer.rules.fence = (tokens, idx) => {
   const token = tokens[idx];
-  const info = token.info.trim();
+  const [kind, arg] = token.info.trim().split(/\s+/);
+  const lines = token.content.replace(/\n$/, "").split("\n");
 
-  if (!info.startsWith("diagram")) {
-    const lang = info.split(/\s+/)[0];
-    const cls = lang ? ` class="language-${md.utils.escapeHtml(lang)}"` : "";
-    return `<pre><code${cls}>${md.utils.escapeHtml(token.content)}</code></pre>\n`;
+  if (kind === "diagram") {
+    const alt = lines[0]?.startsWith("alt: ") ? lines.shift()!.slice("alt: ".length).trim() : "";
+    // Loud on purpose, like an unknown stat: a silent accessibility gap is the
+    // failure mode this whole directive exists to prevent.
+    if (!alt) throw new Error("diagram fence is missing its `alt: ` line");
+
+    return [
+      '<figure class="my-6">',
+      `<pre aria-hidden="true" class="overflow-x-auto rounded border border-rule bg-black/30 p-4 text-xs leading-relaxed text-fg">${md.utils.escapeHtml(lines.join("\n"))}</pre>`,
+      `<figcaption class="sr-only">${md.utils.escapeHtml(alt)}</figcaption>`,
+      "</figure>\n",
+    ].join("");
   }
 
-  const lines = token.content.replace(/\n$/, "").split("\n");
-  const alt = lines[0]?.startsWith("alt: ") ? lines.shift()!.slice("alt: ".length).trim() : "";
+  if (kind === "models") {
+    const caption = lines[0]?.startsWith("caption: ")
+      ? lines.shift()!.slice("caption: ".length).trim()
+      : "";
+    if (!caption) throw new Error("models fence is missing its `caption: ` line");
 
-  if (!alt) throw new Error("diagram fence is missing its `alt: ` line");
+    const rows = getProject(arg ?? "")?.models ?? [];
+    if (rows.length === 0) throw new Error(`models fence names a project with no models: ${arg}`);
 
-  return [
-    "<figure class=\"my-6\">",
-    `<pre aria-hidden="true" class="overflow-x-auto rounded border border-rule bg-black/30 p-4 text-xs leading-relaxed text-fg">${md.utils.escapeHtml(lines.join("\n"))}</pre>`,
-    `<figcaption class="sr-only">${md.utils.escapeHtml(alt)}</figcaption>`,
-    "</figure>\n",
-  ].join("");
+    return `${modelTableHtml(rows, caption)}\n`;
+  }
+
+  const cls = kind ? ` class="language-${md.utils.escapeHtml(kind)}"` : "";
+  return `<pre><code${cls}>${md.utils.escapeHtml(token.content)}</code></pre>\n`;
 };
 
 export function renderMarkdown(source: string, opts: { ids?: boolean } = {}): string {

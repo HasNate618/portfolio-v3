@@ -116,8 +116,16 @@ for (const rel of walk(ROOT)) {
   if (!hasRoute(raw)) continue;
 
   const lines = bodyOf(raw).split("\n");
+  let inFence = false;
 
   lines.forEach((line, i) => {
+    if (/^\s*```/.test(line)) {
+      inFence = !inFence;
+      return;
+    }
+    // Fenced blocks hold ASCII diagrams and code, where naming a tool is
+    // unavoidable and is not a restatement of the stack list.
+    if (inFence) return;
     if (line.includes(EXEMPT)) return;
 
     for (const { value, re } of STAT_PATTERNS) {

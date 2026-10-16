@@ -61,3 +61,18 @@ test("a plain fence still renders as a code block with its language", () => {
   const html = renderMarkdown("```python\nprint(1)\n```");
   assert.match(html, /<pre><code class="language-python">/);
 });
+
+test("a models fence renders the shared captioned table", () => {
+  const html = renderMarkdown("```models aware\ncaption: On-device models.\n```");
+  assert.match(html, /<caption class="sr-only">On-device models\.<\/caption>/);
+  assert.match(html, /scope="col"/);
+  assert.match(html, /YOLOv8n/);
+});
+
+test("a models fence without a caption throws", () => {
+  assert.throws(() => renderMarkdown("```models aware\n```"), /caption/);
+});
+
+test("a models fence naming a project with no models throws", () => {
+  assert.throws(() => renderMarkdown("```models glyph\ncaption: x\n```"), /no models/);
+});
