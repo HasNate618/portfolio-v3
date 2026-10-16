@@ -37,7 +37,7 @@ export function HomeView({ page }: { page: Page }) {
       <h1 className="sr-only">{page.title}</h1>
 
       <div
-        className="mt-6 max-w-[68ch] leading-relaxed"
+        className="rich-text mt-6 max-w-[68ch] leading-relaxed"
         dangerouslySetInnerHTML={{ __html: renderMarkdown(page.body) }}
       />
 
@@ -46,7 +46,7 @@ export function HomeView({ page }: { page: Page }) {
         {site.identity.seeking}.
       </p>
 
-      <h2 id="experience" className="mt-16 text-xs font-bold uppercase tracking-widest text-fg">
+      <h2 id="experience" className="section-label mt-16">
         Experience
       </h2>
       <ul className="mt-6 flex flex-col gap-4">
@@ -77,12 +77,12 @@ export function HomeView({ page }: { page: Page }) {
           );
         })}
       </ul>
-      <h2 id="projects" className="mt-16 text-xs font-bold uppercase tracking-widest text-fg">
+      <h2 id="projects" className="section-label mt-16">
         Projects
       </h2>
 
       {/* Campus: the strongest proof, with checkable numbers. */}
-      <section aria-labelledby="campus" className="mt-6 rounded border border-rule p-6">
+      <section aria-labelledby="campus" className="mt-6 rounded-lg border border-rule bg-white/[0.02] p-6">
         <h3 id="campus" className="text-2xl font-semibold text-fg">
           {campus.name}
         </h3>
@@ -102,9 +102,12 @@ export function HomeView({ page }: { page: Page }) {
         </div>
       </section>
 
-      <ul className="mt-8 flex flex-col gap-8">
+      <ul className="mt-8 flex flex-col gap-6">
         {featured.map((project) => (
-          <li key={project.id}>
+          <li
+            key={project.id}
+            className="rounded-lg border border-rule bg-white/[0.02] p-6 transition-colors hover:border-accent/40"
+          >
             <h3 className="text-lg font-medium leading-snug text-fg">
               <Link href={`/projects/${project.id}`} className="hover:text-accent">
                 {project.name}
@@ -126,7 +129,7 @@ export function HomeView({ page }: { page: Page }) {
       <p className="mt-6">
         <Link
           href="/projects"
-          className="inline-block rounded border border-rule px-4 py-2 text-sm font-medium text-fg hover:border-accent hover:text-accent"
+          className="inline-block rounded-lg border border-rule px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent"
         >
           All projects <span aria-hidden="true">→</span>
         </Link>
@@ -139,7 +142,7 @@ export function HomeView({ page }: { page: Page }) {
         .
       </p>
 
-      <h2 id="ask" className="mt-16 text-xs font-bold uppercase tracking-widest text-fg">
+      <h2 id="ask" className="section-label mt-16">
         Ask
       </h2>
       <p className="mt-6 max-w-[68ch] leading-relaxed">

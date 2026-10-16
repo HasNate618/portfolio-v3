@@ -44,11 +44,11 @@ export function SiteHeader({ current }: { current: string }) {
         </p>
 
         {site.identity.positioning ? (
-          <p className="mt-4 max-w-xs leading-relaxed">{site.identity.positioning}</p>
+          <p className="mt-4 max-w-xs leading-relaxed text-muted">{site.identity.positioning}</p>
         ) : null}
 
-        <nav aria-label="Site" className="mt-8">
-          <ul className="flex flex-wrap gap-x-4 gap-y-2 lg:mt-16 lg:flex-col lg:gap-4">
+        <nav aria-label="Site" className="mt-10">
+          <ul className="flex flex-wrap gap-x-5 gap-y-2 lg:mt-16 lg:flex-col lg:gap-4">
             {NAV_LINKS.map((link) => {
               const active = link.href === current;
               return (
@@ -56,10 +56,18 @@ export function SiteHeader({ current }: { current: string }) {
                   <Link
                     href={link.href}
                     aria-current={active ? "page" : undefined}
-                    className={`text-sm font-bold uppercase tracking-widest transition-colors hover:text-accent ${
+                    className={`group flex items-center gap-3 text-sm font-bold uppercase tracking-widest transition-colors hover:text-accent ${
                       active ? "text-fg" : "text-muted"
                     }`}
                   >
+                    {/* Dash indicator, desktop only: grows and lights up for the
+                        current page and on hover. */}
+                    <span
+                      aria-hidden="true"
+                      className={`hidden h-px transition-all lg:inline-block ${
+                        active ? "w-8 bg-accent" : "w-4 bg-muted group-hover:w-8 group-hover:bg-accent"
+                      }`}
+                    />
                     {link.label}
                   </Link>
                 </li>

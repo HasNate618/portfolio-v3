@@ -26,7 +26,7 @@ function Body({ source }: { source: string }) {
   if (!source) return null;
   return (
     <div
-      className="mt-3 max-w-[68ch] leading-relaxed"
+      className="rich-text mt-3 max-w-[68ch] leading-relaxed"
       dangerouslySetInnerHTML={{ __html: renderMarkdown(source) }}
     />
   );
@@ -50,7 +50,7 @@ export function ResumeView({ page }: { page: Page }) {
       <p>
         <a
           href="/Nathan_Espejo_Resume.pdf"
-          className="inline-block rounded border border-rule px-4 py-2 text-sm font-medium text-fg hover:border-accent hover:text-accent"
+          className="inline-block rounded-lg border border-rule px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent"
         >
           Download PDF
         </a>
@@ -73,7 +73,7 @@ export function ResumeView({ page }: { page: Page }) {
       </p>
 
       <section className="mt-10">
-        <h2 id="education" className="text-xs font-bold uppercase tracking-widest text-fg">
+        <h2 id="education" className="section-label">
           Education
         </h2>
         <p className="mt-3 max-w-[68ch] leading-relaxed">
@@ -87,7 +87,7 @@ export function ResumeView({ page }: { page: Page }) {
       </section>
 
       <section className="mt-10">
-        <h2 id="experience" className="text-xs font-bold uppercase tracking-widest text-fg">
+        <h2 id="experience" className="section-label">
           Experience
         </h2>
         {roles.map((role, index) => (
@@ -104,7 +104,7 @@ export function ResumeView({ page }: { page: Page }) {
       </section>
 
       <section className="mt-10">
-        <h2 id="projects" className="text-xs font-bold uppercase tracking-widest text-fg">
+        <h2 id="projects" className="section-label">
           Projects
         </h2>
         {projects.map((project, index) => (
@@ -122,7 +122,7 @@ export function ResumeView({ page }: { page: Page }) {
       </section>
 
       <section className="mt-10">
-        <h2 id="hackathon-awards" className="text-xs font-bold uppercase tracking-widest text-fg">
+        <h2 id="hackathon-awards" className="section-label">
           Hackathon Awards
         </h2>
         <p className="mt-3 max-w-[68ch] leading-relaxed">
@@ -138,7 +138,7 @@ export function ResumeView({ page }: { page: Page }) {
       </section>
 
       <section className="mt-10">
-        <h2 id="technical-skills" className="text-xs font-bold uppercase tracking-widest text-fg">
+        <h2 id="technical-skills" className="section-label">
           Technical Skills
         </h2>
         {skills.map((group) => (

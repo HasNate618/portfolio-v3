@@ -15,7 +15,7 @@ export function ChatView({ page }: { page: Page }) {
       <h1 className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">{page.title}</h1>
 
       <div
-        className="mt-6 max-w-[68ch] leading-relaxed"
+        className="rich-text mt-6 max-w-[68ch] leading-relaxed"
         dangerouslySetInnerHTML={{ __html: renderMarkdown(page.body) }}
       />
 

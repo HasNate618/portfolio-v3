@@ -26,7 +26,7 @@ export function SocialLinks() {
               <a
                 href={link.href}
                 aria-label={link.label}
-                className="inline-flex h-9 w-9 items-center justify-center rounded border border-rule text-fg hover:border-accent hover:text-accent"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-rule text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent"
                 target={link.href.startsWith("mailto:") ? undefined : "_blank"}
                 rel={link.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
               >

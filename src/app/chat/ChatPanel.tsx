@@ -111,7 +111,7 @@ export function ChatPanel({ starters }: { starters: string[] }) {
                   type="button"
                   onClick={() => void send(starter)}
                   disabled={busy}
-                  className="rounded border border-rule px-3 py-2 text-left text-sm text-fg hover:border-accent hover:text-accent disabled:opacity-50"
+                  className="rounded-lg border border-rule px-4 py-2.5 text-left text-sm text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent disabled:opacity-50"
                 >
                   {starter}
                 </button>
@@ -123,7 +123,7 @@ export function ChatPanel({ starters }: { starters: string[] }) {
           </p>
         </div>
       ) : (
-        <ol aria-live="polite" className="flex flex-col gap-6">
+        <ol aria-live="polite" className="flex flex-col gap-8">
           {messages.map((message, index) => (
             <li key={index}>
               <p className="text-xs font-bold uppercase tracking-widest text-muted">
@@ -168,7 +168,7 @@ export function ChatPanel({ starters }: { starters: string[] }) {
                 type="button"
                 onClick={() => void send(followup)}
                 disabled={busy}
-                className="rounded border border-rule px-3 py-2 text-left text-sm text-fg hover:border-accent hover:text-accent disabled:opacity-50"
+                className="rounded-lg border border-rule px-4 py-2.5 text-left text-sm text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent disabled:opacity-50"
               >
                 {followup}
               </button>
@@ -200,12 +200,12 @@ export function ChatPanel({ starters }: { starters: string[] }) {
               }
             }}
             placeholder="Ask about Campus, TeraGo, or anything else"
-            className="w-full rounded border border-rule bg-transparent px-3 py-2 text-fg placeholder:text-muted focus:border-accent"
+            className="w-full rounded-lg border border-rule bg-transparent px-3 py-2 text-fg placeholder:text-muted focus:border-accent"
           />
           <button
             type="submit"
             disabled={busy || input.trim().length === 0}
-            className="shrink-0 rounded border border-rule px-4 py-2 text-sm font-medium text-fg hover:border-accent hover:text-accent disabled:opacity-50"
+            className="shrink-0 rounded-lg border border-rule px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent disabled:opacity-50"
           >
             Send
           </button>

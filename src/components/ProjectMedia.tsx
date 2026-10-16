@@ -18,8 +18,8 @@ export function ProjectMedia({ media, className = "" }: { media?: Media[]; class
             alt={item.alt}
             width={item.width}
             height={item.height}
-            sizes="128px"
-            className={`h-20 w-32 rounded border border-rule ${
+            sizes="160px"
+            className={`h-24 w-40 rounded-lg border border-rule ${
               item.contain ? "bg-black/20 object-contain" : "object-cover"
             }`}
           />

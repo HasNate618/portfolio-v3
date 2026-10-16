@@ -65,13 +65,13 @@ export function CaseStudy({
       </div>
 
       <div
-        className="mt-10 max-w-[68ch] leading-relaxed"
+        className="rich-text mt-10 max-w-[68ch] leading-relaxed"
         dangerouslySetInnerHTML={{ __html: renderMarkdown(page.body) }}
       />
 
       {page.projectId || page.experienceOrg ? (
         <section className="mt-16">
-          <h2 id="stack" className="text-xs font-bold uppercase tracking-widest text-fg">
+          <h2 id="stack" className="section-label">
             Stack
           </h2>
           <div className="mt-4">

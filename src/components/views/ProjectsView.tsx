@@ -52,16 +52,16 @@ export function ProjectsView({ page }: { page: Page }) {
       <h1 className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">{page.title}</h1>
 
       <div
-        className="mt-6 max-w-[68ch] leading-relaxed"
+        className="rich-text mt-6 max-w-[68ch] leading-relaxed"
         dangerouslySetInnerHTML={{ __html: renderMarkdown(page.body) }}
       />
 
       {OPEN_GROUPS.map((group) => (
         <section key={group} className="mt-16">
-          <h2 id={groupId(group)} className="text-xs font-bold uppercase tracking-widest text-fg">
+          <h2 id={groupId(group)} className="section-label">
             {GROUP_LABELS[group]}
           </h2>
-          <ul className="mt-6 flex flex-col gap-10">
+          <ul className="mt-6 flex flex-col gap-6">
             {byGroup(group).map((project) => (
               <ProjectCard key={project.id} project={project} showStats={group === "featured"} />
             ))}
@@ -70,7 +70,7 @@ export function ProjectsView({ page }: { page: Page }) {
       ))}
 
       <section className="mt-16">
-        <h2 id="awards" className="text-xs font-bold uppercase tracking-widest text-fg">
+        <h2 id="awards" className="section-label">
           Awards
         </h2>
         <p className="mt-4 max-w-[68ch] leading-relaxed">
@@ -88,7 +88,7 @@ export function ProjectsView({ page }: { page: Page }) {
         <summary className="cursor-pointer text-xs font-bold uppercase tracking-widest text-fg hover:text-accent">
           {GROUP_LABELS.games}
         </summary>
-        <ul className="mt-6 flex flex-col gap-10">
+        <ul className="mt-6 flex flex-col gap-6">
           {byGroup("games").map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
@@ -104,7 +104,7 @@ function ProjectCard({ project, showStats }: { project: Project; showStats?: boo
   const href = project.id === "terago" ? "/experience/terago" : project.file ? `/projects/${project.id}` : null;
 
   return (
-    <li>
+    <li className="rounded-lg border border-rule bg-white/[0.02] p-6 transition-colors hover:border-accent/40">
       <h3 className="text-lg font-medium leading-snug text-fg">
         {href ? (
           <Link href={href} className="hover:text-accent">
