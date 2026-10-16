@@ -1,20 +1,36 @@
 @import "tailwindcss";
 
+/*
+ * Palette. src/styles/tokens.ts is authoritative — keep these in sync.
+ * check:contrast asserts fg, muted and accent each clear 4.5:1 against bg.
+ * `rule` is non-text only (hairlines and dividers), so it is not contrast-gated.
+ */
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --color-bg: #0f172a;
+  --color-fg: #94a3b8;
+  --color-muted: #7d8fa9;
+  --color-accent: #5eead4;
+  --color-rule: rgba(226, 232, 240, 0.1);
 }
 
 html {
   scroll-behavior: smooth;
 }
 
+body {
+  /* 16px floor for body copy. */
+  font-size: 16px;
+}
+
 ::selection {
-  background-color: #5eead4;
+  background-color: var(--color-accent);
   color: #134e4a;
 }
 
 :focus-visible {
-  outline: 2px solid #5eead4;
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
