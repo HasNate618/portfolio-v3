@@ -24,7 +24,7 @@ test("no Sources line is rendered", () => {
 });
 
 test("all five starters are offered as buttons for JS users", () => {
-  for (const starter of page.starters) {
+  for (const starter of page.starters ?? []) {
     assert.ok(html.includes(starter), `missing starter: ${starter}`);
     assert.ok(html.includes(`>${starter}</button>`), `starter is not a button: ${starter}`);
   }
@@ -32,7 +32,7 @@ test("all five starters are offered as buttons for JS users", () => {
 
 test("the JS-off path lists the starters as text, not buttons", () => {
   const noscript = html.slice(html.indexOf("<noscript"), html.indexOf("</noscript>"));
-  assert.ok(noscript.includes(page.starters[0]), "the no-JS block must carry the starters");
+  assert.ok(noscript.includes((page.starters ?? [])[0]), "the no-JS block must carry the starters");
   assert.ok(!noscript.includes("<button"), "a no-JS reader cannot press a button");
 });
 

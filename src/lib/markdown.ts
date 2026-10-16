@@ -1,4 +1,3 @@
-import MarkdownIt from "markdown-it";
 import { getExperience, getProject } from "@/data/site";
 import { modelTableHtml } from "@/lib/tables";
 
@@ -32,60 +31,84 @@ export function slugify(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-const md = new MarkdownIt({ html: false, linkify: false, typographer: false });
+type AnyMd = { render: (str: string) => string; utils: { escapeHtml: (s: string) => string }; renderer: { rules: Record<string, unknown> } };
 
-// Give every heading a stable id so "on this page" links resolve.
-md.renderer.rules.heading_open = (tokens, idx, options, _env, self) => {
-  const inline = tokens[idx + 1];
-  if (inline && inline.type === "inline") {
-    tokens[idx].attrSet("id", slugify(inline.content));
-  }
-  return self.renderToken(tokens, idx, options);
-};
+let cachedMd: AnyMd | null = null;
 
 /**
- * Fenced directives. A fence's info string selects a renderer:
- *   `diagram`  - accessible figure, with a required leading `alt:` line
- *   `models X` - the model table for project X, with a required `caption:` line
- *   anything else - an ordinary code block
- * Structured content stays in content files, and the pipeline owns the markup.
+ * Lazy, so `markdown-it` is required at first use (runtime) instead of imported
+ * at module load. Static imports of markdown-it pull it into the route bundle and
+ * a broken vendor chunk (`./vendor-chunks/markdown-it.js`) made `next start`
+ * return 500 on every page. Lazy require also honours `serverExternalPackages`.
  */
-md.renderer.rules.fence = (tokens, idx) => {
-  const token = tokens[idx];
-  const [kind, arg] = token.info.trim().split(/\s+/);
-  const lines = token.content.replace(/\n$/, "").split("\n");
+export function getMd(): AnyMd {
+  if (cachedMd) return cachedMd;
 
-  if (kind === "diagram") {
-    const alt = lines[0]?.startsWith("alt: ") ? lines.shift()!.slice("alt: ".length).trim() : "";
-    // Loud on purpose, like an unknown stat: a silent accessibility gap is the
-    // failure mode this whole directive exists to prevent.
-    if (!alt) throw new Error("diagram fence is missing its `alt: ` line");
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const MarkdownIt = require("markdown-it");
+  const Ctor = typeof MarkdownIt === "function" ? MarkdownIt : MarkdownIt.default;
 
-    return [
-      '<figure class="my-6">',
-      `<pre aria-hidden="true" class="overflow-x-auto rounded border border-rule bg-black/30 p-4 text-xs leading-relaxed text-fg">${md.utils.escapeHtml(lines.join("\n"))}</pre>`,
-      `<figcaption class="sr-only">${md.utils.escapeHtml(alt)}</figcaption>`,
-      "</figure>\n",
-    ].join("");
-  }
+  const instance = new Ctor({ html: false, linkify: false, typographer: false }) as AnyMd;
 
-  if (kind === "models") {
-    const caption = lines[0]?.startsWith("caption: ")
-      ? lines.shift()!.slice("caption: ".length).trim()
-      : "";
-    if (!caption) throw new Error("models fence is missing its `caption: ` line");
+  // Give every heading a stable id so "on this page" links resolve.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  instance.renderer.rules.heading_open = (tokens: any, idx: number, options: any, _env: unknown, self: any) => {
+    const inline = tokens[idx + 1];
+    if (inline && inline.type === "inline") {
+      tokens[idx].attrSet("id", slugify(inline.content));
+    }
+    return self.renderToken(tokens, idx, options);
+  };
 
-    const rows = getProject(arg ?? "")?.models ?? [];
-    if (rows.length === 0) throw new Error(`models fence names a project with no models: ${arg}`);
+  /**
+   * Fenced directives. A fence's info string selects a renderer:
+   *   `diagram`  - accessible figure, with a required leading `alt:` line
+   *   `models X` - the model table for project X, with a required `caption:` line
+   *   anything else - an ordinary code block
+   * Structured content stays in content files, and the pipeline owns the markup.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  instance.renderer.rules.fence = (tokens: any, idx: number) => {
+    const token = tokens[idx];
+    const [kind, arg] = token.info.trim().split(/\s+/);
+    const lines = token.content.replace(/\n$/, "").split("\n");
 
-    return `${modelTableHtml(rows, caption)}\n`;
-  }
+    // escape via the instance's own utils
+    const esc = (s: string) => instance.utils.escapeHtml(s);
 
-  const cls = kind ? ` class="language-${md.utils.escapeHtml(kind)}"` : "";
-  return `<pre><code${cls}>${md.utils.escapeHtml(token.content)}</code></pre>\n`;
-};
+    if (kind === "diagram") {
+      const alt = lines[0]?.startsWith("alt: ") ? lines.shift()!.slice("alt: ".length).trim() : "";
+      if (!alt) throw new Error("diagram fence is missing its `alt: ` line");
+
+      return [
+        '<figure class="my-6">',
+        `<pre aria-hidden="true" class="overflow-x-auto rounded border border-rule bg-black/30 p-4 text-xs leading-relaxed text-fg">${esc(lines.join("\n"))}</pre>`,
+        `<figcaption class="sr-only">${esc(alt)}</figcaption>`,
+        "</figure>\n",
+      ].join("");
+    }
+
+    if (kind === "models") {
+      const caption = lines[0]?.startsWith("caption: ")
+        ? lines.shift()!.slice("caption: ".length).trim()
+        : "";
+      if (!caption) throw new Error("models fence is missing its `caption: ` line");
+
+      const rows = getProject(arg ?? "")?.models ?? [];
+      if (rows.length === 0) throw new Error(`models fence names a project with no models: ${arg}`);
+
+      return `${modelTableHtml(rows, caption)}\n`;
+    }
+
+    const cls = kind ? ` class="language-${esc(kind)}"` : "";
+    return `<pre><code${cls}>${esc(token.content)}</code></pre>\n`;
+  };
+
+  cachedMd = instance;
+  return instance;
+}
 
 export function renderMarkdown(source: string, opts: { ids?: boolean } = {}): string {
-  const html = md.render(resolveStats(source));
+  const html = getMd().render(resolveStats(source));
   return opts.ids === false ? html.replace(/ id="[^"]*"/g, "") : html;
 }

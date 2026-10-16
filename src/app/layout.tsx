@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SeoJsonLd } from "@/components/SeoJsonLd";
 import "./globals.css";
 
 const inter = Inter({
@@ -22,6 +23,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="bg-bg font-sans text-fg antialiased">
+        {/* Person + WebSite structured data. Was migrated but never rendered. */}
+        <SeoJsonLd />
         {children}
         <Analytics />
       </body>

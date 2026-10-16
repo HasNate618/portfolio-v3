@@ -93,6 +93,12 @@ export function getCorpusDocs(): CorpusDoc[] {
  * /knowledgebase/projects/../about.md resolve to an allowlisted document under
  * a non-canonical URL.
  */
+/** First markdown heading in a projected doc. Used by /llms.txt, which has no titles of its own. */
+export function corpusTitle(doc: CorpusDoc): string {
+  const match = /^#\s+(.+)$/m.exec(doc.text);
+  return match ? match[1].trim() : doc.path;
+}
+
 export function getCorpusDoc(rel: string): CorpusDoc | undefined {
   return getCorpusDocs().find((doc) => doc.path === rel);
 }

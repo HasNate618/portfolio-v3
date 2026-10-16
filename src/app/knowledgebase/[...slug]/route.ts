@@ -1,19 +1,19 @@
-import { knowledgebase } from "@/data/site";
-import { getCorpusDoc } from "@/lib/corpus";
+import { getCorpusDoc, getCorpusDocs } from "@/lib/corpus";
 
 export const dynamic = "force-static";
 
 /**
- * Serves the public knowledge base as plain markdown at /knowledgebase/<path>.md
- * Only files listed in `knowledgebase` (src/data/site.ts) are reachable — that
- * list is the allowlist. Anything not on it 404s, so private notes stay private
- * even if they sit in the same folder.
+ * Serves the public knowledge base as plain markdown at /knowledgebase/<path>.md.
  *
- * The body comes from the corpus projection, so what a crawler reads here is the
- * same text the chat retrieves from.
+ * The allowlist is the corpus projection itself, which walks content/ only and
+ * never reads private/. That is the same boundary the loader enforces, so there
+ * is no second list to keep in step — and nothing outside content/ is reachable.
+ *
+ * The body is the projection, so a crawler reads exactly the text the chat
+ * retrieves from.
  */
 export function generateStaticParams() {
-  return knowledgebase.map((entry) => ({ slug: entry.path.split("/") }));
+  return getCorpusDocs().map((doc) => ({ slug: doc.path.split("/") }));
 }
 
 function notFound(): Response {
@@ -29,9 +29,6 @@ export async function GET(
 ): Promise<Response> {
   const { slug } = await params;
   const rel = slug.join("/");
-
-  const entry = knowledgebase.find((e) => e.path === rel);
-  if (!entry) return notFound();
 
   const doc = getCorpusDoc(rel);
   if (!doc) return notFound();
