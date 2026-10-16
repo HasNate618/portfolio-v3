@@ -1,4 +1,4 @@
-import { site } from "@/data/site";
+import { site, highlightProjects } from "@/data/site";
 import { siteBaseUrl } from "@/lib/site-url";
 
 /**
@@ -15,9 +15,7 @@ import { siteBaseUrl } from "@/lib/site-url";
  */
 export function SeoFallback() {
   const base = siteBaseUrl();
-  const highlights = site.projects.filter(
-    (project) => project.tier === "flagship" || project.tier === "featured"
-  );
+  const highlights = highlightProjects();
 
   return (
     <section className="sr-only" aria-label="Site summary">

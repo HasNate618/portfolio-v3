@@ -1,4 +1,4 @@
-import { site, knowledgebase } from "@/data/site";
+import { site, knowledgebase, highlightProjects } from "@/data/site";
 import { siteBaseUrl } from "@/lib/site-url";
 
 /**
@@ -35,8 +35,9 @@ export async function GET(): Promise<Response> {
   }
   lines.push("");
   lines.push("## Flagship projects");
-  for (const p of site.projects.filter((proj) => proj.tier === "flagship" || proj.tier === "featured")) {
-    lines.push(`- ${p.name} (${p.dates}; ${p.role}): ${p.covers} — ${base}${p.file}`);
+  for (const p of highlightProjects()) {
+    const file = p.file ? ` — ${base}${p.file}` : "";
+    lines.push(`- ${p.name} (${p.dates}; ${p.displayRole}): ${p.covers}${file}`);
   }
   lines.push("");
   lines.push(`Hackathons: entered ${site.hackathons.entered}, awards ${site.hackathons.awards}. See ${base}/knowledgebase/awards.md.`);
