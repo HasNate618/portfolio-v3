@@ -11,7 +11,7 @@
  * step lighter (5.42:1) so de-emphasised text still passes.
  */
 export const tokens = {
-  bg: "#0f172a",
+  bg: "#0a0a0a",
   fg: "#94a3b8",
   muted: "#7d8fa9",
   accent: "#5eead4",

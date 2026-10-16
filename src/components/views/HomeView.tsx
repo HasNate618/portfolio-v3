@@ -13,7 +13,7 @@ export function HomeView({ page }: { page: Page }) {
 
   return (
     <article>
-      <h1 className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">{page.title}</h1>
+      <h1 className="sr-only">{page.title}</h1>
 
       <div
         className="mt-6 max-w-[68ch] leading-relaxed"
@@ -34,16 +34,6 @@ export function HomeView({ page }: { page: Page }) {
             Email me
           </a>
         </li>
-        {site.contact.links.map((link) => (
-          <li key={link.href}>
-            <a
-              href={link.href}
-              className="inline-block rounded border border-rule px-4 py-2 text-sm font-medium text-fg hover:border-accent hover:text-accent"
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
       </ul>
 
       {/* Campus: the strongest proof, above the fold, with checkable numbers. */}
