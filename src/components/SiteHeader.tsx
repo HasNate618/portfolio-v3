@@ -9,9 +9,14 @@ import { site } from "@/data/site";
  * client JS (the whole site must read with JavaScript off).
  */
 
+/**
+ * The first two point at sections of the home page rather than at index pages:
+ * `#experience` and `#projects` are ids rendered by HomeView. Off the home page
+ * they navigate home and scroll, which is the intended behaviour.
+ */
 export const NAV_LINKS = [
-  { href: "/projects", label: "Projects" },
-  { href: "/experience", label: "Experience" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#projects", label: "Projects" },
   { href: "/now", label: "Now" },
   { href: "/resume", label: "Resume" },
   { href: "/chat", label: "Ask about me" },

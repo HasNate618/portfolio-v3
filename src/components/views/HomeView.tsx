@@ -1,15 +1,34 @@
 import Link from "next/link";
 import { site, featuredProjects, flagshipProject } from "@/data/site";
 import { renderMarkdown } from "@/lib/markdown";
-import type { Page } from "@/lib/content";
+import { getPage, type Page } from "@/lib/content";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
 import { StatRow } from "@/components/StatRow";
 import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
 
+/**
+ * The home page carries the whole story: who he is, the roles, then the
+ * projects worth leading with. The nav points at these sections rather than at
+ * separate index pages, so `#experience` and `#projects` are load-bearing ids —
+ * renaming either breaks the header links.
+ */
 export function HomeView({ page }: { page: Page }) {
   const campus = flagshipProject()!;
   const featured = featuredProjects();
+
+  /**
+   * Only roles that actually have a case study route link out. Deriving the slug
+   * from the corpus path keeps this honest: a role with no page renders as plain
+   * text rather than as a link that 404s.
+   */
+  const caseStudyHref = (file?: string) => {
+    if (!file) return null;
+    const slug = file.split("/").pop()?.replace(/\.md$/, "");
+    if (!slug) return null;
+    const route = `/experience/${slug}`;
+    return getPage(route) ? route : null;
+  };
 
   return (
     <article>
@@ -36,11 +55,47 @@ export function HomeView({ page }: { page: Page }) {
         </li>
       </ul>
 
-      {/* Campus: the strongest proof, above the fold, with checkable numbers. */}
-      <section aria-labelledby="campus" className="mt-12 rounded border border-rule p-6">
-        <h2 id="campus" className="text-2xl font-semibold text-fg">
+      <h2 id="experience" className="mt-16 text-xs font-bold uppercase tracking-widest text-fg">
+        Experience
+      </h2>
+      <ul className="mt-6 flex flex-col gap-4">
+        {site.experience.map((experience) => {
+          const href = caseStudyHref(experience.file);
+          return (
+            <li key={experience.org} className="sm:grid sm:grid-cols-[10rem_1fr] sm:gap-4">
+              <span className="text-xs uppercase tracking-wide text-muted">{experience.dates}</span>
+              <span className="mt-1 sm:mt-0">
+                <span className="font-medium text-fg">{experience.role}</span>
+                <span className="text-muted"> · {experience.org}</span>
+                {href ? (
+                  <>
+                    {" "}
+                    <Link href={href} className="text-accent underline hover:text-fg">
+                      Case study
+                      <span aria-hidden="true"> →</span>
+                    </Link>
+                  </>
+                ) : null}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      <p className="mt-4">
+        <Link href="/experience" className="text-sm text-accent underline hover:text-fg">
+          All experience <span aria-hidden="true">→</span>
+        </Link>
+      </p>
+
+      <h2 id="projects" className="mt-16 text-xs font-bold uppercase tracking-widest text-fg">
+        Projects
+      </h2>
+
+      {/* Campus: the strongest proof, with checkable numbers. */}
+      <section aria-labelledby="campus" className="mt-6 rounded border border-rule p-6">
+        <h3 id="campus" className="text-2xl font-semibold text-fg">
           {campus.name}
-        </h2>
+        </h3>
         <div className="mt-2">
           <ProjectMetaRow projectId="campus" />
         </div>
@@ -56,10 +111,7 @@ export function HomeView({ page }: { page: Page }) {
         </div>
       </section>
 
-      <h2 id="featured" className="mt-16 text-xs font-bold uppercase tracking-widest text-fg">
-        Featured
-      </h2>
-      <ul className="mt-6 flex flex-col gap-8">
+      <ul className="mt-8 flex flex-col gap-8">
         {featured.map((project) => (
           <li key={project.id}>
             <h3 className="text-lg font-medium leading-snug text-fg">
@@ -75,20 +127,14 @@ export function HomeView({ page }: { page: Page }) {
         ))}
       </ul>
 
-      <h2 id="experience" className="mt-16 text-xs font-bold uppercase tracking-widest text-fg">
-        Experience
-      </h2>
-      <ul className="mt-6 flex flex-col gap-4">
-        {site.experience.map((experience) => (
-          <li key={experience.org} className="sm:grid sm:grid-cols-[10rem_1fr] sm:gap-4">
-            <span className="text-xs uppercase tracking-wide text-muted">{experience.dates}</span>
-            <span className="mt-1 sm:mt-0">
-              <span className="font-medium text-fg">{experience.role}</span>
-              <span className="text-muted"> · {experience.org}</span>
-            </span>
-          </li>
-        ))}
-      </ul>
+      <p className="mt-6">
+        <Link
+          href="/projects"
+          className="inline-block rounded border border-rule px-4 py-2 text-sm font-medium text-fg hover:border-accent hover:text-accent"
+        >
+          All projects <span aria-hidden="true">→</span>
+        </Link>
+      </p>
 
       <h2 id="ask" className="mt-16 text-xs font-bold uppercase tracking-widest text-fg">
         Ask

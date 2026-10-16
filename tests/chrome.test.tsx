@@ -5,18 +5,18 @@ import { SiteHeader, NAV_LINKS } from "../src/components/SiteHeader";
 import { SiteFooter } from "../src/components/SiteFooter";
 
 test("skip link comes before the nav", () => {
-  const html = renderToStaticMarkup(<SiteHeader current="/projects" />);
+  const html = renderToStaticMarkup(<SiteHeader current="/now" />);
   assert.ok(html.indexOf("Skip to content") < html.indexOf("<nav"));
   assert.ok(html.indexOf('href="#content"') !== -1, "skip link must target the content region");
 });
 
 test("the current page is marked with aria-current", () => {
-  const html = renderToStaticMarkup(<SiteHeader current="/projects" />);
+  const html = renderToStaticMarkup(<SiteHeader current="/now" />);
   assert.match(html, /aria-current="page"/);
 });
 
 test("no other nav item is marked current", () => {
-  const html = renderToStaticMarkup(<SiteHeader current="/projects" />);
+  const html = renderToStaticMarkup(<SiteHeader current="/now" />);
   assert.equal((html.match(/aria-current="page"/g) ?? []).length, 1);
 });
 
