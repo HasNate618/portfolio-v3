@@ -21,7 +21,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="bg-bg font-sans text-fg antialiased">
+      <body className="font-sans text-fg antialiased">
+        {/*
+          Marks the document as scripted before first paint. The reveal CSS is
+          scoped to `.js`, so a reader without JavaScript gets the fully visible
+          page rather than content stuck at opacity 0.
+        */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         {/* Person + WebSite structured data. Was migrated but never rendered. */}
         <SeoJsonLd />
         {children}

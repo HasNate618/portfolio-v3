@@ -8,7 +8,7 @@
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  --color-bg: #18181b;
+  --color-bg: #0d0d0f;
   --color-fg: #d4d4d8;
   --color-muted: #a1a1aa;
   --color-accent: #5eead4;
@@ -17,13 +17,33 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--color-bg);
 }
 
 body {
   /* 16px floor for body copy. */
   font-size: 16px;
-  /* Subtle vertical gradient so the dark surface reads more like a panel. */
-  background: linear-gradient(180deg, #1f1f23 0%, #18181b 55%, #111113 100%);
+  /* Transparent so the ambient wash below shows through. */
+  background-color: transparent;
+}
+
+/*
+ * Ambient colour: three soft radial washes in the corners, painted on a fixed
+ * pseudo-element. CSS-only, so nothing animates and no DOM is added, and
+ * pointer-events:none keeps it out of the way of clicks and focus.
+ * The colours and alphas are mirrored in src/styles/tokens.ts, where
+ * check:contrast composites them to prove text still clears 4.5:1.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(38rem 38rem at 78% -8%, rgba(94, 234, 212, 0.14), transparent 70%),
+    radial-gradient(34rem 34rem at -10% 10%, rgba(129, 140, 248, 0.13), transparent 70%),
+    radial-gradient(32rem 32rem at 95% 98%, rgba(251, 191, 36, 0.07), transparent 72%);
 }
 
 ::selection {
@@ -61,3 +81,33 @@ body {
 .markdown ul, .markdown ol { margin: 0.5rem 0; padding-left: 1.5rem; }
 .markdown li { margin: 0.25rem 0; }
 .markdown a { color: var(--color-accent); text-decoration: underline; }
+
+/*
+ * Minimal motion, in the spirit of the reference design: blocks ease in once as
+ * they enter the viewport, and interactive elements ease their colour.
+ *
+ * Everything here is scoped to `.js`, which an inline script sets before first
+ * paint. With JavaScript off the class is absent, none of this applies, and
+ * every page renders fully visible — the motion is an enhancement, never a
+ * prerequisite for reading. Nothing loops and nothing animates on its own.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  a,
+  button,
+  summary {
+    transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease;
+  }
+
+  .js main article > *,
+  .js main > header {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 450ms ease-out, transform 450ms ease-out;
+  }
+
+  .js main article > .is-visible,
+  .js main > header.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}

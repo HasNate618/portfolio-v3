@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 /**
  * The two-column shell: identity and nav stick on the left, content scrolls on
@@ -11,9 +12,10 @@ import { SiteFooter } from "@/components/SiteFooter";
 export function PageShell({ current, children }: { current: string; children: ReactNode }) {
   return (
     <div className="mx-auto min-h-screen max-w-screen-xl px-6 py-12 lg:px-12 lg:py-0">
-      <div className="lg:grid lg:grid-cols-[20rem_1fr] lg:gap-24">
+      <div className="lg:grid lg:grid-cols-[23rem_1fr] lg:gap-24">
         <SiteHeader current={current} />
         <main id="content" className="pt-24 lg:py-24">
+          <ScrollReveal />
           {children}
           <SiteFooter />
         </main>
