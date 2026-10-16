@@ -21,6 +21,8 @@ export type Page = {
   experienceOrg?: string;
   /** Résumé only. The four-group layout is a documented exception to one-source. */
   skills?: { group: string; items: string[] }[];
+  /** Chat only: the empty-state starter questions. */
+  starters?: string[];
   onThisPage: string[];
   body: string;
 };
@@ -181,6 +183,7 @@ export function loadFrom(root: string): Page[] {
       projectId: asOptionalString(data.projectId),
       experienceOrg: asOptionalString(data.experienceOrg),
       skills: asSkills(data.skills),
+      starters: asStringArray(data.starters),
       onThisPage: asStringArray(data.onThisPage),
       body,
     });
