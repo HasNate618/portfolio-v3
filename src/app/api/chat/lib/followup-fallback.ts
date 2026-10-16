@@ -84,7 +84,7 @@ const DEFAULT_FOLLOWUPS = [
   "What hackathons has he won?",
 ];
 
-const AI_DIRECTED = /\b(you|your|ALLMIND|allmind|chatbot|assistant)\b/i;
+const AI_DIRECTED = /\b(you|your|chatbot|assistant)\b/i;
 
 const FOLLOWUP_REWRITES: Array<{ pattern: RegExp; replacement: string }> = [
   { pattern: /\bWhat (programming )?languages do you know\??/i, replacement: "What languages does Nathan know?" },

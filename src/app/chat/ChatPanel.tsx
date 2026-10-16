@@ -123,7 +123,7 @@ export function ChatPanel({ starters }: { starters: string[] }) {
           {messages.map((message, index) => (
             <li key={index}>
               <p className="text-xs font-bold uppercase tracking-widest text-muted">
-                {message.role === "user" ? "You" : "ALLMIND"}
+                {message.role === "user" ? "You" : "Assistant"}
               </p>
               <p className="mt-2 max-w-[68ch] whitespace-pre-wrap leading-relaxed">
                 {message.content}

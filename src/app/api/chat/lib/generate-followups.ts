@@ -67,7 +67,7 @@ Rules:
 - Plain text only, each line ends with "?"
 - One question per line, no numbering, no markdown
 - About Nathan's projects, skills, or experience — refer to him in third person (he/his/Nathan)
-- Never ask about ALLMIND, the chatbot, or "you" — e.g. "What languages does Nathan know?" not "What languages do you know?"
+- Never ask about the chatbot or "you" — e.g. "What languages does Nathan know?" not "What languages do you know?"
 - Do not repeat questions already asked in this thread`;
 
   try {
