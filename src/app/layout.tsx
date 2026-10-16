@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import { SeoJsonLd } from "@/components/SeoJsonLd";
 import "./globals.css";
 
@@ -26,7 +25,6 @@ export default function RootLayout({
         {/* Person + WebSite structured data. Was migrated but never rendered. */}
         <SeoJsonLd />
         {children}
-        <Analytics />
       </body>
     </html>
   );
