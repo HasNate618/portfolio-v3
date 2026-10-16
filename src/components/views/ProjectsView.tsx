@@ -104,7 +104,7 @@ function ProjectCard({ project, showStats }: { project: Project; showStats?: boo
   const href = project.id === "terago" ? "/experience/terago" : project.file ? `/projects/${project.id}` : null;
 
   return (
-    <li className="rounded-lg border border-rule bg-white/[0.02] p-6 transition-colors hover:border-accent/40">
+    <li className="rounded-lg border border-rule bg-surface p-6 transition-colors hover:border-accent/40">
       <h3 className="text-lg font-medium leading-snug text-fg">
         {href ? (
           <Link href={href} className="hover:text-accent">

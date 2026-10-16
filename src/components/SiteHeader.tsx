@@ -24,7 +24,7 @@ export const NAV_LINKS = [
 
 export function SiteHeader({ current }: { current: string }) {
   return (
-    <header className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:flex-col lg:justify-between lg:py-24">
+    <header className="page-enter lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:flex-col lg:justify-between lg:py-24">
       <div>
         <a
           href="#content"
@@ -39,7 +39,9 @@ export function SiteHeader({ current }: { current: string }) {
           </Link>
         </p>
 
-        <p className="mt-3 text-lg font-medium tracking-tight text-fg sm:text-xl">
+        {/* Deliberately quiet: the name leads, this sets context without
+            competing with it for attention. */}
+        <p className="mt-3 max-w-md text-base leading-relaxed text-muted sm:text-lg">
           {site.identity.headline}
         </p>
 
@@ -56,18 +58,10 @@ export function SiteHeader({ current }: { current: string }) {
                   <Link
                     href={link.href}
                     aria-current={active ? "page" : undefined}
-                    className={`group flex items-center gap-3 text-sm font-bold uppercase tracking-widest transition-colors hover:text-accent ${
+                    className={`text-sm font-bold uppercase tracking-widest transition-colors hover:text-accent ${
                       active ? "text-fg" : "text-muted"
                     }`}
                   >
-                    {/* Dash indicator, desktop only: grows and lights up for the
-                        current page and on hover. */}
-                    <span
-                      aria-hidden="true"
-                      className={`hidden h-px transition-all lg:inline-block ${
-                        active ? "w-8 bg-accent" : "w-4 bg-muted group-hover:w-8 group-hover:bg-accent"
-                      }`}
-                    />
                     {link.label}
                   </Link>
                 </li>

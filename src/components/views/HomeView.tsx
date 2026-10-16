@@ -82,7 +82,7 @@ export function HomeView({ page }: { page: Page }) {
       </h2>
 
       {/* Campus: the strongest proof, with checkable numbers. */}
-      <section aria-labelledby="campus" className="mt-6 rounded-lg border border-rule bg-white/[0.02] p-6">
+      <section aria-labelledby="campus" className="mt-6 rounded-lg border border-rule bg-surface p-6">
         <h3 id="campus" className="text-2xl font-semibold text-fg">
           {campus.name}
         </h3>
@@ -106,7 +106,7 @@ export function HomeView({ page }: { page: Page }) {
         {featured.map((project) => (
           <li
             key={project.id}
-            className="rounded-lg border border-rule bg-white/[0.02] p-6 transition-colors hover:border-accent/40"
+            className="rounded-lg border border-rule bg-surface p-6 transition-colors hover:border-accent/40"
           >
             <h3 className="text-lg font-medium leading-snug text-fg">
               <Link href={`/projects/${project.id}`} className="hover:text-accent">
