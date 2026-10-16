@@ -57,7 +57,7 @@ export function ThemeToggle() {
       onClick={() => apply(next)}
       aria-label={label}
       title={label}
-      className="fixed right-4 top-4 z-40 flex h-9 w-9 items-center justify-center rounded-full border border-rule bg-surface text-muted transition-colors hover:border-accent hover:text-accent lg:right-6 lg:top-6"
+      className="fixed right-4 top-4 z-40 hidden h-9 w-9 items-center justify-center rounded-full border border-rule bg-surface text-muted transition-colors hover:border-accent hover:text-accent lg:right-6 lg:top-6 lg:flex"
     >
       <svg
         viewBox="0 0 24 24"
