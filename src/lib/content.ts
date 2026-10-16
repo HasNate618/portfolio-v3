@@ -27,8 +27,12 @@ export type Page = {
   body: string;
 };
 
-/** Left-hand nav order. Routes not listed here sort after these, alphabetically. */
-export const NAV_ORDER = ["/projects", "/now", "/resume"] as const;
+/**
+ * Nav order for anything that lists routes. `/now` is deliberately absent: the
+ * page still exists and is still in the sitemap, but it left the left-hand nav,
+ * so nothing here should imply it is a stop on the tour.
+ */
+export const NAV_ORDER = ["/projects", "/resume"] as const;
 
 const CONTENT_ROOT = "content";
 

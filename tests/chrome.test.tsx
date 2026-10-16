@@ -3,19 +3,23 @@ import assert from "node:assert/strict";
 import { renderToStaticMarkup } from "react-dom/server";
 import { SiteHeader, NAV_LINKS } from "../src/components/SiteHeader";
 
+/*
+ * These three cases use `/resume` as the "current" route: any nav route works,
+ * and it has to be one the nav actually lists.
+ */
 test("skip link comes before the nav", () => {
-  const html = renderToStaticMarkup(<SiteHeader current="/now" />);
+  const html = renderToStaticMarkup(<SiteHeader current="/resume" />);
   assert.ok(html.indexOf("Skip to content") < html.indexOf("<nav"));
   assert.ok(html.indexOf('href="#content"') !== -1, "skip link must target the content region");
 });
 
 test("the current page is marked with aria-current", () => {
-  const html = renderToStaticMarkup(<SiteHeader current="/now" />);
+  const html = renderToStaticMarkup(<SiteHeader current="/resume" />);
   assert.match(html, /aria-current="page"/);
 });
 
 test("no other nav item is marked current", () => {
-  const html = renderToStaticMarkup(<SiteHeader current="/now" />);
+  const html = renderToStaticMarkup(<SiteHeader current="/resume" />);
   assert.equal((html.match(/aria-current="page"/g) ?? []).length, 1);
 });
 
