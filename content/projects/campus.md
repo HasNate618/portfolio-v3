@@ -1,43 +1,71 @@
 ---
-title: "Campus"
-type: project
+title: Campus
+route: /projects/campus
+projectId: campus
+description: A self-hosted study assistant I built for my own courses.
 priority: start-here
-rank: flagship
-dates: "Aug 2026 to present"
-role: "owner"
 tags: [local-ai, rag, agents, education-tooling]
 related: [index.md, homelab.md, aware.md, ../skills.md, ../local-ai.md]
-updated: 2026-10-15
+onThisPage: [tl;dr, Why I built it, What I built, How it works, Models and cost, Results, Next, Stack]
 ---
 
-# Campus
+## tl;dr
 
-Self-hosted AI study assistant that syncs Brightspace/D2L courses into local SQLite, then answers questions from those course files with a tool-using agent. Built with Python, FastAPI and SQLite.
+- Syncs my Brightspace courses into local SQLite and answers questions from the course files.
+- Hybrid retrieval over {{stat:campus.chunks}} chunks from {{stat:campus.files}} course files.
+- A {{stat:campus.tools}}-tool agent that can also edit my notes and due dates. Every write it makes is logged.
+- {{stat:campus.tests}} tests run in CI on every push.
+- Works with any OpenAI-compatible endpoint, local or hosted.
 
-## Status
+## Why I built it
 
-Ongoing since Aug 2026.
+My course material lives in Brightspace, spread across {{stat:campus.courses}} courses and {{stat:campus.files}} files. I wanted one place to look up deadlines, study from the slides, and check a draft against the assignment brief, running on hardware I control.
 
-## Models
+I also wanted it to update my notes and due dates. That is only useful if I can see exactly what it changed, so every AI write is logged with the before and after.
 
-Campus works with any OpenAI-compatible endpoint, so it can point at a local server or a hosted API. How he picks models is covered in [Local and cost-aware AI](../local-ai.md).
+## What I built
 
-## Tech Stack
+All of it.
 
-- Python, FastAPI, SQLite
-- Playwright (LMS sync / MFA)
-- React, TypeScript, Vite (PWA frontend)
-- Docker, NixOS, GitHub Actions
-- Embeddings + cross-encoder reranking (hybrid retrieval)
+- LMS sync with Playwright, MFA login included, into SQLite and a local file store.
+- sha256 change detection, so unchanged files are not downloaded again.
+- Hybrid retrieval: embedding search, cross-encoder reranking, and a lexical SQL prefilter.
+- A fix for exact phrases that scored below the semantic cutoff. They now go through the lexical path.
+- A {{stat:campus.tools}}-tool agent that answers questions, reads files, and edits notes or due dates, in a bounded tool loop.
+- An append-only audit log with the before and after state of every AI write.
+- A React, TypeScript and Vite PWA.
+- CI on GitHub Actions: pytest, frontend type-check and a production build on every push.
 
-## Description
+## How it works
 
-Campus is an offline-first study system built for personal use. It pulls Brightspace/D2L content into a local SQLite spine and file store with sha256 change detection, so unchanged files are not re-downloaded. Hybrid retrieval combines embedding search, cross-encoder reranking, and a lexical SQL prefilter across 4,687 chunks from 215 course files. Exact phrases that used to score below the semantic cutoff are forced through the lexical path.
+```diagram
+alt: Brightspace syncs into SQLite and a local file store. Those files are split into an index of chunks. Retrieval reads the index and feeds an agent with twenty tools, which answers questions and writes every change to an audit log with the before and after state.
+Brightspace ─► sync ─► SQLite + files ─► index
+                                          │
+     answer ◄── agent (20 tools) ◄── retrieve
+        │
+        └──► audit log (every write, before and after)
+```
 
-A 20-tool agent harness answers course questions, reads files, and can mutate notes or due dates. Every AI write is logged with before/after state in an append-only audit log. The tool loop is bounded. CI runs 308 tests on every push (pytest, frontend type-check, production build).
+1. Sync. Playwright signs in and pulls course content. Files with an unchanged sha256 are skipped.
+2. Index. Course files are split into chunks.
+3. Retrieve. A SQL prefilter catches exact phrases, embedding search finds related chunks, and a cross-encoder reranks them.
+4. Answer. The agent picks from its tools to search, read files, or change notes and due dates.
+5. Audit. Every write is logged with its before and after state.
 
-Used across six courses for deadline lookups, studying from course slides, and reviewing drafts against briefs.
+## Models and cost
 
-## Links
+- The agent talks to any OpenAI-compatible endpoint. Same code for a local server or a hosted API, set in config.
+- Like the rest of my AI work, I would rather run a low-cost model that fits the job than pay for the biggest one.
+- Cost per question: still measuring.
 
-- GitHub: https://github.com/HasNate618/Campus
+## Results
+
+- I use it across {{stat:campus.courses}} courses for deadline lookups, studying from slides, and checking drafts against briefs.
+- {{stat:campus.chunks}} chunks indexed from {{stat:campus.files}} course files.
+- {{stat:campus.tests}} tests pass in CI on every push.
+- Retrieval and answer quality: evaluation in progress.
+
+## Next
+
+Finish the retrieval and answer evaluation, then post the numbers here.

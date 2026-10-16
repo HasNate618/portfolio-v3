@@ -90,16 +90,23 @@ const STAT_PATTERNS = STAT_VALUES.map((v) => ({ value: v, re: statPattern(v) }))
 const STACK_PATTERNS = STACK_ENTRIES.map((v) => ({ value: v, re: stackPattern(v) }));
 
 /**
- * A line is list-shaped when it reads as a stack list: two or more known
- * entries, or one entry on a line that is clearly a list (· separators or a
- * `Stack:` label). Prose that names a single technology ("behind Caddy") is
- * legitimate and must not fail the gate.
+ * A line is list-shaped when it enumerates the stack: known entries make up most
+ * of its words, or it uses list punctuation. A prose sentence that happens to
+ * name two technologies ("LMS sync with Playwright ... into SQLite") is
+ * legitimate — flagging it trains people to ignore the gate, which is worse than
+ * the drift it is meant to catch.
  */
 function isStackListShaped(line, hits) {
-  if (hits >= 2) return true;
-  if (hits >= 1 && line.includes("·")) return true;
-  if (hits >= 1 && /^\s*Stack\s*:/i.test(line)) return true;
-  return false;
+  if (hits === 0) return false;
+  if (line.includes("·")) return true;
+  if (/^\s*Stack\s*:/i.test(line)) return true;
+
+  const words = line
+    .replace(/[^\p{L}\p{N}+#./ -]/gu, " ")
+    .split(/\s+/)
+    .filter(Boolean).length;
+
+  return hits >= 2 && words > 0 && hits / words >= 0.4;
 }
 
 const failures = [];

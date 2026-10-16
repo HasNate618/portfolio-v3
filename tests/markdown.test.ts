@@ -39,3 +39,25 @@ test("raw html in content is escaped, not passed through", () => {
 test("ids can be turned off for the bot view", () => {
   assert.ok(!renderMarkdown("## Heading", { ids: false }).includes('id="heading"'));
 });
+
+test("a diagram fence renders an accessible figure, not a code block", () => {
+  const html = renderMarkdown("```diagram\nalt: Sync feeds SQLite.\na -> b\n```");
+  assert.match(html, /<figure/);
+  assert.match(html, /<pre aria-hidden="true"/);
+  assert.match(html, /<figcaption class="sr-only">Sync feeds SQLite\.<\/figcaption>/);
+  assert.match(html, /a -&gt; b/);
+});
+
+test("the alt line is not part of the art", () => {
+  const html = renderMarkdown("```diagram\nalt: Words here.\nart line\n```");
+  assert.ok(!/<pre[^>]*>[^<]*Words here/.test(html), "alt text must not be drawn inside the pre");
+});
+
+test("a diagram fence without an alt line throws rather than shipping silently", () => {
+  assert.throws(() => renderMarkdown("```diagram\njust art\n```"), /alt/);
+});
+
+test("a plain fence still renders as a code block with its language", () => {
+  const html = renderMarkdown("```python\nprint(1)\n```");
+  assert.match(html, /<pre><code class="language-python">/);
+});

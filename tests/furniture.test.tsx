@@ -7,7 +7,6 @@ import { StackList } from "../src/components/StackList";
 import { StatRow } from "../src/components/StatRow";
 import { LinkRow } from "../src/components/LinkRow";
 import { OnThisPage } from "../src/components/OnThisPage";
-import { Diagram } from "../src/components/Diagram";
 import { AwardsTable } from "../src/components/AwardsTable";
 import { ModelTable } from "../src/components/ModelTable";
 import { getProject } from "../src/data/site";
@@ -93,12 +92,4 @@ test("the model table carries its rows and a caption", () => {
   assert.match(html, /YOLOv8n/);
   assert.match(html, /MiniCPM5-1B/);
   assert.equal(renderToStaticMarkup(<ModelTable rows={[]} caption="none" />), "");
-});
-
-test("a diagram hides the art and gives a text alternative", () => {
-  const html = renderToStaticMarkup(
-    <Diagram alt="Sync feeds SQLite, which feeds the index.">{"a -> b"}</Diagram>
-  );
-  assert.match(html, /<pre[^>]*aria-hidden="true"/);
-  assert.match(html, /sr-only">Sync feeds SQLite/);
 });
