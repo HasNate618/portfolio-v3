@@ -58,7 +58,7 @@ Likely to bite a real user, and not covered by any single task's happy-path test
 | `src/styles/tokens.ts` | Palette as data, so contrast is testable |
 | `scripts/check-content.mjs` | One-source invariant (route files only) |
 | `scripts/check-contrast.mjs` | Every token pair ≥ 4.5:1 |
-| `scripts/check-render.mjs` | Serve the build; assert every route's copy with JS off |
+| `scripts/check-render.mjs` | Consume a running production server; assert every route's copy with JS off |
 | `scripts/check-embeddings.mjs` | Corpus hash vs the embeddings cache |
 | `tests/fixtures/content/**` | Fixture tree for loader and invariant tests |
 
@@ -1504,6 +1504,10 @@ pkill -f "[n]ext start"
 Assert one required substring per route: `/` contains `4,687`; `/projects` contains `Awards`; `/projects/campus` contains `lexical`; `/projects/homelab`, `/projects/aware` and `/experience/terago` each contain a figure unique to them; `/experience` contains `May 2026 to Aug 2026`; `/now` contains `mailto:`; `/resume` contains `Automated outage ticketing`; `/chat` contains `needs JavaScript`. Also assert `/knowledgebase/not-a-real-file.md` returns 404, `/llms.txt` returns `text/markdown`, `/robots.txt` returns `text/plain` and names the sitemap, and `/sitemap.xml` returns XML containing `/projects/campus`. Exit non-zero listing every failure.
 
 `check-render.mjs` **consumes `http://localhost:3100`** and does not spawn its own server — the step above starts one. If it spawned its own it would collide on the port.
+
+It **must first assert it is talking to a production build** and fail loudly if it is not. This is not hypothetical: during implementation a leftover `next dev -p 3100` from an earlier session held the port, so every `npm start` failed to bind and exited, and every request silently hit the dev server instead. `npm start` does not error when the port is taken, and a dev server serves the same components, so the checks all passed while grading development output — including a spurious `500` on `/knowledgebase/*.md` from a stale dev chunk that production does not have. Two cheap signals, both observed here: a dev response contains `react-refresh`, and its `__NEXT_DATA__` carries `"buildId":"development"`. Refuse to run if either is present, and report that the port is held by another server.
+
+Before starting the server in Step 1, confirm the port is free (`ss -ltnp | grep 3100`) rather than assuming it is.
 
 Every case study gets a page-level check here — the unit tests exercise `CaseStudy` with a supplied page, so a route that fails to build or 404s would otherwise pass everything.
 
