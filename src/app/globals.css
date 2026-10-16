@@ -1,37 +1,122 @@
 @import "tailwindcss";
 
 /*
- * Palette. src/styles/tokens.ts is authoritative — keep these in sync.
- * check:contrast asserts fg, muted and accent each clear 4.5:1 against bg.
- * `rule` is non-text only (hairlines and dividers), so it is not contrast-gated.
+ * Palette. src/styles/palettes.ts is authoritative — every value below mirrors
+ * an entry in that registry, which is what lets check:contrast verify each
+ * candidate and lets the dev-only palette panel repaint the site at runtime.
+ *
+ * The dark values here are the `amber` entry; the light block further down is
+ * the `paper` entry, applied when the reader's system asks for light. Because
+ * Tailwind utilities compile to `var(--color-*)`, overriding the custom
+ * properties re-themes the whole site without touching a single component.
+ *
+ * `rule`, `surface`, `code-bg`, `pre-bg` and `scrollbar` are non-text, so they
+ * are not contrast-gated.
  */
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  --color-bg: #0d0d0f;
-  --color-fg: #d4d4d8;
-  --color-muted: #a1a1aa;
-  --color-accent: #5eead4;
-  --color-rule: rgba(226, 232, 240, 0.1);
+  --color-bg: #0a0e0c;
+  --color-fg: #e2e8e3;
+  --color-muted: #9daaa1;
+  --color-accent: #8cc7a1;
+  --color-rule: rgba(226, 232, 227, 0.09);
+  --color-surface: rgba(226, 232, 227, 0.03);
+  --color-bubble: rgba(226, 232, 227, 0.07);
+  --color-code-bg: rgba(226, 232, 227, 0.08);
+  --color-pre-bg: rgba(0, 0, 0, 0.3);
+  --color-selection-fg: #0d1a13;
+  --color-scrollbar: rgba(226, 232, 227, 0.18);
+}
+
+/*
+ * Ambient washes, kept out of @theme because nothing generates a utility from
+ * them. Declared as whole colours so the palette panel can swap them in one
+ * assignment.
+ */
+:root {
+  color-scheme: dark;
+  --glow-1: rgba(140, 199, 161, 0.05);
+  --glow-2: rgba(111, 174, 134, 0.03);
+}
+
+/*
+ * Light scheme. Reachable two ways: the reader's system preference, or the
+ * toggle, which writes `data-theme` on <html>. The values are repeated in both
+ * rules because CSS cannot share one declaration list between a media query and
+ * an attribute selector — one of the few places here that duplication is forced.
+ *
+ * Both are unlayered, so they win over the @theme layer; keeping them in this
+ * stylesheet is what makes it the only place a scheme is written down.
+ */
+@media (prefers-color-scheme: light) {
+  /* The `:not` lets an explicit dark choice survive a light operating system. */
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --color-bg: #f7f9f5;
+    --color-fg: #222722;
+    --color-muted: #565f57;
+    --color-accent: #2f6b46;
+    --color-rule: rgba(34, 39, 34, 0.12);
+    --color-surface: rgba(34, 39, 34, 0.03);
+    --color-bubble: rgba(255, 255, 255, 0.75);
+    --color-code-bg: rgba(34, 39, 34, 0.06);
+    --color-pre-bg: rgba(34, 39, 34, 0.04);
+    --color-selection-fg: #f7fbf6;
+    --color-scrollbar: rgba(34, 39, 34, 0.25);
+    --glow-1: rgba(140, 199, 161, 0.16);
+    --glow-2: rgba(95, 156, 120, 0.1);
+  }
+}
+
+/* The same scheme, chosen by hand. Survives a dark operating system. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: #f7f9f5;
+  --color-fg: #222722;
+  --color-muted: #565f57;
+  --color-accent: #2f6b46;
+  --color-rule: rgba(34, 39, 34, 0.12);
+  --color-surface: rgba(34, 39, 34, 0.03);
+  --color-bubble: rgba(255, 255, 255, 0.75);
+  --color-code-bg: rgba(34, 39, 34, 0.06);
+  --color-pre-bg: rgba(34, 39, 34, 0.04);
+  --color-selection-fg: #f7fbf6;
+  --color-scrollbar: rgba(34, 39, 34, 0.25);
+  --glow-1: rgba(140, 199, 161, 0.16);
+  --glow-2: rgba(95, 156, 120, 0.1);
+}
+
+/*
+ * The dark values are the @theme defaults, so an explicit dark choice only has
+ * to pin `color-scheme` (native controls and scrollbars follow it) and opt out
+ * of the light media query above.
+ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 html {
   scroll-behavior: smooth;
   background-color: var(--color-bg);
+  /* Scrollbar follows the scheme rather than the OS default chrome. */
+  scrollbar-color: var(--color-scrollbar) transparent;
 }
 
 body {
   /* 16px floor for body copy. */
   font-size: 16px;
-  /* Transparent so the ambient wash below shows through. */
+  line-height: 1.6;
+  /* Transparent so the ambient glow below shows through. */
   background-color: transparent;
 }
 
 /*
- * Ambient colour: three soft radial washes in the corners, painted on a fixed
- * pseudo-element. CSS-only, so nothing animates and no DOM is added, and
- * pointer-events:none keeps it out of the way of clicks and focus.
- * The colours and alphas are mirrored in src/styles/tokens.ts, where
+ * Ambient colour: a soft wash from the top centre and a fainter one rising
+ * from the bottom, painted on a fixed pseudo-element. Symmetric and low-alpha,
+ * so the page has depth without scattered colour. CSS-only, so no DOM is
+ * added, and pointer-events:none keeps it out of the way of clicks and focus.
+ * The colours and alphas are mirrored in src/styles/palettes.ts, where
  * check:contrast composites them to prove text still clears 4.5:1.
  */
 body::before {
@@ -41,14 +126,13 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background-image:
-    radial-gradient(38rem 38rem at 78% -8%, rgba(94, 234, 212, 0.14), transparent 70%),
-    radial-gradient(34rem 34rem at -10% 10%, rgba(129, 140, 248, 0.13), transparent 70%),
-    radial-gradient(32rem 32rem at 95% 98%, rgba(251, 191, 36, 0.07), transparent 72%);
+    radial-gradient(70rem 32rem at 50% -12%, var(--glow-1), transparent 70%),
+    radial-gradient(50rem 26rem at 50% 112%, var(--glow-2), transparent 70%);
 }
 
 ::selection {
   background-color: var(--color-accent);
-  color: #134e4a;
+  color: var(--color-selection-fg);
 }
 
 /* Balanced headings and tidier paragraph rags. */
@@ -69,9 +153,9 @@ li {
 }
 
 /*
- * Section labels: the small uppercase headings that divide a page. An accent
- * tick on the left and a hairline running out to the right give each section a
- * clear start, which is what makes long pages scannable.
+ * Section labels: the small uppercase headings that divide a page. A quiet
+ * hairline running out to the right gives each section a clear start, which
+ * is what makes long pages scannable.
  */
 .section-label {
   display: flex;
@@ -82,13 +166,6 @@ li {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-fg);
-}
-
-.section-label::before {
-  content: "";
-  width: 1.25rem;
-  height: 2px;
-  background-color: var(--color-accent);
 }
 
 .section-label::after {
@@ -103,6 +180,13 @@ li {
   outline-offset: 2px;
 }
 
+/* A scroll pane that can be scrolled without dragging the page with it. */
+.scroll-pane {
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-scrollbar) transparent;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -113,6 +197,13 @@ li {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Keyboard hints are noise on touch devices. */
+@media (pointer: coarse) {
+  .kbd-hint {
+    display: none;
   }
 }
 
@@ -243,7 +334,7 @@ li {
 
 .rich-text code,
 .markdown code {
-  background-color: rgba(226, 232, 240, 0.1);
+  background-color: var(--color-code-bg);
   border-radius: 4px;
   padding: 0.1rem 0.35rem;
   font-size: 0.9em;
@@ -256,7 +347,7 @@ li {
   border: 1px solid var(--color-rule);
   border-radius: 8px;
   padding: 0.75rem 1rem;
-  background-color: rgba(0, 0, 0, 0.35);
+  background-color: var(--color-pre-bg);
 }
 
 .rich-text pre code,
@@ -266,14 +357,66 @@ li {
 }
 
 /*
- * Minimal motion, in the spirit of the reference design: blocks ease in once as
- * they enter the viewport, and interactive elements ease their colour.
+ * Motion. Two families:
  *
- * Everything here is scoped to `.js`, which an inline script sets before first
- * paint. With JavaScript off the class is absent, none of this applies, and
- * every page renders fully visible — the motion is an enhancement, never a
- * prerequisite for reading. Nothing loops and nothing animates on its own.
+ * 1. Page entrance. Every route eases in once on load — header first, then the
+ *    column beside it. Deliberately load-triggered, not scroll-triggered: an
+ *    earlier version hid content until it scrolled into view, which made a page
+ *    look empty below the fold. Nothing here waits on the viewport, so content
+ *    below the fold is always present and readable.
+ * 2. Chat. Each message fades up as it arrives, and a spinner sits beside the
+ *    status line while a reply is in flight.
+ *
+ * Keyframes are defined unconditionally but only applied under no-preference;
+ * the reduced-motion block above collapses them to a static result.
  */
+@keyframes page-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes glow-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes chat-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes chat-caret-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes chat-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   a,
   button,
@@ -281,16 +424,37 @@ li {
     transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease;
   }
 
-  .js main article > *,
-  .js main > header {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 450ms ease-out, transform 450ms ease-out;
+  .page-enter {
+    animation: page-rise 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .js main article > .is-visible,
-  .js main > header.is-visible {
-    opacity: 1;
-    transform: none;
+  .page-enter-delayed {
+    animation: page-rise 480ms cubic-bezier(0.22, 1, 0.36, 1) 110ms both;
   }
+
+  body::before {
+    animation: glow-in 900ms ease-out both;
+  }
+
+  .chat-message {
+    animation: chat-in 240ms ease-out both;
+  }
+
+  .chat-spinner {
+    animation: chat-spin 700ms linear infinite;
+  }
+}
+
+/*
+ * In-flight indicator. A ring with one lit segment reads as "working" even
+ * when it stops turning, which is the state reduced-motion readers get.
+ */
+.chat-spinner {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  flex-shrink: 0;
+  border: 2px solid var(--color-rule);
+  border-top-color: var(--color-accent);
+  border-radius: 9999px;
 }
