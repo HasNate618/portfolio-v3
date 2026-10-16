@@ -1,6 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import MarkdownIt from "markdown-it";
 import { renderMarkdown, resolveStats } from "../src/lib/markdown";
+import { MARKDOWN_OPTIONS } from "../src/lib/markdown-options";
 
 test("headings map to h1, h2 and h3 with ids", () => {
   assert.match(renderMarkdown("# A"), /<h1 id="a"/);
@@ -34,6 +36,41 @@ test("raw html in content is escaped, not passed through", () => {
   const html = renderMarkdown("<script>alert(1)</script>");
   assert.ok(!html.includes("<script>"), "html:false must escape raw tags");
   assert.match(html, /&lt;script&gt;/);
+});
+
+/*
+ * The chat transcript renders model answers straight into the DOM, and page
+ * bodies do the same with content files, so `html: false` is the only thing
+ * standing between either of them and injected markup. These assertions exist
+ * to fail loudly if someone flips it.
+ */
+test("the shared markdown options keep raw html inert", () => {
+  assert.equal(MARKDOWN_OPTIONS.html, false, "html must stay off: escaping is the sanitiser");
+
+  const md = new MarkdownIt(MARKDOWN_OPTIONS);
+
+  /*
+   * Escaping neutralises a tag by turning its angle brackets into entities; it
+   * does not delete the text. So the property to assert is that nothing but
+   * markdown-it's own wrapper survives as markup, not that the words vanish.
+   */
+  for (const probe of [
+    "<script>alert(1)</script>",
+    '<img src=x onerror=alert(1)>',
+    '<a href="#" onclick="alert(1)">x</a>',
+  ]) {
+    const text = md.render(probe).trim().replace(/<\/?p>/g, "");
+    assert.ok(!text.includes("<"), `live markup survived: ${text}`);
+    assert.ok(text.includes("&lt;"), `source tag should arrive escaped: ${text}`);
+  }
+});
+
+test("unsafe link schemes never reach an href", () => {
+  const md = new MarkdownIt(MARKDOWN_OPTIONS);
+  for (const scheme of ["javascript:", "JaVaScRiPt:", "vbscript:", "data:"]) {
+    const html = md.render(`[click](${scheme}alert(1))`);
+    assert.ok(!html.includes("href="), `${scheme} produced a link: ${html}`);
+  }
 });
 
 test("ids can be turned off for the bot view", () => {

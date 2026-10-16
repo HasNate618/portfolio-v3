@@ -1,5 +1,6 @@
 import { getExperience, getProject } from "@/data/site";
 import { modelTableHtml } from "@/lib/tables";
+import { MARKDOWN_OPTIONS } from "@/lib/markdown-options";
 
 /** The id may be a project id or an experience org ("3D Western"), so dots are the only delimiter. */
 const STAT_PATTERN = /\{\{stat:([^.}]+)\.([a-zA-Z0-9_-]+)\}\}/g;
@@ -48,7 +49,7 @@ export function getMd(): AnyMd {
   const MarkdownIt = require("markdown-it");
   const Ctor = typeof MarkdownIt === "function" ? MarkdownIt : MarkdownIt.default;
 
-  const instance = new Ctor({ html: false, linkify: false, typographer: false }) as AnyMd;
+  const instance = new Ctor(MARKDOWN_OPTIONS) as AnyMd;
 
   // Give every heading a stable id so "on this page" links resolve.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
