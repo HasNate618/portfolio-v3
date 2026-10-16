@@ -11,9 +11,9 @@
  * step lighter (5.42:1) so de-emphasised text still passes.
  */
 export const tokens = {
-  bg: "#0a0a0a",
-  fg: "#ffffff",
-  muted: "#cbd5e1",
+  bg: "#18181b",
+  fg: "#d4d4d8",
+  muted: "#a1a1aa",
   accent: "#5eead4",
   /** Non-text only: hairlines and section dividers. */
   rule: "rgba(226, 232, 240, 0.1)",

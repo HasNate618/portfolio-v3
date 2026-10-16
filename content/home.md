@@ -9,3 +9,7 @@ onThisPage: [Featured, Experience, Ask]
 I build LLM tools for my own work, on low-cost models or models I run myself.
 
 In my agent projects, the model proposes a change and plain code applies it, with a log or a rollback behind it.
+
+The TypeScript, Python, and retrieval pieces on the resume are where I am strongest.
+
+If you want the short version of any project before reading, the chat answers from the public notes. Trust the case studies first.

@@ -8,9 +8,9 @@
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  --color-bg: #0a0a0a;
-  --color-fg: #ffffff;
-  --color-muted: #cbd5e1;
+  --color-bg: #18181b;
+  --color-fg: #d4d4d8;
+  --color-muted: #a1a1aa;
   --color-accent: #5eead4;
   --color-rule: rgba(226, 232, 240, 0.1);
 }
@@ -22,6 +22,8 @@ html {
 body {
   /* 16px floor for body copy. */
   font-size: 16px;
+  /* Subtle vertical gradient so the dark surface reads more like a panel. */
+  background: linear-gradient(180deg, #1f1f23 0%, #18181b 55%, #111113 100%);
 }
 
 ::selection {
