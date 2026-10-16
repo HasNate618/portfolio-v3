@@ -24,11 +24,6 @@ test("projects renders every group label", () => {
   }
 });
 
-test("the TeraGo row shows its figure via StatRow, not prose", () => {
-  assert.match(html, /760/);
-  assert.ok(!page.body.includes("760"), "the figure must not be typed into content");
-});
-
 test("the games list is a native disclosure", () => {
   assert.match(html, /<details/);
   assert.match(html, /<summary/);
@@ -48,7 +43,6 @@ test("every project in site.ts is rendered exactly once", () => {
 
 test("only projects with a case study are linked", () => {
   assert.match(html, /href="\/projects\/campus"/);
-  assert.match(html, /href="\/experience\/terago"/);
   // Wasteland has no content file, so it must not offer a dead case-study link.
   assert.doesNotMatch(html, /href="\/projects\/wasteland"/);
 });

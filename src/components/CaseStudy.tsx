@@ -69,13 +69,13 @@ export function CaseStudy({
         dangerouslySetInnerHTML={{ __html: renderMarkdown(page.body) }}
       />
 
-      {page.projectId ? (
+      {page.projectId || page.experienceOrg ? (
         <section className="mt-16">
           <h2 id="stack" className="text-xs font-bold uppercase tracking-widest text-fg">
             Stack
           </h2>
           <div className="mt-4">
-            <StackList projectId={page.projectId} />
+            <StackList projectId={page.projectId} org={page.experienceOrg} />
           </div>
         </section>
       ) : null}

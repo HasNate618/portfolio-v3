@@ -1,8 +1,6 @@
 ---
 title: Experience
-route: /experience
 description: Internship, student team and part-time roles, newest first.
-priority: start-here
 tags: [experience]
 related: [index.md, ../skills.md]
 ---
@@ -12,7 +10,7 @@ Roles newest first. Dates, titles and locations come from the site data rather t
 ## TeraGo
 
 - Built a Python prototype where a local LLM on Ollama pulls details out of non-standard provider outage emails and opens Jira issues, reading mail through Microsoft Graph.
-- Wrote Channel Finder, a Python tool that shortlists clear RF channels from MapInfo spectrum records. Validated on {{stat:terago.testCases}} test cases, shipped as a CLI and a web UI.
+- Wrote Channel Finder, a Python tool that shortlists clear RF channels from MapInfo spectrum records. Validated on {{stat:TeraGo.testCases}} test cases, shipped as a CLI and a web UI.
 - Deployed a Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
 - Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) with estimated savings over Copilot.
 

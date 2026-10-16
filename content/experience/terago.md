@@ -1,7 +1,6 @@
 ---
 title: TeraGo
 route: /experience/terago
-projectId: terago
 experienceOrg: TeraGo
 description: Software Engineering Intern, Markham, ON, May to Aug 2026.
 priority: start-here
@@ -17,7 +16,7 @@ This was internal work, so there's no code or screenshots here.
 ## tl;dr
 
 - A Python prototype where a local LLM on Ollama reads provider outage emails and opens Jira issues.
-- Channel Finder, an RF tool that shortlists clear channels, validated on {{stat:terago.testCases}} test cases.
+- Channel Finder, an RF tool that shortlists clear channels, validated on {{stat:TeraGo.testCases}} test cases.
 - A Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
 - A proposal for a self-hosted LLM platform to cut per-user Copilot licensing costs.
 
@@ -62,5 +61,5 @@ link type + candidates ─► check against spectrum records
 
 ## Results
 
-- Channel Finder validated on {{stat:terago.testCases}} test cases, shipped as a CLI and a web UI.
+- Channel Finder validated on {{stat:TeraGo.testCases}} test cases, shipped as a CLI and a web UI.
 - Copilot Studio agent deployed for engineers.

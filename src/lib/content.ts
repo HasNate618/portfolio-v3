@@ -28,7 +28,7 @@ export type Page = {
 };
 
 /** Left-hand nav order. Routes not listed here sort after these, alphabetically. */
-export const NAV_ORDER = ["/projects", "/experience", "/now", "/resume"] as const;
+export const NAV_ORDER = ["/projects", "/now", "/resume"] as const;
 
 const CONTENT_ROOT = "content";
 

@@ -8,9 +8,16 @@ const ICONS: Record<string, { path: string; fill?: boolean; stroke?: boolean }> 
 };
 
 export function SocialLinks() {
+  // Email is not in `contact.links` (that list is external profiles), so it is
+  // prepended here and gets the same icon treatment as the rest.
+  const links = [
+    { label: "Email", href: `mailto:${site.contact.email}` },
+    ...site.contact.links,
+  ];
+
   return (
-    <ul className="mt-8 flex flex-wrap items-center gap-4" aria-label="Contact links">
-      {site.contact.links
+    <ul className="mt-8 flex flex-wrap items-center gap-3" aria-label="Contact links">
+      {links
         .filter((link) => ["Email", "GitHub", "LinkedIn", "Devpost"].includes(link.label))
         .map((link) => {
           const icon = ICONS[link.label];

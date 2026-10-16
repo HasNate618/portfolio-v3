@@ -46,17 +46,6 @@ export function HomeView({ page }: { page: Page }) {
         {site.identity.seeking}.
       </p>
 
-      <ul className="mt-6 flex flex-wrap gap-3">
-        <li>
-          <a
-            href={`mailto:${site.contact.email}`}
-            className="inline-block rounded border border-rule px-4 py-2 text-sm font-medium text-fg hover:border-accent hover:text-accent"
-          >
-            Email me
-          </a>
-        </li>
-      </ul>
-
       <h2 id="experience" className="mt-16 text-xs font-bold uppercase tracking-widest text-fg">
         Experience
       </h2>
@@ -66,29 +55,28 @@ export function HomeView({ page }: { page: Page }) {
           return (
             <li key={experience.org} className="sm:grid sm:grid-cols-[10rem_1fr] sm:gap-4">
               <span className="text-xs uppercase tracking-wide text-muted">{experience.dates}</span>
-              <span className="mt-1 sm:mt-0">
-                <span className="font-medium text-fg">{experience.role}</span>
-                <span className="text-muted"> · {experience.org}</span>
+              <div className="mt-1 sm:mt-0">
+                <p>
+                  <span className="font-medium text-fg">{experience.role}</span>
+                  <span className="text-muted"> · {experience.org}</span>
+                  <span className="text-muted"> · {experience.location}</span>
+                </p>
+                {experience.summary ? (
+                  <p className="mt-1 max-w-[68ch] leading-relaxed">{experience.summary}</p>
+                ) : null}
                 {href ? (
-                  <>
-                    {" "}
+                  <p className="mt-1">
                     <Link href={href} className="text-accent underline hover:text-fg">
                       Case study
                       <span aria-hidden="true"> →</span>
                     </Link>
-                  </>
+                  </p>
                 ) : null}
-              </span>
+              </div>
             </li>
           );
         })}
       </ul>
-      <p className="mt-4">
-        <Link href="/experience" className="text-sm text-accent underline hover:text-fg">
-          All experience <span aria-hidden="true">→</span>
-        </Link>
-      </p>
-
       <h2 id="projects" className="mt-16 text-xs font-bold uppercase tracking-widest text-fg">
         Projects
       </h2>
@@ -127,7 +115,10 @@ export function HomeView({ page }: { page: Page }) {
             </div>
             <AwardBadge projectName={project.name} />
             <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
-            <ProjectMedia media={project.media} className="mt-4 max-w-xl" />
+            <ProjectMedia media={project.media} className="mt-3" />
+            <div className="mt-3">
+              <StackList projectId={project.id} />
+            </div>
           </li>
         ))}
       </ul>

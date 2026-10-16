@@ -28,8 +28,9 @@ test("Homelab carries the figures the draft states", () => {
 });
 
 test("TeraGo keeps its corrected dates and the 760-case figure", () => {
-  assert.equal(site.experience.find((e) => e.org === "TeraGo")!.dates, "May 2026 to Aug 2026");
-  assert.ok(getProject("terago")!.stats.some((s) => s.value === "760"));
+  const terago = site.experience.find((e) => e.org === "TeraGo")!;
+  assert.equal(terago.dates, "May 2026 to Aug 2026");
+  assert.ok(terago.stats?.some((s) => s.value === "760"));
 });
 
 test("every project has a group, order, role and unique stat keys", () => {
@@ -58,10 +59,11 @@ test("every display group has at least one project", () => {
   }
 });
 
-test("terago exists as a project with a named stat key", () => {
-  const terago = getProject("terago")!;
-  assert.ok(terago, "terago must be in site.projects as well as site.experience");
-  assert.ok(terago.stats.some((s) => s.key === "testCases" && s.value === "760"));
+test("terago is an experience, not a project", () => {
+  // It used to be both, which listed the internship twice on the home page.
+  assert.equal(getProject("terago"), undefined, "terago must not be in site.projects");
+  const terago = getExperience("TeraGo")!;
+  assert.ok(terago.stats?.some((s) => s.key === "testCases" && s.value === "760"));
 });
 
 test("aware carries the rows its model table renders", () => {
@@ -99,12 +101,12 @@ test("the flagship is explicit data, not a hardcoded id in a view", () => {
 test("the featured cards are the ranked projects, in display order", () => {
   assert.deepEqual(
     featuredProjects().map((p) => p.id),
-    ["homelab", "aware", "terago"]
+    ["homelab", "aware"]
   );
 });
 
 test("every ranked project exists and exactly one is the flagship", () => {
   const ranked = site.projects.filter((p) => p.rank);
   assert.equal(ranked.filter((p) => p.rank === "flagship").length, 1);
-  assert.equal(ranked.length, 4);
+  assert.equal(ranked.length, 3, "campus (flagship) plus two featured");
 });

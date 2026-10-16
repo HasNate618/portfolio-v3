@@ -24,7 +24,7 @@ test("the seeking line comes from site.ts, not from the markdown", () => {
 });
 
 test("the featured section links to real case studies", () => {
-  for (const id of ["homelab", "aware", "terago"]) {
+  for (const id of ["homelab", "aware"]) {
     assert.ok(html.includes(`href="/projects/${id}"`), `missing case study link for ${id}`);
   }
 });
@@ -42,7 +42,7 @@ test("every experience row is rendered", () => {
   }
 });
 
-test("contact links are real anchors", () => {
-  assert.match(html, /mailto:/);
+test("the Campus card links out to real anchors", () => {
+  // Email lives in the header icon row now, not on the page body.
   assert.match(html, /github\.com\/HasNate618/);
 });

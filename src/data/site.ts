@@ -61,12 +61,16 @@ export type Project = {
 export type Experience = {
   org: string;
   role: string;
+  /** One or two sentences for the home page. Depth lives in the corpus doc. */
+  summary?: string;
   location: string;
   terms: { start: string; end: string | null }[];
   dates: string;
   onResume: boolean;
   file: string;
   stats?: ProjectStat[];
+  /** Tech pills for a role that has no project entry (TeraGo). */
+  stack?: string[];
 };
 
 export type SiteContent = {
@@ -101,12 +105,19 @@ export const site: SiteContent = {
     ],
   },
   experience: [
-    { org: "TeraGo", role: "Software Engineering Intern", location: "Markham, ON", terms: [{ start: "2026-05", end: "2026-08" }], dates: "May 2026 to Aug 2026", onResume: true, file: "/knowledgebase/experience/terago.md" },
+    { org: "TeraGo", role: "Software Engineering Intern", location: "Markham, ON", terms: [{ start: "2026-05", end: "2026-08" }], dates: "May 2026 to Aug 2026", onResume: true, file: "/knowledgebase/experience/terago.md",
+      summary: "Built a local-LLM prototype that turns provider outage emails into Jira issues, an RF channel tool that shortlists clear channels from MapInfo spectrum records, a Copilot Studio agent, and a self-hosted LLM proposal.",
+      stats: [{ key: "testCases", label: "test cases", value: "760" }],
+      stack: ["Python", "Ollama", "Microsoft Graph", "Jira", "Copilot Studio", "SharePoint", "MapInfo data"] },
     { org: "3D Western", role: "VP of Data/ML (promoted from Software Developer)", location: "London, ON", terms: [{ start: "2025-09", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
+      summary: "Led two developers on the club's print-approval dataset: 4,127 scraped models, rendered in Blender and class-checked by a VLM, then benchmarked base vision models against it.",
       stats: [{ key: "dataset", label: "labelled frames", value: "4,127" }] },
-    { org: "WEMars", role: "Software team member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2024 to Apr 2025, rejoined Sep 2026", onResume: false, file: "/knowledgebase/experience/wemars.md" },
-    { org: "WEFirst Robotics", role: "Software Developer", location: "London, ON", terms: [{ start: "2026-01", end: "2026-04" }], dates: "Jan 2026 to Apr 2026", onResume: false, file: "/knowledgebase/experience/wefirst.md" },
-    { org: "Microcomputer Consulting Inc.", role: "IT Intern (part-time)", location: "Mississauga, ON", terms: [{ start: "2025-05", end: "2025-08" }], dates: "May 2025 to Aug 2025", onResume: false, file: "/knowledgebase/experience/mcc.md" },
+    { org: "WEMars", role: "Software team member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2024 to Apr 2025, rejoined Sep 2026", onResume: false, file: "/knowledgebase/experience/wemars.md",
+      summary: "Western's Mars rover team. Back on AI and autonomy for the rover; previously built wireless ESP32-CAM streaming and looked at vision for navigation markers." },
+    { org: "WEFirst Robotics", role: "Software Developer", location: "London, ON", terms: [{ start: "2026-01", end: "2026-04" }], dates: "Jan 2026 to Apr 2026", onResume: false, file: "/knowledgebase/experience/wefirst.md",
+      summary: "Programmed the swerve drive to turn Xbox controller input into omnidirectional motion, tuned closed-loop control, and assembled the CAN bus drivetrain." },
+    { org: "Microcomputer Consulting Inc.", role: "IT Intern (part-time)", location: "Mississauga, ON", terms: [{ start: "2025-05", end: "2025-08" }], dates: "May 2025 to Aug 2025", onResume: false, file: "/knowledgebase/experience/mcc.md",
+      summary: "Set up and deployed Windows workstations for client organizations." },
   ],
   projects: [
     // ── featured ──────────────────────────────────────────────────────────
@@ -174,15 +185,6 @@ export const site: SiteContent = {
         { name: "Piper TTS", job: "text to speech", runtime: "on-device" },
         { name: "MiniCPM5-1B (GGUF Q4_K_M)", job: "commands to rules, memory", runtime: "on-device" },
       ],
-    },
-    {
-      id: "terago", name: "TeraGo internship", group: "featured", order: 4,
-      dates: "May 2026 to Aug 2026", displayRole: "intern",
-      covers: "Local LLM outage-ticket prototype, an RF channel tool, a Copilot Studio agent, and a self-hosted LLM proposal.",
-      links: [],
-      stats: [{ key: "testCases", label: "test cases", value: "760" }],
-      stack: ["Python", "Ollama", "Microsoft Graph", "Jira", "Copilot Studio", "SharePoint", "MapInfo data"],
-      rank: "featured",
     },
 
     // ── also building ─────────────────────────────────────────────────────

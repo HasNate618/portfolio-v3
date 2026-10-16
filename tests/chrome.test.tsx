@@ -2,7 +2,6 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { renderToStaticMarkup } from "react-dom/server";
 import { SiteHeader, NAV_LINKS } from "../src/components/SiteHeader";
-import { SiteFooter } from "../src/components/SiteFooter";
 
 test("skip link comes before the nav", () => {
   const html = renderToStaticMarkup(<SiteHeader current="/now" />);
@@ -43,7 +42,8 @@ test("the header contributes no headings, so each page owns its h1", () => {
   assert.doesNotMatch(html, /<h[1-6][\s>]/, "a banner heading would precede the page h1");
 });
 
-test("the footer carries a real mailto link", () => {
-  const html = renderToStaticMarkup(<SiteFooter />);
+test("the contact icons include a real mailto link", () => {
+  const html = renderToStaticMarkup(<SiteHeader current="/" />);
   assert.match(html, /href="mailto:/);
+  assert.match(html, /aria-label="Email"/);
 });

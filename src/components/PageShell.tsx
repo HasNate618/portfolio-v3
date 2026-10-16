@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
 import { ScrollReveal } from "@/components/ScrollReveal";
 
 /**
@@ -17,7 +16,6 @@ export function PageShell({ current, children }: { current: string; children: Re
         <main id="content" className="pt-24 lg:py-24">
           <ScrollReveal />
           {children}
-          <SiteFooter />
         </main>
       </div>
     </div>
