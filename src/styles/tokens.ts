@@ -12,8 +12,8 @@
  */
 export const tokens = {
   bg: "#0a0a0a",
-  fg: "#94a3b8",
-  muted: "#7d8fa9",
+  fg: "#ffffff",
+  muted: "#cbd5e1",
   accent: "#5eead4",
   /** Non-text only: hairlines and section dividers. */
   rule: "rgba(226, 232, 240, 0.1)",

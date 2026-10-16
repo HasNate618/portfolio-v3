@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SocialLinks } from "@/components/SocialLinks";
 import { site } from "@/data/site";
 
 /**
@@ -37,7 +38,9 @@ export function SiteHeader({ current }: { current: string }) {
           {site.identity.headline}
         </p>
 
-        <p className="mt-4 max-w-xs leading-relaxed">{site.identity.positioning}</p>
+        {site.identity.positioning ? (
+          <p className="mt-4 max-w-xs leading-relaxed">{site.identity.positioning}</p>
+        ) : null}
 
         <nav aria-label="Site" className="mt-8">
           <ul className="flex flex-wrap gap-x-4 gap-y-2 lg:mt-16 lg:flex-col lg:gap-4">
@@ -61,15 +64,7 @@ export function SiteHeader({ current }: { current: string }) {
         </nav>
       </div>
 
-      <ul className="mt-8 flex flex-wrap items-center gap-4 text-sm lg:mt-0">
-        {site.contact.links.map((link) => (
-          <li key={link.href}>
-            <a href={link.href} className="text-fg underline hover:text-accent">
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <SocialLinks />
     </header>
   );
 }

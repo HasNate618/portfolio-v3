@@ -57,7 +57,7 @@ export type Experience = {
 };
 
 export type SiteContent = {
-  identity: { name: string; headline: string; positioning: string; seeking: string; location: string; year: string;
+  identity: { name: string; headline: string; positioning?: string; seeking: string; location: string; year: string;
     education: { school: string; degree: string; honors: string; start: string; end: string; location: string } };
   contact: { email: string; links: { label: string; href: string }[] };
   experience: Experience[];
@@ -72,7 +72,6 @@ export const site: SiteContent = {
   identity: {
     name: "Nathan Espejo",
     headline: "Applied AI engineer (3rd-year Software Engineering, Western) focused on cost-efficient models, with local and self-hosted options",
-    positioning: "Builds LLM agents and retrieval systems wired into his own workflows. Campus is the flagship, alongside a NixOS homelab run through Hermes Agent profiles and the on-device AWARE build.",
     seeking: "Summer 2027 applied AI engineering internship",
     location: "Brampton and London, ON",
     year: "3rd year (2026-27)",

@@ -21,8 +21,10 @@ export async function GET(): Promise<Response> {
   lines.push(`# ${site.identity.name}`);
   lines.push(`> ${site.identity.headline}`);
   lines.push("");
-  lines.push(site.identity.positioning);
-  lines.push("");
+  if (site.identity.positioning) {
+    lines.push(site.identity.positioning);
+    lines.push("");
+  }
   lines.push(`${site.identity.seeking} · ${site.identity.location} · ${site.identity.year}`);
   lines.push("");
   lines.push("## Contact");
