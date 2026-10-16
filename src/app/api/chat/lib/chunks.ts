@@ -1,5 +1,4 @@
-import fs from "fs";
-import path from "path";
+import { getCorpusDocs } from "@/lib/corpus";
 
 const CHUNK_SIZE = 800;
 
@@ -46,26 +45,11 @@ function splitIntoChunks(text: string, source: string): Chunk[] {
   return chunks;
 }
 
+/**
+ * Indexes the corpus projection rather than walking the filesystem, so the chat
+ * sees exactly what /knowledgebase/*.md serves: frontmatter stripped, stat
+ * placeholders resolved, and the facts components render already inlined.
+ */
 export function loadKnowledgebase(): Chunk[] {
-  // Corpus lives in content/. Task 6 replaces this walk with the corpus projection.
-  const kbPath = path.join(process.cwd(), "content");
-  const allChunks: Chunk[] = [];
-
-  function readDir(dir: string, prefix = "") {
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        readDir(fullPath, path.join(prefix, entry.name));
-      } else if (entry.name.endsWith(".md")) {
-        const content = fs.readFileSync(fullPath, "utf-8");
-        const source = path.join(prefix, entry.name).replace(/\\/g, "/");
-        const chunks = splitIntoChunks(content, source);
-        allChunks.push(...chunks);
-      }
-    }
-  }
-
-  readDir(kbPath);
-  return allChunks;
+  return getCorpusDocs().flatMap((doc) => splitIntoChunks(doc.text, doc.path));
 }

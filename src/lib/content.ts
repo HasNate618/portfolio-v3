@@ -84,6 +84,11 @@ function asStringArray(value: FrontmatterValue | undefined): string[] {
   return Array.isArray(value) ? value : [];
 }
 
+/** Body only, frontmatter removed. Used by the corpus projection. */
+export function stripFrontmatter(raw: string): string {
+  return parseFrontmatter(raw).body;
+}
+
 /** Every .md path under root, relative to root, forward-slashed and sorted. */
 function walk(root: string): string[] {
   const out: string[] = [];
