@@ -6,8 +6,11 @@
  * hold. Prose uses `{{stat:<projectId>.<key>}}`; templates use StatRow/StackList.
  * Otherwise the page and the bot surface drift apart on the next edit.
  *
- * Only route files (files with a `route:` frontmatter key) are scanned — corpus-only
- * files are not rendered, so restating a figure there costs nothing.
+ * Only route files (files with a `route:` frontmatter key) are scanned. Corpus-only
+ * files are exempt from this script, not from the rule: they are still served, at
+ * /knowledgebase/*.md and into the chat corpus, so a figure restated there drifts just
+ * as visibly. The index maps under content/ are where this bites — keep dates, roles
+ * and events out of them and let the site.ts facts block carry those.
  *
  * Usage: check-content.mjs [--root <dir>]   (default root: content)
  */
