@@ -1,0 +1,53 @@
+---
+title: Nathan Espejo
+route: /resume
+description: The résumé as text, matching the PDF.
+priority: reference
+tags: [resume]
+related: [index.md, ../skills.md]
+skills:
+  - group: AI
+    items: [LLM agents, tool calling, RAG, embeddings and reranking, MCP, VLMs, model evaluation, llama.cpp, Ollama, PyTorch, YOLOv8, ONNX]
+  - group: Languages
+    items: [Python, TypeScript, C#, C++, SQL, Bash]
+  - group: Web & Infra
+    items: [React, FastAPI, Next.js, NixOS, Linux, Docker, Tailscale, Caddy, Git, GitHub Actions]
+  - group: Tools
+    items: [Cursor, Claude Code, Hermes Agent, Microsoft Graph, Copilot Studio, Jira, SharePoint, Blender]
+---
+
+## Experience
+
+### TeraGo
+
+- Automated outage ticketing for non-standard provider emails: a local LLM on Ollama extracts the key details and the pipeline opens Jira issues through Microsoft Graph.
+- Wrote Channel Finder, a Python tool that finds clear RF channels in MapInfo data, validated on {{stat:terago.testCases}} test cases.
+- Deployed a Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
+- Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) with estimated savings over Copilot.
+
+### 3D Western
+
+- Led two developers through tickets and PR review to build the club's print-approval dataset and benchmark.
+- Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender and class-checked by a VLM.
+- Benchmarked base vision models on the clean dataset (safe, unsafe and grey classes) for future fine-tuning.
+
+## Projects
+
+### Campus
+
+- Built a self-hosted AI study assistant that syncs my LMS courses into SQLite with Playwright.
+- Designed hybrid retrieval over {{stat:campus.chunks}} chunks from {{stat:campus.files}} course files with embedding search, cross-encoder reranking and a lexical SQL prefilter. Fixed exact phrases that scored below the semantic cutoff.
+- Wrote a {{stat:campus.tools}}-tool agent harness with an audit log for every AI write and a bounded tool loop, with {{stat:campus.tests}} tests in CI.
+- Use it across {{stat:campus.courses}} courses for deadline lookups, studying from course slides, and reviewing drafts against briefs.
+
+### Homelab and NixOS
+
+- Defined a laptop and home server entirely in version-controlled NixOS config ({{stat:homelab.containers}} hardened containers, Tailscale-only access, sops-nix secrets), so every change is a reviewable, reversible diff.
+- Run one Hermes Agent profile per host that makes changes as config edits, over {{stat:homelab.sessions}} sessions and {{stat:homelab.toolCalls}} tool calls since June, with subagents taking larger investigations.
+- Gated agent changes behind my approval and a nixos-safe-rebuild guard, with rollback to the last good build.
+- Grew a git-versioned library of {{stat:homelab.skills}} agent skills on low-cost models, pruned weekly by a curator that keeps backups of removed skills.
+
+### AWARE
+
+- Built an offline home-awareness device running YOLOv8 and YAMNet on a {{stat:aware.boardCost}} Arduino UNO Q with QNN.
+- Had an on-device LLM compile commands like "when glass breaks after 10pm alert me" into deterministic rules, then checked them every 500 ms with no LLM in the loop.

@@ -33,3 +33,16 @@ test("frontmatter is separated from the body", () => {
   assert.ok(!page.body.includes("title:"));
   assert.ok(page.body.length > 0);
 });
+
+test("a skills block list parses into groups with items", () => {
+  const page = loadFrom(FIXTURES).find((p) => p.route === "/")!;
+  assert.deepEqual(page.skills, [
+    { group: "AI", items: ["RAG", "agents"] },
+    { group: "Languages", items: ["Python", "TypeScript"] },
+  ]);
+});
+
+test("a page without a skills block gets an empty list, not undefined", () => {
+  const page = loadFrom(FIXTURES).find((p) => p.route === "/projects/campus")!;
+  assert.deepEqual(page.skills, []);
+});

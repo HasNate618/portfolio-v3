@@ -1,0 +1,33 @@
+@media print {
+  /* The site chrome is navigation, not résumé content. */
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  main,
+  article {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+
+  /* Keep each role and project from splitting across a page break. */
+  section,
+  li {
+    break-inside: avoid;
+  }
+}

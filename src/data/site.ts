@@ -45,6 +45,8 @@ export type Project = {
   stats: ProjectStat[];
   stack: string[];
   models?: ModelRow[];
+  /** Shown on /resume. Mirrors Experience.onResume. */
+  onResume?: boolean;
 };
 
 export type Experience = {
@@ -105,6 +107,7 @@ export const site: SiteContent = {
       dates: "Aug 2026 to present", displayRole: "solo",
       covers: "Self-hosted study assistant for my courses. Hybrid retrieval over 4,687 chunks and a 20-tool agent that logs every write.",
       file: "/knowledgebase/projects/campus.md",
+      onResume: true,
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Campus" }],
       stats: [
         { key: "chunks", label: "chunks", value: "4,687" },
@@ -120,6 +123,7 @@ export const site: SiteContent = {
       dates: "May 2026 to present", displayRole: "solo",
       covers: "Two NixOS machines, 27 hardened containers, and AI agents that change the config only after I approve.",
       file: "/knowledgebase/projects/homelab.md",
+      onResume: true,
       links: [{ label: "GitHub (public NixOS config)", href: "https://github.com/HasNate618/nixos-config-public" }, { label: "GitHub (llama.cpp setup)", href: "https://github.com/HasNate618/local-llama-setup" }],
       stats: [
         { key: "sessions", label: "agent sessions", value: "472" },
@@ -134,6 +138,7 @@ export const site: SiteContent = {
       dates: "Jul 2026", displayRole: "solo", event: "Hack the 6ix 2026",
       covers: "My first solo hack. Vision, audio and a small LLM running offline on one $80 Arduino UNO Q.",
       file: "/knowledgebase/projects/aware.md",
+      onResume: true,
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/AWARE" }, { label: "Devpost", href: "https://devpost.com/software/a-w-a-r-e-autonomous-witness-and-response-engine" }],
       stats: [
         { key: "boardCost", label: "board cost", value: "$80" },

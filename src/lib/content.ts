@@ -19,6 +19,8 @@ export type Page = {
   priority: "start-here" | "reference";
   projectId?: string;
   experienceOrg?: string;
+  /** Résumé only. The four-group layout is a documented exception to one-source. */
+  skills?: { group: string; items: string[] }[];
   onThisPage: string[];
   body: string;
 };
@@ -28,7 +30,7 @@ export const NAV_ORDER = ["/projects", "/experience", "/now", "/resume"] as cons
 
 const CONTENT_ROOT = "content";
 
-type FrontmatterValue = string | string[];
+type FrontmatterValue = string | string[] | Record<string, unknown>[];
 type Frontmatter = Record<string, FrontmatterValue>;
 
 function unquote(value: string): string {
@@ -36,9 +38,10 @@ function unquote(value: string): string {
 }
 
 /**
- * Flat scalars plus one inline array shape (`key: [a, b, c]`). Deliberately not
- * a YAML parser: the content is ours, and a dependency here would be the only
- * thing standing between a typo and a silently empty page.
+ * Flat scalars, one inline array shape (`key: [a, b, c]`), and one block list
+ * (`key:` then `- group: X` / `  items: [a, b]`). Deliberately not a YAML parser:
+ * the content is ours, and a dependency here would be the only thing standing
+ * between a typo and a silently empty page.
  */
 function parseFrontmatter(raw: string): { data: Frontmatter; body: string } {
   if (!raw.startsWith("---")) return { data: {}, body: raw };
@@ -50,8 +53,10 @@ function parseFrontmatter(raw: string): { data: Frontmatter; body: string } {
   const body = raw.slice(end + 4).replace(/^\s*\n/, "");
   const data: Frontmatter = {};
 
-  for (const line of head.split("\n")) {
-    const match = /^([A-Za-z0-9_-]+):\s*(.*)$/.exec(line.trim());
+  const lines = head.split("\n");
+
+  for (let i = 0; i < lines.length; i += 1) {
+    const match = /^([A-Za-z0-9_-]+):\s*(.*)$/.exec(lines[i].trim());
     if (!match) continue;
 
     const [, key, rawValue] = match;
@@ -63,9 +68,39 @@ function parseFrontmatter(raw: string): { data: Frontmatter; body: string } {
         .split(",")
         .map(unquote)
         .filter(Boolean);
-    } else {
-      data[key] = unquote(value);
+      continue;
     }
+
+    if (value === "") {
+      // A block list. Indented lines belong to it; the first unindented key ends it.
+      const entries: Record<string, unknown>[] = [];
+      let current: Record<string, unknown> | undefined;
+
+      while (i + 1 < lines.length && /^\s+/.test(lines[i + 1])) {
+        const nested = lines[i + 1].trim();
+        i += 1;
+
+        const group = /^-\s*group:\s*(.+)$/.exec(nested);
+        if (group) {
+          current = { group: unquote(group[1]) };
+          entries.push(current);
+          continue;
+        }
+
+        const items = /^items:\s*\[(.*)\]$/.exec(nested);
+        if (items && current) {
+          current.items = items[1]
+            .split(",")
+            .map(unquote)
+            .filter(Boolean);
+        }
+      }
+
+      data[key] = entries;
+      continue;
+    }
+
+    data[key] = unquote(value);
   }
 
   return { data, body };
@@ -81,7 +116,19 @@ function asOptionalString(value: FrontmatterValue | undefined): string | undefin
 }
 
 function asStringArray(value: FrontmatterValue | undefined): string[] {
-  return Array.isArray(value) ? value : [];
+  return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === "string") : [];
+}
+
+function asSkills(value: FrontmatterValue | undefined): { group: string; items: string[] }[] {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .filter((entry): entry is Record<string, unknown> => typeof entry === "object" && entry !== null)
+    .map((entry) => ({
+      group: typeof entry.group === "string" ? entry.group : "",
+      items: Array.isArray(entry.items) ? entry.items.map(String) : [],
+    }))
+    .filter((entry) => entry.group.length > 0 && entry.items.length > 0);
 }
 
 /** Body only, frontmatter removed. Used by the corpus projection. */
@@ -133,6 +180,7 @@ export function loadFrom(root: string): Page[] {
       priority: data.priority === "start-here" ? "start-here" : "reference",
       projectId: asOptionalString(data.projectId),
       experienceOrg: asOptionalString(data.experienceOrg),
+      skills: asSkills(data.skills),
       onThisPage: asStringArray(data.onThisPage),
       body,
     });
