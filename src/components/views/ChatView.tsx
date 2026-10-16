@@ -4,8 +4,11 @@ import type { Page } from "@/lib/content";
 import { ChatPanel } from "@/app/chat/ChatPanel";
 
 /**
- * Server-rendered shell: the intro, the disclaimer and the starters are in the
- * HTML, so the page reads with JavaScript off. Only ChatPanel is client-side.
+ * Server-rendered shell: the intro is rendered here and handed to the panel as
+ * the assistant's opening message, so the copy stays in content/chat.md while
+ * the transcript owns its presentation. The disclaimer and the starters are in
+ * the HTML too, so the page reads with JavaScript off. Only ChatPanel is
+ * client-side.
  */
 export function ChatView({ page }: { page: Page }) {
   const starters = page.starters ?? [];
@@ -13,22 +16,6 @@ export function ChatView({ page }: { page: Page }) {
   return (
     <article>
       <h1 className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">{page.title}</h1>
-
-      <div
-        className="rich-text mt-6 max-w-[68ch] leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(page.body) }}
-      />
-
-      <p className="mt-4 max-w-[68ch] leading-relaxed text-muted">
-        Answers come from my public notes and can be wrong. Check the pages, or email{" "}
-        <a
-          href={`mailto:${site.contact.email}`}
-          className="text-accent underline hover:text-fg"
-        >
-          {site.contact.email}
-        </a>
-        .
-      </p>
 
       <noscript>
         <p className="mt-6 max-w-[68ch] leading-relaxed">
@@ -47,7 +34,22 @@ export function ChatView({ page }: { page: Page }) {
         </ul>
       </noscript>
 
-      <ChatPanel starters={starters} />
+      <ChatPanel starters={starters} introHtml={renderMarkdown(page.body)} />
+
+      {/*
+       * A footnote rather than a preamble: the panel is the point of the page,
+       * so the caveat follows it instead of pushing it down the screen.
+       */}
+      <p className="mt-4 max-w-[68ch] text-sm leading-relaxed text-muted">
+        Answers come from my public notes and can be wrong. Check the pages, or email{" "}
+        <a
+          href={`mailto:${site.contact.email}`}
+          className="text-accent underline hover:text-fg"
+        >
+          {site.contact.email}
+        </a>
+        .
+      </p>
     </article>
   );
 }
