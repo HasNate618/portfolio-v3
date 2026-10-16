@@ -142,14 +142,18 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
   }
 
   return (
-    <div className="mt-6">
+    /*
+     * A fixed-height column: the transcript fills what the composer does not
+     * use. Without a fixed height the block grew with every message, so the
+     * page itself kept getting longer as an answer streamed in.
+     */
+    <div className="mt-6 flex h-[62vh] min-h-[20rem] flex-col">
       {/*
-       * The transcript scrolls on its own, so a long answer never stretches
-       * the page, but it carries no chrome: no card, no border, no fill. The
-       * conversation should read as part of the page rather than as a widget
-       * in a pane, and the composer is a separate element below it.
+       * The transcript scrolls on its own but carries no chrome: no card, no
+       * border, no fill. The conversation reads as part of the page rather than
+       * as a widget in a pane, and it ends flush against the composer.
        */}
-      <div ref={scrollRef} className="scroll-pane max-h-[62vh] min-h-[18rem] overflow-y-auto">
+      <div ref={scrollRef} className="scroll-pane scroll-fade-top flex-1 overflow-y-auto">
         <ol aria-live="polite" className="flex flex-col gap-4">
           {/*
            * The page's intro is content, not chrome: it arrives the way every
@@ -157,7 +161,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
            * rendered on the server so the copy stays in content/chat.md.
            */}
           <li className="chat-message">
-            <div className="mr-auto w-fit max-w-[92%] rounded-3xl rounded-bl-lg border border-rule bg-bubble px-4 py-3">
+            <div className="bubble-assistant mr-auto w-fit max-w-[92%] border border-rule bg-bubble px-4 py-3">
               <p className="text-xs font-bold uppercase tracking-widest text-muted">Assistant</p>
               <div
                 className="markdown mt-1.5 max-w-[68ch] leading-relaxed text-fg"
@@ -166,35 +170,48 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
             </div>
           </li>
 
-          {messages.map((message, index) => (
-            <li key={index} className="chat-message">
-              {message.role === "user" ? (
-                <div className="ml-auto w-fit max-w-[85%] rounded-3xl rounded-br-lg border border-rule bg-bubble px-4 py-2.5">
-                  <p className="sr-only">You</p>
-                  <p className="whitespace-pre-wrap leading-relaxed text-fg">{message.content}</p>
-                </div>
-              ) : (
-                <div className="mr-auto w-fit max-w-[92%] rounded-3xl rounded-bl-lg border border-rule bg-bubble px-4 py-3">
-                  <p className="text-xs font-bold uppercase tracking-widest text-muted">
-                    Assistant
-                  </p>
-                  {/*
-                   * Safe by construction: `md` is markdown-it with
-                   * `html: false`, so raw HTML in the answer is escaped rather
-                   * than parsed, and its default link validator drops
-                   * `javascript:` and other unsafe schemes. Only escaped
-                   * markup reaches the DOM.
-                   */}
-                  <div
-                    className="markdown mt-1.5 max-w-[68ch] leading-relaxed text-fg"
-                    dangerouslySetInnerHTML={{
-                      __html: message.content ? md.render(message.content) : "",
-                    }}
-                  />
-                </div>
-              )}
-            </li>
-          ))}
+          {messages.map((message, index) => {
+            const thinking = busy && index === messages.length - 1 && message.role === "assistant";
+
+            /*
+             * An answer with no text yet renders nothing: an empty bubble was
+             * just a pill with a label in it. The status line below carries the
+             * "working" signal until the first chunk lands.
+             */
+            if (thinking && message.content.length === 0) return null;
+
+            return (
+              <li key={index} className="chat-message">
+                {message.role === "user" ? (
+                  <div className="bubble-user ml-auto w-fit max-w-[85%] border border-rule bg-bubble px-4 py-2.5">
+                    <p className="sr-only">You</p>
+                    <p className="whitespace-pre-wrap leading-relaxed text-fg">{message.content}</p>
+                  </div>
+                ) : (
+                  <div className="bubble-assistant mr-auto w-fit max-w-[92%] border border-rule bg-bubble px-4 py-3">
+                    <p className="text-xs font-bold uppercase tracking-widest text-muted">
+                      Assistant
+                    </p>
+                    {/*
+                     * Safe by construction: `md` is markdown-it with
+                     * `html: false`, so raw HTML in the answer is escaped rather
+                     * than parsed, and its default link validator drops
+                     * `javascript:` and other unsafe schemes. Only escaped
+                     * markup reaches the DOM.
+                     */}
+                    <div
+                      className={`markdown mt-1.5 max-w-[68ch] leading-relaxed text-fg ${
+                        thinking ? "streaming-text" : ""
+                      }`}
+                      dangerouslySetInnerHTML={{
+                        __html: message.content ? md.render(message.content) : "",
+                      }}
+                    />
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ol>
 
         {/*
@@ -210,7 +227,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
                   type="button"
                   onClick={() => void send(starter)}
                   disabled={busy}
-                  className="rounded-3xl rounded-br-lg border border-rule bg-bubble px-4 py-2.5 text-left text-sm text-fg transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+                  className="bubble-user border border-rule bg-bubble px-4 py-2.5 text-left text-sm text-fg transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
                 >
                   {starter}
                 </button>
@@ -234,7 +251,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
 
         {status === "error" ? (
           <p className="mt-5 text-sm text-muted" role="alert">
-            Something went wrong and I couldn&rsquo;t answer. Try again, or read the{" "}
+            Something went wrong and the assistant couldn&rsquo;t answer. Try again, or read the{" "}
             <Link href="/projects" className="text-accent underline hover:text-fg">
               projects
             </Link>{" "}
@@ -257,7 +274,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
                   type="button"
                   onClick={() => void send(followup)}
                   disabled={busy}
-                  className="rounded-3xl rounded-br-lg border border-rule bg-bubble px-4 py-2.5 text-left text-sm text-fg transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+                  className="bubble-user border border-rule bg-bubble px-4 py-2.5 text-left text-sm text-fg transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
                 >
                   {followup}
                 </button>
@@ -268,19 +285,19 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
       </div>
 
       {/*
-       * Composer: a single rounded control below the transcript, not attached
-       * to it. The field keeps no outline of its own, so the shell can show a
-       * ring for keyboard focus and nothing at all for a pointer click.
+       * Composer: a single rounded control ending the column, flush against the
+       * transcript so the last message meets it. The field keeps no outline of
+       * its own, so the shell can show a ring for keyboard focus and nothing at
+       * all for a pointer click.
        */}
       <form
-        className="mt-4"
         onSubmit={(event) => {
           event.preventDefault();
           void send(input);
         }}
       >
         <label htmlFor="chat-input" className="sr-only">
-          Ask about Campus, TeraGo, or anything else
+          Ask the assistant about Campus, TeraGo, or anything else
         </label>
         <div
           className={`flex items-end gap-2 rounded-2xl border border-rule bg-surface p-2 ${
@@ -299,8 +316,8 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
                 void send(input);
               }
             }}
-            placeholder="Ask about Campus, TeraGo, or anything else"
-            className="max-h-40 w-full resize-none bg-transparent px-2 py-2 leading-relaxed text-fg placeholder:text-muted focus:outline-none"
+            placeholder="Ask the assistant about Campus, TeraGo, or anything else"
+            className="composer-field max-h-40 w-full resize-none bg-transparent px-2 py-2 leading-relaxed text-fg placeholder:text-muted"
           />
           <button
             type="submit"

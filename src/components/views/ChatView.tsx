@@ -41,7 +41,8 @@ export function ChatView({ page }: { page: Page }) {
        * so the caveat follows it instead of pushing it down the screen.
        */}
       <p className="mt-4 max-w-[68ch] text-sm leading-relaxed text-muted">
-        Answers come from my public notes and can be wrong. Check the pages, or email{" "}
+        The assistant answers from Nathan&rsquo;s public notes and can be wrong. Check the pages, or
+        email{" "}
         <a
           href={`mailto:${site.contact.email}`}
           className="text-accent underline hover:text-fg"

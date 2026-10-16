@@ -401,16 +401,6 @@ li {
   }
 }
 
-@keyframes chat-caret-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.25;
-  }
-}
-
 @keyframes chat-spin {
   to {
     transform: rotate(360deg);
@@ -446,8 +436,52 @@ li {
 }
 
 /*
- * In-flight indicator. A ring with one lit segment reads as "working" even
- * when it stops turning, which is the state reduced-motion readers get.
+ * Chat transcript geometry, kept in CSS rather than as utility stacks on
+ * purpose: a bubble's radii and the masks that soften the transcript's edges
+ * are easier to read here, and the radii cannot be reordered out from under
+ * each other by utility sort order.
+ */
+
+/* A bubble with one squared-off corner: the side the message came from. */
+.bubble-user {
+  border-radius: 1.5rem 1.5rem 0.5rem 1.5rem;
+}
+
+.bubble-assistant {
+  border-radius: 1.5rem 1.5rem 1.5rem 0.5rem;
+}
+
+/* Messages passing under the top edge dissolve instead of being sliced off. */
+.scroll-fade-top {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 2.5rem);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 2.5rem);
+}
+
+/*
+ * While an answer streams, its newest lines fade in through a gradient that
+ * travels with the growing text block. Deliberately a mask on the block rather
+ * than a per-chunk animation: the transcript replaces its HTML on every chunk,
+ * so anything keyed to a chunk would restart constantly and read as flicker.
+ */
+.streaming-text {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 3rem), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 3rem), transparent 100%);
+}
+
+/*
+ * The composer shell carries focus indication, never the field itself. This has
+ * to be unlayered and specific: the global `:focus-visible` outline is unlayered
+ * too, and unlayered CSS outranks Tailwind's layered `outline-none` whatever the
+ * specificity — which is why clicking the box drew a border regardless.
+ */
+.composer-field:focus,
+.composer-field:focus-visible {
+  outline: none;
+}
+
+/*
+ * In-flight indicator. A ring with one lit segment reads as "working" even when
+ * it stops turning, which is the state reduced-motion readers get.
  */
 .chat-spinner {
   display: inline-block;
