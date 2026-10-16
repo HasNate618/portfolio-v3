@@ -38,6 +38,11 @@ test("identity links home", () => {
   assert.match(html, /href="\/"/);
 });
 
+test("the header contributes no headings, so each page owns its h1", () => {
+  const html = renderToStaticMarkup(<SiteHeader current="/" />);
+  assert.doesNotMatch(html, /<h[1-6][\s>]/, "a banner heading would precede the page h1");
+});
+
 test("the footer carries a real mailto link", () => {
   const html = renderToStaticMarkup(<SiteFooter />);
   assert.match(html, /href="mailto:/);

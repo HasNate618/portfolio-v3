@@ -1,0 +1,23 @@
+import type { ReactNode } from "react";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+
+/**
+ * The two-column shell: identity and nav stick on the left, content scrolls on
+ * the right, one column below lg. Each page passes its own `current` rather than
+ * reading the pathname, which would pull in a client component and cost JS on a
+ * site that must read with JavaScript off.
+ */
+export function PageShell({ current, children }: { current: string; children: ReactNode }) {
+  return (
+    <div className="mx-auto min-h-screen max-w-screen-xl px-6 py-12 lg:px-12 lg:py-0">
+      <div className="lg:flex lg:justify-between lg:gap-4">
+        <SiteHeader current={current} />
+        <main id="content" className="pt-24 lg:w-[52%] lg:py-24">
+          {children}
+          <SiteFooter />
+        </main>
+      </div>
+    </div>
+  );
+}

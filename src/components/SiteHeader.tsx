@@ -27,15 +27,15 @@ export function SiteHeader({ current }: { current: string }) {
           Skip to content
         </a>
 
-        <h1 className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">
+        <p className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">
           <Link href="/" className="hover:text-accent">
             {site.identity.name}
           </Link>
-        </h1>
+        </p>
 
-        <h2 className="mt-3 text-lg font-medium tracking-tight text-fg sm:text-xl">
+        <p className="mt-3 text-lg font-medium tracking-tight text-fg sm:text-xl">
           {site.identity.headline}
-        </h2>
+        </p>
 
         <p className="mt-4 max-w-xs leading-relaxed">{site.identity.positioning}</p>
 
