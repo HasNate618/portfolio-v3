@@ -8,6 +8,8 @@ import { StatRow } from "@/components/StatRow";
 import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
 import { AwardsTable } from "@/components/AwardsTable";
+import { ProjectMedia } from "@/components/ProjectMedia";
+import { AwardBadge } from "@/components/AwardBadge";
 
 /**
  * The draft's headings are lowercase slugs (`## ~/also-building`), so the
@@ -115,7 +117,9 @@ function ProjectCard({ project, showStats }: { project: Project; showStats?: boo
       <div className="mt-1">
         <ProjectMetaRow projectId={project.id} />
       </div>
+      <AwardBadge projectName={project.name} />
       <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
+      <ProjectMedia media={project.media} className="mt-4 max-w-xl" />
       {showStats ? (
         <div className="mt-4">
           <StatRow projectId={project.id} />

@@ -6,6 +6,9 @@ import { ExperienceMetaRow } from "@/components/ExperienceMetaRow";
 import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
 import { OnThisPage } from "@/components/OnThisPage";
+import { ProjectMedia } from "@/components/ProjectMedia";
+import { AwardBadge } from "@/components/AwardBadge";
+import { getProject } from "@/data/site";
 
 /**
  * Back and next are props so TeraGo can point at /experience while the project
@@ -52,6 +55,10 @@ export function CaseStudy({
           <LinkRow projectId={page.projectId} />
         </div>
       ) : null}
+
+      {page.projectId ? <AwardBadge projectName={getProject(page.projectId)?.name ?? ""} /> : null}
+
+      <ProjectMedia media={getProject(page.projectId ?? "")?.media} className="mt-8 max-w-2xl" />
 
       <div className="mt-8">
         <OnThisPage items={page.onThisPage} />

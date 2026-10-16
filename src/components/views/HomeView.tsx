@@ -6,6 +6,8 @@ import { ProjectMetaRow } from "@/components/ProjectMetaRow";
 import { StatRow } from "@/components/StatRow";
 import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
+import { ProjectMedia } from "@/components/ProjectMedia";
+import { AwardBadge } from "@/components/AwardBadge";
 
 /**
  * The home page carries the whole story: who he is, the roles, then the
@@ -100,6 +102,7 @@ export function HomeView({ page }: { page: Page }) {
           <ProjectMetaRow projectId="campus" />
         </div>
         <p className="mt-4 max-w-[68ch] leading-relaxed">{campus.covers}</p>
+        <ProjectMedia media={campus.media} className="mt-5 max-w-xl" />
         <div className="mt-6">
           <StatRow projectId="campus" />
         </div>
@@ -122,7 +125,9 @@ export function HomeView({ page }: { page: Page }) {
             <div className="mt-1">
               <ProjectMetaRow projectId={project.id} />
             </div>
+            <AwardBadge projectName={project.name} />
             <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
+            <ProjectMedia media={project.media} className="mt-4 max-w-xl" />
           </li>
         ))}
       </ul>
@@ -134,6 +139,13 @@ export function HomeView({ page }: { page: Page }) {
         >
           All projects <span aria-hidden="true">→</span>
         </Link>
+      </p>
+      <p className="mt-3 text-sm text-muted">
+        {site.hackathons.awards} hackathon awards across {site.hackathons.entered} events —{" "}
+        <Link href="/projects#awards" className="text-accent underline hover:text-fg">
+          see the winners
+        </Link>
+        .
       </p>
 
       <h2 id="ask" className="mt-16 text-xs font-bold uppercase tracking-widest text-fg">

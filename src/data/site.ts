@@ -23,6 +23,17 @@ export type ProjectGroup =
  */
 export type ProjectRank = "flagship" | "featured";
 
+export type SiteAward = { event: string; year: string; project: string; prize: string; role: string };
+
+/** One image on a project card or case study. `contain` is for logos and diagrams. */
+export type ProjectMedia = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  contain?: boolean;
+};
+
 export type Project = {
   id: string;
   name: string;
@@ -36,6 +47,8 @@ export type Project = {
   /** Content doc describing this project. Absent for rows covered by projects/other.md. */
   file?: string;
   links: { label: string; href: string }[];
+  /** Images ported from v2, optimized to WebP. Absent when a project has none. */
+  media?: ProjectMedia[];
   stats: ProjectStat[];
   stack: string[];
   models?: ModelRow[];
@@ -63,7 +76,7 @@ export type SiteContent = {
   experience: Experience[];
   projects: Project[];
   hackathons: { entered: number; awards: number };
-  awards: { event: string; year: string; project: string; prize: string; role: string }[];
+  awards: SiteAward[];
   skills: { group: string; items: string[] }[];
   alsoUsed: string[];
 };
@@ -101,6 +114,10 @@ export const site: SiteContent = {
       id: "campus", name: "Campus", group: "featured", order: 1,
       dates: "Aug 2026 to present", displayRole: "solo",
       covers: "Self-hosted study assistant for my courses. Hybrid retrieval over 4,687 chunks and a 20-tool agent that logs every write.",
+      media: [
+        { src: "/projects/campus-0.svg", alt: "Campus wordmark", width: 2221, height: 763, contain: true },
+        { src: "/projects/campus-1.webp", alt: "Campus — course hub and chat with exact citation", width: 1200, height: 675 },
+      ],
       file: "/knowledgebase/projects/campus.md",
       onResume: true,
       rank: "flagship",
@@ -118,6 +135,9 @@ export const site: SiteContent = {
       id: "homelab", name: "Homelab and Hermes Agent", group: "featured", order: 2,
       dates: "May 2026 to present", displayRole: "solo",
       covers: "Two NixOS machines, 27 hardened containers, and AI agents that change the config only after I approve.",
+      media: [
+        { src: "/projects/homelab-0.webp", alt: "Homelab Dashboard and Service Overview", width: 1155, height: 891 },
+      ],
       file: "/knowledgebase/projects/homelab.md",
       onResume: true,
       rank: "featured",
@@ -134,6 +154,10 @@ export const site: SiteContent = {
       id: "aware", name: "AWARE", group: "featured", order: 3,
       dates: "Jul 2026", displayRole: "solo", event: "Hack the 6ix 2026",
       covers: "My first solo hack. Vision, audio and a small LLM running offline on one $80 Arduino UNO Q.",
+      media: [
+        { src: "/projects/aware-0.webp", alt: "AWARE device on an Arduino UNO Q", width: 1200, height: 676 },
+        { src: "/projects/aware-1.webp", alt: "AWARE web dashboard", width: 1200, height: 1122 },
+      ],
       file: "/knowledgebase/projects/aware.md",
       onResume: true,
       rank: "featured",
@@ -166,6 +190,10 @@ export const site: SiteContent = {
       id: "agntos", name: "AgntOS", group: "also-building", order: 5,
       dates: "2026", displayRole: "solo", displayStatus: "work in progress",
       covers: "A concept for a NixOS system run by an LLM agent. Every change is proposed, approved, applied with nixos-rebuild, logged, and reversible. Mostly Rust.",
+      media: [
+        { src: "/projects/agntos-0.webp", alt: "AgntOS Dev VM Running KDE Plasma", width: 1200, height: 750 },
+        { src: "/projects/agntos-1.webp", alt: "AgntOS Banner", width: 1200, height: 355 },
+      ],
       file: "/knowledgebase/projects/agntos.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/AgntOS" }],
       stats: [],
@@ -175,6 +203,11 @@ export const site: SiteContent = {
       id: "glyph", name: "Glyph", group: "also-building", order: 6,
       dates: "2026", displayRole: "solo",
       covers: "Leader-key command overlay for Windows, so you don't have to memorize shortcuts. Per-app bindings, YAML config, ships on WinGet.",
+      media: [
+        { src: "/projects/glyph-0.webp", alt: "Glyph Logo", width: 296, height: 77, contain: true },
+        { src: "/projects/glyph-1.webp", alt: "Glyph App Keymap", width: 1200, height: 832 },
+        { src: "/projects/glyph-2.webp", alt: "Glyph App Overlay", width: 360, height: 677 },
+      ],
       file: "/knowledgebase/projects/glyph.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Glyph" }],
       stats: [],
@@ -184,6 +217,11 @@ export const site: SiteContent = {
       id: "agenticarmy", name: "AgenticArmy", group: "also-building", order: 7,
       dates: "Mar 2026", displayRole: "repo on my GitHub", event: "GenAI Genesis 2026",
       covers: "VS Code extension and FastAPI backend for running several coding agents in parallel, with a human approving the plan.",
+      media: [
+        { src: "/projects/agenticarmy-0.webp", alt: "AgenticArmy Title Card", width: 1055, height: 1024 },
+        { src: "/projects/agenticarmy-1.webp", alt: "AgenticArmy Workflow Overview", width: 1200, height: 683 },
+        { src: "/projects/agenticarmy-2.webp", alt: "AgenticArmy Multi-Agent View", width: 550, height: 534 },
+      ],
       file: "/knowledgebase/projects/agenticarmy.md",
       links: [{ label: "Devpost", href: "https://devpost.com/software/agenticarmy" }, { label: "GitHub", href: "https://github.com/HasNate618/genai-genesis-2026" }],
       stats: [],
@@ -204,6 +242,9 @@ export const site: SiteContent = {
       id: "whack-a-ml", name: "Whack-A-ML", group: "ai-ml", order: 9,
       dates: "2026", displayRole: "solo",
       covers: "A PPO agent learns to hit targets with a simulated arm in Unity, with curriculum learning.",
+      media: [
+        { src: "/projects/whack-a-ml-0.webp", alt: "Whack-A-ML Training", width: 1200, height: 675 },
+      ],
       file: "/knowledgebase/projects/whack-a-ml.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Whack-A-ML" }],
       stats: [],
@@ -213,6 +254,11 @@ export const site: SiteContent = {
       id: "animarker", name: "Animarker", group: "ai-ml", order: 10,
       dates: "May 2023", displayRole: "solo", event: "Washington Justice Encode",
       covers: "Android wildlife tracker. A TensorFlow CNN identifies the species and the sighting goes on a map.",
+      media: [
+        { src: "/projects/animarker-0.webp", alt: "Animarker Overview", width: 1024, height: 500 },
+        { src: "/projects/animarker-1.webp", alt: "Animarker Map View", width: 271, height: 573 },
+        { src: "/projects/animarker-2.webp", alt: "Animarker Upload Screen", width: 271, height: 573 },
+      ],
       file: "/knowledgebase/projects/animarker.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Animarker" }, { label: "Devpost", href: "https://devpost.com/software/animarker" }],
       stats: [],
@@ -224,6 +270,11 @@ export const site: SiteContent = {
       id: "auralis", name: "Auralis", group: "team", order: 11,
       dates: "Nov 2025", displayRole: "team project", event: "Hack Western 12",
       covers: "3D virtual doctor with emotion detection and voice.",
+      media: [
+        { src: "/projects/auralis-0.webp", alt: "Auralis Project Overview", width: 1024, height: 1024 },
+        { src: "/projects/auralis-1.webp", alt: "Auralis 3D Characters", width: 806, height: 422 },
+        { src: "/projects/auralis-2.webp", alt: "Auralis Chat Interface", width: 806, height: 422 },
+      ],
       file: "/knowledgebase/projects/auralis.md",
       links: [{ label: "Live", href: "https://auralis.vercel.app" }, { label: "GitHub", href: "https://github.com/rickytang666/auralis" }],
       stats: [],
@@ -233,6 +284,11 @@ export const site: SiteContent = {
       id: "carebridge", name: "CareBridge", group: "team", order: 12,
       dates: "Feb 2026", displayRole: "team contributor", event: "Spark 2026",
       covers: "Check-ins and risk tracking for rural patients and providers.",
+      media: [
+        { src: "/projects/carebridge-0.webp", alt: "CareBridge Provider Dashboard", width: 806, height: 564 },
+        { src: "/projects/carebridge-1.webp", alt: "CareBridge Financials View", width: 1200, height: 913 },
+        { src: "/projects/carebridge-2.webp", alt: "CareBridge Pitch Slide", width: 1200, height: 694 },
+      ],
       file: "/knowledgebase/projects/carebridge.md",
       links: [{ label: "GitHub", href: "https://github.com/liamma06/Spark" }],
       stats: [],
@@ -242,6 +298,10 @@ export const site: SiteContent = {
       id: "vitalsign", name: "VitalSign", group: "team", order: 13,
       dates: "Jan 2026", displayRole: "team project", event: "DeltaHacks 2026",
       covers: "Turns ASL gestures and facial expressions into speech that carries the emotion.",
+      media: [
+        { src: "/projects/vitalsign-0.webp", alt: "VitalSign Title Card", width: 333, height: 222 },
+        { src: "/projects/vitalsign-1.webp", alt: "VitalSign Demo", width: 1200, height: 554 },
+      ],
       file: "/knowledgebase/projects/vitalsign.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/VitalSign" }],
       stats: [],
@@ -251,6 +311,10 @@ export const site: SiteContent = {
       id: "nowandthen", name: "NowAndThen", group: "team", order: 14,
       dates: "Jan 2026", displayRole: "team project", event: "UofTHacks 13",
       covers: "Map app for leaving geotagged posts, with AI summaries of places.",
+      media: [
+        { src: "/projects/nowandthen-0.webp", alt: "NowAndThen Map View", width: 764, height: 573 },
+        { src: "/projects/nowandthen-1.webp", alt: "NowAndThen Memory Feed", width: 764, height: 573 },
+      ],
       file: "/knowledgebase/projects/nowandthen.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/NowAndThen" }],
       stats: [],
@@ -260,6 +324,10 @@ export const site: SiteContent = {
       id: "eyecandy", name: "Eyecandy", group: "team", order: 15,
       dates: "Sep 2025", displayRole: "team project", event: "Hack the North 2025",
       covers: "AR try-on of Shopify products on Snap Spectacles.",
+      media: [
+        { src: "/projects/eyecandy-0.webp", alt: "Eyecandy Project", width: 806, height: 537 },
+        { src: "/projects/eyecandy-1.webp", alt: "Eyecandy AR Demo", width: 1200, height: 675 },
+      ],
       file: "/knowledgebase/projects/eyecandy.md",
       links: [{ label: "GitHub", href: "https://github.com/Duck-luv-pie/eyecandy" }],
       stats: [],
@@ -269,6 +337,11 @@ export const site: SiteContent = {
       id: "lumen", name: "Lumen", group: "team", order: 16,
       dates: "Aug 2025", displayRole: "team; I built the Unity mini-games", event: "TerraHacks 2025",
       covers: "Wellness companion that picks a mini-game from a mood check-in.",
+      media: [
+        { src: "/projects/lumen-0.webp", alt: "Lumen Project", width: 333, height: 222 },
+        { src: "/projects/lumen-1.webp", alt: "Lumen Mini Game", width: 1200, height: 701 },
+        { src: "/projects/lumen-2.webp", alt: "Lumen Analytics", width: 1200, height: 726 },
+      ],
       file: "/knowledgebase/projects/lumen.md",
       links: [{ label: "Live", href: "https://lumen-beryl.vercel.app" }, { label: "GitHub", href: "https://github.com/Dawgsrlife/lumen" }],
       stats: [],
@@ -278,6 +351,11 @@ export const site: SiteContent = {
       id: "careerly", name: "Careerly", group: "team", order: 17,
       dates: "Feb 2024", displayRole: "team project", event: "NSBEHacks 2024",
       covers: "Unity virtual job fair with AI mentors.",
+      media: [
+        { src: "/projects/careerly-0.webp", alt: "Careerly Project", width: 333, height: 222 },
+        { src: "/projects/careerly-1.webp", alt: "Careerly Demo", width: 806, height: 383 },
+        { src: "/projects/careerly-2.webp", alt: "Careerly Professional View", width: 806, height: 382 },
+      ],
       file: "/knowledgebase/projects/careerly.md",
       links: [{ label: "GitHub", href: "https://github.com/she11fish/careerly" }],
       stats: [],
@@ -289,6 +367,10 @@ export const site: SiteContent = {
       id: "cyberdeck", name: "Cyberdeck", group: "hardware", order: 18,
       dates: "2026", displayRole: "solo", displayStatus: "in progress",
       covers: "Handheld Raspberry Pi 3B that boots straight into a terminal. No desktop, just the terminal.",
+      media: [
+        { src: "/projects/cyberdeck-0.webp", alt: "Cyberdeck Work-in-Progress Build", width: 1200, height: 1209 },
+        { src: "/projects/cyberdeck-1.webp", alt: "Cyberdeck CAD Render", width: 1172, height: 1072 },
+      ],
       file: "/knowledgebase/projects/cyberdeck.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Cyberdeck" }],
       stats: [],
@@ -298,6 +380,10 @@ export const site: SiteContent = {
       id: "flexfire-x", name: "FLEXFIRE-X", group: "hardware", order: 19,
       dates: "2025", displayRole: "solo",
       covers: "Forearm launcher inspired by Cyberpunk 2077. Flex your forearm and an EMG sensor fires it. Nine 3D-printed parts.",
+      media: [
+        { src: "/projects/flexfire-x-0.webp", alt: "FLEXFIRE-X Demo", width: 701, height: 899 },
+        { src: "/projects/flexfire-x-1.webp", alt: "FLEXFIRE-X Exploded View", width: 1200, height: 675 },
+      ],
       file: "/knowledgebase/projects/flexfire-x.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/FLEXFIRE-X" }, { label: "Video", href: "https://youtube.com/shorts/8Y7lV0Z1Z1Y" }],
       stats: [],
@@ -307,6 +393,10 @@ export const site: SiteContent = {
       id: "rubber-band-turret", name: "Rubber Band Turret", group: "hardware", order: 20,
       dates: "2023", displayRole: "solo",
       covers: "Bluetooth turret I control from an Android app.",
+      media: [
+        { src: "/projects/rubber-band-turret-0.webp", alt: "Rubber Band Turret Build", width: 806, height: 458 },
+        { src: "/projects/rubber-band-turret-1.webp", alt: "Rubber Band Turret", width: 1200, height: 800 },
+      ],
       links: [],
       stats: [],
       stack: ["Arduino", "Bluetooth", "Kotlin"],
@@ -326,6 +416,10 @@ export const site: SiteContent = {
       id: "saferoute", name: "SafeRoute", group: "web-mobile", order: 22,
       dates: "2025", displayRole: "solo",
       covers: "Android app for reporting hazards and routing around them.",
+      media: [
+        { src: "/projects/saferoute-0.webp", alt: "SafeRoute Project", width: 999, height: 666 },
+        { src: "/projects/saferoute-1.webp", alt: "SafeRoute User Flow", width: 1200, height: 1233 },
+      ],
       file: "/knowledgebase/projects/saferoute.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/SafeRoute" }],
       stats: [],
@@ -335,6 +429,10 @@ export const site: SiteContent = {
       id: "uwo-mealplan-calc", name: "UWO Mealplan Calc", group: "web-mobile", order: 23,
       dates: "2024", displayRole: "solo",
       covers: "Chrome extension that tracks meal plan spending.",
+      media: [
+        { src: "/projects/uwo-mealplan-calc-0.webp", alt: "Mealplan Settings View", width: 1200, height: 750 },
+        { src: "/projects/uwo-mealplan-calc-1.webp", alt: "Mealplan Projections", width: 1200, height: 750 },
+      ],
       links: [{ label: "Chrome Web Store", href: "https://chromewebstore.google.com/" }],
       stats: [],
       stack: ["JavaScript", "Chrome Extensions API"],
@@ -345,6 +443,10 @@ export const site: SiteContent = {
       id: "wasteland", name: "Wasteland", group: "games", order: 24,
       dates: "Feb 2025", displayRole: "solo", event: "MakeUofT 2025",
       covers: "Horror game you play with a sensor glove.",
+      media: [
+        { src: "/projects/wasteland-0.webp", alt: "Wasteland Gameplay", width: 806, height: 459 },
+        { src: "/projects/wasteland-1.webp", alt: "Wasteland Wearable Glove", width: 430, height: 573 },
+      ],
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Wasteland" }],
       stats: [], stack: ["Unity", "Arduino", "C#"],
     },
@@ -352,6 +454,10 @@ export const site: SiteContent = {
       id: "vr-odm-gear-sim", name: "VR ODM Gear Sim", group: "games", order: 25,
       dates: "Sep 2023", displayRole: "solo", event: "Hack the North 2023",
       covers: "Cardboard VR sim with an Arduino glove controller.",
+      media: [
+        { src: "/projects/vr-odm-gear-sim-0.webp", alt: "VR ODM Gear Gameplay", width: 806, height: 372 },
+        { src: "/projects/vr-odm-gear-sim-1.webp", alt: "Arduino Glove Controller", width: 430, height: 573 },
+      ],
       links: [{ label: "Devpost", href: "https://devpost.com/software/vr-odm-gear-sim" }],
       stats: [], stack: ["Unity", "Arduino", "C#"],
     },
@@ -359,6 +465,11 @@ export const site: SiteContent = {
       id: "street-cleaner", name: "Street Cleaner", group: "games", order: 26,
       dates: "May 2023", displayRole: "my repo", event: "GameHACKS 1.0",
       covers: "Mobile recycling game on Google Play.",
+      media: [
+        { src: "/projects/street-cleaner-0.webp", alt: "Street Cleaner How To Play", width: 1080, height: 1920 },
+        { src: "/projects/street-cleaner-1.webp", alt: "Street Cleaner Gameplay", width: 1080, height: 1920 },
+        { src: "/projects/street-cleaner-2.webp", alt: "Street Cleaner Results Screen", width: 1080, height: 1920 },
+      ],
       links: [{ label: "Google Play", href: "https://play.google.com/store" }],
       stats: [], stack: ["Unity", "C#"],
     },
@@ -366,6 +477,10 @@ export const site: SiteContent = {
       id: "object-love-interface", name: "Object-Love-Interface", group: "games", order: 27,
       dates: "Feb 2026", displayRole: "my repo", event: "CTRL+HACK+DEL 2.0",
       covers: "IoT objects with voices and personalities.",
+      media: [
+        { src: "/projects/object-love-interface-0.webp", alt: "OLI Device Open", width: 573, height: 322 },
+        { src: "/projects/object-love-interface-1.webp", alt: "OLI Product Shot", width: 1200, height: 1347 },
+      ],
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Object-Love-Interface" }],
       stats: [], stack: ["ESP32", "Arduino", "Python"],
     },
@@ -373,6 +488,10 @@ export const site: SiteContent = {
       id: "stupid-spotify", name: "Stupid Spotify", group: "games", order: 28,
       dates: "Nov 2025", displayRole: "my repo", event: "Stupid Hackathon @ Western",
       covers: "A deliberately bad Spotify clone. Its chatbot gaslights you about your music choices.",
+      media: [
+        { src: "/projects/stupid-spotify-0.webp", alt: "Stupid Spotify Dashboard", width: 806, height: 504 },
+        { src: "/projects/stupid-spotify-1.webp", alt: "Stupid Spotify Face CAPTCHA", width: 806, height: 481 },
+      ],
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Stupid-Spotify" }],
       stats: [], stack: ["Next.js", "TypeScript"],
     },
@@ -380,6 +499,11 @@ export const site: SiteContent = {
       id: "motaru", name: "Mōtaru", group: "games", order: 29,
       dates: "2024", displayRole: "solo",
       covers: "Unity mobile game on Google Play.",
+      media: [
+        { src: "/projects/motaru-0.webp", alt: "Mōtaru Character Customization", width: 1080, height: 1920 },
+        { src: "/projects/motaru-1.webp", alt: "Mōtaru Gameplay", width: 1080, height: 1920 },
+        { src: "/projects/motaru-2.webp", alt: "Mōtaru Second Level", width: 1080, height: 1920 },
+      ],
       links: [{ label: "Google Play", href: "https://play.google.com/store" }],
       stats: [], stack: ["Unity", "C#"],
     },
@@ -387,6 +511,9 @@ export const site: SiteContent = {
       id: "zenith-tower", name: "Zenith Tower", group: "games", order: 30,
       dates: "2024", displayRole: "solo",
       covers: "Unity mobile game on Google Play.",
+      media: [
+        { src: "/projects/zenith-tower-0.webp", alt: "Zenith Tower Gameplay", width: 1200, height: 568 },
+      ],
       links: [{ label: "Google Play", href: "https://play.google.com/store" }],
       stats: [], stack: ["Unity", "C#"],
     },
@@ -394,6 +521,10 @@ export const site: SiteContent = {
       id: "tic-tac-toe-ultimate", name: "Tic Tac Toe Ultimate", group: "games", order: 31,
       dates: "2024", displayRole: "solo",
       covers: "Unity mobile game on Google Play.",
+      media: [
+        { src: "/projects/tic-tac-toe-ultimate-0.webp", alt: "Tic Tac Toe Ultimate Gameplay", width: 561, height: 998 },
+        { src: "/projects/tic-tac-toe-ultimate-1.webp", alt: "Tic Tac Toe Ultimate Win Screen", width: 1200, height: 675 },
+      ],
       links: [{ label: "Google Play", href: "https://play.google.com/store" }],
       stats: [], stack: ["Unity", "C#"],
     },
@@ -439,6 +570,15 @@ export function featuredProjects(): Project[] {
   return site.projects
     .filter((p) => p.rank === "featured")
     .sort((a, b) => a.order - b.order);
+}
+
+/**
+ * The award a project won, if any. Derived from `site.awards` rather than stored
+ * on the project, so a badge and the awards table can never disagree.
+ */
+export function awardFor(projectName: string): SiteAward | undefined {
+  const target = projectName.toLowerCase();
+  return site.awards.find((award) => award.project.toLowerCase() === target);
 }
 
 export function getProject(id: string): Project | undefined {
