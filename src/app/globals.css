@@ -436,6 +436,35 @@ li {
 }
 
 /*
+ * Below `lg` a sticky bar carries the nav, and it would cover any heading or
+ * section a link scrolls to. Leave room for it on that axis only; desktop has
+ * no bar, so anchored targets keep landing flush there.
+ */
+@media (max-width: 63.99rem) {
+  [id] {
+    scroll-margin-top: 4rem;
+  }
+}
+
+/*
+ * The chat column is a fixed height so the page does not grow as an answer
+ * streams. svh rather than vh: on a phone the browser chrome coming and going
+ * changes vh, which would resize the region mid-conversation, while svh is the
+ * stable, smaller measure. The fallback goes through @supports rather than a
+ * vh first line because the minifier collapses duplicate declarations and the
+ * vh one would be silently dropped.
+ */
+.chat-region {
+  height: 62vh;
+}
+
+@supports (height: 1svh) {
+  .chat-region {
+    height: 62svh;
+  }
+}
+
+/*
  * Chat transcript geometry, kept in CSS rather than as utility stacks on
  * purpose: a bubble's radii and the masks that soften the transcript's edges
  * are easier to read here, and the radii cannot be reordered out from under

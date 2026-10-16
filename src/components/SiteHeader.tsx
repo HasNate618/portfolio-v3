@@ -4,9 +4,11 @@ import { site } from "@/data/site";
 
 /**
  * Left column on desktop: identity, nav, contact. Collapses above the content
- * on mobile. Plain <a> rather than next/link — every route is static, so there
- * is nothing for client-side routing to save, and this keeps the chrome at zero
- * client JS (the whole site must read with JavaScript off).
+ * on mobile, where MobileTopBar takes over navigation — the nav and the skip
+ * link below are `lg`-only so the two never both appear. Plain <a> rather than
+ * next/link — every route is static, so there is nothing for client-side
+ * routing to save, and this keeps the chrome at zero client JS (the whole
+ * site must read with JavaScript off).
  */
 
 /**
@@ -25,9 +27,11 @@ export function SiteHeader({ current }: { current: string }) {
   return (
     <header className="page-enter lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:flex-col lg:justify-between lg:py-24">
       <div>
+        {/* The top bar carries the skip link below `lg`, so this one is
+            desktop-only; two competing skip links would both take focus. */}
         <a
           href="#content"
-          className="absolute left-4 top-4 -translate-y-32 rounded bg-accent px-4 py-2 font-medium text-bg transition-transform focus-visible:translate-y-0"
+          className="absolute left-4 top-4 -translate-y-32 rounded bg-accent px-4 py-2 font-medium text-bg transition-transform focus-visible:translate-y-0 max-lg:hidden"
         >
           Skip to content
         </a>
@@ -48,8 +52,10 @@ export function SiteHeader({ current }: { current: string }) {
           <p className="mt-4 max-w-xs leading-relaxed text-muted">{site.identity.positioning}</p>
         ) : null}
 
-        <nav aria-label="Site" className="mt-10">
-          <ul className="flex flex-wrap gap-x-5 gap-y-2 lg:mt-16 lg:flex-col lg:gap-4">
+        {/* Mobile navigates by the top bar, so this list only exists at `lg`
+            and up; display:none keeps the second landmark out of the tree. */}
+        <nav aria-label="Site" className="hidden lg:block">
+          <ul className="mt-16 flex flex-col gap-4">
             {NAV_LINKS.map((link) => {
               const active = link.href === current;
               return (

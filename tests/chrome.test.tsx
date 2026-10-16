@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { renderToStaticMarkup } from "react-dom/server";
 import { SiteHeader, NAV_LINKS } from "../src/components/SiteHeader";
+import { MobileTopBar } from "../src/components/MobileTopBar";
 
 /*
  * These three cases use `/resume` as the "current" route: any nav route works,
@@ -50,4 +51,35 @@ test("the contact icons include a real mailto link", () => {
   const html = renderToStaticMarkup(<SiteHeader current="/" />);
   assert.match(html, /href="mailto:/);
   assert.match(html, /aria-label="Email"/);
+});
+
+/*
+ * The mobile top bar is the same nav in a second landmark. CSS guarantees only
+ * one of the two is ever in the accessibility tree — the bar is `lg:hidden`,
+ * the header nav `hidden lg:block` — and these cases pin that contract.
+ */
+test("the top bar lists every nav route", () => {
+  const html = renderToStaticMarkup(<MobileTopBar current="/resume" />);
+  assert.match(html, /aria-label="Site"/);
+  for (const link of NAV_LINKS) {
+    assert.ok(html.includes(`href="${link.href}"`), `missing ${link.href}`);
+  }
+});
+
+test("the top bar marks exactly one item current", () => {
+  const html = renderToStaticMarkup(<MobileTopBar current="/resume" />);
+  assert.equal((html.match(/aria-current="page"/g) ?? []).length, 1);
+});
+
+test("the two nav landmarks can never be visible at once", () => {
+  const bar = renderToStaticMarkup(<MobileTopBar current="/" />);
+  const header = renderToStaticMarkup(<SiteHeader current="/" />);
+  assert.match(bar, /lg:hidden/, "the bar must not render at desktop widths");
+  assert.match(header, /hidden lg:block/, "the header nav must not render on mobile");
+});
+
+test("the top bar carries the mobile skip link, before its nav", () => {
+  const html = renderToStaticMarkup(<MobileTopBar current="/" />);
+  assert.ok(html.indexOf("Skip to content") < html.indexOf("<nav"));
+  assert.ok(html.includes('href="#content"'), "skip link must target the content region");
 });

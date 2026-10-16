@@ -147,7 +147,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
      * use. Without a fixed height the block grew with every message, so the
      * page itself kept getting longer as an answer streamed in.
      */
-    <div className="mt-6 flex h-[62vh] min-h-[20rem] flex-col">
+    <div className="chat-region mt-6 flex min-h-[20rem] flex-col">
       {/*
        * The transcript scrolls on its own but carries no chrome: no card, no
        * border, no fill. The conversation reads as part of the page rather than
