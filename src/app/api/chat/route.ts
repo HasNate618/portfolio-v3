@@ -76,7 +76,7 @@ export async function POST(req: Request) {
         })),
         { role: "user", content: trimmedMessage },
       ],
-      temperature: 0.7,
+      temperature: 0.2,
       maxTokens: CHAT_MAX_TOKENS,
       thinking: CHAT_THINKING_ENABLED,
     });

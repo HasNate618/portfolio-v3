@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import {
   site,
   highlightProjects,
+  flagshipProject,
+  featuredProjects,
   getProject,
   getExperience,
   type ProjectGroup,
@@ -88,4 +90,21 @@ test("highlightProjects is sorted by order and excludes non-highlight groups", (
     [...hi.map((p) => p.order)].sort((a, b) => a - b)
   );
   assert.ok(hi.every((p) => p.group === "featured" || p.group === "also-building"));
+});
+
+test("the flagship is explicit data, not a hardcoded id in a view", () => {
+  assert.equal(flagshipProject()?.id, "campus");
+});
+
+test("the featured cards are the ranked projects, in display order", () => {
+  assert.deepEqual(
+    featuredProjects().map((p) => p.id),
+    ["homelab", "aware", "terago"]
+  );
+});
+
+test("every ranked project exists and exactly one is the flagship", () => {
+  const ranked = site.projects.filter((p) => p.rank);
+  assert.equal(ranked.filter((p) => p.rank === "flagship").length, 1);
+  assert.equal(ranked.length, 4);
 });

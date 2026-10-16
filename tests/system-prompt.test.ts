@@ -62,3 +62,18 @@ test("the context block still carries each chunk with its source", () => {
   assert.match(prompt, /\[1\] Source: projects\/campus\.md/);
   assert.match(prompt, /Campus is a study assistant\./);
 });
+
+test("the prompt forbids substituting a similar product", () => {
+  assert.match(prompt, /must appear verbatim in CONTEXT/);
+  assert.match(prompt, /does not sync Canvas or Blackboard/);
+});
+
+test("the prompt no longer demands a word count", () => {
+  assert.doesNotMatch(prompt, /200.500 words/, "length pressure is a hallucination engine");
+  assert.match(prompt, /Length is set by the record/);
+});
+
+test("the prompt tells the model to admit a thin record instead of filling it", () => {
+  assert.match(prompt, /detail is not in the record/);
+  assert.match(prompt, /Do not borrow detail from another project/);
+});

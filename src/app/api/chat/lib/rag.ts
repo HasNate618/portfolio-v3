@@ -14,6 +14,21 @@ interface RerankedChunk {
   score: number;
 }
 
+/**
+ * The index maps exist to point at other docs, and they name every project and
+ * role. That makes them match almost any query, so they crowd out the specific
+ * doc that actually answers it — "what did you build at TeraGo?" was returning
+ * the experience index above terago.md itself. They stay in the index as a
+ * fallback but lose to a specific doc.
+ */
+const NAVIGATION_DOC = /^(index|projects\/index|experience\/index|projects\/other)\.md$/;
+const NAVIGATION_PENALTY = 0.5;
+
+/** Exported so the demotion rule can be tested without hitting the rerank API. */
+export function isNavigationDoc(source: string): boolean {
+  return NAVIGATION_DOC.test(source);
+}
+
 export async function retrieveRelevantChunks(query: string, topK = 20): Promise<ScoredChunk[]> {
   const embeddings = loadEmbeddings();
   if (!embeddings || embeddings.length === 0) {
@@ -47,9 +62,14 @@ export async function rerankChunks(
     topN,
   });
 
-  return response.results.map((r) => ({
-    text: chunks[r.index]?.text ?? "",
-    source: chunks[r.index]?.source ?? "",
-    score: r.relevanceScore,
-  }));
+  return response.results
+    .map((r) => {
+      const source = chunks[r.index]?.source ?? "";
+      return {
+        text: chunks[r.index]?.text ?? "",
+        source,
+        score: isNavigationDoc(source) ? r.relevanceScore * NAVIGATION_PENALTY : r.relevanceScore,
+      };
+    })
+    .sort((a, b) => b.score - a.score);
 }

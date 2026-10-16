@@ -29,6 +29,14 @@ export type ProjectGroup =
   | "web-mobile"
   | "games";
 
+/**
+ * Home-page prominence. Distinct from `group`, which is how /projects files them.
+ * This was previously implicit as `p.id !== "campus"` in HomeView, which meant the
+ * corpus projection had no way to say that Campus is the flagship — and so the
+ * chat could not retrieve Campus for "what is his flagship project?".
+ */
+export type ProjectRank = "flagship" | "featured";
+
 export type Project = {
   id: string;
   name: string;
@@ -47,6 +55,8 @@ export type Project = {
   models?: ModelRow[];
   /** Shown on /resume. Mirrors Experience.onResume. */
   onResume?: boolean;
+  /** Home-page prominence, carried into the chat corpus so the flagship is retrievable. */
+  rank?: ProjectRank;
 };
 
 export type Experience = {
@@ -108,6 +118,7 @@ export const site: SiteContent = {
       covers: "Self-hosted study assistant for my courses. Hybrid retrieval over 4,687 chunks and a 20-tool agent that logs every write.",
       file: "/knowledgebase/projects/campus.md",
       onResume: true,
+      rank: "flagship",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Campus" }],
       stats: [
         { key: "chunks", label: "chunks", value: "4,687" },
@@ -124,6 +135,7 @@ export const site: SiteContent = {
       covers: "Two NixOS machines, 27 hardened containers, and AI agents that change the config only after I approve.",
       file: "/knowledgebase/projects/homelab.md",
       onResume: true,
+      rank: "featured",
       links: [{ label: "GitHub (public NixOS config)", href: "https://github.com/HasNate618/nixos-config-public" }, { label: "GitHub (llama.cpp setup)", href: "https://github.com/HasNate618/local-llama-setup" }],
       stats: [
         { key: "sessions", label: "agent sessions", value: "472" },
@@ -139,6 +151,7 @@ export const site: SiteContent = {
       covers: "My first solo hack. Vision, audio and a small LLM running offline on one $80 Arduino UNO Q.",
       file: "/knowledgebase/projects/aware.md",
       onResume: true,
+      rank: "featured",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/AWARE" }, { label: "Devpost", href: "https://devpost.com/software/a-w-a-r-e-autonomous-witness-and-response-engine" }],
       stats: [
         { key: "boardCost", label: "board cost", value: "$80" },
@@ -160,6 +173,7 @@ export const site: SiteContent = {
       links: [],
       stats: [{ key: "testCases", label: "test cases", value: "760" }],
       stack: ["Python", "Ollama", "Microsoft Graph", "Jira", "Copilot Studio", "SharePoint", "MapInfo data"],
+      rank: "featured",
     },
 
     // ── also building ─────────────────────────────────────────────────────
@@ -427,6 +441,18 @@ export function highlightProjects(): Project[] {
   return site.projects
     .filter((p) => p.group === "featured" || p.group === "also-building")
     .slice()
+    .sort((a, b) => a.order - b.order);
+}
+
+/** The one project the home page leads with. */
+export function flagshipProject(): Project | undefined {
+  return site.projects.find((p) => p.rank === "flagship");
+}
+
+/** The home page's featured cards, in display order. */
+export function featuredProjects(): Project[] {
+  return site.projects
+    .filter((p) => p.rank === "featured")
     .sort((a, b) => a.order - b.order);
 }
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { site, highlightProjects, getProject } from "@/data/site";
+import { site, featuredProjects, flagshipProject } from "@/data/site";
 import { renderMarkdown } from "@/lib/markdown";
 import type { Page } from "@/lib/content";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
@@ -8,8 +8,8 @@ import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
 
 export function HomeView({ page }: { page: Page }) {
-  const campus = getProject("campus")!;
-  const featured = highlightProjects().filter((p) => p.id !== "campus");
+  const campus = flagshipProject()!;
+  const featured = featuredProjects();
 
   return (
     <article>
