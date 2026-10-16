@@ -1,24 +1,23 @@
 import MarkdownIt from "markdown-it";
-import { getProject } from "@/data/site";
+import { getExperience, getProject } from "@/data/site";
 import { modelTableHtml } from "@/lib/tables";
 
-/**
- * Content files never restate a figure that site.ts owns. They write
- * `{{stat:campus.chunks}}` and this resolves it, so a page and the bot surface
- * cannot drift apart on the next edit.
- */
-const STAT_PATTERN = /\{\{stat:([a-zA-Z0-9-]+)\.([a-zA-Z0-9_-]+)\}\}/g;
+/** The id may be a project id or an experience org ("3D Western"), so dots are the only delimiter. */
+const STAT_PATTERN = /\{\{stat:([^.}]+)\.([a-zA-Z0-9_-]+)\}\}/g;
 
 /** Substitute stat placeholders and return plain text. Used by the corpus projection. */
 export function resolveStats(text: string): string {
-  return text.replace(STAT_PATTERN, (_match, projectId: string, key: string) => {
-    const project = getProject(projectId);
-    const stat = project?.stats.find((s) => s.key === key);
+  return text.replace(STAT_PATTERN, (_match, id: string, key: string) => {
+    // Projects first, then roles: the 3D Western dataset figure belongs to an
+    // experience entry, and a role has no project id.
+    const stat =
+      getProject(id)?.stats.find((s) => s.key === key) ??
+      getExperience(id)?.stats?.find((s) => s.key === key);
 
     if (!stat) {
       // Loud on purpose: a silently blank figure is the failure mode this
       // whole placeholder mechanism exists to prevent.
-      throw new Error(`unknown stat: ${projectId}.${key}`);
+      throw new Error(`unknown stat: ${id}.${key}`);
     }
 
     return stat.value;
