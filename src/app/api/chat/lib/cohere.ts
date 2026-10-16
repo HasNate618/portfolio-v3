@@ -27,4 +27,36 @@ export function getCohereClient(): CohereClient {
   return client;
 }
 
+/**
+ * Embedding identity. The document index and the query MUST use the same model
+ * and dimension: if they diverge, cosine similarity compares vectors from two
+ * different spaces and retrieval degrades silently instead of failing. Both
+ * paths go through embedTexts() so that cannot happen by accident, and the
+ * model is part of the cache hash so swapping it invalidates the index.
+ */
+export const EMBED_MODEL = "embed-v5.0-pro";
+export const EMBED_DIMENSION = 1024;
+
+export async function embedTexts(
+  texts: string[],
+  inputType: "search_document" | "search_query"
+): Promise<number[][]> {
+  const response = await getCohereClient().v2.embed({
+    texts,
+    model: EMBED_MODEL,
+    inputType,
+    outputDimension: EMBED_DIMENSION,
+    embeddingTypes: ["float"],
+  });
+
+  const vectors = response.embeddings.float;
+
+  // A short response would silently misalign vectors with their source text.
+  if (!vectors || vectors.length !== texts.length) {
+    throw new Error(`embed returned ${vectors?.length ?? 0} vectors for ${texts.length} texts`);
+  }
+
+  return vectors;
+}
+
 export const MAX_CHAT_MESSAGE_LENGTH = 4000;

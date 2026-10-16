@@ -1,4 +1,5 @@
 import { buildEmbeddings } from "../src/app/api/chat/lib/embeddings.ts";
+import { EMBED_MODEL, EMBED_DIMENSION } from "../src/app/api/chat/lib/cohere.ts";
 import { config } from "dotenv";
 config();
 
@@ -10,7 +11,7 @@ async function main() {
   }
 
   console.log("Building embeddings for knowledgebase...");
-  console.log(`Using Cohere embed-v4 model`);
+  console.log(`Using ${EMBED_MODEL} at ${EMBED_DIMENSION} dimensions`);
   console.log("This will chunk all .md files and generate embeddings.\n");
 
   try {

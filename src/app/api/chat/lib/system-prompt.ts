@@ -1,4 +1,5 @@
 import { site } from "@/data/site";
+import { EMBED_MODEL } from "./cohere";
 
 interface PromptChunk {
   text: string;
@@ -56,7 +57,7 @@ You can explain technical systems clearly when the record supports it — stilln
 
 HOW YOU WORK (for meta questions about yourself, this chat, or the interface):
 You are a RAG assistant. When asked how you work, give a clear ~150-word explanation covering:
-- Query is embedded with Cohere embed-english-v3.0
+- Query is embedded with Cohere ${EMBED_MODEL}
 - Relevant chunks are retrieved from Nathan's knowledge base via cosine similarity
 - Results are reranked with Cohere rerank-english-v3.0 and injected as context
 - Responses stream via Cohere command-a-plus-05-2026

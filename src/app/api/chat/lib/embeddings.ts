@@ -1,8 +1,8 @@
-import { CohereClient } from "cohere-ai";
 import { createHash } from "node:crypto";
 import fs from "fs";
 import path from "path";
 import { loadKnowledgebase } from "./chunks";
+import { embedTexts, EMBED_MODEL, EMBED_DIMENSION } from "./cohere";
 
 const CACHE_PATH = path.join(process.cwd(), "src", "app", "api", "chat", "lib", "embeddings-cache.json");
 
@@ -26,6 +26,13 @@ let cachedEmbeddings: EmbeddingDoc[] | null = null;
  */
 export function corpusContentHash(chunks: { text: string; source: string }[]): string {
   const hash = createHash("sha256");
+
+  // The embedder identity is part of the cache key. Swapping the model changes
+  // what every vector means, so a hash over the text alone would happily serve
+  // an index built by a different model.
+  hash.update(`${EMBED_MODEL}:${EMBED_DIMENSION}`);
+  hash.update("\0");
+
   for (const chunk of chunks) {
     hash.update(chunk.source);
     hash.update("\0");
@@ -48,23 +55,19 @@ export function readCacheHash(): string | null {
 }
 
 export async function buildEmbeddings() {
-  const cohere = new CohereClient({ token: process.env.COHERE_API_KEY });
   const chunks = loadKnowledgebase();
 
-  console.log(`Building embeddings for ${chunks.length} chunks...`);
+  console.log(`Building embeddings for ${chunks.length} chunks with ${EMBED_MODEL}...`);
 
   const batchSize = 96;
   const embeddings: EmbeddingDoc[] = [];
 
   for (let i = 0; i < chunks.length; i += batchSize) {
     const batch = chunks.slice(i, i + batchSize);
-    const response = await cohere.embed({
-      texts: batch.map((c) => c.text),
-      model: "embed-english-v3.0",
-      inputType: "search_document",
-    });
-
-    const batchEmbeddings = response.embeddings as number[][];
+    const batchEmbeddings = await embedTexts(
+      batch.map((c) => c.text),
+      "search_document"
+    );
 
     for (let j = 0; j < batch.length; j++) {
       embeddings.push({
