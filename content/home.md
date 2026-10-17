@@ -13,6 +13,4 @@ I'm a software engineer, and most of what I build lately is LLM tooling I actual
 
 I'd rather pick a cheap model that does the job well than pay for the biggest one. In my agent projects the model proposes a change and plain code applies it, with a log or a rollback behind it.
 
-Right now: using Campus across six courses while I finish its retrieval evaluation, and approving whatever the homelab agents want to change next.
-
-The chat answers from my public notes. It can be wrong, so trust the pages first.
+Right now: using Campus every day across my six courses, and running my homelab, where agents propose config changes and nothing applies until I approve it.

@@ -83,7 +83,7 @@ export type SiteContent = {
 export const site: SiteContent = {
   identity: {
     name: "Nathan Espejo",
-    headline: "Software engineer building applied AI tools (3rd-year Software Engineering, Western), focused on cost-efficient models with local and self-hosted options",
+    headline: "Software engineer building applied AI tools. 3rd-year Software Engineering at Western.",
     seeking: "Summer 2027 software engineering or applied AI internship",
     location: "Brampton and London, ON",
     year: "3rd year (2026-27)",
