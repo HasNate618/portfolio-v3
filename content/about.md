@@ -34,7 +34,7 @@ Campus, his self-hosted study assistant, is the flagship. Next come a NixOS home
 
 ## How he works
 
-He likes small teams with clear ownership, reproducible setups, and good READMEs. In his agent projects the model proposes a change and a deterministic step applies it, with an audit log or rollback behind it.
+He likes small teams with clear ownership, reproducible setups, and good READMEs. In his homelab the model proposes a change and a deterministic step applies it, with an audit log or rollback behind it.
 
 ## Links
 
