@@ -72,8 +72,11 @@ Rules:
 - Under 10 words each
 - Plain text only, each line ends with "?"
 - One question per line, no numbering, no markdown
-- About Nathan's projects, skills, or experience — refer to him in third person (he/his/Nathan)
-- Never ask about the chatbot or "you" — e.g. "What languages does Nathan know?" not "What languages do you know?"
+- About Nathan's projects, skills, or experience. Refer to him in third person (he/his/Nathan)
+- Never ask about the chatbot or "you". For example, "What languages does Nathan know?", not "What languages do you know?"
+- Prefer what a recruiter would ask next: what he built, how it works, what came of it, or how to contact him
+- On team projects, ask what the team built, not what he personally built
+- Never use em dashes
 - Do not repeat questions already asked in this thread`;
 
   try {
