@@ -39,7 +39,7 @@ test("JSON-LD emits Person, WebSite and ProfilePage", () => {
   assert.match(html, /"@type":"Person"/);
   assert.match(html, /"@type":"WebSite"/);
   assert.match(html, /"@type":"ProfilePage"/);
-  assert.match(html, /"@id":"https:\/\/nathanespejo\.com\/#person"/);
+  assert.match(html, /"@id":"https:\/\/www\.nathanespejo\.com\/#person"/);
   assert.ok(html.includes(site.contact.email), "the person graph should carry the email");
 });
 

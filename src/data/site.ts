@@ -92,7 +92,7 @@ export const site: SiteContent = {
   contact: {
     email: "nate.e.espejo@gmail.com",
     links: [
-      { label: "Portfolio", href: "https://nathanespejo.com" },
+      { label: "Portfolio", href: "https://www.nathanespejo.com" },
       { label: "GitHub", href: "https://github.com/HasNate618" },
       { label: "LinkedIn", href: "https://linkedin.com/in/nathan-espejo" },
       { label: "Devpost", href: "https://devpost.com/nate-e-espejo" },
