@@ -107,7 +107,7 @@ export const site: SiteContent = {
       stats: [{ key: "testCases", label: "test cases", value: "760" }],
       stack: ["Python", "Ollama", "Microsoft Graph", "Jira", "Copilot Studio", "SharePoint", "MapInfo data"] },
     { id: "3d-western", org: "3D Western", role: "VP of Data/ML (promoted from Software Developer)", location: "London, ON", terms: [{ start: "2025-09", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
-      summary: "Started on the Dockerized print pipeline, then as VP co-led two data developers: a print-safety dataset of 2,559 clean renders from 4,620 scraped 3D models, rendered in Blender and checked by a VLM. The best small vision model agreed with those labels on 84.2%. Ran alongside my TeraGo internship.",
+      summary: "Started on the Dockerized print pipeline, then as VP co-led two data developers: a print-safety dataset of 2,559 clean renders from 4,620 scraped 3D models, rendered in Blender and checked by a VLM. The best small vision model agreed with those labels on 84.2% with the filename visible, and 76.9% from the image alone on the earlier prompt. Ran alongside my TeraGo internship.",
       stats: [{ key: "dataset", label: "scraped 3D models", value: "4,620" }],
       stack: ["Python", "Blender", "Qwen3-VL-2B", "Shieldstral", "llama.cpp", "Docker", "Jira"] },
     { id: "wemars", org: "WEMars", role: "Software team member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2024 to Apr 2025, rejoined Sep 2026", onResume: false, file: "/knowledgebase/experience/wemars.md",
