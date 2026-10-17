@@ -85,6 +85,20 @@ test("the top bar carries the mobile skip link, before its nav", () => {
 });
 
 /*
+ * Below `lg` the identity block and the contact row belong to the first page:
+ * on every other route they pushed the page's own content a screenful down to
+ * repeat the same name and blurb. The desktop sidebar keeps both, where they sit
+ * beside the content rather than ahead of it, so they are hidden, not removed.
+ */
+test("identity and contact links are first-page furniture on mobile", () => {
+  const home = renderToStaticMarkup(<SiteHeader current="/" />);
+  const other = renderToStaticMarkup(<SiteHeader current="/resume" />);
+  // The home page's single occurrence is the desktop-only skip link.
+  assert.equal((home.match(/max-lg:hidden/g) ?? []).length, 1);
+  assert.equal((other.match(/max-lg:hidden/g) ?? []).length, 3);
+});
+
+/*
  * The chat is a call to action, not a nav destination: the header renders it
  * as a button near the identity, and the mobile bar leaves it out — four
  * items do not fit a phone width, and the button is on the page anyway.

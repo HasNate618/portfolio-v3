@@ -49,6 +49,29 @@ test("StackList renders from site.ts", () => {
   assert.ok(getProject("campus")!.stack.length > 0);
 });
 
+/*
+ * Featured projects carry twelve to nineteen pills, which buries a card's own
+ * text. A card shows a capped list plus the count that is left over, linking to
+ * the case study where the full stack lives.
+ */
+test("a capped StackList shows the overflow and links to the case study", () => {
+  const stack = getProject("campus")!.stack;
+  const html = renderToStaticMarkup(<StackList projectId="campus" limit={4} />);
+  assert.ok(
+    html.includes(`+${stack.length - 4} more`),
+    `expected a "+${stack.length - 4} more" pill`
+  );
+  assert.match(html, /href="\/projects\/campus"/);
+  assert.ok(!html.includes(stack[stack.length - 1]), "the last pill must be left out");
+});
+
+test("an uncapped StackList still renders everything", () => {
+  const stack = getProject("campus")!.stack;
+  const html = renderToStaticMarkup(<StackList projectId="campus" />);
+  assert.ok(html.includes(stack[stack.length - 1]), "case studies show the full stack");
+  assert.doesNotMatch(html, /more<\/a>/);
+});
+
 test("StatRow renders every keyed stat as a description list", () => {
   const html = renderToStaticMarkup(<StatRow projectId="campus" />);
   assert.match(html, /<dl/);

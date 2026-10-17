@@ -43,6 +43,17 @@ export function isActiveNav(href: string, current: string): boolean {
 export const CHAT_LINK = { href: "/chat", label: "Ask about me" } as const;
 
 export function SiteHeader({ current }: { current: string }) {
+  const isHome = current === "/";
+
+  /*
+   * Below `lg`, the identity block and the contact row are first-page
+   * furniture: on every other route they pushed the actual content — a case
+   * study, the project list — a screenful down, repeating the same name and
+   * blurb. The desktop sidebar keeps them, where they sit beside the content
+   * rather than ahead of it.
+   */
+  const firstPageOnly = isHome ? undefined : "max-lg:hidden";
+
   return (
     <header className="page-enter lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:flex-col lg:justify-between lg:py-24">
       <div>
@@ -55,21 +66,23 @@ export function SiteHeader({ current }: { current: string }) {
           Skip to content
         </a>
 
-        <p className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">
-          <Link href="/" className="hover:text-accent">
-            {site.identity.name}
-          </Link>
-        </p>
+        <div className={firstPageOnly}>
+          <p className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">
+            <Link href="/" className="hover:text-accent">
+              {site.identity.name}
+            </Link>
+          </p>
 
-        {/* Deliberately quiet: the name leads, this sets context without
-            competing with it for attention. */}
-        <p className="mt-3 max-w-md text-base leading-relaxed text-muted sm:text-lg">
-          {site.identity.headline}
-        </p>
+          {/* Deliberately quiet: the name leads, this sets context without
+              competing with it for attention. */}
+          <p className="mt-3 max-w-md text-base leading-relaxed text-muted sm:text-lg">
+            {site.identity.headline}
+          </p>
 
-        {site.identity.positioning ? (
-          <p className="mt-4 max-w-xs leading-relaxed text-muted">{site.identity.positioning}</p>
-        ) : null}
+          {site.identity.positioning ? (
+            <p className="mt-4 max-w-xs leading-relaxed text-muted">{site.identity.positioning}</p>
+          ) : null}
+        </div>
 
         {/*
          * The chat earns a button, not a link: it is the one place a visitor
@@ -128,7 +141,11 @@ export function SiteHeader({ current }: { current: string }) {
         </nav>
       </div>
 
-      <SocialLinks />
+      {/* Contact links travel with the identity: first page below `lg`, every
+          page on the desktop sidebar. */}
+      <div className={firstPageOnly}>
+        <SocialLinks />
+      </div>
     </header>
   );
 }

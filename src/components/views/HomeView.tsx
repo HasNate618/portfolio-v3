@@ -118,7 +118,7 @@ export function HomeView({ page }: { page: Page }) {
           <StatRow projectId="campus" />
         </div>
         <div className="mt-6">
-          <StackList projectId="campus" />
+          <StackList projectId="campus" limit={6} />
         </div>
         <div className="mt-6">
           <LinkRow projectId="campus" />
@@ -149,7 +149,7 @@ export function HomeView({ page }: { page: Page }) {
               <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
               <ProjectMedia media={project.media} className="mt-3" />
               <div className="mt-3">
-                <StackList projectId={project.id} />
+                <StackList projectId={project.id} limit={6} />
               </div>
               <div className="mt-3">
                 <LinkRow projectId={project.id} />
