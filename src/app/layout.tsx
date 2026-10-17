@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import { SeoJsonLd } from "@/components/SeoJsonLd";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import "./globals.css";
@@ -40,6 +41,7 @@ export default function RootLayout({
         {/* Person + WebSite structured data. Was migrated but never rendered. */}
         <SeoJsonLd />
         {children}
+        <Analytics />
         {/* Renders nothing without script; the system scheme works without it. */}
         <ThemeToggle />
       </body>
