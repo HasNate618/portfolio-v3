@@ -16,9 +16,13 @@ const PROJECT_ORDER = [flagshipProject(), ...featuredProjects()]
 const LANGUAGES =
   site.skills.find((group) => group.group === "Languages")?.items.join(", ") ?? "";
 
+/** A term without an end date is the one that is still running. */
+const roleLabel = (role: (typeof site.experience)[number]): string =>
+  role.terms.some((term) => term.end === null) ? "Current role" : "Past role";
+
 const HIGHLIGHTS = [
   `${site.identity.year}, ${site.identity.education.degree} at ${site.identity.education.school} (${monthYear(site.identity.education.start)} to ${monthYear(site.identity.education.end)}, graduating ${site.identity.graduation})`,
-  ...site.experience.map((role) => `${role.role} at ${role.org} (${role.dates})`),
+  ...site.experience.map((role) => `${roleLabel(role)}: ${role.role} at ${role.org} (${role.dates})`),
   `${site.hackathons.awards} awards across ${site.hackathons.entered} hackathons`,
   `Looking for a ${site.identity.seeking}; graduates ${site.identity.graduation}`,
   `Based in ${site.identity.location}`,
@@ -98,6 +102,7 @@ STRICT RULES:
 24. AWARE is not offline. Say "no cloud inference": every model runs on the board, and alerts go out over Telegram.
 25. Campus has no chunk count and no exact file count, and you never give either. If asked how big it is, answer with the courses it covers and CONTEXT's dated file figure, just over 200 course files as of early October 2026.
 26. A 3D Western accuracy is agreement with VLM-checked scraped labels, not ground truth. Say that 84.2% is the run with the filename visible and that the best image-only result is 76.9%. Say he co-led the data team with the other VP.
+27. Roles carry their own label in RESUME HIGHLIGHTS. A role labelled Past role has ended, so say "was" and never list it as a current role.
 
 RESUME HIGHLIGHTS:
 ${HIGHLIGHTS}

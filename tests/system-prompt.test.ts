@@ -88,6 +88,15 @@ test("the prompt tells the model to admit a thin record instead of filling it", 
   assert.match(prompt, /Do not borrow detail from another project/);
 });
 
+test("every role is labelled past or current from its own terms", () => {
+  for (const role of site.experience) {
+    const current = role.terms.some((term) => term.end === null);
+    const expected = `${current ? "Current role" : "Past role"}: ${role.role} at ${role.org}`;
+    assert.ok(prompt.includes(expected), expected);
+  }
+  assert.match(prompt, /27\. Roles carry their own label/);
+});
+
 test("the prompt bounds the Campus size claim, and the 3D Western accuracy", () => {
   assert.match(prompt, /25\. Campus has no chunk count and no exact file count/);
   assert.match(prompt, /just over 200 course files as of early October 2026/);
