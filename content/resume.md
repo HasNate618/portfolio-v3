@@ -23,23 +23,23 @@ updated: 2026-10-16
 
 ### TeraGo
 
-- Built an outage-email parser: a local LLM (Ollama) extracts the key details from non-standard provider emails and opens Jira issues through Microsoft Graph. Works end to end; not yet deployed.
+- Built outage ticketing for non-standard provider emails: a local LLM (Ollama) extracts the key details and opens Jira issues through Microsoft Graph; works end to end, not yet deployed.
 - Wrote Channel Finder, a Python tool that finds clear RF channels in MapInfo data, validated on {{stat:TeraGo.testCases}} test cases.
 - Deployed a Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
 - Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) to cut per-user Copilot licensing costs.
 
 ### 3D Western
 
-- Led two developers through tickets and PR review to build the club's print-approval dataset and benchmark.
-- Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender and labelled by a VLM.
-- Benchmarked base vision models on the clean dataset (safe, unsafe and grey classes) for future fine-tuning.
+- Co-led two data developers through Jira tickets and PR review on the print-approval dataset and benchmark.
+- Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender with labels checked by a VLM.
+- Benchmarked small vision models as a binary safe-or-flag gate: 84.2% best agreement with VLM-checked labels.
 
 ## Projects
 
 ### Campus
 
-- Built a self-hosted AI study assistant that syncs my LMS courses into SQLite with Playwright.
-- Designed hybrid retrieval over {{stat:campus.chunks}} chunks from {{stat:campus.files}} course files with embedding search, cross-encoder reranking and a lexical SQL prefilter. Fixed exact phrases that scored below the semantic cutoff.
+- Built a self-hosted AI study assistant that syncs my LMS courses into SQLite with Playwright and runs on any OpenAI-compatible endpoint, local or hosted.
+- Designed hybrid retrieval over course files with embedding search, cross-encoder reranking and a lexical SQL prefilter. Fixed exact phrases that scored below the semantic cutoff.
 - Wrote a {{stat:campus.tools}}-tool agent harness with an audit log for every AI write and a bounded tool loop, with {{stat:campus.tests}} tests in CI.
 - Use it across {{stat:campus.courses}} courses for deadline lookups, studying from course slides, and reviewing drafts against briefs.
 

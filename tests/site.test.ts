@@ -87,7 +87,7 @@ test("aware carries the rows its model table renders", () => {
 
 test("experience carries the 3D Western dataset figure", () => {
   const stats = getExperience("3D Western")!.stats ?? [];
-  assert.ok(stats.some((s) => s.value === "4,127"));
+  assert.ok(stats.some((s) => s.value === "4,620"));
 });
 
 test("displayStatus is a plain word, never a colour", () => {

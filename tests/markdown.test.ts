@@ -106,6 +106,69 @@ test("a diagram fence without an alt line throws rather than shipping silently",
   assert.throws(() => renderMarkdown("```diagram\njust art\n```"), /alt/);
 });
 
+test("a figure fence renders a captioned image with its intrinsic size", () => {
+  const html = renderMarkdown(
+    "```figure\nsrc: /projects/x.webp\nwidth: 1600\nheight: 693\nalt: A funnel of 4,620 files.\ncaption: From scraped files to clean ones.\n```"
+  );
+  assert.match(html, /<figure class="my-8">/);
+  assert.match(
+    html,
+    /<img src="\/projects\/x\.webp" alt="A funnel of 4,620 files\." width="1600" height="693" loading="lazy" decoding="async"/
+  );
+  assert.match(html, /<figcaption[^>]*>From scraped files to clean ones\.<\/figcaption>/);
+});
+
+test("a figure fence without width and height still renders", () => {
+  const html = renderMarkdown("```figure\nsrc: /projects/x.webp\nalt: A.\ncaption: C.\n```");
+  assert.ok(!/width="/.test(html), "size attributes are optional, not defaulted");
+  assert.match(html, /<img src="\/projects\/x\.webp"/);
+});
+
+test("a figure fence demands src, alt and caption, and a site-local path", () => {
+  const fence = (body: string) => `\`\`\`figure\n${body}\n\`\`\``;
+  assert.throws(() => renderMarkdown(fence("src: /a.webp\nalt: A.")), /caption/);
+  assert.throws(() => renderMarkdown(fence("src: /a.webp\ncaption: C.")), /alt/);
+  assert.throws(() => renderMarkdown(fence("alt: A.\ncaption: C.")), /src/);
+  // Off-site and protocol-relative paths are refused: a content file cannot
+  // hotlink an image or smuggle a scheme in through the fence.
+  assert.throws(() => renderMarkdown(fence("src: https://evil.test/x.png\nalt: A.\ncaption: C.")), /site/);
+  assert.throws(() => renderMarkdown(fence("src: //evil.test/x.png\nalt: A.\ncaption: C.")), /site/);
+});
+
+test("a figure fence reuses the project lightbox, ids included", () => {
+  const html = renderMarkdown("```figure\nsrc: /projects/x.webp\nalt: A.\ncaption: C.\n```");
+
+  // The same CSS `:target` overlay ProjectMedia builds, so the expansion works
+  // with JavaScript off and Escape/focus from LightboxKeys applies here too.
+  assert.match(
+    html,
+    /<a id="figure-projects-x-webp-thumb" href="#figure-projects-x-webp" class="block cursor-zoom-in">/
+  );
+  assert.match(html, /<div id="figure-projects-x-webp" class="lightbox" tabindex="-1">/);
+  assert.match(
+    html,
+    /<a href="#figure-projects-x-webp-thumb" class="lightbox-backdrop" aria-label="Close the expanded image"><\/a>/
+  );
+  assert.match(html, /<figure class="lightbox-frame">/);
+  assert.match(html, /<a href="\/projects\/x\.webp" target="_blank" rel="noopener noreferrer"/);
+
+  // The pair is a contract with LightboxKeys, which derives the thumbnail as
+  // `${overlay.id}-thumb`; break it and Escape has nowhere to send focus.
+  const overlay = /<div id="([^"]+)" class="lightbox"/.exec(html)?.[1];
+  assert.ok(
+    overlay && html.includes(`id="${overlay}-thumb"`),
+    "the overlay id must be the thumbnail's id minus -thumb"
+  );
+});
+
+test("a figure fence cannot break out of its src attribute", () => {
+  const html = renderMarkdown(
+    "```figure\nsrc: /a.webp\" onerror=\"alert(1)\nalt: A.\ncaption: C.\n```"
+  );
+  assert.ok(!html.includes('onerror="alert(1)"'), `live attribute survived: ${html}`);
+  assert.match(html, /&quot;/);
+});
+
 test("a plain fence still renders as a code block with its language", () => {
   const html = renderMarkdown("```python\nprint(1)\n```");
   assert.match(html, /<pre><code class="language-python">/);

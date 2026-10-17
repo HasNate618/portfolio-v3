@@ -360,6 +360,16 @@ li {
   border-color: var(--color-rule);
 }
 
+/*
+ * Figures from the `figure` content fence. Charts are exported on a white
+ * background, so they keep it rather than inheriting the dark page.
+ */
+.rich-text figure img,
+.markdown figure img {
+  max-width: 100%;
+  height: auto;
+}
+
 .rich-text code,
 .markdown code {
   background-color: var(--color-code-bg);

@@ -14,9 +14,21 @@ export interface Chunk {
   length: number;
 }
 
+/**
+ * In a figure fence, the image path is for the page. The chat gets the caption
+ * and the alt text, which is what the figure says.
+ */
+function keepFigureText(text: string): string {
+  return text.replace(/```figure\n([\s\S]*?)```/g, (_match, body: string) => {
+    const caption = /^caption:\s*(.+)$/m.exec(body)?.[1].trim() ?? "";
+    const alt = /^alt:\s*(.+)$/m.exec(body)?.[1].trim() ?? "";
+    return [caption, alt].filter(Boolean).join(" ");
+  });
+}
+
 /** In a diagram fence, the picture is for the page. The chat only needs the alt. */
 function keepDiagramAlts(text: string): string {
-  return text.replace(/```diagram\n([\s\S]*?)```/g, (_match, body: string) => {
+  return keepFigureText(text).replace(/```diagram\n([\s\S]*?)```/g, (_match, body: string) => {
     const alt = /^alt:\s*(.+)$/m.exec(body);
     return alt ? alt[1].trim() : "";
   });

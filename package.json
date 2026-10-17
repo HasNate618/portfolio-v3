@@ -13,6 +13,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "TSX_TSCONFIG_PATH=tsconfig.test.json node --import tsx --test \"tests/**/*.test.ts\" \"tests/**/*.test.tsx\"",
+    "build:resume": "bash resume/build.sh",
     "build-embeddings": "tsx scripts/build-embeddings.mjs",
     "check:content": "tsx scripts/check-content.mjs",
     "check:contrast": "tsx scripts/check-contrast.mjs",

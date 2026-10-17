@@ -2,6 +2,7 @@ import Link from "next/link";
 import { site } from "@/data/site";
 import { renderMarkdown, slugify, stripLeadingH1 } from "@/lib/markdown";
 import type { Page } from "@/lib/content";
+import { getPage } from "@/lib/content";
 import { ExperienceMetaRow } from "@/components/ExperienceMetaRow";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -60,9 +61,11 @@ export function ExperienceView({ page }: { page: Page }) {
               dangerouslySetInnerHTML={{ __html: renderMarkdown(roleBodies[index]) }}
             />
           ) : null}
-          {role.org === "TeraGo" ? (
+          {/* Any role with its own route page gets a link; a role without one
+              gets nothing rather than a dead end. */}
+          {getPage(`/experience/${role.id}`) ? (
             <p className="mt-3 text-sm">
-              <Link href="/experience/terago" className="font-medium text-accent hover:text-fg">
+              <Link href={`/experience/${role.id}`} className="font-medium text-accent hover:text-fg">
                 Case study <span aria-hidden="true">→</span>
               </Link>
             </p>

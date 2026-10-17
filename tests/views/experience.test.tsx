@@ -31,12 +31,24 @@ test("every role in site.ts gets a section, none silently dropped", () => {
 });
 
 test("the 3D Western dataset figure resolves from the role, not a project", () => {
-  assert.match(html, /4,127/);
-  assert.ok(!page.body.includes("4,127"), "the figure must not be typed into content");
+  assert.match(html, /4,620/);
+  assert.ok(!page.body.includes("4,620"), "the figure must not be typed into content");
 });
 
-test("TeraGo links to its case study", () => {
-  assert.match(html, /href="\/experience\/terago"/);
+/*
+ * The link used to be hardcoded to TeraGo. Deriving it from the role in site.ts
+ * is what keeps a second role's case study reachable without another special
+ * case, so the invariant is asserted rather than the two ids.
+ */
+test("a role is linked to its case study exactly when that route page exists", () => {
+  for (const role of site.experience) {
+    const route = `/experience/${role.id}`;
+    assert.equal(
+      html.includes(`href="${route}"`),
+      Boolean(getPage(route)),
+      `${role.org}: link presence must match whether ${route} exists`
+    );
+  }
 });
 
 test("education dates come from site.ts", () => {

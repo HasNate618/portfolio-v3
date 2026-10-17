@@ -77,6 +77,9 @@ export function getMd(): AnyMd {
    * Fenced directives. A fence's info string selects a renderer:
    *   `diagram`  - accessible figure, with a required leading `alt:` line
    *   `models X` - the model table for project X, with a required `caption:` line
+   *   `figure`   - an image under public/, from required `src:`, `alt:` and
+   *                `caption:` lines, plus optional `width:`/`height:` so the
+   *                page does not shift while the image loads
    *   anything else - an ordinary code block
    * Structured content stays in content files, and the pipeline owns the markup.
    */
@@ -98,6 +101,56 @@ export function getMd(): AnyMd {
         `<pre aria-hidden="true" class="overflow-x-auto rounded border border-rule bg-black/30 p-4 text-xs leading-relaxed text-fg">${esc(lines.join("\n"))}</pre>`,
         `<figcaption class="sr-only">${esc(alt)}</figcaption>`,
         "</figure>\n",
+      ].join("");
+    }
+
+    if (kind === "figure") {
+      const fields: Record<string, string> = {};
+      for (const line of lines) {
+        const match = /^([a-z]+):\s*(.*)$/.exec(line);
+        if (match) fields[match[1]] = match[2].trim();
+      }
+      for (const key of ["src", "alt", "caption"]) {
+        if (!fields[key]) throw new Error(`figure fence is missing its \`${key}: \` line`);
+      }
+      // Site-local paths only. A single leading slash also rules out "//host/x",
+      // so a content file can neither hotlink nor smuggle in a scheme.
+      if (!/^\/[^/]/.test(fields.src)) {
+        throw new Error("figure fence `src:` must be a site path under public/, like /projects/x.webp");
+      }
+      const sized = /^\d+$/.test(fields.width ?? "") && /^\d+$/.test(fields.height ?? "");
+      const size = sized ? ` width="${fields.width}" height="${fields.height}"` : "";
+
+      /*
+       * Clicking a figure expands it with the same CSS `:target` lightbox the
+       * project thumbnails use (ProjectMedia builds the markup; LightboxKeys
+       * adds Escape and focus). The fence emits that markup rather than a React
+       * component because a fence returns a string, the way `diagram` and
+       * `models` do.
+       *
+       * The two ids are a contract with LightboxKeys, which derives the
+       * thumbnail as `${overlay.id}-thumb`: the overlay id must end in the
+       * thumbnail's id, or Escape and focus restoration have nowhere to go.
+       */
+      const overlayId = `figure-${slugify(fields.src)}`;
+      const thumbId = `${overlayId}-thumb`;
+      const fullSize = `
+        <a href="${esc(fields.src)}" target="_blank" rel="noopener noreferrer" class="font-medium text-accent hover:text-fg">Open the full-size file</a>`;
+
+      return [
+        '<figure class="my-8">',
+        `<a id="${thumbId}" href="#${overlayId}" class="block cursor-zoom-in">`,
+        `<img src="${esc(fields.src)}" alt="${esc(fields.alt)}"${size} loading="lazy" decoding="async" class="h-auto w-full rounded-lg border border-rule bg-white transition-colors hover:border-accent" />`,
+        "</a>",
+        `<figcaption class="mt-2 text-sm text-muted">${esc(fields.caption)}</figcaption>`,
+        "</figure>",
+        `<div id="${overlayId}" class="lightbox" tabindex="-1">`,
+        `<a href="#${thumbId}" class="lightbox-backdrop" aria-label="Close the expanded image"></a>`,
+        '<figure class="lightbox-frame">',
+        `<img src="${esc(fields.src)}" alt="${esc(fields.alt)}"${size} decoding="async" class="max-h-[80vh] max-w-[92vw] rounded-lg border border-rule bg-white" />`,
+        `<figcaption class="mt-3 max-w-[60ch] text-center text-sm text-muted">${esc(fields.caption)}${fullSize}</figcaption>`,
+        "</figure>",
+        "</div>\n",
       ].join("");
     }
 

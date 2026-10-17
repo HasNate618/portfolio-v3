@@ -24,7 +24,8 @@ npm run check:content     # content/index/SEO consistency
 npm run check:contrast    # 4.5:1 text contrast
 npm run check:embeddings  # embedding cache freshness
 npm run check:render      # JS-off served HTML, against a running `npm start`
-npm run build-embeddings  # rebuild the chat RAG index
+npm run build-embeddings  # rebuild the chat RAG index (needs COHERE_API_KEY)
+npm run build:resume      # compile resume/Resume.tex into public/Nathan_Espejo_Resume.pdf
 ```
 
 `.tsx` tests need `TSX_TSCONFIG_PATH=tsconfig.test.json` (the `test` script sets this).
@@ -40,12 +41,22 @@ npm run build-embeddings  # rebuild the chat RAG index
 | `src/lib/corpus.ts` | Projection from `content/` + `site.ts` facts into `/knowledgebase/*.md` and the chat RAG index. |
 | `src/lib/content.ts` | Page loader: `loadFrom`, `listPages`, `getPage`, frontmatter. |
 | `src/lib/markdown.ts` | `renderMarkdown`, `resolveStats`, `slugify`. Markdown-it is required lazily. |
+| `resume/` | The résumé source (`Resume.tex`, `flake.nix`, `build.sh`). See below. |
+
+### The résumé
+
+The PDF at `public/Nathan_Espejo_Resume.pdf` is what the site serves, and `resume/Resume.tex` is its only source. Nothing else may edit either file by hand: run `npm run build:resume`, which compiles the `.tex` (borrowing `latexmk` from `resume/flake.nix` when it isn't on PATH) and copies the PDF over `public/`. Build artifacts land in the gitignored `resume/build/`.
+
+The `HasNate618/Resume` repo is archived; it was the build workflow, not the source.
+
+A change to a figure or claim in `resume/Resume.tex` needs the same change in `content/resume.md`, which is the same résumé as text.
 
 ## One-source-of-truth
 
 - Page copy lives in `content/`, never in JSX and never rendered from `knowledgebase/`.
 - Numbers/stack links/etc live in `site.ts`. Content files reference them as `{{stat:<id>.<key>}}`; the pipeline resolves them at render time and throws on any unknown key.
-- Structured tables/diagrams go through fences: `diagram` (required `alt:`) and `models X` (required `caption:`). Their markup generators are the single source for `<caption>`/`scope="col"`/`aria-hidden`.
+- Structured tables/diagrams go through fences: `diagram` (required `alt:`), `models X` (required `caption:`) and `figure` (required `src:`, `alt:` and `caption:`; optional `width:`/`height:` so the page does not shift as the image loads). Their markup generators are the single source for `<caption>`/`scope="col"`/`aria-hidden`/`<figcaption>`.
+- A `figure` fence's `src:` must be a site path under `public/`. Off-site and protocol-relative paths are refused.
 
 A route content file may not contain a bare figure or stack list that `site.ts` can hold.
 
@@ -60,7 +71,7 @@ A route content file may not contain a bare figure or stack list that `site.ts` 
 
 ## Internal links
 
-Always `next/link`. Plain `<a>` only for the skip anchor, `mailto:`, and the mounted files (`/llms.txt`, `/knowledgebase/*.md`, the resume PDF).
+Always `next/link`. Plain `<a>` only for the skip anchor, `mailto:`, the mounted files (`/llms.txt`, `/knowledgebase/*.md`, the resume PDF), and a `figure` fence's image links, which point at static assets rather than routes.
 
 ## Do not
 
