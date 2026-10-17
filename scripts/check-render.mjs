@@ -13,7 +13,7 @@ function pass(cond, label) {
   if (!cond) failures.push(label);
 }
 
-const req = { "/": "4,687", "/projects": "Awards", "/projects/campus": "lexical",
+const req = { "/": "Awards", "/projects": "Hackathon team projects", "/projects/campus": "lexical",
   "/projects/homelab": "58,000", "/projects/aware": "$80", "/experience/terago": "760",
   "/now": "mailto:", "/resume": "Automated outage ticketing",
   "/chat": "needs JavaScript" };
