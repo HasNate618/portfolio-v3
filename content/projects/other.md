@@ -31,7 +31,7 @@ VR simulation of Attack on Titan's ODM Gear with custom Arduino glove controller
 ## UWO Mealplan Calc
 <a id="uwo-mealplan-calc"></a>
 
-Chrome extension for students to track meal plan spending and project remaining balances with budget recommendations. Built with JavaScript, Chrome Extension API and HTML. (2024 (approx.).)
+Chrome extension for students to track meal plan spending and project remaining balances with budget recommendations. Built with JavaScript, Chrome Extension API and HTML. (2024, approx.)
 
 - Chrome Web Store: https://chromewebstore.google.com/detail/uwo-mealplan-calc/ligfhpfnfnmkmoloelfpcjpeajifkmpo
 - GitHub: https://github.com/HasNate618/UWO-Mealplan-Calculator
@@ -47,29 +47,29 @@ Horror game with wearable glove controller using accelerometer, flex sensors, an
 ## Rubber Band Turret
 <a id="rubber-band-turret"></a>
 
-Bluetooth-controlled rubber band turret with smooth servo movement and wireless Android app control. Built with Arduino, C++ and Servo Motors. (2023 (approx.).)
+Bluetooth-controlled rubber band turret with smooth servo movement and wireless Android app control. Built with Arduino, C++ and Servo Motors. (2023, approx.)
 
 - GitHub: https://github.com/HasNate618/Rubber-Band-Turret
 
 ## Mōtaru
 <a id="motaru"></a>
 
-Take down ninjas using quick reflexes in this action mobile game. Built with Unity3D, C# and Google Play. (undated.)
+Take down ninjas using quick reflexes in this action mobile game. Built with Unity3D, C# and Google Play. (2024.)
 
 ## Zenith Tower
 <a id="zenith-tower"></a>
 
-Ascend an endless futuristic dungeon tower in this fast-paced mobile crawler. Built with Unity3D, C# and Google Play. (undated.)
+Ascend an endless futuristic dungeon tower in this fast-paced mobile crawler. Built with Unity3D, C# and Google Play. (2024.)
 
 ## Tic Tac Toe Ultimate
 <a id="tic-tac-toe-ultimate"></a>
 
-The Ultimate Tic Tac Toe experience on Android. Built with Unity3D, C# and Google Play. (undated.)
+Ultimate Tic Tac Toe for Android. Built with Unity3D, C# and Google Play. (2024.)
 
 ## Object-Love-Interface
 <a id="object-love-interface"></a>
 
-Multi-device IoT system that gives objects personality and voice so you can interact with them in an immersive, real-life setting. Built with Python, Node.js and Express. (CTRL+HACK+DEL 2.0, Feb 2026.)
+Multi-device IoT system that gives objects personality and voice so you can talk to everyday objects. Built with ESP32 boards running Arduino code, plus Python and Node.js. (CTRL+HACK+DEL 2.0, Feb 2026.)
 
 - Devpost: https://devpost.com/software/object-love-interface
 - GitHub: https://github.com/HasNate618/Object-Love-Interface
@@ -80,5 +80,5 @@ Multi-device IoT system that gives objects personality and voice so you can inte
 A cursed Spotify clone with an intentional terrible early 2000s aesthetic. Features an AI chatbot that gaslights you about your music choices and plays random songs instead of the ones you click. (Stupid Hackathon @ Western, Nov 2025.)
 
 - Devpost: https://devpost.com/software/stupid-spotify
-- GitHub: https://github.com/HasNate618/stupid-spotify
+- GitHub: https://github.com/HasNate618/Stupid-Spotify
 - Live Demo: https://stupid-spotify-sigma.vercel.app

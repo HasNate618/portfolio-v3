@@ -27,7 +27,7 @@ Real-time web app translating ASL gestures and facial expressions into emotion-a
 
 ## Description
 
-VitalSign is an AI-powered bridge between sign language and speech that doesn't just translate what you say, but how you feel. It helps Deaf and non-verbal users communicate more naturally in situations where interpreters aren't available.
+VitalSign turns sign language into speech and carries the emotion from your face into the voice. It helps Deaf and non-verbal users communicate more naturally in situations where interpreters aren't available.
 
 ### Inspiration
 

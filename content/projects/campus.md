@@ -10,7 +10,7 @@ onThisPage: [tl;dr, Why I built it, What I built, How it works, Models and cost,
 id: campus
 dates: "Aug 2026 to present"
 role: solo
-status: in-progress
+status: active
 rank: flagship
 updated: 2026-10-16
 ---

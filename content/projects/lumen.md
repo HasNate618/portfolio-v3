@@ -14,7 +14,7 @@ updated: 2026-10-16
 ---
 # Lumen
 
-A calming companion that listens, understands, and responds with personalized mini-games tailored to your emotional state. Built with React, TypeScript and Unity3D.
+Built at TerraHacks 2025 with a team of four. You check in on how you feel, Gemini reads it, and Lumen picks a mini-game to match. I built the Unity mini-games.
 
 ## Status
 
@@ -33,7 +33,7 @@ Built at TerraHacks 2025. The prize is listed in [awards](../awards.md).
 
 ## Description
 
-Lumen is a mental wellness companion that listens when no one else does. It invites users to check in with how they feel through a short guided survey or by journaling freely.
+Lumen is a mental wellness app. You check in with how you feel through a short guided survey or by journaling freely.
 
 ### How It Works
 
@@ -49,7 +49,6 @@ Lumen is a mental wellness companion that listens when no one else does. It invi
 1. **Emotion Analysis**
    - Gemini interprets nuanced journal inputs
    - Returns emotionally intelligent responses
-   - Bridges clinical insight with accessible interface
 
 2. **Personalized Mini-Games**
    - Built in Unity with C#
@@ -57,13 +56,7 @@ Lumen is a mental wellness companion that listens when no one else does. It invi
    - Therapeutic game design principles
    - Embedded in React app with minimal latency
 
-3. **Beautiful UI**
-   - Minimal design to avoid overload
-   - Satisfying and comforting interface
-   - GSAP and Framer Motion animations
-   - Intentional spacing and subtle motion
-
-4. **Data Tracking**
+3. **Data Tracking**
    - User emotional history
    - Login frequency and patterns
    - Emotional trend visualization

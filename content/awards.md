@@ -22,6 +22,6 @@ Nathan has won 8 awards across 22 hackathons. Most were team efforts, and the ro
 | TerraHacks | 2025 | [Lumen](projects/lumen.md) | Best Use of MongoDB Atlas | Team project; I built the Unity mini-games |
 | Hack the North | 2025 | [Eyecandy](projects/eyecandy.md) | Snap Spectacles AR Runner Up | Team project |
 | Spark | 2026 | [CareBridge](projects/carebridge.md) | Overall 3rd place | Team project |
-| GameHACKS 1.0 | 2023 | [Street Cleaner](projects/other.md#street-cleaner) | Second Award | Repo owner |
-| CTRL+HACK+DEL 2.0 | 2026 | [Object-Love-Interface](projects/other.md#object-love-interface) | Best Useless Hack | Repo owner |
-| Stupid Hackathon @ Western | 2025 | [Stupid Spotify](projects/other.md#stupid-spotify) | Worst UX | Repo owner |
+| GameHACKS 1.0 | 2023 | [Street Cleaner](projects/other.md#street-cleaner) | Second Award | Team project |
+| CTRL+HACK+DEL 2.0 | 2026 | [Object-Love-Interface](projects/other.md#object-love-interface) | Best Useless Hack | Team project |
+| Stupid Hackathon @ Western | 2025 | [Stupid Spotify](projects/other.md#stupid-spotify) | Worst UX | Team project |

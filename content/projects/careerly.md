@@ -14,7 +14,7 @@ updated: 2026-10-16
 ---
 # Careerly
 
-AI-powered virtual job fair built in Unity that makes career exploration fun and inclusive. Built with Unity3D, C# and Cohere API.
+A virtual job fair in Unity where you walk between booths and talk to AI mentors. Built with Unity3D, C# and Cohere API.
 
 ## Status
 

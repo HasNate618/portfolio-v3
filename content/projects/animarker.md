@@ -6,7 +6,7 @@ description: An Android wildlife tracker that identifies species with computer v
 priority: reference
 rank: archive
 dates: "May 2023"
-role: "owner"
+role: "solo"
 status: shipped
 tags: [android, ai, computer-vision, data-collection]
 related: [index.md, ../skills.md]
@@ -14,7 +14,7 @@ updated: 2026-10-16
 ---
 # Animarker
 
-A crowdsourced wildlife tracker using computer vision to identify and map animal sightings worldwide. Built with Kotlin, TensorFlow and Google Maps API.
+An Android app that identifies an animal from a photo and puts the sighting on a map. Built with Kotlin, TensorFlow and the Google Maps API. It was my first hackathon, and I did it solo: a small online event that ran over two weeks, where everyone was in high school, me included.
 
 ## Tech Stack
 

@@ -4,9 +4,9 @@ type: project
 id: agenticarmy
 description: A human-in-the-loop multi-agent coding workflow with a VS Code extension and FastAPI backend.
 priority: reference
-rank: featured
+rank: archive
 dates: "Mar 2026"
-role: "repo owner"
+role: "team"
 status: shipped
 tags: [agentic-coding, full-stack, ai-systems]
 related: [index.md, ../skills.md]

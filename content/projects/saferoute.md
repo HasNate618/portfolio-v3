@@ -24,7 +24,7 @@ A real-time hazard reporting app with crowdsourced data, drone integration, and 
 
 ## Description
 
-SafeRoute is a mobile application that helps users navigate safely by reporting and avoiding hazards in real-time. It combines crowdsourced data with intelligent routing to keep users safe.
+SafeRoute is a mobile application that helps users navigate safely by reporting and avoiding hazards in real-time. Users report hazards, and the app routes around them.
 
 ### Key Features
 

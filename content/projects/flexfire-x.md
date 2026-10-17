@@ -14,7 +14,7 @@ updated: 2026-10-16
 ---
 # FLEXFIRE-X
 
-A wearable, servo-powered arm attachment that extends and fires a spring-loaded projectile using EMG muscle signals, built to mimic the immersive cyberware experience of Cyberpunk 2077. Built with Arduino Nano RP2040 Connect, EMG Sensor and SG90 Servo Motor.
+A wearable, servo-powered arm attachment that extends and fires a spring-loaded projectile using EMG muscle signals, inspired by the arm launchers in Cyberpunk 2077. Built with Arduino Nano RP2040 Connect, EMG Sensor and SG90 Servo Motor.
 
 ## Tech Stack
 

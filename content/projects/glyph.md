@@ -6,7 +6,7 @@ description: A leader-key command overlay for Windows with discoverable actions 
 priority: reference
 rank: featured
 dates: "Jan 2026 (approx.)"
-role: "owner"
+role: "solo"
 status: shipped
 tags: [developer-tools, desktop-software, productivity]
 related: [index.md, ../skills.md]

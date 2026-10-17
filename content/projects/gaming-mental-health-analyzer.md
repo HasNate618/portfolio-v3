@@ -6,7 +6,7 @@ description: A machine-learning pipeline that predicts five wellbeing risks from
 priority: reference
 rank: archive
 dates: "Mar 2026 (approx.)"
-role: "owner"
+role: "team"
 status: shipped
 tags: [ai, data-science, health]
 related: [index.md, ../skills.md]
@@ -29,7 +29,7 @@ ML system that predicts mental wellbeing risks across sleep, productivity, socia
 
 ## Description
 
-A hackathon project that uses machine learning to analyze the relationship between gaming habits and mental wellbeing. Users fill out a short assessment and receive personalized risk analysis across five wellbeing dimensions.
+A Dataquest team project that uses machine learning to analyze the relationship between gaming habits and mental wellbeing. Users fill out a short assessment and receive personalized risk analysis across five wellbeing dimensions.
 
 ### What It Does
 

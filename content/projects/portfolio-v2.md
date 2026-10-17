@@ -6,7 +6,7 @@ description: The previous portfolio: a desktop-first site with a 3D ASCII ocean 
 priority: reference
 rank: archive
 dates: "Jun 2026 (approx.) to present"
-role: "owner"
+role: "solo"
 status: shipped
 tags: [web-development, 3d-graphics, creative-development, portfolio]
 related: [index.md, ../skills.md]

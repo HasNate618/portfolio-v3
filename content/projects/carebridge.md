@@ -32,42 +32,17 @@ Built at Spark Hackathon 2026. The prize is listed in [awards](../awards.md).
 - Tailwind CSS
 - Zustand (state management)
 
-## Description
+## What it does
 
-CareBridge AI is a healthcare coordination platform designed for rural communities, inspired by real consequences of broken care coordination.
+Patients check in by chat or voice. Each conversation becomes a structured summary on a timeline, and providers see every patient in one dashboard, with risk signals flagged from what patients said.
 
-### Inspiration
+## How it works
 
-A winter storm that cut off access to a regional hospital exposed ongoing problems: missed referrals, fragmented communication, and lack of systematic follow-up escalating into preventable emergencies. The goal was to catch missed follow-ups before they turned into emergencies.
+A React and TypeScript frontend talks to a FastAPI backend. Supabase stores the data, with row-level security and role-based access. Cohere reads the conversations, ElevenLabs handles voice, and risk flags combine keyword rules with model output.
 
-### What It Does
+## Why
 
-**For Patients:**
-- AI-powered care companion for health check-ins and symptom reporting
-- Conversational interactions that generate structured health summaries
-- Low-friction, private way to report concerns without travel
-- Ongoing engagement supporting follow-up rather than one-off interactions
-
-**For Providers:**
-- Unified dashboard showing all patients and their current status
-- Chronological patient timeline tracking symptoms, alerts, and interactions
-- Risk signals surfaced from patient conversations to flag potential escalation
-- Clear visibility into patient history for continuity of care
-
-### Architecture
-
-- **Frontend**: React with TypeScript, Tailwind CSS, Zustand state management
-- **Backend**: FastAPI serving REST endpoints
-- **Database**: Supabase with Row Level Security and role-based access control
-- **AI Layer**: Cohere for conversational analysis, ElevenLabs for voice
-- **Risk Assessment**: Keyword-based and AI-assisted risk assessment
-
-### Challenges Overcome
-
-- **Trust and Privacy**: Designing for small communities where privacy concerns prevent engagement
-- **Data Modeling**: Turning unstructured conversations into clean, chronological timelines
-- **Scope Management**: Focusing on one core coordination failure within time limits
-- **UI Layout**: Handling dynamic timelines without breaking layout
+A winter storm cut off a regional hospital, and missed referrals and follow-ups turned into emergencies. We picked that one coordination failure and built for it.
 
 ## Links
 

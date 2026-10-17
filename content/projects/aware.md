@@ -2,7 +2,7 @@
 title: AWARE
 type: project
 route: /projects/aware
-description: My first solo hack: an offline device on an $80 Arduino that sees, hears and follows plain-English rules.
+description: A solo Hack the 6ix build: an $80 Arduino that sees, hears and follows plain-English rules, with every model on the board.
 priority: start-here
 tags: [edge-ai, on-device, hackathon]
 related: [index.md, campus.md, homelab.md, ../skills.md]
@@ -18,18 +18,18 @@ updated: 2026-10-16
 
 ## tl;dr
 
-- Every model runs on one {{stat:aware.boardCost}} Arduino UNO Q. No cloud, no internet.
+- Every model runs on one {{stat:aware.boardCost}} Arduino UNO Q. No cloud inference: the camera and mic are processed on the board, and alerts go out over Telegram.
 - You type a rule like "when glass breaks after 10pm alert me". An on-device LLM turns it into a deterministic rule.
 - A rules engine checks every active rule each 500 ms. No LLM in that loop.
 - YOLOv8n runs on the board's Adreno GPU through ONNX Runtime QNN.
 
 ## Why I built it
 
-My goal for the edge track: a device where you describe what to watch for in plain English, and everything, including the language model, stays on the board. Camera and mic data never leave the room.
+My goal for the edge track: a device where you describe what to watch for in plain English, and every model, including the language model, runs on the board. Nothing goes to a cloud model.
 
 ## What I built
 
-It was my first solo hackathon project, so I built every part: the perception pipeline, the LLM rule compiler and parser, the rules engine, memory digests, the dashboard, the bridge to the microcontroller, and deployment.
+I built it solo, so every part is mine: the perception pipeline, the LLM rule compiler and parser, the rules engine, memory digests, the dashboard, the bridge to the microcontroller, and deployment.
 
 ## How it works
 
@@ -54,7 +54,7 @@ camera + mic + sensors ─► perception (always on)
 caption: The on-device models AWARE runs on the board, and what each one does.
 ```
 
-The LLM only runs when you add a rule, ask a question, or a digest is due. The {{stat:aware.ruleTick}} checks are plain code. No API costs, and nothing leaves the device.
+The LLM only runs when you add a rule, ask a question, or a digest is due. The {{stat:aware.ruleTick}} checks are plain code. No API costs, and no camera or mic data goes to a cloud model.
 
 ## Results
 
