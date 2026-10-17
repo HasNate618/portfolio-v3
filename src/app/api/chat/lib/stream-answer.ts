@@ -1,4 +1,5 @@
 import { DashFilter } from "./sanitize-dashes";
+import { BannedPhraseFilter } from "./banned-phrases";
 
 /**
  * A Cohere stream event, as far as this module needs it. The SDK types the stream
@@ -88,6 +89,7 @@ export async function streamAnswer(options: StreamAnswerOptions): Promise<Answer
     text = "";
     let chars = 0;
     const filter = new DashFilter();
+    const phrases = new BannedPhraseFilter();
 
     try {
       const source = await options.start();
@@ -110,7 +112,7 @@ export async function streamAnswer(options: StreamAnswerOptions): Promise<Answer
         if (accepted.length < delta.length) truncated = true;
         chars += accepted.length;
 
-        const safe = filter.push(accepted);
+        const safe = phrases.push(filter.push(accepted));
         if (safe) {
           text += safe;
           options.emit(safe);
@@ -118,12 +120,17 @@ export async function streamAnswer(options: StreamAnswerOptions): Promise<Answer
         }
       }
     } finally {
-      // The filter holds a short tail; the answer is not finished until it is out.
-      const tail = filter.flush();
+      // Each filter holds a short tail; the answer is not finished until both
+      // are out. Dashes run first, so the phrase filter sees the final wording.
+      const tail = phrases.push(filter.flush()) + phrases.flush();
       if (tail) {
         text += tail;
         options.emit(tail);
         options.onProgress?.(text);
+      }
+
+      if (phrases.removed > 0) {
+        console.warn(`Chat stripped ${phrases.removed} banned phrase(s) from the answer`);
       }
     }
 
