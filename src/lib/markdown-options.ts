@@ -11,9 +11,14 @@
  * (`src/lib/markdown.ts`) and the chat transcript cannot drift apart. Flipping
  * `html` to `true` would open an injection path; `tests/markdown.test.ts` fails
  * if that happens.
+ *
+ * `linkify` is on so the `## Links` lines in content files — and any URL a model
+ * writes in an answer — render as anchors rather than inert text. It matches only
+ * explicit `http(s)://` and `mailto:` schemes, so a token like `Node.js` or
+ * `index.md` stays prose.
  */
 export const MARKDOWN_OPTIONS = {
   html: false,
-  linkify: false,
+  linkify: true,
   typographer: false,
 } as const;

@@ -77,6 +77,18 @@ test("ids can be turned off for the bot view", () => {
   assert.ok(!renderMarkdown("## Heading", { ids: false }).includes('id="heading"'));
 });
 
+test("bare urls in a link line become anchors", () => {
+  assert.match(
+    renderMarkdown("- Devpost: https://devpost.com/software/x"),
+    /<a href="https:\/\/devpost\.com\/software\/x">/
+  );
+});
+
+test("linkify leaves library and file names as prose", () => {
+  const html = renderMarkdown("Node.js, Next.js, Three.js and index.md all stay text");
+  assert.ok(!html.includes("<a "), `unexpected anchor in: ${html}`);
+});
+
 test("a diagram fence renders an accessible figure, not a code block", () => {
   const html = renderMarkdown("```diagram\nalt: Sync feeds SQLite.\na -> b\n```");
   assert.match(html, /<figure/);
