@@ -8,9 +8,10 @@ import { site } from "../../src/data/site";
 const page = getPage("/resume")!;
 const html = renderToStaticMarkup(<ResumeView page={page} />);
 
-test("resume says Automated, not Prototyped", () => {
-  assert.match(html, /Automated outage ticketing/);
-  assert.doesNotMatch(html, /Prototyped/);
+test("resume describes the outage parser honestly", () => {
+  assert.match(html, /outage-email parser/);
+  assert.match(html, /Jira/);
+  assert.doesNotMatch(html, /Automated/);
 });
 
 test("resume carries no phone number", () => {

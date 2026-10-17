@@ -25,10 +25,10 @@ test("'present' is rendered as 'now'", () => {
 
 test("ProjectMetaRow shows a status only where site.ts has one", () => {
   const withStatus = renderToStaticMarkup(<ProjectMetaRow projectId="agntos" />);
-  assert.match(withStatus, /concept/);
+  assert.match(withStatus, /abandoned/);
 
   const withoutStatus = renderToStaticMarkup(<ProjectMetaRow projectId="campus" />);
-  assert.doesNotMatch(withoutStatus, /concept/);
+  assert.doesNotMatch(withoutStatus, /abandoned/);
 });
 
 test("an unknown project renders nothing rather than throwing", () => {

@@ -24,9 +24,24 @@ test("the seeking line comes from site.ts, not from the markdown", () => {
   assert.ok(!page.body.includes("Summer 2027"), "seeking must not be restated in content");
 });
 
-test("the featured section links to real case studies", () => {
-  for (const id of ["homelab", "aware", "carebridge"]) {
+test("the featured section links to real case studies, and only those", () => {
+  for (const id of ["homelab", "aware"]) {
     assert.ok(html.includes(`href="/projects/${id}"`), `missing case study link for ${id}`);
+  }
+  // CareBridge is a featured card with no case-study route, so its title is
+  // plain text rather than a link that 404s.
+  assert.ok(!html.includes('href="/projects/carebridge"'), "CareBridge has no case study page");
+});
+
+test("every project link on the home page resolves to a real page", () => {
+  // Media anchors point at the asset itself (ProjectMedia links the full-size
+  // image), so only extension-less hrefs are page routes.
+  const hrefs = [...html.matchAll(/href="(\/projects\/[^"]+)"/g)]
+    .map((match) => match[1])
+    .filter((href) => !/\.[a-z0-9]+$/i.test(href));
+  assert.ok(hrefs.length > 0, "expected at least one project link");
+  for (const href of hrefs) {
+    assert.ok(getPage(href), `${href} links to a page that does not exist`);
   }
 });
 

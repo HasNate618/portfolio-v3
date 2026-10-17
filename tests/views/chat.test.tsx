@@ -7,9 +7,11 @@ import { getPage } from "../../src/lib/content";
 
 const page = getPage("/chat")!;
 const html = renderToStaticMarkup(<ChatView page={page} />);
+// React escapes text nodes, so an apostrophe arrives as &#x27;.
+const text = html.replace(/&#x27;/g, "'");
 
 test("chat renders starters and the JS-off notice in the HTML", () => {
-  assert.match(html, /What is Campus and how does its retrieval work\?/);
+  assert.match(text, /What are Nathan's strongest projects\?/);
   assert.match(html, /needs JavaScript/);
   assert.match(html, /\/llms\.txt/);
 });
@@ -25,13 +27,13 @@ test("no Sources line is rendered", () => {
 
 test("all five starters are offered as buttons for JS users", () => {
   for (const starter of page.starters ?? []) {
-    assert.ok(html.includes(starter), `missing starter: ${starter}`);
-    assert.ok(html.includes(`>${starter}</button>`), `starter is not a button: ${starter}`);
+    assert.ok(text.includes(starter), `missing starter: ${starter}`);
+    assert.ok(text.includes(`>${starter}</button>`), `starter is not a button: ${starter}`);
   }
 });
 
 test("the JS-off path lists the starters as text, not buttons", () => {
-  const noscript = html.slice(html.indexOf("<noscript"), html.indexOf("</noscript>"));
+  const noscript = text.slice(text.indexOf("<noscript"), text.indexOf("</noscript>"));
   assert.ok(noscript.includes((page.starters ?? [])[0]), "the no-JS block must carry the starters");
   assert.ok(!noscript.includes("<button"), "a no-JS reader cannot press a button");
 });

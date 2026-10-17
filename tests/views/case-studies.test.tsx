@@ -60,10 +60,10 @@ test("terago shows an experience meta row, not a project one", () => {
   assert.match(terago, /Software Engineering Intern/);
 });
 
-test("terago describes the outage ticketing as automated", () => {
-  assert.match(terago, /automated/i);
-  assert.doesNotMatch(terago, /prototype/i);
-  assert.match(terago, /proposal/i);
+test("terago says the parser works but is not deployed", () => {
+  assert.match(terago, /outage-email parser/i);
+  assert.match(terago, /not deployed/i);
+  assert.doesNotMatch(terago, /automated/i);
 });
 
 test("terago's 760 test cases come from site.ts", () => {

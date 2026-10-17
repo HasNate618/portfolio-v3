@@ -69,7 +69,7 @@ test("group labels are the capitalized display form, not the slugs", () => {
 });
 
 test("team projects carry the honesty rule before any credit", () => {
-  const rule = html.indexOf("Team projects are labelled as team projects");
+  const rule = html.indexOf("Most of my hackathon projects were team efforts");
   const firstTeam = html.indexOf("Auralis");
   assert.ok(rule !== -1 && rule < firstTeam, "the honesty rule must precede team credits");
 });

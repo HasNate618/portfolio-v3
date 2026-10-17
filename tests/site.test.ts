@@ -91,7 +91,8 @@ test("experience carries the 3D Western dataset figure", () => {
 });
 
 test("displayStatus is a plain word, never a colour", () => {
-  assert.equal(getProject("agntos")!.displayStatus, "concept");
+  assert.equal(getProject("agntos")!.displayStatus, "abandoned");
+  assert.equal(getProject("cyberdeck")!.displayStatus, "abandoned");
 });
 
 test("project order is unique", () => {
