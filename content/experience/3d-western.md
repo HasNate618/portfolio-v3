@@ -24,11 +24,11 @@ His VP term (May to Aug 2026) ran alongside his TeraGo internship. As VP he led 
 
 ## Dataset
 
-He built a labelled dataset from 4,127 scraped 3D models, rendered in Blender and class-checked by a VLM.
+He built a labelled dataset from 4,127 scraped 3D models, rendered in Blender and labelled by a VLM.
 
 ## Benchmark
 
-He benchmarked base vision models on the 2,559 clean renders, with safe, unsafe and grey classes, as groundwork for future fine-tuning. The best scored 84.2% accuracy.
+He benchmarked base vision models on the 2,559 clean renders, with safe, unsafe and grey classes, as groundwork for future fine-tuning. The best agreed with the dataset labels on 84.2% of them.
 
 ## Earlier work as Software Developer
 

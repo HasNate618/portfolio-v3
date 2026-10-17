@@ -23,7 +23,7 @@ updated: 2026-10-16
 
 ### TeraGo
 
-- Automated outage ticketing for non-standard provider emails: a local LLM on Ollama extracts the key details and the pipeline opens Jira issues through Microsoft Graph.
+- Built an outage-email parser: a local LLM (Ollama) extracts the key details from non-standard provider emails and opens Jira issues through Microsoft Graph. Works end to end; not yet deployed.
 - Wrote Channel Finder, a Python tool that finds clear RF channels in MapInfo data, validated on {{stat:TeraGo.testCases}} test cases.
 - Deployed a Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
 - Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) to cut per-user Copilot licensing costs.
@@ -31,7 +31,7 @@ updated: 2026-10-16
 ### 3D Western
 
 - Led two developers through tickets and PR review to build the club's print-approval dataset and benchmark.
-- Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender and class-checked by a VLM.
+- Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender and labelled by a VLM.
 - Benchmarked base vision models on the clean dataset (safe, unsafe and grey classes) for future fine-tuning.
 
 ## Projects
@@ -43,7 +43,7 @@ updated: 2026-10-16
 - Wrote a {{stat:campus.tools}}-tool agent harness with an audit log for every AI write and a bounded tool loop, with {{stat:campus.tests}} tests in CI.
 - Use it across {{stat:campus.courses}} courses for deadline lookups, studying from course slides, and reviewing drafts against briefs.
 
-### Homelab and NixOS
+### NixOS homelab
 
 - Defined a laptop and home server entirely in version-controlled NixOS config ({{stat:homelab.containers}} hardened containers, Tailscale-only access, sops-nix secrets), so every change is a reviewable, reversible diff.
 - Run one Hermes Agent profile per host that makes changes as config edits, over {{stat:homelab.sessions}} sessions and {{stat:homelab.toolCalls}} tool calls since June, with subagents taking larger investigations.
@@ -52,5 +52,5 @@ updated: 2026-10-16
 
 ### AWARE
 
-- Built an offline home-awareness device running YOLOv8 and YAMNet on a {{stat:aware.boardCost}} Arduino UNO Q with QNN.
+- Built an on-device home-awareness system running YOLOv8 and YAMNet on a {{stat:aware.boardCost}} Arduino UNO Q with QNN, with no cloud inference.
 - Had an on-device LLM compile commands like "when glass breaks after 10pm alert me" into deterministic rules, then checked them every {{stat:aware.ruleTick}} with no LLM in the loop.

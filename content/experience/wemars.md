@@ -12,10 +12,10 @@ updated: 2026-10-16
 ---
 # Software team, WEMars
 
-WEMars is Western's Mars rover team. Nathan was on its software team from Sep 2024 to Apr 2025 and rejoined in Sep 2026, this time focusing on AI and autonomy for the rover.
+WEMars is Western's Mars rover team. Nathan was on its software team from Sep 2024 to Apr 2025 and rejoined in Sep 2026 to work on AI and autonomy for the rover.
 
-## 2024-25: camera and comms
+## 2024-25: camera streaming and exploration
 
-- Developed wireless camera and video streaming with ESP32-CAM for the rover platform.
-- Looked into networking protocols for reliable communication with a central hub.
-- Looked into computer vision for detecting the visual markers used in rover navigation and competition tasks.
+- Built wireless camera and video streaming on the ESP32-CAM for the rover.
+- Explored networking protocols for reliable communication with a central hub.
+- Explored computer vision for detecting the visual markers used in rover navigation and competition tasks.
