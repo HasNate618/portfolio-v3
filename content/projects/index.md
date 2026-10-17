@@ -23,6 +23,7 @@ Every project Nathan has documented, one file each, with a line on what it cover
 - [AgntOS](agntos.md): An AI system for NixOS configuration he stopped building once Hermes Agent on NixOS did the job.
 - [AgenticArmy](agenticarmy.md): How the multi-agent coding workflow plans, splits and merges work with a human approving each step.
 - [Glyph](glyph.md): What Glyph does for Windows keyboard workflows, its config model, and how it ships through WinGet.
+- [ferret](ferret.md): How the local-first search tool indexes text, images and PDFs into one SQLite file, and what its JSON contract covers.
 - [Auralis](auralis.md): What the Auralis virtual doctor does and the stack his team used.
 - [Careerly](careerly.md): What the Careerly Unity job fair does and its AI mentor setup.
 - [Lumen](lumen.md): What the Lumen wellness companion does and which part Nathan built.

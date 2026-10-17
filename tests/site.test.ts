@@ -9,6 +9,7 @@ import {
   getExperience,
   type ProjectGroup,
 } from "../src/data/site";
+import { caseStudyHref } from "../src/lib/content";
 
 test("Campus carries the figures the draft states", () => {
   const stats = Object.fromEntries(getProject("campus")!.stats.map((s) => [s.key, s.value]));
@@ -93,11 +94,12 @@ test("displayStatus is a plain word, never a colour", () => {
   assert.equal(getProject("cyberdeck")!.displayStatus, "abandoned");
 });
 
-test("ferret is a solo tool with no case study yet", () => {
+test("ferret is a solo tool with a corpus doc but no case study", () => {
   const ferret = getProject("ferret");
   assert.equal(ferret?.group, "tools");
   assert.equal(ferret?.displayRole, "solo");
-  assert.ok(!ferret?.file, "a card only: no corpus doc, so the chat does not answer about it");
+  assert.equal(ferret?.file, "/knowledgebase/projects/ferret.md");
+  assert.equal(caseStudyHref(ferret!), null, "no route is declared, so the card has no page");
 });
 
 test("project order is unique", () => {

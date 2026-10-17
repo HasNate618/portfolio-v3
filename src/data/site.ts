@@ -207,6 +207,7 @@ export const site: SiteContent = {
       id: "ferret", name: "ferret", group: "tools", order: 5,
       dates: "Oct 2026 (approx.)", displayRole: "solo",
       covers: "Local-first semantic search over text, images and PDFs in Rust: hybrid vector, FTS5 and filename search fused with RRF.",
+      file: "/knowledgebase/projects/ferret.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/ferret" }],
       stats: [], stack: ["Rust", "SQLite FTS5", "llama.cpp"],
     },
