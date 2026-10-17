@@ -1,15 +1,17 @@
 ---
 title: "FLEXFIRE-X"
 type: project
+id: flexfire-x
+description: A wearable launcher triggered by an EMG muscle sensor, with nine 3D-printed parts.
 priority: reference
-rank: other
+rank: archive
 dates: "2025 (approx.)"
 role: "owner"
+status: shipped
 tags: [hardware, embedded-systems, cad, 3d-printing]
 related: [index.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # FLEXFIRE-X
 
 A wearable, servo-powered arm attachment that extends and fires a spring-loaded projectile using EMG muscle signals, built to mimic the immersive cyberware experience of Cyberpunk 2077. Built with Arduino Nano RP2040 Connect, EMG Sensor and SG90 Servo Motor.

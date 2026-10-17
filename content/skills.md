@@ -1,14 +1,14 @@
 ---
 title: "Skills"
 type: skills
+description: Nathan Espejo's skills, grouped by area and linked to the projects and roles where he used them.
 priority: reference
 dates: "2023 to present"
 role: "self"
 tags: [skills]
 related: [index.md, projects/index.md, experience/index.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Skills
 
 Nathan's skills grouped by area. Each one links to the project or role files where he used it.

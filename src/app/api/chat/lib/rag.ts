@@ -4,6 +4,7 @@ import { getCohereClient, embedTexts } from "./cohere";
 interface ScoredChunk {
   text: string;
   source: string;
+  section: string;
   embedding: number[];
   score: number;
 }
@@ -11,6 +12,7 @@ interface ScoredChunk {
 interface RerankedChunk {
   text: string;
   source: string;
+  section: string;
   score: number;
 }
 
@@ -68,6 +70,7 @@ export async function rerankChunks(
       return {
         text: chunks[r.index]?.text ?? "",
         source,
+        section: chunks[r.index]?.section ?? "",
         score: isNavigationDoc(source) ? r.relevanceScore * NAVIGATION_PENALTY : r.relevanceScore,
       };
     })

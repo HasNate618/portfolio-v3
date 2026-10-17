@@ -1,5 +1,5 @@
 import { site } from "@/data/site";
-import { renderMarkdown } from "@/lib/markdown";
+import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import type { Page } from "@/lib/content";
 import { ExperienceMetaRow } from "@/components/ExperienceMetaRow";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
@@ -34,8 +34,9 @@ function Body({ source }: { source: string }) {
 
 export function ResumeView({ page }: { page: Page }) {
   const education = site.identity.education;
-  const roleBodies = subsections(page.body, "Experience");
-  const projectBodies = subsections(page.body, "Projects");
+  const body = stripLeadingH1(page.body, page.title);
+  const roleBodies = subsections(body, "Experience");
+  const projectBodies = subsections(body, "Projects");
 
   const roles = site.experience.filter((role) => role.onResume);
   const projects = site.projects.filter((project) => project.onResume);

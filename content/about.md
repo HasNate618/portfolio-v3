@@ -1,16 +1,16 @@
 ---
 title: "About Nathan Espejo"
-type: about
+type: page
+description: About Nathan Espejo, a Software Engineering student building applied AI systems and software tools.
 priority: start-here
 dates: "Aug 2024 to present"
 tags: [profile, education, contact, recruiting]
 related: [now.md, local-ai.md, projects/campus.md, projects/homelab.md, experience/index.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # About Nathan Espejo
 
-Nathan Espejo is a 3rd-year Software Engineering student at Western University (2026-27) who builds LLM agents and retrieval systems for his own workflows. He is looking for a Summer 2027 applied AI engineering internship.
+Nathan Espejo is a 3rd-year Software Engineering student at Western University (2026-27) who builds LLM agents and retrieval systems for his own workflows. He is looking for a Summer 2027 software engineering or applied AI internship.
 
 ## Location
 

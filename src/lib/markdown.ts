@@ -24,6 +24,18 @@ export function resolveStats(text: string): string {
   });
 }
 
+/**
+ * Drop a leading H1 when the page template already renders that same title.
+ * The heading stays in the file so the knowledge base and the chat still have it.
+ */
+export function stripLeadingH1(body: string, title: string): string {
+  const match = /^#\s+([^\n]+)\n*/.exec(body);
+  if (!match) return body;
+  const heading = match[1].trim().replace(/^["']|["']$/g, "");
+  if (heading !== title.trim()) return body;
+  return body.slice(match[0].length);
+}
+
 /** Heading text to anchor id. Shared with the "on this page" list so they always agree. */
 export function slugify(text: string): string {
   return text

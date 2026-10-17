@@ -1,15 +1,17 @@
 ---
 title: "NowAndThen"
 type: project
+id: nowandthen
+description: A team-built geotagged memory map for leaving posts and generating summaries of places.
 priority: reference
-rank: other
+rank: archive
 dates: "Jan 2026"
 role: "team"
+status: shipped
 tags: [full-stack, mobile, ai, maps]
 related: [index.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # NowAndThen
 
 Geotagged memory map app for leaving comments, photos, and videos tied to locations with AI personality summaries. Built with React Native, Expo Go and MongoDB.

@@ -17,6 +17,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { site } from "../src/data/site.ts";
+import { contentProblems, PAGE_ONLY_KEYS } from "../src/lib/content.ts";
 
 const rootIndex = process.argv.indexOf("--root");
 const ROOT =
@@ -147,6 +148,18 @@ for (const rel of walk(ROOT)) {
   });
 }
 
+// Page-only keys stay in content/ and are stripped before /knowledgebase is served.
+// Listed here so a new page-only key is a deliberate edit: route, onThisPage,
+// starters, skills, priority.
+void PAGE_ONLY_KEYS;
+
+const schemaProblems = contentProblems(ROOT);
+if (schemaProblems.length > 0) {
+  console.error(`check:content — ${schemaProblems.length} frontmatter problem(s) under ${ROOT}/\n`);
+  for (const problem of schemaProblems) console.error(`  ${problem}`);
+  process.exitCode = 1;
+}
+
 if (failures.length > 0) {
   console.error(
     `check:content — ${failures.length} restated fact(s) in route files under ${ROOT}/\n`
@@ -160,6 +173,6 @@ if (failures.length > 0) {
       `\nor ${EXEMPT} on a line that genuinely must name the value.`
   );
   process.exitCode = 1;
-} else {
+} else if (!process.exitCode) {
   console.log(`check:content — clean (${ROOT}/)`);
 }

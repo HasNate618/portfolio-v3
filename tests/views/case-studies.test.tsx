@@ -60,8 +60,9 @@ test("terago shows an experience meta row, not a project one", () => {
   assert.match(terago, /Software Engineering Intern/);
 });
 
-test("terago keeps its honest scope words", () => {
-  assert.match(terago, /prototype/i);
+test("terago describes the outage ticketing as automated", () => {
+  assert.match(terago, /automated/i);
+  assert.doesNotMatch(terago, /prototype/i);
   assert.match(terago, /proposal/i);
 });
 

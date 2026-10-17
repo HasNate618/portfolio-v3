@@ -1,13 +1,20 @@
 ---
 title: Campus
+type: project
 route: /projects/campus
-projectId: campus
-description: A self-hosted study assistant I built for my own courses.
+description: A self-hosted study assistant for my courses: Brightspace sync, hybrid retrieval and an agent that logs every write.
 priority: start-here
 tags: [local-ai, rag, agents, education-tooling]
 related: [index.md, homelab.md, aware.md, ../skills.md, ../local-ai.md]
 onThisPage: [tl;dr, Why I built it, What I built, How it works, Models and cost, Results, Next, Stack]
+id: campus
+dates: "Aug 2026 to present"
+role: solo
+status: in-progress
+rank: flagship
+updated: 2026-10-16
 ---
+# Campus
 
 ## tl;dr
 
@@ -33,7 +40,7 @@ All of it.
 - A fix for exact phrases that scored below the semantic cutoff. They now go through the lexical path.
 - A {{stat:campus.tools}}-tool agent that answers questions, reads files, and edits notes or due dates, in a bounded tool loop.
 - An append-only audit log with the before and after state of every AI write.
-- A React, TypeScript and Vite PWA.
+- A React, TypeScript and Vite PWA. <!-- one-source-ok -->
 - CI on GitHub Actions: pytest, frontend type-check and a production build on every push.
 
 ## How it works

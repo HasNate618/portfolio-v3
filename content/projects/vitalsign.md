@@ -1,15 +1,17 @@
 ---
 title: "VitalSign"
 type: project
+id: vitalsign
+description: A team-built web app translating ASL gestures and facial expressions into emotion-aware speech.
 priority: reference
-rank: other
+rank: archive
 dates: "Jan 2026"
 role: "team"
+status: shipped
 tags: [ai, full-stack, accessibility, computer-vision]
 related: [index.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # VitalSign
 
 Real-time web app translating ASL gestures and facial expressions into emotion-aware speech for natural communication. Built with Next.js 15, React 19 and MediaPipe.

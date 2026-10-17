@@ -9,7 +9,7 @@ const html = renderToStaticMarkup(<HomeView page={page} />);
 
 test("home renders identity, seeking and the Campus card", () => {
   assert.match(html, /Nathan Espejo/);
-  assert.match(html, /Summer 2027 applied AI engineering internship/);
+  assert.match(html, /Summer 2027 software engineering or applied AI internship/);
   assert.match(html, /Campus/);
   assert.match(html, /4,687/);
   assert.match(html, /308/);
@@ -24,7 +24,7 @@ test("the seeking line comes from site.ts, not from the markdown", () => {
 });
 
 test("the featured section links to real case studies", () => {
-  for (const id of ["homelab", "aware"]) {
+  for (const id of ["homelab", "aware", "carebridge"]) {
     assert.ok(html.includes(`href="/projects/${id}"`), `missing case study link for ${id}`);
   }
 });
@@ -69,7 +69,7 @@ test("the featured cards offer their outward links", () => {
   assert.match(html, /href="\/projects\/homelab"/);
 });
 
-test("the home page has no award-winning featured cards to frame", () => {
-  // Every winner is a hackathon team project; those render on /projects.
-  assert.doesNotMatch(html, /border-accent\/50 bg-accent\/5/);
+test("CareBridge is an award-winning featured card", () => {
+  assert.match(html, /CareBridge/);
+  assert.match(html, /border-accent\/50 bg-accent\/5/);
 });

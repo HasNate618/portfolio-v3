@@ -1,5 +1,5 @@
 import { site } from "@/data/site";
-import { renderMarkdown } from "@/lib/markdown";
+import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import type { Page } from "@/lib/content";
 import { ChatPanel } from "@/app/chat/ChatPanel";
 
@@ -34,7 +34,7 @@ export function ChatView({ page }: { page: Page }) {
         </ul>
       </noscript>
 
-      <ChatPanel starters={starters} introHtml={renderMarkdown(page.body)} />
+      <ChatPanel starters={starters} introHtml={renderMarkdown(stripLeadingH1(page.body, page.title))} />
 
       {/*
        * A footnote rather than a preamble: the panel is the point of the page,

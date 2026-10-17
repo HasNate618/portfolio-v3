@@ -1,12 +1,13 @@
 import { getProject } from "@/data/site";
 
-export function StatRow({ projectId }: { projectId: string }) {
+export function StatRow({ projectId, home = false }: { projectId: string; home?: boolean }) {
   const project = getProject(projectId);
-  if (!project || project.stats.length === 0) return null;
+  const stats = project?.stats.filter((stat) => !home || stat.home !== false) ?? [];
+  if (!project || stats.length === 0) return null;
 
   return (
     <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
-      {project.stats.map((stat) => (
+      {stats.map((stat) => (
         <div key={stat.key}>
           <dt className="text-[0.7rem] font-semibold uppercase tracking-wider text-muted">
             {stat.label}

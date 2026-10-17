@@ -1,7 +1,8 @@
 ---
-title: Nathan Espejo
+title: Résumé
+type: page
 route: /resume
-description: The résumé as text, matching the PDF.
+description: My résumé as text, matching the PDF.
 priority: reference
 tags: [resume]
 related: [index.md, ../skills.md]
@@ -14,7 +15,9 @@ skills:
     items: [React, FastAPI, Next.js, NixOS, Linux, Docker, Tailscale, Caddy, Git, GitHub Actions]
   - group: Tools
     items: [Cursor, Claude Code, Hermes Agent, Microsoft Graph, Copilot Studio, Jira, SharePoint, Blender]
+updated: 2026-10-16
 ---
+# Résumé
 
 ## Experience
 

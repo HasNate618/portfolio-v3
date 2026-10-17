@@ -1,15 +1,17 @@
 ---
 title: "SafeRoute"
 type: project
+id: saferoute
+description: An Android app for reporting hazards and routing around them with crowdsourced data.
 priority: reference
-rank: other
+rank: archive
 dates: "2025 (approx.)"
 role: "owner"
+status: shipped
 tags: [android, full-stack, maps]
 related: [index.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # SafeRoute
 
 A real-time hazard reporting app with crowdsourced data, drone integration, and safe routing for Android. Built with Kotlin, Google Maps API and Android Studio.

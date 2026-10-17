@@ -1,15 +1,17 @@
 ---
 title: "Eyecandy"
 type: project
+id: eyecandy
+description: A team-built AR try-on experience for Shopify products on Snap Spectacles.
 priority: reference
-rank: other
+rank: archive
 dates: "Sep 2025"
 role: "team"
+status: shipped
 tags: [ar, ai, shopping, full-stack]
 related: [index.md, ../awards.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Eyecandy
 
 An AR shopping experience that turns Shopify products into virtual try-on using augmented reality. Built with Snap Spectacles, Lens Studio and Shopify API.

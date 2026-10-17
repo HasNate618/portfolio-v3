@@ -62,7 +62,7 @@ test("no role bullet is lost when the content file has the wrong number of secti
 test("now ends with the ask and a mailto link", () => {
   const now = renderToStaticMarkup(<NowView page={getPage("/now")!} />);
   assert.match(now, /mailto:nate\.e\.espejo@gmail\.com/);
-  assert.match(now, /Summer 2027 applied AI engineering internship/);
+  assert.match(now, /Summer 2027 software engineering or applied AI internship/);
 });
 
 test("now renders its bullets", () => {

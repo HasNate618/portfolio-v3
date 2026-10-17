@@ -7,6 +7,7 @@ import { SeoJsonLd } from "../src/components/SeoJsonLd";
 import { listPages } from "../src/lib/content";
 import { getCorpusDocs } from "../src/lib/corpus";
 import { site } from "../src/data/site";
+import { pageMetadata } from "../src/lib/page-metadata";
 
 const urls = sitemap().map((entry) => new URL(entry.url).pathname);
 
@@ -32,12 +33,28 @@ test("the sitemap has no duplicates", () => {
   assert.equal(new Set(urls).size, urls.length);
 });
 
-test("JSON-LD emits Person and WebSite", () => {
+test("JSON-LD emits Person, WebSite and ProfilePage", () => {
   const html = renderToStaticMarkup(<SeoJsonLd />);
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /"@type":"Person"/);
   assert.match(html, /"@type":"WebSite"/);
+  assert.match(html, /"@type":"ProfilePage"/);
+  assert.match(html, /"@id":"https:\/\/nathanespejo\.com\/#person"/);
   assert.ok(html.includes(site.contact.email), "the person graph should carry the email");
+});
+
+test("route metadata comes from frontmatter and marks case studies as articles", () => {
+  const campus = listPages().find((page) => page.route === "/projects/campus")!;
+  const metadata = pageMetadata(campus, { article: true });
+  assert.equal(metadata.title, campus.title);
+  assert.equal(metadata.description, campus.description);
+  assert.equal(metadata.openGraph?.type, "article");
+  assert.equal(metadata.alternates?.canonical, "/projects/campus");
+});
+
+test("sitemap lastmod uses frontmatter dates", () => {
+  const home = sitemap().find((entry) => new URL(entry.url).pathname === "/")!;
+  assert.equal((home.lastModified as Date).toISOString(), "2026-10-16T00:00:00.000Z");
 });
 
 test("the person graph cannot break out of its script tag", () => {

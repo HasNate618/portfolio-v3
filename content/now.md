@@ -1,15 +1,17 @@
 ---
 title: Now
+type: page
 route: /now
-description: What I am working on this term.
+description: What I'm working on this term: Campus, its retrieval evaluation, and my homelab.
 priority: reference
 tags: [now]
 related: [index.md, ../projects/index.md]
+updated: 2026-10-16
 ---
+# Now
 
 Updated October 2026.
 
 - School. Third year of Software Engineering at Western.
 - Campus. Still building it, and using it across {{stat:campus.courses}} courses. The evaluation is in progress.
 - Homelab. Both NixOS machines run 24/7. The agents make config changes, and I approve each one.
-- WEMars. Rejoined the software team in September to work on AI and autonomy for the rover. Just getting started.

@@ -2,10 +2,15 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { getCorpusDocs, getCorpusDoc } from "../src/lib/corpus";
 
-test("no served document leaks frontmatter", () => {
+test("served documents keep public frontmatter and strip page-only keys", () => {
   for (const doc of getCorpusDocs()) {
-    assert.ok(!doc.text.startsWith("---"), `${doc.path} starts with frontmatter`);
-    assert.ok(!/^title:/m.test(doc.text), `${doc.path} contains frontmatter keys`);
+    assert.ok(doc.text.startsWith("---"), `${doc.path} is missing frontmatter`);
+    assert.match(doc.text, /^title:/m, `${doc.path} is missing its title`);
+    assert.match(doc.text, /^type:/m, `${doc.path} is missing its type`);
+    assert.doesNotMatch(doc.text, /^route:/m, `${doc.path} leaked its route`);
+    assert.doesNotMatch(doc.text, /^onThisPage:/m, `${doc.path} leaked page navigation`);
+    assert.doesNotMatch(doc.text, /^starters:/m, `${doc.path} leaked chat UI starters`);
+    assert.doesNotMatch(doc.text, /^skills:/m, `${doc.path} leaked resume-only layout data`);
   }
 });
 

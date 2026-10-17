@@ -1,15 +1,17 @@
 ---
 title: "Lumen"
 type: project
+id: lumen
+description: A team-built wellness companion that selects a mini-game from a mood check-in.
 priority: reference
-rank: other
+rank: archive
 dates: "Aug 2025"
 role: "team (built the Unity mini-games)"
+status: shipped
 tags: [ai, games, mental-health]
 related: [index.md, ../awards.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Lumen
 
 A calming companion that listens, understands, and responds with personalized mini-games tailored to your emotional state. Built with React, TypeScript and Unity3D.

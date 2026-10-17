@@ -1,16 +1,18 @@
 ---
 title: "Gaming and Mental Health Analyzer"
 type: project
+id: gaming-mental-health-analyzer
+description: A machine-learning pipeline that predicts five wellbeing risks from gaming habits.
 priority: reference
-rank: other
+rank: archive
 dates: "Mar 2026 (approx.)"
 role: "owner"
+status: shipped
 tags: [ai, data-science, health]
 related: [index.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
-# Gaming & Mental Health Analyzer
+# Gaming and Mental Health Analyzer
 
 ML system that predicts mental wellbeing risks across sleep, productivity, social isolation, dysregulation, and emotional problems based on gaming habits. Built with Python, scikit-learn and Jupyter Notebook.
 

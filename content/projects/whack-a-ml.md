@@ -1,15 +1,17 @@
 ---
 title: "Whack-A-ML"
 type: project
+id: whack-a-ml
+description: A reinforcement learning agent that trains a simulated robotic arm to strike targets in Unity.
 priority: reference
-rank: other
+rank: archive
 dates: "Jan 2026 (approx.)"
 role: "owner"
+status: shipped
 tags: [ai, reinforcement-learning, unity, robotics-simulation]
 related: [index.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Whack-A-ML
 
 Reinforcement learning agent training a robotic arm to strike targets in Unity using PPO and curriculum learning. Built with PyTorch, Unity3D and C#.

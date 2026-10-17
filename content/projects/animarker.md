@@ -1,15 +1,17 @@
 ---
 title: "Animarker"
 type: project
+id: animarker
+description: An Android wildlife tracker that identifies species with computer vision and maps sightings.
 priority: reference
-rank: other
+rank: archive
 dates: "May 2023"
 role: "owner"
+status: shipped
 tags: [android, ai, computer-vision, data-collection]
 related: [index.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Animarker
 
 A crowdsourced wildlife tracker using computer vision to identify and map animal sightings worldwide. Built with Kotlin, TensorFlow and Google Maps API.

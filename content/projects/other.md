@@ -1,14 +1,14 @@
 ---
 title: "Other projects"
-type: projects
+type: index
+description: Short notes on Nathan Espejo's smaller games, maker builds and hackathon projects.
 priority: reference
 dates: "2023 to 2026"
 role: "mixed"
 tags: [games, hardware, hackathons]
 related: [index.md, ../awards.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Other projects
 
 Short entries for Nathan's smaller games, maker builds and joke hackathon projects. Each section stands alone, with its date or event where one is known.

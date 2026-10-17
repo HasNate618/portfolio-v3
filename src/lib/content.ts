@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { site } from "@/data/site";
 
 /**
  * Authored prose lives in content/ as markdown. A file with a `route:` key is a
@@ -16,15 +17,35 @@ export type Page = {
   route: string;
   title: string;
   description: string;
+  /** page | project | experience | index | awards | skills */
+  type: string;
+  /** Project or experience id. Matches site.ts. */
+  id?: string;
+  dates?: string;
+  role?: string;
+  status?: string;
+  updated?: string;
   priority: "start-here" | "reference";
-  projectId?: string;
-  experienceOrg?: string;
   /** Résumé only. The four-group layout is a documented exception to one-source. */
   skills?: { group: string; items: string[] }[];
   /** Chat only: the empty-state starter questions. */
   starters?: string[];
   onThisPage: string[];
   body: string;
+};
+
+/** Keys that belong to a rendered page and are stripped from the published knowledge base. */
+export const PAGE_ONLY_KEYS = ["route", "onThisPage", "starters", "skills", "priority"] as const;
+
+export type DocMeta = {
+  title: string;
+  type: string;
+  id?: string;
+  description?: string;
+  dates?: string;
+  role?: string;
+  status?: string;
+  updated?: string;
 };
 
 /**
@@ -142,6 +163,51 @@ export function stripFrontmatter(raw: string): string {
   return parseFrontmatter(raw).body;
 }
 
+function docMeta(data: Frontmatter): DocMeta {
+  return {
+    title: asString(data.title),
+    type: asString(data.type),
+    id: asOptionalString(data.id) ?? asOptionalString(data.projectId),
+    description: asOptionalString(data.description),
+    dates: asOptionalString(data.dates),
+    role: asOptionalString(data.role),
+    status: asOptionalString(data.status),
+    updated: asOptionalString(data.updated),
+  };
+}
+
+/** Frontmatter the chunker and the sitemap read. Page-only keys are not included. */
+export function readDocMeta(raw: string): DocMeta {
+  return docMeta(parseFrontmatter(raw).data);
+}
+
+/**
+ * Frontmatter published at /knowledgebase. Route furniture is omitted, while
+ * title, type, id, dates, role, status, rank, tags, related and updated remain.
+ */
+export function publicFrontmatter(raw: string): string {
+  if (!raw.startsWith("---")) return "";
+  const end = raw.indexOf("\n---", 3);
+  if (end === -1) return "";
+
+  const pageOnly = new Set<string>(PAGE_ONLY_KEYS);
+  const lines = raw.slice(3, end).trim().split("\n");
+  const kept: string[] = [];
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const match = /^([A-Za-z0-9_-]+):/.exec(lines[index]);
+    if (!match || !pageOnly.has(match[1])) {
+      kept.push(lines[index]);
+      continue;
+    }
+
+    // Block values such as the resume's skills consume their indented lines.
+    while (index + 1 < lines.length && /^\s+/.test(lines[index + 1])) index += 1;
+  }
+
+  return `---\n${kept.join("\n")}\n---`;
+}
+
 /** Every .md path under root, relative to root, forward-slashed and sorted. */
 function walk(root: string): string[] {
   const out: string[] = [];
@@ -178,14 +244,19 @@ export function loadFrom(root: string): Page[] {
     const route = asOptionalString(data.route);
     if (!route) continue;
 
+    const meta = docMeta(data);
     pages.push({
       slug: rel.replace(/\.md$/, ""),
       route,
-      title: asString(data.title),
+      title: meta.title,
       description: asString(data.description),
+      type: meta.type,
+      id: meta.id,
+      dates: meta.dates,
+      role: meta.role,
+      status: meta.status,
+      updated: meta.updated,
       priority: data.priority === "start-here" ? "start-here" : "reference",
-      projectId: asOptionalString(data.projectId),
-      experienceOrg: asOptionalString(data.experienceOrg),
       skills: asSkills(data.skills),
       starters: asStringArray(data.starters),
       onThisPage: asStringArray(data.onThisPage),
@@ -229,4 +300,57 @@ export function caseStudyHref(project: { id: string }): string | null {
 /** Every content/**\/*.md path relative to content/. */
 export function listCorpusFiles(): string[] {
   return listCorpusFilesFrom(CONTENT_ROOT);
+}
+
+/** Updated dates for sitemap lastmod. Missing dates fall back at the call site. */
+export function listCorpusUpdated(root = CONTENT_ROOT): { path: string; updated?: string }[] {
+  return walk(root).map((rel) => {
+    const raw = fs.readFileSync(path.join(root, rel), "utf-8");
+    return { path: rel, updated: readDocMeta(raw).updated };
+  });
+}
+
+const DOC_TYPES = new Set(["page", "project", "experience", "index", "awards", "skills"]);
+
+/**
+ * Required frontmatter and a real H1. Route files and corpus files share this
+ * gate so a chat document cannot drift away from the schema.
+ */
+export function contentProblems(root: string): string[] {
+  const problems: string[] = [];
+
+  for (const rel of walk(root)) {
+    const raw = fs.readFileSync(path.join(root, rel), "utf-8");
+    const { data, body } = parseFrontmatter(raw);
+    const meta = docMeta(data);
+    const where = `${root}/${rel}`;
+
+    if (!meta.title) problems.push(`${where}: missing title`);
+    if (!DOC_TYPES.has(meta.type)) problems.push(`${where}: missing or invalid type`);
+    if (!meta.description) problems.push(`${where}: missing description`);
+    else if (meta.description.length > 155) {
+      problems.push(`${where}: description is ${meta.description.length} characters (max 155)`);
+    }
+    if (!meta.updated || !/^\d{4}-\d{2}-\d{2}$/.test(meta.updated)) {
+      problems.push(`${where}: missing updated date (YYYY-MM-DD)`);
+    }
+    if (meta.type === "project" || meta.type === "experience") {
+      if (!meta.id) problems.push(`${where}: missing id`);
+      if (!meta.dates) problems.push(`${where}: missing dates`);
+    }
+    if (meta.type === "project" && meta.id && !site.projects.some((project) => project.id === meta.id)) {
+      problems.push(`${where}: id ${meta.id} is not a project in site.ts`);
+    }
+    if (meta.type === "experience" && meta.id && !site.experience.some((role) => role.id === meta.id)) {
+      problems.push(`${where}: id ${meta.id} is not an experience entry in site.ts`);
+    }
+    if (data.projectId || data.experienceOrg) {
+      problems.push(`${where}: rename projectId/experienceOrg to id`);
+    }
+    const h1 = /^#\s+(.+)$/m.exec(body)?.[1].trim();
+    if (!h1) problems.push(`${where}: missing H1`);
+    else if (h1 !== meta.title) problems.push(`${where}: H1 does not match title`);
+  }
+
+  return problems;
 }

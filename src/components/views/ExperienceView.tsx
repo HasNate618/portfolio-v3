@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { site } from "@/data/site";
-import { renderMarkdown, slugify } from "@/lib/markdown";
+import { renderMarkdown, slugify, stripLeadingH1 } from "@/lib/markdown";
 import type { Page } from "@/lib/content";
 import { ExperienceMetaRow } from "@/components/ExperienceMetaRow";
 
@@ -30,8 +30,9 @@ function sections(body: string): string[] {
  * the page for someone who wants the whole list.
  */
 export function ExperienceView({ page }: { page: Page }) {
-  const intro = page.body.split(/^## /m)[0].trim();
-  const roleBodies = sections(page.body);
+  const body = stripLeadingH1(page.body, page.title);
+  const intro = body.split(/^## /m)[0].trim();
+  const roleBodies = sections(body);
   const education = site.identity.education;
 
   return (

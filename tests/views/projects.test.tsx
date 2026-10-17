@@ -11,26 +11,28 @@ const html = renderToStaticMarkup(<ProjectsView page={page} />);
 
 test("projects renders every group label", () => {
   for (const h of [
-    "Featured",
-    "Also building",
-    "AI and ML",
-    "Hackathon team projects",
-    "Hardware",
-    "Web and mobile",
-    "Games and smaller builds",
+    "Case studies",
+    "AI and LLM",
+    "Hardware and embedded",
+    "AR and VR",
+    "Tools and apps",
+    "Archive",
+    "Hackathon awards",
   ]) {
     assert.ok(html.includes(h), `missing ${h}`);
   }
 });
 
-test("the games list is a native disclosure", () => {
+test("the archive is a native disclosure with a compact table", () => {
   assert.match(html, /<details/);
   assert.match(html, /<summary/);
+  assert.match(html, /older and smaller builds/);
+  assert.match(html, /<th scope="col"[^>]*>Role<\/th>/);
 });
 
-test("the awards table lives on the home page, not here", () => {
-  assert.doesNotMatch(html, /<caption/);
-  assert.doesNotMatch(html, /id="awards"/);
+test("the full awards table lives at the bottom of the projects page", () => {
+  assert.match(html, /id="hackathon-awards"/);
+  assert.match(html, /Hackathon awards:/);
 });
 
 test("winning projects wear the accent frame and a trophy badge", () => {
@@ -62,12 +64,12 @@ test("on-this-page entries resolve to real heading ids", () => {
 });
 
 test("group labels are the capitalized display form, not the slugs", () => {
-  assert.equal(GROUP_LABELS["ai-ml"], "AI and ML");
-  assert.doesNotMatch(html, />ai-ml</);
+  assert.equal(GROUP_LABELS.ai, "AI and LLM");
+  assert.doesNotMatch(html, />ai</);
 });
 
 test("team projects carry the honesty rule before any credit", () => {
-  const rule = html.indexOf("only claim the parts I can name");
+  const rule = html.indexOf("Team projects are marked as team projects");
   const firstTeam = html.indexOf("Auralis");
   assert.ok(rule !== -1 && rule < firstTeam, "the honesty rule must precede team credits");
 });
