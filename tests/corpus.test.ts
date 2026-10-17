@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { getCorpusDocs, getCorpusDoc } from "../src/lib/corpus";
+import { site } from "../src/data/site";
 
 test("served documents keep public frontmatter and strip page-only keys", () => {
   for (const doc of getCorpusDocs()) {
@@ -62,4 +63,31 @@ test("a ranked project's doc states its rank, so the flagship is retrievable", (
 
 test("an unranked project's doc claims no rank", () => {
   assert.doesNotMatch(getCorpusDoc("projects/glyph.md")!.text, /^Rank:/m);
+});
+
+test("every file-backed project doc carries its card summary", () => {
+  const backed = site.projects.filter((p) => p.file);
+  assert.ok(backed.length > 0, "no project links a knowledgebase doc");
+
+  for (const project of backed) {
+    const rel = project.file!.replace("/knowledgebase/", "");
+    const doc = getCorpusDoc(rel);
+    assert.ok(doc, `${rel} must be in the corpus`);
+    assert.match(doc.text, /^Summary: /m, `${rel} has no Summary line`);
+    assert.ok(doc.text.includes(project.covers), `${rel} is missing its card text`);
+  }
+});
+
+test("an experience doc carries its summary", () => {
+  const terago = getCorpusDoc("experience/terago.md")!;
+  assert.match(terago.text, /^Summary: Built a working outage-email parser/m);
+});
+
+test("a Summary line is never empty or the word undefined", () => {
+  for (const doc of getCorpusDocs()) {
+    const line = /^Summary: (.*)$/m.exec(doc.text)?.[1];
+    if (line === undefined) continue;
+    assert.ok(line.trim().length > 20, `${doc.path} has a stub Summary`);
+    assert.notEqual(line.trim(), "undefined", `${doc.path} wrote undefined`);
+  }
 });

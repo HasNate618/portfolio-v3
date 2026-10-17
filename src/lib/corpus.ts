@@ -34,12 +34,19 @@ function projectFacts(p: Project): string[] {
   if (p.links.length > 0) {
     lines.push(`Links: ${p.links.map((l) => `${l.label} ${l.href}`).join(" · ")}`);
   }
+  // The card text the projects page shows. Without it the facts block is a list
+  // of scalars, and a broad question ("his strongest projects") has almost
+  // nothing in it to match on, so the doc never reaches the model.
+  if (p.covers) lines.push(`Summary: ${p.covers}`);
   return lines;
 }
 
 function experienceFacts(e: Experience): string[] {
   const lines = [`Dates: ${e.dates}`, `Role: ${e.role}`, `Location: ${e.location}`];
   for (const stat of e.stats ?? []) lines.push(`${stat.label}: ${stat.value}`);
+  // Same reason as a project's card text: a role that is only a date, a title
+  // and a stat is hard to retrieve and easy to paraphrase badly.
+  if (e.summary) lines.push(`Summary: ${e.summary}`);
   return lines;
 }
 
