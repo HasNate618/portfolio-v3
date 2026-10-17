@@ -7,7 +7,6 @@ priority: reference
 rank: archive
 dates: "2026 (approx.)"
 role: "owner"
-status: in-progress
 tags: [hardware, linux, embedded-systems]
 related: [index.md, ../skills.md]
 updated: 2026-10-16
@@ -15,10 +14,6 @@ updated: 2026-10-16
 # Cyberdeck
 
 Custom handheld Linux cyberdeck built around a Raspberry Pi 3B with a terminal-first boot flow, modular hardware, and a custom 3D-printed case. Built with Raspberry Pi 3B, DietPi and Linux.
-
-## Status
-
-Work in Progress
 
 ## Tech Stack
 

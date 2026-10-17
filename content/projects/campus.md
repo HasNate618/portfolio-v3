@@ -19,20 +19,20 @@ updated: 2026-10-16
 ## tl;dr
 
 - Syncs my Brightspace courses into local SQLite and answers questions from the course files.
-- Hybrid retrieval over {{stat:campus.chunks}} chunks from {{stat:campus.files}} course files.
+- Hybrid retrieval over my course files: just over 200 of them as of early October 2026.
 - A {{stat:campus.tools}}-tool agent that can also edit my notes and due dates. Every write it makes is logged.
 - {{stat:campus.tests}} tests run in CI on every push.
 - Works with any OpenAI-compatible endpoint, local or hosted.
 
 ## Why I built it
 
-My course material lives in Brightspace, spread across {{stat:campus.courses}} courses and {{stat:campus.files}} files. I wanted one place to look up deadlines, study from the slides, and check a draft against the assignment brief, running on hardware I control.
+My course material lives in Brightspace, spread across {{stat:campus.courses}} courses. I wanted one place to look up deadlines, study from the slides, and check a draft against the assignment brief, running on hardware I control.
 
 I also wanted it to update my notes and due dates. That is only useful if I can see exactly what it changed, so every AI write is logged with the before and after.
 
 ## What I built
 
-All of it.
+It's a solo project, so everything below is mine.
 
 - LMS sync with Playwright, MFA login included, into SQLite and a local file store.
 - sha256 change detection, so unchanged files are not downloaded again.
@@ -63,13 +63,11 @@ Brightspace ─► sync ─► SQLite + files ─► index
 ## Models and cost
 
 - The agent talks to any OpenAI-compatible endpoint. Same code for a local server or a hosted API, set in config.
-- Like the rest of my AI work, I would rather run a low-cost model that fits the job than pay for the biggest one.
-- Cost per question: still measuring.
 
 ## Results
 
 - I use it across {{stat:campus.courses}} courses for deadline lookups, studying from slides, and checking drafts against briefs.
-- {{stat:campus.chunks}} chunks indexed from {{stat:campus.files}} course files.
+- As of early October 2026 it had synced just over 200 course files. I'm the only user, so that number is my course load, not adoption.
 - {{stat:campus.tests}} tests pass in CI on every push.
 - Retrieval and answer quality: evaluation in progress.
 
