@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: { default: "Nathan Espejo, Software Engineer", template: "%s · Nathan Espejo" },
   description:
     "Nathan Espejo, 3rd-year Software Engineering at Western. I build software and applied AI tools on low-cost and self-hosted models. Looking for Summer 2027.",
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/", types: { "text/markdown": "/llms.txt" } },
   openGraph: {
     type: "profile",
     siteName: "Nathan Espejo",
