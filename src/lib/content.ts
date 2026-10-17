@@ -32,7 +32,7 @@ export type Page = {
  * page still exists and is still in the sitemap, but it left the left-hand nav,
  * so nothing here should imply it is a stop on the tour.
  */
-export const NAV_ORDER = ["/projects", "/resume"] as const;
+export const NAV_ORDER = ["/experience", "/projects", "/resume"] as const;
 
 const CONTENT_ROOT = "content";
 

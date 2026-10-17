@@ -15,7 +15,7 @@ const aware = renderToStaticMarkup(
 const terago = renderToStaticMarkup(
   <CaseStudy
     page={getPage("/experience/terago")!}
-    backHref="/#experience"
+    backHref="/experience"
     backLabel="experience"
   />
 );
@@ -51,7 +51,7 @@ test("aware's board cost comes from site.ts", () => {
 
 test("terago states it is internal work and links back to experience", () => {
   assert.match(terago, /no code or screenshots/i);
-  assert.match(terago, /href="\/#experience"/);
+  assert.match(terago, /href="\/experience"/);
 });
 
 test("terago shows an experience meta row, not a project one", () => {

@@ -15,7 +15,7 @@ function pass(cond, label) {
 
 const req = { "/": "Awards", "/projects": "Hackathon team projects", "/projects/campus": "lexical",
   "/projects/homelab": "58,000", "/projects/aware": "$80", "/experience/terago": "760",
-  "/now": "mailto:", "/resume": "Automated outage ticketing",
+  "/experience": "May 2026 to Aug 2026", "/now": "mailto:", "/resume": "Automated outage ticketing",
   "/chat": "needs JavaScript" };
 
 try {

@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { NAV_LINKS } from "@/components/SiteHeader";
+import { NAV_LINKS, isActiveNav } from "@/components/SiteHeader";
 
 /**
  * Below `lg` there is no left column, so the sidebar's nav would scroll away
- * with the identity block. This bar keeps the three destinations pinned to the
+ * with the identity block. This bar keeps the same destinations pinned to the
  * top of the viewport instead. The chat is not one of them: it has its own
- * button in the header block, and four items did not fit a phone width.
+ * button in the header block, and a fifth item would not fit a phone width.
  *
  * It is a second "Site" nav landmark next to the one in SiteHeader, but never
  * a visible second one: this bar is `lg:hidden` and the header's nav is
@@ -37,13 +37,13 @@ export function MobileTopBar({ current }: { current: string }) {
       >
         <ul className="flex items-center justify-center gap-1">
           {NAV_LINKS.map((link) => {
-            const active = link.href === current;
+            const active = isActiveNav(link.href, current);
             return (
               <li key={link.href} className="flex-1">
                 <Link
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={`block rounded-full px-3 py-2 text-center text-xs font-bold uppercase tracking-wider transition-colors ${
+                  className={`block whitespace-nowrap rounded-full px-2 py-2 text-center text-[11px] font-bold uppercase tracking-wide transition-colors ${
                     active ? "bg-bubble text-fg" : "text-muted hover:text-accent"
                   }`}
                 >

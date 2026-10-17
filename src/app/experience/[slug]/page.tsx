@@ -18,8 +18,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   if (!page) notFound();
 
   return (
-    <PageShell current="/#experience">
-      <CaseStudy page={page} backHref="/#experience" backLabel="experience" />
+    <PageShell current={page.route}>
+      <CaseStudy page={page} backHref="/experience" backLabel="experience" />
     </PageShell>
   );
 }

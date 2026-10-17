@@ -12,15 +12,28 @@ import { site } from "@/data/site";
  */
 
 /**
- * The first two point at sections of the home page rather than at index pages:
- * `#experience` and `#projects` are ids rendered by HomeView. Off the home page
- * they navigate home and scroll, which is the intended behaviour.
+ * The whole site navigation, in reading order. About is the home page, which
+ * holds the short version of everything; Experience and Projects have index
+ * pages of their own, so the nav points at routes rather than at anchors inside
+ * the home page.
  */
 export const NAV_LINKS = [
-  { href: "/#experience", label: "Experience" },
-  { href: "/#projects", label: "Projects" },
+  { href: "/", label: "About" },
+  { href: "/experience", label: "Experience" },
+  { href: "/projects", label: "Projects" },
   { href: "/resume", label: "Resume" },
 ] as const;
+
+/**
+ * A destination is current when it *is* the page or when the page is nested
+ * under it — /projects/campus keeps Projects lit, /experience/terago keeps
+ * Experience lit. Shared with MobileTopBar so the two navs cannot disagree
+ * about where the reader is.
+ */
+export function isActiveNav(href: string, current: string): boolean {
+  if (href === "/") return current === "/";
+  return current === href || current.startsWith(`${href}/`);
+}
 
 /*
  * The chat is a call to action, not a nav destination, so it is deliberately
@@ -77,19 +90,36 @@ export function SiteHeader({ current }: { current: string }) {
         {/* Mobile navigates by the top bar, so this list only exists at `lg`
             and up; display:none keeps the second landmark out of the tree. */}
         <nav aria-label="Site" className="hidden lg:block">
-          <ul className="mt-16 flex flex-col gap-4">
+          <ul className="mt-16 flex flex-col">
             {NAV_LINKS.map((link) => {
-              const active = link.href === current;
+              const active = isActiveNav(link.href, current);
               return (
                 <li key={link.href}>
                   <Link
                     href={link.href}
                     aria-current={active ? "page" : undefined}
-                    className={`text-sm font-bold uppercase tracking-widest transition-colors hover:text-accent ${
-                      active ? "text-fg" : "text-muted"
-                    }`}
+                    className="group flex items-center py-3"
                   >
-                    {link.label}
+                    {/*
+                     * A hairline that grows into the accent on hover, and stays
+                     * grown while the item is the current page. Two lines of
+                     * text alone made the nav look like body copy.
+                     */}
+                    <span
+                      aria-hidden="true"
+                      className={`mr-4 h-px transition-all motion-safe:duration-200 ${
+                        active
+                          ? "w-16 bg-accent"
+                          : "w-8 bg-rule group-hover:w-16 group-hover:bg-accent"
+                      }`}
+                    />
+                    <span
+                      className={`text-xs font-bold uppercase tracking-widest transition-colors ${
+                        active ? "text-fg" : "text-muted group-hover:text-fg"
+                      }`}
+                    >
+                      {link.label}
+                    </span>
                   </Link>
                 </li>
               );

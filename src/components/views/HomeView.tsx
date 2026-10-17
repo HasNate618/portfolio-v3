@@ -11,11 +11,20 @@ import { AwardBadge } from "@/components/AwardBadge";
 import { AwardsTable } from "@/components/AwardsTable";
 
 /**
- * The home page carries the whole story: who he is, the roles, then the
- * projects worth leading with. The nav points at these sections rather than at
- * separate index pages, so `#experience` and `#projects` are load-bearing ids —
- * renaming either breaks the header links.
+ * The home page carries the whole story: who he is, the newest roles, then the
+ * projects worth leading with.
+ *
+ * The ids on these sections are still load-bearing: the page's own "on this
+ * page" list and any in-page link resolve against them, so renaming one breaks
+ * a link. The header nav no longer points here — it goes to /experience and
+ * /projects — so these are anchors, not navigation.
+ *
+ * Experience is deliberately partial here: the newest roles, then a button to
+ * the full record. Five roles with their summaries pushed the projects — the
+ * actual proof — far down the page.
  */
+const HOME_ROLES = 2;
+
 export function HomeView({ page }: { page: Page }) {
   const campus = flagshipProject()!;
   const featured = featuredProjects();
@@ -51,7 +60,7 @@ export function HomeView({ page }: { page: Page }) {
         Experience
       </h2>
       <ul className="mt-6 flex flex-col gap-4">
-        {site.experience.map((experience) => {
+        {site.experience.slice(0, HOME_ROLES).map((experience) => {
           const href = caseStudyHref(experience.file);
           return (
             <li key={experience.org} className="sm:grid sm:grid-cols-[10rem_1fr] sm:gap-4">
@@ -78,6 +87,19 @@ export function HomeView({ page }: { page: Page }) {
           );
         })}
       </ul>
+
+      {/* The newest roles only; the whole record lives on its own page. */}
+      <div className="mt-10 flex items-center gap-4">
+        <span className="h-px flex-1 bg-rule" aria-hidden="true" />
+        <Link
+          href="/experience"
+          className="inline-block rounded-full border border-rule px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent"
+        >
+          Show all experience <span aria-hidden="true">→</span>
+        </Link>
+        <span className="h-px flex-1 bg-rule" aria-hidden="true" />
+      </div>
+
       <h2 id="projects" className="section-label mt-16">
         Projects
       </h2>

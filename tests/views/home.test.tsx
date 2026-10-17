@@ -36,10 +36,14 @@ test("home on-this-page entries match the heading ids it renders", () => {
   }
 });
 
-test("every experience row is rendered", () => {
-  for (const experience of ["TeraGo", "3D Western", "WEMars", "WEFirst Robotics"]) {
-    assert.ok(html.includes(experience), `missing ${experience}`);
-  }
+test("home trims experience to the newest roles and links to the rest", () => {
+  // The home page carries two roles now, then a button; the full record is its
+  // own page, covered by tests/views/experience.test.tsx.
+  assert.match(html, /TeraGo/);
+  assert.match(html, /3D Western/);
+  assert.doesNotMatch(html, /WEMars/, "older roles belong to /experience");
+  assert.match(html, /href="\/experience"/);
+  assert.match(html, /Show all experience/);
 });
 
 test("the Campus card links out to real anchors", () => {

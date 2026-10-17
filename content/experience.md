@@ -1,6 +1,8 @@
 ---
 title: Experience
+route: /experience
 description: Internship, student team and part-time roles, newest first.
+priority: start-here
 tags: [experience]
 related: [index.md, ../skills.md]
 ---
