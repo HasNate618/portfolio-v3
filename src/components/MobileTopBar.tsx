@@ -13,9 +13,22 @@ import { NAV_LINKS, isActiveNav } from "@/components/SiteHeader";
  *
  * The bar floats (inset, rounded, shadowed) rather than spanning the width,
  * and each destination is a filled pill rather than bare text, so the row
- * reads as controls instead of a run of words. The fill is the solid page
- * colour rather than a translucent blur: text scrolling under a translucent
- * bar shows through and competes with the links.
+ * reads as controls instead of a run of words.
+ *
+ * The fill is the page colour at 80% over a backdrop blur. The blur is what
+ * makes that legible: content scrolling underneath arrives dissolved instead of
+ * showing through the bar and competing with the links. The 80% is deliberate
+ * too — under a large bright image the blur has little left to dissolve, so the
+ * bar keeps most of the page colour rather than trusting the blur alone.
+ *
+ * The labels are `text-fg`, not `text-muted`, for that same reason. The contrast
+ * check validates muted against the page colour, but this bar's background is
+ * whatever scrolls under it, and the colour that can sit there is not part of
+ * that check: over a bright figure in the light scheme muted falls to roughly
+ * 3:1, and even in the dark scheme only just clears 4.5:1. The foreground colour
+ * holds above 8:1 against the worst a backdrop can do — pure white under the
+ * dark bar, pure black under the light one — so nothing scrolling past can
+ * break it.
  *
  * The chat is deliberately not a fifth item: it has its own button on the About
  * page, and five pills do not fit a phone width.
@@ -35,7 +48,7 @@ export function MobileTopBar({ current }: { current: string }) {
       </a>
       <nav
         aria-label="Site"
-        className="rounded-full border border-rule bg-bg px-2 py-1.5 shadow-lg shadow-black/25"
+        className="rounded-full border border-rule bg-bg/80 px-2 py-1.5 shadow-lg shadow-black/25 backdrop-blur-md"
       >
         <ul className="flex items-center justify-center gap-1">
           {NAV_LINKS.map((link) => {
@@ -45,8 +58,8 @@ export function MobileTopBar({ current }: { current: string }) {
                 <Link
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={`block whitespace-nowrap rounded-full px-2 py-2 text-center text-[11px] font-bold uppercase tracking-wide transition-colors ${
-                    active ? "bg-bubble text-fg" : "text-muted hover:text-accent"
+                  className={`block whitespace-nowrap rounded-full px-2 py-2 text-center text-[11px] font-bold uppercase tracking-wide text-fg transition-colors ${
+                    active ? "bg-bubble" : "hover:text-accent"
                   }`}
                 >
                   {link.label}
