@@ -1,6 +1,5 @@
 import { featuredProjects, flagshipProject, site } from "@/data/site";
 import { factsBlockFor } from "@/lib/corpus";
-import { isNavigationDoc } from "./rag";
 
 /**
  * Coverage floor.
@@ -22,11 +21,19 @@ export interface PromptChunk {
   source: string;
 }
 
-const SUBSTANTIVE_DOC = /^(?:projects|experience)\//;
+/**
+ * A question that names a project or a role is specific: it keeps the context
+ * retrieval chose for it, and the pin stays out of the way.
+ */
+function questionNamesSubject(question: string): boolean {
+  const names = [
+    ...site.projects.flatMap((project) => [project.name, project.id.replace(/-/g, " ")]),
+    ...site.experience.flatMap((role) => [role.org, role.id.replace(/-/g, " ")]),
+  ];
 
-/** An index page lists projects; it does not say what any of them does. */
-function isCoverage(chunk: PromptChunk): boolean {
-  return SUBSTANTIVE_DOC.test(chunk.source) && !isNavigationDoc(chunk.source);
+  return names.some((name) =>
+    new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(question),
+  );
 }
 
 function relative(file: string | undefined): string | null {
@@ -34,25 +41,44 @@ function relative(file: string | undefined): string | null {
   return file?.startsWith(prefix) ? file.slice(prefix.length) : null;
 }
 
-/** The documents a broad question should always have in view. */
-export function pinnedChunks(): PromptChunk[] {
+/**
+ * The work the home page leads with: the flagship, the featured projects, and the
+ * roles that are on the resume. This is what a broad question should have in view.
+ */
+function leadingDocs(): string[] {
   const files = [
     flagshipProject()?.file,
     ...featuredProjects().map((project) => project.file),
-    ...site.experience.map((role) => role.file),
+    ...site.experience.filter((role) => role.onResume).map((role) => role.file),
   ];
 
+  return [...new Set(files.map(relative).filter((rel): rel is string => rel !== null))];
+}
+
+/** The documents a broad question should always have in view. */
+export function pinnedChunks(): PromptChunk[] {
   const chunks: PromptChunk[] = [];
-  for (const source of new Set(files.map(relative).filter((rel): rel is string => rel !== null))) {
+
+  for (const source of leadingDocs()) {
     const text = factsBlockFor(source);
     if (text) chunks.push({ source, text });
   }
   return chunks;
 }
 
-export function withCoverageFloor(chunks: PromptChunk[]): PromptChunk[] {
-  if (chunks.some(isCoverage)) return chunks;
+export function withCoverageFloor(chunks: PromptChunk[], question = ""): PromptChunk[] {
+  if (questionNamesSubject(question)) return chunks;
 
   const present = new Set(chunks.map((chunk) => chunk.source));
-  return [...chunks, ...pinnedChunks().filter((chunk) => !present.has(chunk.source))];
+  const pinned = pinnedChunks();
+
+  /*
+   * Coverage means one of these documents is already in the context. Counted any
+   * other way it fails: projects/cyberdeck.md is a project doc too, and counting
+   * it is why the floor did not fire for "What is the most impressive thing
+   * Nathan has built?", the question the conflation was written from.
+   */
+  if (pinned.some((chunk) => present.has(chunk.source))) return chunks;
+
+  return [...chunks, ...pinned.filter((chunk) => !present.has(chunk.source))];
 }

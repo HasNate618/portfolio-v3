@@ -121,8 +121,9 @@ export async function POST(req: Request) {
     const reranked = await rerankChunks(retrievalQuery, topChunks, 10);
     // Retrieval that comes back with no project and no role is how a broad
     // question turns into invented detail: the floor pins the work the home
-    // page leads with, and only then.
-    const context = withCoverageFloor(reranked);
+    // page leads with, and only then. A question that names a project or a role
+    // is specific, so it keeps the context retrieval chose for it.
+    const context = withCoverageFloor(reranked, trimmedMessage);
     const systemPrompt = buildSystemPrompt(context);
 
     const cohere = getCohereClient();

@@ -11,6 +11,25 @@ const UNCOVERED = [
   { text: "awards > Hackathon awards", source: "awards.md" },
 ];
 
+const IMPRESSIVE = "What is the most impressive thing Nathan has built, and why?";
+
+/**
+ * The reranked ten retrieval actually returned for that question on 2026-10-17,
+ * which is what the conflation was written from: no project and no role in it.
+ */
+const IMPRESSIVE_RERANK = [
+  "about.md",
+  "home.md",
+  "local-ai.md",
+  "about.md",
+  "about.md",
+  "awards.md",
+  "projects/cyberdeck.md",
+  "projects/cyberdeck.md",
+  "about.md",
+  "projects/index.md",
+].map((source, index) => ({ text: `${source} chunk ${index}`, source }));
+
 test("a context that already holds a project doc is left alone", () => {
   const chunks = [...UNCOVERED, { text: "Campus", source: "projects/campus.md" }];
   assert.equal(withCoverageFloor(chunks), chunks);
@@ -67,4 +86,41 @@ test("every pinned chunk names a real corpus document", () => {
     assert.ok(doc, `${chunk.source} is not in the corpus`);
     assert.ok(chunk.text.length > 20, `${chunk.source} pinned an empty chunk`);
   }
+});
+
+/*
+ * The floor did not fire for the question that produced the conflation, because
+ * projects/cyberdeck.md was in the reranked ten and any project doc counted as
+ * coverage. Coverage is the work the home page leads with, not any project.
+ */
+test("an abandoned project's doc is not coverage", () => {
+  const chunks = [...UNCOVERED, { text: "Cyberdeck", source: "projects/cyberdeck.md" }];
+  const out = withCoverageFloor(chunks, IMPRESSIVE);
+  assert.ok(out.length > chunks.length, "the floor must still fire");
+  assert.ok(out.map((c) => c.source).includes("projects/campus.md"), "the flagship must be pinned");
+});
+
+test("a role that is not on the resume is not coverage", () => {
+  const chunks = [...UNCOVERED, { text: "MCC", source: "experience/mcc.md" }];
+  assert.ok(withCoverageFloor(chunks, IMPRESSIVE).length > chunks.length);
+});
+
+test("the question that produced the conflation now gets the facts", () => {
+  const sources = withCoverageFloor(IMPRESSIVE_RERANK, IMPRESSIVE).map((c) => c.source);
+  assert.ok(sources.includes("projects/campus.md"), "Campus facts were missing from that answer");
+  assert.ok(sources.includes("projects/homelab.md"), "homelab facts were missing from that answer");
+});
+
+test("a broad question still gets the pin", () => {
+  assert.ok(withCoverageFloor(UNCOVERED, "What are his strongest projects?").length > UNCOVERED.length);
+});
+
+test("a question that names a project keeps its own context", () => {
+  const chunks = [{ text: "Cyberdeck links", source: "projects/cyberdeck.md" }];
+  assert.equal(withCoverageFloor(chunks, "How does Cyberdeck work?"), chunks);
+});
+
+test("a question that names a role keeps its own context", () => {
+  const chunks = [{ text: "MCC", source: "experience/mcc.md" }];
+  assert.equal(withCoverageFloor(chunks, "What did he do at WEMars?"), chunks);
 });
