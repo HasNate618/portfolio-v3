@@ -4,6 +4,7 @@ import { buildSystemPrompt } from "./lib/system-prompt";
 import { generateFollowups, formatFollowupsTail } from "./lib/generate-followups";
 import { buildFallbackFollowups } from "./lib/followup-fallback";
 import { checkRateLimit } from "./lib/rate-limit";
+import { DashFilter, sanitizeDashes } from "./lib/sanitize-dashes";
 import { getCohereClient, MAX_CHAT_MESSAGE_LENGTH, CHAT_MODEL, CHAT_MAX_TOKENS, CHAT_THINKING_ENABLED } from "./lib/cohere";
 import { FOLLOWUP_DELIMITER, stripBodyPrefix } from "@/lib/tts/stream-delimiters";
 
@@ -139,6 +140,7 @@ export async function POST(req: Request) {
           let totalChars = 0;
           const MAX_CHARS = 32000;
           let accumulated = "";
+          const dashes = new DashFilter();
 
           const followupInput = () => ({
             userMessage: trimmedMessage,
@@ -164,12 +166,22 @@ export async function POST(req: Request) {
                 const text = content?.text ?? "";
                 totalChars += text.length;
                 if (totalChars > MAX_CHARS) break;
-                accumulated += text;
-                enqueueText(text);
+                const safe = dashes.push(text);
+                accumulated += safe;
+                enqueueText(safe);
                 if (!followupsPending && accumulated.length >= FOLLOWUP_START_CHARS) {
                   followupsPending = generateFollowups(followupInput());
                 }
               }
+            }
+
+            // The filter holds a short tail back, so the answer is not finished
+            // until that is released. It goes out before the delimiter that says
+            // the answer is done.
+            const tail = dashes.flush();
+            if (tail) {
+              accumulated += tail;
+              enqueueText(tail);
             }
 
             if (!closed && !req.signal.aborted && !accumulated.includes(FOLLOWUP_DELIMITER)) {
@@ -181,7 +193,7 @@ export async function POST(req: Request) {
                 followupsPending ?? generateFollowups(followupInput()),
                 () => buildFallbackFollowups(trimmedMessage, stripBodyPrefix(accumulated))
               );
-              enqueueText(formatFollowupsTail(followups));
+              enqueueText(sanitizeDashes(formatFollowupsTail(followups)));
             }
 
             closeStream();
