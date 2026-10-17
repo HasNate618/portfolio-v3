@@ -37,7 +37,7 @@ export type Project = {
   displayStatus?: string;
   event?: string;
   covers: string;
-  /** Content doc describing this project. Absent for rows covered by projects/other.md. */
+  /** Content doc describing this project. Absent for card-only rows, and for rows covered by projects/other.md. */
   file?: string;
   links: { label: string; href: string }[];
   /** Images ported from v2, optimized to WebP. Absent when a project has none. */
@@ -202,6 +202,13 @@ export const site: SiteContent = {
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/AgntOS" }],
       stats: [],
       stack: ["Rust", "NixOS"],
+    },
+    {
+      id: "ferret", name: "ferret", group: "tools", order: 5,
+      dates: "Oct 2026 (approx.)", displayRole: "solo",
+      covers: "Local-first semantic search over text, images and PDFs in Rust: hybrid vector, FTS5 and filename search fused with RRF.",
+      links: [{ label: "GitHub", href: "https://github.com/HasNate618/ferret" }],
+      stats: [], stack: ["Rust", "SQLite FTS5", "llama.cpp"],
     },
     {
       id: "glyph", name: "Glyph", group: "tools", order: 6,

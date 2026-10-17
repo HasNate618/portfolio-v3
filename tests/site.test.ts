@@ -93,6 +93,13 @@ test("displayStatus is a plain word, never a colour", () => {
   assert.equal(getProject("cyberdeck")!.displayStatus, "abandoned");
 });
 
+test("ferret is a solo tool with no case study yet", () => {
+  const ferret = getProject("ferret");
+  assert.equal(ferret?.group, "tools");
+  assert.equal(ferret?.displayRole, "solo");
+  assert.ok(!ferret?.file, "a card only: no corpus doc, so the chat does not answer about it");
+});
+
 test("project order is unique", () => {
   const orders = site.projects.map((p) => p.order);
   assert.equal(new Set(orders).size, orders.length, "duplicate project order");
