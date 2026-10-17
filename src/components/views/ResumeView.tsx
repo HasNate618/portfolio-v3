@@ -47,16 +47,33 @@ export function ResumeView({ page }: { page: Page }) {
 
   return (
     <article>
-      <p>
+      {/*
+       * The PDF link belongs to the title, not above it: a lone button
+       * floating over the heading read as a stray element. On the title row
+       * it answers the page's natural first question — "can I have this as
+       * a file?" — at the moment it is asked.
+       */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">{page.title}</h1>
         <a
           href="/Nathan_Espejo_Resume.pdf"
-          className="inline-block rounded-lg border border-rule px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent"
+          className="inline-flex items-center gap-2 rounded-full border border-rule px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:text-accent"
         >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.75}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-4 w-4"
+            aria-hidden="true"
+          >
+            <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+          </svg>
           Download PDF
         </a>
-      </p>
-
-      <h1 className="mt-6 text-4xl font-bold tracking-tight text-fg sm:text-5xl">{page.title}</h1>
+      </div>
 
       <p className="mt-4 flex flex-wrap gap-x-2 text-sm text-muted">
         <a href={`mailto:${site.contact.email}`} className="hover:text-accent">
