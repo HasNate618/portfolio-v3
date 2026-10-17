@@ -85,17 +85,19 @@ test("the top bar carries the mobile skip link, before its nav", () => {
 });
 
 /*
- * Below `lg` the identity block and the contact row belong to the first page:
- * on every other route they pushed the page's own content a screenful down to
- * repeat the same name and blurb. The desktop sidebar keeps both, where they sit
- * beside the content rather than ahead of it, so they are hidden, not removed.
+ * Below `lg` the identity block, the contact row and the chat button belong to
+ * the first page: on every other route they pushed the page's own content a
+ * screenful down to repeat the same name and blurb, or to offer a conversation
+ * the reader had not asked for. The desktop sidebar keeps all three, where they
+ * sit beside the content rather than ahead of it, so they are hidden, not
+ * removed.
  */
-test("identity and contact links are first-page furniture on mobile", () => {
+test("identity, contact and chat are first-page furniture on mobile", () => {
   const home = renderToStaticMarkup(<SiteHeader current="/" />);
   const other = renderToStaticMarkup(<SiteHeader current="/resume" />);
   // The home page's single occurrence is the desktop-only skip link.
   assert.equal((home.match(/max-lg:hidden/g) ?? []).length, 1);
-  assert.equal((other.match(/max-lg:hidden/g) ?? []).length, 3);
+  assert.equal((other.match(/max-lg:hidden/g) ?? []).length, 4);
 });
 
 /*
@@ -115,11 +117,13 @@ test("the top bar does not carry the chat", () => {
 });
 
 /*
- * The button belongs to the About page: every other route is read for its own
- * content, and repeating the call to action there pushed that content down to
+ * The chat button is on every route at desktop widths, where the sidebar has the
+ * room for it. Below `lg` it follows the identity block: hidden on every route
+ * but the About page, because there it pushed that route's own content down to
  * offer a conversation the reader had not asked for.
  */
-test("the chat CTA is offered on the about page only", () => {
+test("the chat CTA stays on every desktop page and only the about page on mobile", () => {
   const other = renderToStaticMarkup(<SiteHeader current="/resume" />);
-  assert.ok(!other.includes(`href="${CHAT_LINK.href}"`), "the chat button is about-page only");
+  assert.ok(other.includes(`href="${CHAT_LINK.href}"`), "desktop keeps the chat button on every route");
+  assert.match(other, /class="mt-8 max-lg:hidden"/, "below lg it belongs to the about page");
 });
