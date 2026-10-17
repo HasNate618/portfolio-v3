@@ -54,7 +54,7 @@ camera + mic + sensors ─► perception (always on)
 caption: The on-device models AWARE runs on the board, and what each one does.
 ```
 
-The LLM only runs when you add a rule, ask a question, or a digest is due. The 500 ms checks are plain code. No API costs, and nothing leaves the device.
+The LLM only runs when you add a rule, ask a question, or a digest is due. The {{stat:aware.ruleTick}} checks are plain code. No API costs, and nothing leaves the device.
 
 ## Results
 

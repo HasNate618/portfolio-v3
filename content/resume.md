@@ -53,4 +53,4 @@ updated: 2026-10-16
 ### AWARE
 
 - Built an offline home-awareness device running YOLOv8 and YAMNet on a {{stat:aware.boardCost}} Arduino UNO Q with QNN.
-- Had an on-device LLM compile commands like "when glass breaks after 10pm alert me" into deterministic rules, then checked them every 500 ms with no LLM in the loop.
+- Had an on-device LLM compile commands like "when glass breaks after 10pm alert me" into deterministic rules, then checked them every {{stat:aware.ruleTick}} with no LLM in the loop.
