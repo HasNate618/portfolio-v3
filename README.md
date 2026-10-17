@@ -49,10 +49,18 @@ npm run build-embeddings   # needs COHERE_API_KEY in .env, and a content edit ne
 npm run check:embeddings   # fails while a content edit is unindexed
 ```
 
+The chat is browser-only. It requires the browser's own `Sec-Fetch-Site`, or `Origin` from a browser too old to send that, to match this host, so a script is sent to search instead. Limits: 20 an hour per address, 300 a day for the site, 30 messages of history, 4,000 characters per message, 100 KB per request. Every ceiling reads from the environment (`CHAT_REQUESTS_PER_HOUR`, `CHAT_REQUESTS_PER_DAY`).
+
+## Search API
+
+`GET /api/search?q=<query>&limit=5` is the machine-facing half: the same corpus, the same committed index, the same embed and rerank, with no generation. Each result carries the record's own text plus the `/knowledgebase` URL to cite, which costs about a hundredth of a chat answer and cannot drift the way a paraphrase can. `limit` defaults to 5 and caps at 10, the response is cached at the edge for an hour, and the ceilings are `SEARCH_REQUESTS_PER_HOUR` (60) and `SEARCH_REQUESTS_PER_DAY` (1000).
+
+Both limiters count in memory, so on serverless each instance keeps its own and a cold start resets them. That is a brake on a runaway crawler rather than a global quota; a hard one needs a shared store, which this site does not have.
+
 ## The résumé
 
 `resume/Resume.tex` is the source for `public/Nathan_Espejo_Resume.pdf`, the file the site serves. `npm run build:resume` compiles it, borrowing `latexmk` from `resume/flake.nix` when it is not on `PATH`. `content/resume.md` is the same résumé as text.
 
 ## Deploy
 
-Vercel. `/api/chat` needs `COHERE_API_KEY` set for the environment being deployed. Without a valid key it returns 500 and the rest of the site is unaffected.
+Vercel. `/api/chat` needs `COHERE_API_KEY` set for the environment being deployed, and so does `/api/search`. Without a valid key both return 500 and the rest of the site is unaffected.

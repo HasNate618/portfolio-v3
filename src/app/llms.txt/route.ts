@@ -33,6 +33,19 @@ export async function GET(): Promise<Response> {
     lines.push(`- ${link.label}: ${link.href}`);
   }
 
+  lines.push("");
+  lines.push("## Machine access");
+  lines.push(
+    `- Search: GET ${base}/api/search?q=<query>&limit=5 returns JSON {query, count, results}, where each result is {score, source, section, url, text}. limit defaults to 5 and caps at 10. The text is the record's own wording and url is the document to cite.`,
+  );
+  lines.push(
+    "- Limits: 60 searches an hour per address and 1000 a day for the site. Responses are cached for an hour, so a repeated query is free.",
+  );
+  lines.push(
+    `- Full text: every document below is plain markdown at ${base}/knowledgebase/<path>. There is no need to scrape the HTML.`,
+  );
+  lines.push(`- ${base}/chat is a browser interface, not an API. Where this file and a page disagree, the page wins.`);
+
   const section = (heading: string, entries: typeof pages) => {
     if (entries.length === 0) return;
     lines.push("");
