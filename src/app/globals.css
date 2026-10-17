@@ -409,8 +409,11 @@ li {
  * 1. Page entrance. The first page of a visit eases in — the header rises, then
  *    the column beside it fades. Only the first page: every navigation re-mounts
  *    the left column, and re-animating it on each one read as a loading stutter
- *    rather than an entrance. The gate is `data-visited`, set before first paint
- *    by the boot script in the root layout. Deliberately load-triggered, not
+ *    rather than an entrance. The gate is `data-visited` on <html>: the boot
+ *    script in the root layout sets it for every page after the first of a visit,
+ *    and once the first page's own entrance has played — the router navigates
+ *    without reloading, so waiting for the next load would never come.
+ *    Deliberately load-triggered, not
  *    scroll-triggered: an earlier version hid content until it scrolled into
  *    view, which made a page look empty below the fold. Nothing here waits on
  *    the viewport, so content below the fold is always present and readable.

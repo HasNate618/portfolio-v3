@@ -47,18 +47,53 @@ export const metadata: Metadata = {
 const THEME_BOOT = `try{var t=localStorage.getItem("portfolio-v3:theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
 
 /**
- * Marks every page load after the first one of a visit, again before first paint.
+ * Marks the entrance animation as spent, so it runs once per visit rather than
+ * once per page.
  *
- * The entrance animation is CSS, so the only way to keep it from replaying on
- * the second page is to give the stylesheet something to test before it paints.
- * An attribute on <html> set here does that; doing it in a component's effect
- * would be too late, and the column would animate and then be cancelled, which
- * looks worse than animating.
+ * The flag has to live on <html>: the animation is CSS, and the left column is
+ * re-mounted on every navigation, so the stylesheet can only tell a first page
+ * from a later one by something that outlives the page. In a client-side
+ * navigation the document does; the header does not.
+ *
+ * Two moments set it, and both are needed. On any load after the first of the
+ * visit it is set before first paint, so that page never animates. On the first
+ * page it is set once the entrance has finished — or as soon as the reader clicks
+ * or types, in case they navigate before it ends. Setting it on load instead
+ * would cancel the very animation it exists to allow; leaving it until the next
+ * load was the bug, because the router never causes one: every route change
+ * replayed the animation for the rest of the visit.
  *
  * sessionStorage, not localStorage: a new visit is a new arrival and earns the
  * animation, while a navigation within the visit does not.
  */
-const FIRST_LOAD_BOOT = `try{var k="portfolio-v3:visited";if(sessionStorage.getItem(k)){document.documentElement.dataset.visited="1"}else{sessionStorage.setItem(k,"1")}}catch(e){}`;
+const FIRST_LOAD_BOOT = `try {
+  var key = "portfolio-v3:visited";
+  var root = document.documentElement;
+  if (sessionStorage.getItem(key)) {
+    root.dataset.visited = "1";
+  } else {
+    sessionStorage.setItem(key, "1");
+    var spent = false;
+    var mark = function () {
+      if (spent) return;
+      spent = true;
+      root.dataset.visited = "1";
+    };
+    // A click or keypress means the reader is about to navigate, so the
+    // entrance is already over as far as the next page is concerned.
+    root.addEventListener("click", mark, true);
+    root.addEventListener("keydown", mark, true);
+    var arm = function () {
+      var el = document.querySelector(".page-enter-delayed") || document.querySelector(".page-enter");
+      if (el) el.addEventListener("animationend", mark, { once: true });
+      // Fallback for a collapsed animation (reduced motion) or an element that
+      // never fires the event.
+      setTimeout(mark, 1500);
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", arm);
+    else arm();
+  }
+} catch (e) {}`;
 
 export default function RootLayout({
   children,
