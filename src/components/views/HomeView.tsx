@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { site, featuredProjects, flagshipProject, awardFor } from "@/data/site";
-import { renderMarkdown } from "@/lib/markdown";
+import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import { getPage, type Page } from "@/lib/content";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
 import { StatRow } from "@/components/StatRow";
@@ -24,6 +24,7 @@ import { AwardsTable } from "@/components/AwardsTable";
  * actual proof — far down the page.
  */
 const HOME_ROLES = 2;
+const HOME_AWARDS = ["Careerly", "Auralis", "Eyecandy", "CareBridge"];
 
 export function HomeView({ page }: { page: Page }) {
   const campus = flagshipProject()!;
@@ -44,11 +45,11 @@ export function HomeView({ page }: { page: Page }) {
 
   return (
     <article>
-      <h1 className="sr-only">{page.title}</h1>
+      <h1 className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">{page.title}</h1>
 
       <div
         className="rich-text mt-6 max-w-[68ch] leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(page.body) }}
+        dangerouslySetInnerHTML={{ __html: renderMarkdown(stripLeadingH1(page.body, page.title)) }}
       />
 
       <p className="mt-6 max-w-[68ch] text-muted">
@@ -115,7 +116,7 @@ export function HomeView({ page }: { page: Page }) {
         <p className="mt-4 max-w-[68ch] leading-relaxed">{campus.covers}</p>
         <ProjectMedia media={campus.media} className="mt-5 max-w-xl" />
         <div className="mt-6">
-          <StatRow projectId="campus" />
+          <StatRow projectId="campus" home />
         </div>
         <div className="mt-6">
           <StackList projectId="campus" />
@@ -149,6 +150,9 @@ export function HomeView({ page }: { page: Page }) {
               <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
               <ProjectMedia media={project.media} className="mt-3" />
               <div className="mt-3">
+                <StatRow projectId={project.id} home />
+              </div>
+              <div className="mt-3">
                 <StackList projectId={project.id} />
               </div>
               <div className="mt-3">
@@ -180,11 +184,11 @@ export function HomeView({ page }: { page: Page }) {
         Awards
       </h2>
       <p className="mt-4 max-w-[68ch] leading-relaxed">
-        {site.hackathons.awards} awards across {site.hackathons.entered} hackathons. Most were team
-        projects.
+        {site.hackathons.awards} awards across {site.hackathons.entered} hackathons, mostly with teams.
+        Four I&apos;d point to are below. The rest are on the projects page.
       </p>
       <div className="mt-6">
-        <AwardsTable />
+        <AwardsTable awards={site.awards.filter((award) => HOME_AWARDS.includes(award.project))} />
       </div>
       <p className="mt-6 max-w-[68ch] leading-relaxed">
         Off the hackathon circuit: {site.identity.education.honors} at{" "}

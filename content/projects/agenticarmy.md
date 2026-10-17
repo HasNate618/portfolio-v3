@@ -1,15 +1,17 @@
 ---
 title: "AgenticArmy"
 type: project
+id: agenticarmy
+description: A human-in-the-loop multi-agent coding workflow with a VS Code extension and FastAPI backend.
 priority: reference
 rank: featured
 dates: "Mar 2026"
 role: "repo owner"
+status: shipped
 tags: [agentic-coding, full-stack, ai-systems]
 related: [index.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # AgenticArmy
 
 Human-in-the-loop multi-agent coding workflow with a VS Code extension and FastAPI backend for planning, coordination, conflict analysis, and QA. Built with TypeScript, JavaScript and Python.

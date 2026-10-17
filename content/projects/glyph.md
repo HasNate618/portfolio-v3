@@ -1,15 +1,17 @@
 ---
 title: "Glyph"
 type: project
+id: glyph
+description: A leader-key command overlay for Windows with discoverable actions and per-app bindings.
 priority: reference
 rank: featured
 dates: "Jan 2026 (approx.)"
 role: "owner"
+status: shipped
 tags: [developer-tools, desktop-software, productivity]
 related: [index.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Glyph
 
 Leader-key command overlay for Windows with discoverable actions, per-app bindings, and custom themes. Built with C#, .NET and WPF.

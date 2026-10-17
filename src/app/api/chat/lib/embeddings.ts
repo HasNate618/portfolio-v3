@@ -9,6 +9,7 @@ const CACHE_PATH = path.join(process.cwd(), "src", "app", "api", "chat", "lib", 
 interface EmbeddingDoc {
   text: string;
   source: string;
+  section: string;
   embedding: number[];
 }
 
@@ -24,8 +25,11 @@ let cachedEmbeddings: EmbeddingDoc[] | null = null;
  * mtimes, so a clone or CI checkout makes every file equally new and an mtime
  * comparison becomes a coin flip. The hash is stable across machines.
  */
-export function corpusContentHash(chunks: { text: string; source: string }[]): string {
+export function corpusContentHash(chunks: { text: string; source: string; section?: string }[]): string {
   const hash = createHash("sha256");
+
+  hash.update("section-chunks-v2");
+  hash.update("\0");
 
   // The embedder identity is part of the cache key. Swapping the model changes
   // what every vector means, so a hash over the text alone would happily serve
@@ -36,6 +40,10 @@ export function corpusContentHash(chunks: { text: string; source: string }[]): s
   for (const chunk of chunks) {
     hash.update(chunk.source);
     hash.update("\0");
+    if (chunk.section) {
+      hash.update(chunk.section);
+      hash.update("\0");
+    }
     hash.update(chunk.text);
     hash.update("\0");
   }
@@ -73,6 +81,7 @@ export async function buildEmbeddings() {
       embeddings.push({
         text: batch[j].text,
         source: batch[j].source,
+        section: batch[j].section,
         embedding: batchEmbeddings[j],
       });
     }

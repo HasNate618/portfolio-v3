@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { renderMarkdown } from "@/lib/markdown";
+import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import type { Page } from "@/lib/content";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
 import { ExperienceMetaRow } from "@/components/ExperienceMetaRow";
@@ -7,7 +7,7 @@ import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
 import { ProjectMedia } from "@/components/ProjectMedia";
 import { AwardBadge } from "@/components/AwardBadge";
-import { getProject } from "@/data/site";
+import { getExperienceById, getProject } from "@/data/site";
 
 /**
  * Back and next are props so TeraGo can point at /experience while the project
@@ -27,6 +27,9 @@ export function CaseStudy({
   nextHref?: string;
   nextLabel?: string;
 }) {
+  const project = page.id ? getProject(page.id) : undefined;
+  const experience = page.id ? getExperienceById(page.id) : undefined;
+
   return (
     <article>
       <p className="text-sm">
@@ -42,38 +45,38 @@ export function CaseStudy({
       ) : null}
 
       <div className="mt-4">
-        {page.experienceOrg ? (
-          <ExperienceMetaRow org={page.experienceOrg} />
-        ) : page.projectId ? (
-          <ProjectMetaRow projectId={page.projectId} />
+        {experience ? (
+          <ExperienceMetaRow org={experience.org} />
+        ) : project ? (
+          <ProjectMetaRow projectId={project.id} />
         ) : null}
       </div>
 
-      {page.projectId ? (
+      {project ? (
         <div className="mt-4">
-          <LinkRow projectId={page.projectId} selfHref={page.route} />
+          <LinkRow projectId={project.id} selfHref={page.route} />
         </div>
       ) : null}
 
-      {page.projectId ? <AwardBadge projectName={getProject(page.projectId)?.name ?? ""} /> : null}
+      {project ? <AwardBadge projectName={project.name} /> : null}
 
-      <ProjectMedia media={getProject(page.projectId ?? "")?.media} className="mt-8 max-w-2xl" />
+      <ProjectMedia media={project?.media} className="mt-8 max-w-2xl" />
 
       {/* No "On this page" box: a case study is short enough to read
           straight through, and the box pushed the body below the fold. */}
 
       <div
         className="rich-text mt-10 max-w-[68ch] leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(page.body) }}
+        dangerouslySetInnerHTML={{ __html: renderMarkdown(stripLeadingH1(page.body, page.title)) }}
       />
 
-      {page.projectId || page.experienceOrg ? (
+      {project || experience ? (
         <section className="mt-16">
           <h2 id="stack" className="section-label">
             Stack
           </h2>
           <div className="mt-4">
-            <StackList projectId={page.projectId} org={page.experienceOrg} />
+            <StackList projectId={project?.id} org={experience?.org} />
           </div>
         </section>
       ) : null}

@@ -1,15 +1,17 @@
 ---
 title: "AgntOS"
 type: project
+id: agntos
+description: A concept for an agent-managed NixOS system with proposed, approved and reversible config changes.
 priority: reference
 rank: featured
 dates: "May 2026 (approx.)"
 role: "owner"
+status: concept
 tags: [ai-systems, agentic-ai, ai-native-infrastructure, operating-systems]
 related: [index.md, homelab.md, campus.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # AgntOS
 
 AgntOS is a concept for an agent-native operating system on NixOS, where an LLM agent manages the system by proposing config changes that are applied with nixos-rebuild and can be rolled back. The repo is mostly Rust, with Nix, TypeScript and QML.

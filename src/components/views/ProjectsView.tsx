@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { site, awardFor } from "@/data/site";
 import type { Project, ProjectGroup } from "@/data/site";
-import { renderMarkdown, slugify } from "@/lib/markdown";
+import { renderMarkdown, slugify, stripLeadingH1 } from "@/lib/markdown";
 import { caseStudyHref, type Page } from "@/lib/content";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
 import { StatRow } from "@/components/StatRow";
@@ -9,29 +9,22 @@ import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
 import { ProjectMedia } from "@/components/ProjectMedia";
 import { AwardBadge } from "@/components/AwardBadge";
+import { AwardsTable } from "@/components/AwardsTable";
 
 /**
  * The draft's headings are lowercase slugs (`## ~/also-building`), so the
  * capitalized label has to come from here rather than from heading text.
  */
 export const GROUP_LABELS: Record<ProjectGroup, string> = {
-  featured: "Featured",
-  "also-building": "Also building",
-  "ai-ml": "AI and ML",
-  team: "Hackathon team projects",
-  hardware: "Hardware",
-  "web-mobile": "Web and mobile",
-  games: "Games and smaller builds",
+  featured: "Case studies",
+  ai: "AI and LLM",
+  hardware: "Hardware and embedded",
+  xr: "AR and VR",
+  tools: "Tools and apps",
+  archive: "Archive",
 };
 
-const OPEN_GROUPS: ProjectGroup[] = [
-  "featured",
-  "also-building",
-  "ai-ml",
-  "team",
-  "hardware",
-  "web-mobile",
-];
+const OPEN_GROUPS: ProjectGroup[] = ["featured", "ai", "hardware", "xr", "tools"];
 
 function byGroup(group: ProjectGroup): Project[] {
   return site.projects.filter((p) => p.group === group).sort((a, b) => a.order - b.order);
@@ -52,7 +45,7 @@ export function ProjectsView({ page }: { page: Page }) {
 
       <div
         className="rich-text mt-6 max-w-[68ch] leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(page.body) }}
+        dangerouslySetInnerHTML={{ __html: renderMarkdown(stripLeadingH1(page.body, page.title)) }}
       />
 
       {OPEN_GROUPS.map((group) => (
@@ -68,22 +61,95 @@ export function ProjectsView({ page }: { page: Page }) {
         </section>
       ))}
 
-      {/* The awards table lives at the bottom of the home page now; this page
-          only carries the badges on the cards that won. */}
-
-      {/* Eight games would bury the rest of the page; a native disclosure keeps
-          them reachable without JavaScript. */}
-      <details className="mt-16">
+      <details id="archive" className="mt-16">
         <summary className="cursor-pointer text-xs font-bold uppercase tracking-widest text-fg hover:text-accent">
-          {GROUP_LABELS.games}
+          Archive: older and smaller builds, and team hacks where I can&apos;t name my part
         </summary>
-        <ul className="mt-6 flex flex-col gap-6">
-          {byGroup("games").map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </ul>
+        <ArchiveTable projects={byGroup("archive")} />
       </details>
+
+      <h2 id="hackathon-awards" className="section-label mt-16">
+        Hackathon awards
+      </h2>
+      <div className="mt-6">
+        <AwardsTable />
+      </div>
     </article>
+  );
+}
+
+function yearOf(dates: string): string {
+  return dates.match(/\d{4}/)?.[0] ?? dates;
+}
+
+function ArchiveTable({ projects }: { projects: Project[] }) {
+  return (
+    <>
+      <ul className="mt-6 flex flex-col gap-4 sm:hidden">
+        {projects.map((project) => {
+          const award = awardFor(project.name);
+          const link = project.links[0];
+          return (
+            <li key={project.id} className="border-t border-rule pt-4">
+              <p className="font-medium text-fg">{project.name}</p>
+              <p className="text-sm text-muted">
+                {yearOf(project.dates)}
+                {project.event ? ` · ${project.event}` : ""}
+              </p>
+              {award ? <p className="text-sm">{award.prize}</p> : null}
+              <p className="mt-1 text-xs text-muted">{project.displayRole}</p>
+              {link ? (
+                <p className="mt-1 text-sm">
+                  <a href={link.href} className="text-accent hover:text-fg">
+                    {link.label}
+                  </a>
+                </p>
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+
+      <div className="mt-6 hidden sm:block">
+        <table className="w-full border-collapse text-left text-sm">
+          <caption className="sr-only">
+            Archive: older and smaller builds, and team hacks where I can&apos;t name my part
+          </caption>
+          <thead>
+            <tr className="border-b border-rule">
+              <th scope="col" className="py-2 pr-4 font-semibold text-fg">Project</th>
+              <th scope="col" className="py-2 pr-4 font-semibold text-fg">Year</th>
+              <th scope="col" className="py-2 pr-4 font-semibold text-fg">Event</th>
+              <th scope="col" className="py-2 pr-4 font-semibold text-fg">Award</th>
+              <th scope="col" className="py-2 pr-4 font-semibold text-fg">Role</th>
+              <th scope="col" className="py-2 font-semibold text-fg">Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            {projects.map((project) => {
+              const award = awardFor(project.name);
+              const link = project.links[0];
+              return (
+                <tr key={project.id} className="border-b border-rule align-top">
+                  <th scope="row" className="py-3 pr-4 font-normal text-fg">{project.name}</th>
+                  <td className="py-3 pr-4 text-muted">{yearOf(project.dates)}</td>
+                  <td className="py-3 pr-4">{project.event ?? ""}</td>
+                  <td className="py-3 pr-4">{award?.prize ?? ""}</td>
+                  <td className="py-3 pr-4">{project.displayRole}</td>
+                  <td className="py-3">
+                    {link ? (
+                      <a href={link.href} className="text-accent hover:text-fg">
+                        {link.label}
+                      </a>
+                    ) : null}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }
 

@@ -11,33 +11,44 @@ export function SeoJsonLd() {
   const graph = [
     {
       "@type": "Person",
+      "@id": `${base}/#person`,
       name: site.identity.name,
       url: base,
+      image: `${base}/og.png`,
       email: `mailto:${site.contact.email}`,
-      description: site.identity.headline,
       jobTitle: "Software Engineering student",
-      alumniOf: {
-        "@type": "CollegeOrUniversity",
-        name: site.identity.education.school,
-      },
-      homeLocation: {
-        "@type": "Place",
-        name: site.identity.location,
-      },
+      description: "Software engineer building applied AI tools on low-cost and self-hosted models.",
+      affiliation: { "@type": "CollegeOrUniversity", name: site.identity.education.school },
+      homeLocation: { "@type": "Place", name: site.identity.location },
       sameAs: site.contact.links
-        .filter((link) => link.label !== "Resume PDF")
+        .filter((link) => link.label !== "Resume PDF" && link.label !== "Portfolio")
         .map((link) => link.href),
-      knowsAbout: site.skills.flatMap((group) => group.items),
-      award: site.awards.map(
-        (award) => `${award.prize} — ${award.project} (${award.event} ${award.year})`
-      ),
+      knowsAbout: [
+        "Python",
+        "TypeScript",
+        "LLM agents",
+        "Retrieval-augmented generation",
+        "NixOS",
+        "FastAPI",
+        "React",
+        "Embedded systems",
+      ],
+      award: site.awards.map((award) => `${award.prize}, ${award.project} (${award.event} ${award.year})`),
     },
     {
       "@type": "WebSite",
+      "@id": `${base}/#website`,
       name: site.identity.name,
       url: base,
       inLanguage: "en",
-      description: site.identity.headline,
+      publisher: { "@id": `${base}/#person` },
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${base}/#profile`,
+      url: base,
+      mainEntity: { "@id": `${base}/#person` },
+      isPartOf: { "@id": `${base}/#website` },
     },
   ];
 

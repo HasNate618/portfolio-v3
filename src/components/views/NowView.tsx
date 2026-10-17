@@ -1,5 +1,5 @@
 import { site } from "@/data/site";
-import { renderMarkdown } from "@/lib/markdown";
+import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import type { Page } from "@/lib/content";
 
 export function NowView({ page }: { page: Page }) {
@@ -9,7 +9,7 @@ export function NowView({ page }: { page: Page }) {
 
       <div
         className="rich-text mt-6 max-w-[68ch] leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(page.body) }}
+        dangerouslySetInnerHTML={{ __html: renderMarkdown(stripLeadingH1(page.body, page.title)) }}
       />
 
       <p className="mt-8 max-w-[68ch] leading-relaxed">

@@ -57,16 +57,16 @@ test("every project has a group, order, role and unique stat keys", () => {
   }
 });
 
-test("no project still carries tier, and highlights derive from group", () => {
+test("no project still carries tier, and highlights are the case studies", () => {
   for (const p of site.projects) assert.ok(!("tier" in p), `${p.id} still has tier`);
   const ids = highlightProjects().map((p) => p.id);
   assert.ok(ids.includes("campus"));
-  assert.ok(!ids.includes("wasteland"), "a games project must not be a highlight");
+  assert.ok(!ids.includes("wasteland"), "an archive-free case-study list must exclude Wasteland");
 });
 
 test("every display group has at least one project", () => {
   const groups: ProjectGroup[] = [
-    "featured", "also-building", "ai-ml", "team", "hardware", "web-mobile", "games",
+    "featured", "ai", "hardware", "xr", "tools", "archive",
   ];
   for (const g of groups) {
     assert.ok(site.projects.some((p) => p.group === g), `group ${g} is empty`);
@@ -99,13 +99,13 @@ test("project order is unique", () => {
   assert.equal(new Set(orders).size, orders.length, "duplicate project order");
 });
 
-test("highlightProjects is sorted by order and excludes non-highlight groups", () => {
+test("highlightProjects is sorted by order and contains case studies only", () => {
   const hi = highlightProjects();
   assert.deepEqual(
     hi.map((p) => p.order),
     [...hi.map((p) => p.order)].sort((a, b) => a - b)
   );
-  assert.ok(hi.every((p) => p.group === "featured" || p.group === "also-building"));
+  assert.ok(hi.every((p) => p.group === "featured"));
 });
 
 test("the flagship is explicit data, not a hardcoded id in a view", () => {
@@ -115,12 +115,12 @@ test("the flagship is explicit data, not a hardcoded id in a view", () => {
 test("the featured cards are the ranked projects, in display order", () => {
   assert.deepEqual(
     featuredProjects().map((p) => p.id),
-    ["homelab", "aware"]
+    ["homelab", "aware", "carebridge"]
   );
 });
 
 test("every ranked project exists and exactly one is the flagship", () => {
   const ranked = site.projects.filter((p) => p.rank);
   assert.equal(ranked.filter((p) => p.rank === "flagship").length, 1);
-  assert.equal(ranked.length, 3, "campus (flagship) plus two featured");
+  assert.equal(ranked.length, 4, "campus (flagship) plus three featured");
 });

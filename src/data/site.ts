@@ -1,19 +1,12 @@
 /** Structured summary of nathanespejo.com. One source for every fact the pages render. */
 
 /** A figure the pages render. Content files reference these by key, never by value. */
-export type ProjectStat = { key: string; label: string; value: string };
+export type ProjectStat = { key: string; label: string; value: string; /** Hidden on the home StatRow. Case studies still use the value. */ home?: boolean };
 
 /** One row of the AWARE on-device model table. */
 export type ModelRow = { name: string; job: string; runtime: string };
 
-export type ProjectGroup =
-  | "featured"
-  | "also-building"
-  | "ai-ml"
-  | "team"
-  | "hardware"
-  | "web-mobile"
-  | "games";
+export type ProjectGroup = "featured" | "ai" | "hardware" | "xr" | "tools" | "archive";
 
 /**
  * Home-page prominence. Distinct from `group`, which is how /projects files them.
@@ -59,6 +52,8 @@ export type Project = {
 };
 
 export type Experience = {
+  /** Matches the content file id, for example `terago`. */
+  id: string;
   org: string;
   role: string;
   /** One or two sentences for the home page. Depth lives in the corpus doc. */
@@ -88,8 +83,8 @@ export type SiteContent = {
 export const site: SiteContent = {
   identity: {
     name: "Nathan Espejo",
-    headline: "Applied AI engineer (3rd-year Software Engineering, Western) focused on cost-efficient models, with local and self-hosted options",
-    seeking: "Summer 2027 applied AI engineering internship",
+    headline: "Software engineer building applied AI tools (3rd-year Software Engineering, Western), focused on cost-efficient models with local and self-hosted options",
+    seeking: "Summer 2027 software engineering or applied AI internship",
     location: "Brampton and London, ON",
     year: "3rd year (2026-27)",
     education: { school: "Western University", degree: "Bachelor of Engineering Science in Software Engineering", honors: "Dean's Honour List (2024, 2025)", start: "2024-08", end: "2028-05", location: "London, ON" },
@@ -105,18 +100,18 @@ export const site: SiteContent = {
     ],
   },
   experience: [
-    { org: "TeraGo", role: "Software Engineering Intern", location: "Markham, ON", terms: [{ start: "2026-05", end: "2026-08" }], dates: "May 2026 to Aug 2026", onResume: true, file: "/knowledgebase/experience/terago.md",
-      summary: "Built a local-LLM prototype that turns provider outage emails into Jira issues, an RF channel tool that shortlists clear channels from MapInfo spectrum records, a Copilot Studio agent, and a self-hosted LLM proposal.",
+    { id: "terago", org: "TeraGo", role: "Software Engineering Intern", location: "Markham, ON", terms: [{ start: "2026-05", end: "2026-08" }], dates: "May 2026 to Aug 2026", onResume: true, file: "/knowledgebase/experience/terago.md",
+      summary: "Automated outage ticketing: a local LLM on Ollama reads non-standard provider outage emails and opens Jira issues. Also built Channel Finder, an RF tool that shortlists clear channels from MapInfo spectrum records and was validated on 760 test cases, plus a Copilot Studio agent and a self-hosted LibreChat proposal to cut Copilot licensing costs.",
       stats: [{ key: "testCases", label: "test cases", value: "760" }],
       stack: ["Python", "Ollama", "Microsoft Graph", "Jira", "Copilot Studio", "SharePoint", "MapInfo data"] },
-    { org: "3D Western", role: "VP of Data/ML (promoted from Software Developer)", location: "London, ON", terms: [{ start: "2025-09", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
-      summary: "Led two developers on the club's print-approval dataset: 4,127 scraped models, rendered in Blender and class-checked by a VLM, then benchmarked base vision models against it.",
+    { id: "3d-western", org: "3D Western", role: "VP of Data/ML (promoted from Software Developer)", location: "London, ON", terms: [{ start: "2025-09", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
+      summary: "Started on the Dockerized print pipeline, then got promoted to VP and led two developers building the print-approval dataset: 4,127 scraped models rendered in Blender and class-checked by a VLM, then used to benchmark base vision models. Ran alongside my TeraGo internship.",
       stats: [{ key: "dataset", label: "labelled frames", value: "4,127" }] },
-    { org: "WEMars", role: "Software team member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2024 to Apr 2025, rejoined Sep 2026", onResume: false, file: "/knowledgebase/experience/wemars.md",
-      summary: "Western's Mars rover team. Back on AI and autonomy for the rover; previously built wireless ESP32-CAM streaming and looked at vision for navigation markers." },
-    { org: "WEFirst Robotics", role: "Software Developer", location: "London, ON", terms: [{ start: "2026-01", end: "2026-04" }], dates: "Jan 2026 to Apr 2026", onResume: false, file: "/knowledgebase/experience/wefirst.md",
+    { id: "wemars", org: "WEMars", role: "Software team member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2024 to Apr 2025, rejoined Sep 2026", onResume: false, file: "/knowledgebase/experience/wemars.md",
+      summary: "Western's Mars rover team. Rejoined in Sep 2026 on AI and autonomy, just starting. In 2024-25 I built wireless ESP32-CAM streaming." },
+    { id: "wefirst", org: "WEFirst Robotics", role: "Software Developer", location: "London, ON", terms: [{ start: "2026-01", end: "2026-04" }], dates: "Jan 2026 to Apr 2026", onResume: false, file: "/knowledgebase/experience/wefirst.md",
       summary: "Programmed the swerve drive to turn Xbox controller input into omnidirectional motion, tuned closed-loop control, and assembled the CAN bus drivetrain." },
-    { org: "Microcomputer Consulting Inc.", role: "IT Intern (part-time)", location: "Mississauga, ON", terms: [{ start: "2025-05", end: "2025-08" }], dates: "May 2025 to Aug 2025", onResume: false, file: "/knowledgebase/experience/mcc.md",
+    { id: "mcc", org: "Microcomputer Consulting Inc.", role: "IT Intern (part-time)", location: "Mississauga, ON", terms: [{ start: "2024-05", end: "2024-08" }], dates: "May 2024 to Aug 2024", onResume: false, file: "/knowledgebase/experience/mcc.md",
       summary: "Set up and deployed Windows workstations for client organizations." },
   ],
   projects: [
@@ -124,21 +119,21 @@ export const site: SiteContent = {
     {
       id: "campus", name: "Campus", group: "featured", order: 1,
       dates: "Aug 2026 to present", displayRole: "solo",
-      covers: "Self-hosted study assistant for my courses. Hybrid retrieval over 4,687 chunks and a 20-tool agent that logs every write.",
+      covers: "My courses are spread across six Brightspace pages, and I wanted one place to check deadlines, study from slides and test a draft against the brief. Campus syncs them into SQLite and answers from the course files, using a lexical prefilter, embeddings and a cross-encoder reranker. The 20-tool agent logs every change it makes to my notes or due dates, and it runs on any OpenAI-compatible endpoint, local or hosted. Retrieval and answer quality: evaluation in progress.",
       media: [
         { src: "/projects/campus-0.svg", alt: "Campus wordmark", width: 2221, height: 763, contain: true },
-        { src: "/projects/campus-1.webp", alt: "Campus — course hub and chat with exact citation", width: 1200, height: 675 },
+        { src: "/projects/campus-1.webp", alt: "Campus course hub and chat, with an exact citation", width: 1200, height: 675 },
       ],
       file: "/knowledgebase/projects/campus.md",
       onResume: true,
       rank: "flagship",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Campus" }],
       stats: [
-        { key: "chunks", label: "chunks", value: "4,687" },
-        { key: "files", label: "course files", value: "215" },
-        { key: "tests", label: "tests", value: "308" },
-        { key: "courses", label: "courses", value: "6" },
-        { key: "tools", label: "agent tools", value: "20" },
+        { key: "chunks", label: "chunks from 215 course files", value: "4,687" },
+        { key: "tests", label: "tests in CI on every push", value: "308" },
+        { key: "courses", label: "courses I use it in", value: "6" },
+        { key: "files", label: "course files", value: "215", home: false },
+        { key: "tools", label: "agent tools", value: "20", home: false },
       ],
       // Six pills per project, at most: a card is a summary, and a stack of
       // twelve to nineteen turned every card into a wall of tags that buried
@@ -149,7 +144,7 @@ export const site: SiteContent = {
     {
       id: "homelab", name: "Homelab and Hermes Agent", group: "featured", order: 2,
       dates: "May 2026 to present", displayRole: "solo",
-      covers: "Two NixOS machines, 27 hardened containers, and AI agents that change the config only after I approve.",
+      covers: "My laptop and a home server built from used parts run from one NixOS flake. Hermes Agent profiles make the config changes, but every change waits for my approval and can roll back to the last good build. One bug I won't forget: a VPN set as the server's default route. When the peer died, the whole machine went dark until I reset it by hand.",
       media: [
         { src: "/projects/homelab-0.webp", alt: "Homelab Dashboard and Service Overview", width: 1155, height: 891 },
       ],
@@ -158,17 +153,17 @@ export const site: SiteContent = {
       rank: "featured",
       links: [{ label: "GitHub (public NixOS config)", href: "https://github.com/HasNate618/nixos-config-public" }, { label: "GitHub (llama.cpp setup)", href: "https://github.com/HasNate618/local-llama-setup" }],
       stats: [
-        { key: "sessions", label: "agent sessions", value: "472" },
-        { key: "toolCalls", label: "tool calls", value: "58,000" },
-        { key: "skills", label: "agent skills", value: "191" },
-        { key: "containers", label: "containers", value: "27" },
+        { key: "containers", label: "hardened containers", value: "27" },
+        { key: "sessions", label: "agent sessions since June 2026", value: "472" },
+        { key: "skills", label: "agent skills in git", value: "191" },
+        { key: "toolCalls", label: "tool calls", value: "58,000", home: false },
       ],
       stack: ["NixOS", "Nix flakes", "Docker", "Tailscale", "Hermes Agent", "llama.cpp"],
     },
     {
       id: "aware", name: "AWARE", group: "featured", order: 3,
       dates: "Jul 2026", displayRole: "solo", event: "Hack the 6ix 2026",
-      covers: "My first solo hack. Vision, audio and a small LLM running offline on one $80 Arduino UNO Q.",
+      covers: "My first solo hack. I pitched the idea to three teams at Hack the 6ix and none had the background, so I built it alone. It watches a camera, listens for sounds and reads sensors, and you set automations in plain English, like \"when glass breaks after 10pm, alert me.\" A 1B model turns that into a rule, and everything runs offline. Demo video and latency numbers: not posted yet.",
       media: [
         { src: "/projects/aware-0.webp", alt: "AWARE device on an Arduino UNO Q", width: 1200, height: 676 },
         { src: "/projects/aware-1.webp", alt: "AWARE web dashboard", width: 1200, height: 1122 },
@@ -178,8 +173,7 @@ export const site: SiteContent = {
       rank: "featured",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/AWARE" }, { label: "Devpost", href: "https://devpost.com/software/a-w-a-r-e-autonomous-witness-and-response-engine" }],
       stats: [
-        { key: "boardCost", label: "board cost", value: "$80" },
-        { key: "models", label: "models on device", value: "5" },
+        { key: "boardCost", label: "Arduino UNO Q, all inference on board", value: "$80" },
       ],
       // Vision, audio, the small model and the board it all runs on: the four
       // claims in the summary, and nothing else.
@@ -195,9 +189,9 @@ export const site: SiteContent = {
 
     // ── also building ─────────────────────────────────────────────────────
     {
-      id: "agntos", name: "AgntOS", group: "also-building", order: 5,
+      id: "agntos", name: "AgntOS", group: "ai", order: 5,
       dates: "2026", displayRole: "solo", displayStatus: "work in progress",
-      covers: "A concept for a NixOS system run by an LLM agent. Every change is proposed, approved, applied with nixos-rebuild, logged, and reversible. Mostly Rust.",
+      covers: "Still a concept: a NixOS system run by an LLM agent. Every change is proposed, approved, applied with nixos-rebuild, logged, and reversible. Mostly Rust.",
       media: [
         { src: "/projects/agntos-0.webp", alt: "AgntOS Dev VM Running KDE Plasma", width: 1200, height: 750 },
         { src: "/projects/agntos-1.webp", alt: "AgntOS Banner", width: 1200, height: 355 },
@@ -208,11 +202,11 @@ export const site: SiteContent = {
       stack: ["Rust", "NixOS"],
     },
     {
-      id: "glyph", name: "Glyph", group: "also-building", order: 6,
+      id: "glyph", name: "Glyph", group: "tools", order: 6,
       dates: "2026", displayRole: "solo",
       covers: "Leader-key command overlay for Windows, so you don't have to memorize shortcuts. Per-app bindings, YAML config, ships on WinGet.",
       media: [
-        { src: "/projects/glyph-0.webp", alt: "Glyph Logo", width: 296, height: 77, contain: true },
+        { src: "/projects/glyph-0.webp", alt: "Glyph wordmark", width: 296, height: 77, contain: true },
         { src: "/projects/glyph-1.webp", alt: "Glyph App Keymap", width: 1200, height: 832 },
         { src: "/projects/glyph-2.webp", alt: "Glyph App Overlay", width: 360, height: 677 },
         { src: "/projects/glyph-3.webp", alt: "Glyph Settings", width: 1200, height: 826 },
@@ -223,7 +217,7 @@ export const site: SiteContent = {
       stack: ["C#", "WPF", "YAML", "WinGet"],
     },
     {
-      id: "agenticarmy", name: "AgenticArmy", group: "also-building", order: 7,
+      id: "agenticarmy", name: "AgenticArmy", group: "ai", order: 7,
       dates: "Mar 2026", displayRole: "repo on my GitHub", event: "GenAI Genesis 2026",
       covers: "VS Code extension and FastAPI backend for running several coding agents in parallel, with a human approving the plan.",
       media: [
@@ -239,8 +233,8 @@ export const site: SiteContent = {
 
     // ── ai and ml ─────────────────────────────────────────────────────────
     {
-      id: "gaming-mental-health-analyzer", name: "Gaming and Mental Health Analyzer", group: "ai-ml", order: 8,
-      dates: "2026", displayRole: "solo", event: "Dataquest",
+      id: "gaming-mental-health-analyzer", name: "Gaming and Mental Health Analyzer", group: "ai", order: 8,
+      dates: "Mar 2026 (approx.)", displayRole: "solo", event: "Dataquest",
       covers: "scikit-learn models that predict five wellbeing risks from gaming habits, trained on a 1,000-row Kaggle dataset.",
       media: [
         { src: "/projects/gaming-mental-health-analyzer-0.webp", alt: "Gaming & Mental Health Results Dashboard", width: 1200, height: 1354 },
@@ -253,7 +247,7 @@ export const site: SiteContent = {
       stack: ["Python", "scikit-learn", "pandas"],
     },
     {
-      id: "whack-a-ml", name: "Whack-A-ML", group: "ai-ml", order: 9,
+      id: "whack-a-ml", name: "Whack-A-ML", group: "ai", order: 9,
       dates: "2026", displayRole: "solo",
       covers: "A PPO agent learns to hit targets with a simulated arm in Unity, with curriculum learning.",
       media: [
@@ -265,7 +259,7 @@ export const site: SiteContent = {
       stack: ["Unity", "ML-Agents", "PPO", "C#"],
     },
     {
-      id: "animarker", name: "Animarker", group: "ai-ml", order: 10,
+      id: "animarker", name: "Animarker", group: "tools", order: 10,
       dates: "May 2023", displayRole: "solo", event: "Washington Justice Encode",
       covers: "Android wildlife tracker. A TensorFlow CNN identifies the species and the sighting goes on a map.",
       media: [
@@ -281,7 +275,7 @@ export const site: SiteContent = {
 
     // ── hackathon team projects ───────────────────────────────────────────
     {
-      id: "auralis", name: "Auralis", group: "team", order: 11,
+      id: "auralis", name: "Auralis", group: "ai", order: 11,
       dates: "Nov 2025", displayRole: "team project", event: "Hack Western 12",
       covers: "3D virtual doctor with emotion detection and voice.",
       media: [
@@ -297,21 +291,21 @@ export const site: SiteContent = {
       stack: ["React", "Three.js", "Cloudflare", "Python"],
     },
     {
-      id: "carebridge", name: "CareBridge", group: "team", order: 12,
-      dates: "Feb 2026", displayRole: "team contributor", event: "Spark 2026",
-      covers: "Check-ins and risk tracking for rural patients and providers.",
+      id: "carebridge", name: "CareBridge", group: "featured", order: 4, rank: "featured",
+      dates: "Feb 2026", displayRole: "team project", event: "Spark 2026",
+      covers: "A team build at Spark 2026. We started from how a winter storm that cut off a regional hospital led to missed referrals and follow-ups. Patients check in by chat or voice, and providers get one timeline with risk signals pulled from those conversations. Built as a team; the repo is my teammate's.",
       media: [
         { src: "/projects/carebridge-0.webp", alt: "CareBridge Provider Dashboard", width: 806, height: 564 },
         { src: "/projects/carebridge-1.webp", alt: "CareBridge Financials View", width: 1200, height: 913 },
         { src: "/projects/carebridge-2.webp", alt: "CareBridge Pitch Slide", width: 1200, height: 694 },
       ],
       file: "/knowledgebase/projects/carebridge.md",
-      links: [{ label: "Devpost", href: "https://devpost.com/software/care-bridge-ai" }, { label: "GitHub", href: "https://github.com/liamma06/Spark" }],
-      stats: [],
-      stack: ["React", "TypeScript", "Node.js"],
+      links: [{ label: "Devpost", href: "https://devpost.com/software/care-bridge-ai" }, { label: "GitHub (teammate's repo)", href: "https://github.com/liamma06/Spark" }],
+      stats: [{ key: "place", label: "overall, Spark 2026", value: "3rd" }],
+      stack: ["React", "TypeScript", "Vite", "FastAPI", "Supabase", "Cohere", "ElevenLabs"],
     },
     {
-      id: "vitalsign", name: "VitalSign", group: "team", order: 13,
+      id: "vitalsign", name: "VitalSign", group: "archive", order: 13,
       dates: "Jan 2026", displayRole: "team project", event: "DeltaHacks 2026",
       covers: "Turns ASL gestures and facial expressions into speech that carries the emotion.",
       media: [
@@ -324,7 +318,7 @@ export const site: SiteContent = {
       stack: ["MediaPipe", "face-api.js", "Python", "React"],
     },
     {
-      id: "nowandthen", name: "NowAndThen", group: "team", order: 14,
+      id: "nowandthen", name: "NowAndThen", group: "archive", order: 14,
       dates: "Jan 2026", displayRole: "team project", event: "UofTHacks 13",
       covers: "Map app for leaving geotagged posts, with AI summaries of places.",
       media: [
@@ -337,11 +331,11 @@ export const site: SiteContent = {
       stack: ["React Native", "Node.js", "MongoDB"],
     },
     {
-      id: "eyecandy", name: "Eyecandy", group: "team", order: 15,
+      id: "eyecandy", name: "Eyecandy", group: "xr", order: 15,
       dates: "Sep 2025", displayRole: "team project", event: "Hack the North 2025",
       covers: "AR try-on of Shopify products on Snap Spectacles.",
       media: [
-        { src: "/projects/eyecandy-0.webp", alt: "Eyecandy Project", width: 806, height: 537 },
+        { src: "/projects/eyecandy-0.webp", alt: "Eyecandy title card", width: 806, height: 537 },
         { src: "/projects/eyecandy-1.webp", alt: "Eyecandy AR Demo", width: 1200, height: 675 },
       ],
       file: "/knowledgebase/projects/eyecandy.md",
@@ -350,11 +344,11 @@ export const site: SiteContent = {
       stack: ["Lens Studio", "TypeScript", "Snap Spectacles"],
     },
     {
-      id: "lumen", name: "Lumen", group: "team", order: 16,
+      id: "lumen", name: "Lumen", group: "archive", order: 16,
       dates: "Aug 2025", displayRole: "team; I built the Unity mini-games", event: "TerraHacks 2025",
       covers: "Wellness companion that picks a mini-game from a mood check-in.",
       media: [
-        { src: "/projects/lumen-0.webp", alt: "Lumen Project", width: 333, height: 222 },
+        { src: "/projects/lumen-0.webp", alt: "Lumen title card", width: 333, height: 222 },
         { src: "/projects/lumen-1.webp", alt: "Lumen Mini Game", width: 1200, height: 701 },
         { src: "/projects/lumen-2.webp", alt: "Lumen Analytics", width: 1200, height: 726 },
         { src: "/projects/lumen-3.webp", alt: "Lumen Mini Game 2", width: 1200, height: 706 },
@@ -365,11 +359,11 @@ export const site: SiteContent = {
       stack: ["Unity", "C#", "MongoDB Atlas", "Next.js"],
     },
     {
-      id: "careerly", name: "Careerly", group: "team", order: 17,
+      id: "careerly", name: "Careerly", group: "archive", order: 17,
       dates: "Feb 2024", displayRole: "team project", event: "NSBEHacks 2024",
       covers: "Unity virtual job fair with AI mentors.",
       media: [
-        { src: "/projects/careerly-0.webp", alt: "Careerly Project", width: 333, height: 222 },
+        { src: "/projects/careerly-0.webp", alt: "Careerly title card", width: 333, height: 222 },
         { src: "/projects/careerly-1.webp", alt: "Careerly Demo", width: 806, height: 383 },
         { src: "/projects/careerly-2.webp", alt: "Careerly Professional View", width: 806, height: 382 },
       ],
@@ -404,7 +398,7 @@ export const site: SiteContent = {
         { src: "/projects/flexfire-x-3.webp", alt: "FLEXFIRE-X Launcher", width: 768, height: 1080 },
       ],
       file: "/knowledgebase/projects/flexfire-x.md",
-      links: [{ label: "GitHub", href: "https://github.com/HasNate618/FLEXFIRE-X" }, { label: "Video", href: "https://youtube.com/shorts/8Y7lV0Z1Z1Y" }],
+      links: [{ label: "GitHub", href: "https://github.com/HasNate618/FLEXFIRE-X" }, { label: "Video", href: "https://youtube.com/shorts/VqzTay1VbeE" }],
       stats: [],
       stack: ["Arduino", "EMG sensors", "3D printing", "C++"],
     },
@@ -423,7 +417,7 @@ export const site: SiteContent = {
 
     // ── web and mobile ────────────────────────────────────────────────────
     {
-      id: "portfolio-v2", name: "Portfolio v2", group: "web-mobile", order: 21,
+      id: "portfolio-v2", name: "Portfolio v2", group: "archive", order: 21,
       dates: "2026", displayRole: "solo",
       covers: "The last version of this site: a WebGL ASCII ocean with a RAG chatbot. This version is plain text on purpose.",
       file: "/knowledgebase/projects/portfolio-v2.md",
@@ -432,11 +426,11 @@ export const site: SiteContent = {
       stack: ["Next.js", "React Three Fiber", "GLSL", "Cohere"],
     },
     {
-      id: "saferoute", name: "SafeRoute", group: "web-mobile", order: 22,
+      id: "saferoute", name: "SafeRoute", group: "tools", order: 22,
       dates: "2025", displayRole: "solo",
       covers: "Android app for reporting hazards and routing around them.",
       media: [
-        { src: "/projects/saferoute-0.webp", alt: "SafeRoute Project", width: 999, height: 666 },
+        { src: "/projects/saferoute-0.webp", alt: "SafeRoute title card", width: 999, height: 666 },
         { src: "/projects/saferoute-1.webp", alt: "SafeRoute User Flow", width: 1200, height: 1233 },
       ],
       file: "/knowledgebase/projects/saferoute.md",
@@ -445,7 +439,7 @@ export const site: SiteContent = {
       stack: ["Kotlin", "Android", "Google Maps API"],
     },
     {
-      id: "uwo-mealplan-calc", name: "UWO Mealplan Calc", group: "web-mobile", order: 23,
+      id: "uwo-mealplan-calc", name: "UWO Mealplan Calc", group: "tools", order: 23,
       dates: "2024", displayRole: "solo",
       covers: "Chrome extension that tracks meal plan spending.",
       media: [
@@ -459,7 +453,7 @@ export const site: SiteContent = {
 
     // ── games and smaller builds ──────────────────────────────────────────
     {
-      id: "wasteland", name: "Wasteland", group: "games", order: 24,
+      id: "wasteland", name: "Wasteland", group: "hardware", order: 24,
       dates: "Feb 2025", displayRole: "solo", event: "MakeUofT 2025",
       covers: "Horror game you play with a sensor glove.",
       media: [
@@ -470,7 +464,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "Arduino", "C#"],
     },
     {
-      id: "vr-odm-gear-sim", name: "VR ODM Gear Sim", group: "games", order: 25,
+      id: "vr-odm-gear-sim", name: "VR ODM Gear Sim", group: "xr", order: 25,
       dates: "Sep 2023", displayRole: "solo", event: "Hack the North 2023",
       covers: "Cardboard VR sim with an Arduino glove controller.",
       media: [
@@ -481,7 +475,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "Arduino", "C#"],
     },
     {
-      id: "street-cleaner", name: "Street Cleaner", group: "games", order: 26,
+      id: "street-cleaner", name: "Street Cleaner", group: "archive", order: 26,
       dates: "May 2023", displayRole: "my repo", event: "GameHACKS 1.0",
       covers: "Mobile recycling game on Google Play.",
       media: [
@@ -493,7 +487,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "C#"],
     },
     {
-      id: "object-love-interface", name: "Object-Love-Interface", group: "games", order: 27,
+      id: "object-love-interface", name: "Object-Love-Interface", group: "hardware", order: 27,
       dates: "Feb 2026", displayRole: "my repo", event: "CTRL+HACK+DEL 2.0",
       covers: "IoT objects with voices and personalities.",
       media: [
@@ -504,7 +498,7 @@ export const site: SiteContent = {
       stats: [], stack: ["ESP32", "Arduino", "Python"],
     },
     {
-      id: "stupid-spotify", name: "Stupid Spotify", group: "games", order: 28,
+      id: "stupid-spotify", name: "Stupid Spotify", group: "archive", order: 28,
       dates: "Nov 2025", displayRole: "my repo", event: "Stupid Hackathon @ Western",
       covers: "A deliberately bad Spotify clone. Its chatbot gaslights you about your music choices.",
       media: [
@@ -515,7 +509,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Next.js", "TypeScript"],
     },
     {
-      id: "motaru", name: "Mōtaru", group: "games", order: 29,
+      id: "motaru", name: "Mōtaru", group: "archive", order: 29,
       dates: "2024", displayRole: "solo",
       covers: "Unity mobile game on Google Play.",
       media: [
@@ -527,7 +521,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "C#"],
     },
     {
-      id: "zenith-tower", name: "Zenith Tower", group: "games", order: 30,
+      id: "zenith-tower", name: "Zenith Tower", group: "archive", order: 30,
       dates: "2024", displayRole: "solo",
       covers: "Unity mobile game on Google Play.",
       media: [
@@ -537,7 +531,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "C#"],
     },
     {
-      id: "tic-tac-toe-ultimate", name: "Tic Tac Toe Ultimate", group: "games", order: 31,
+      id: "tic-tac-toe-ultimate", name: "Tic Tac Toe Ultimate", group: "archive", order: 31,
       dates: "2024", displayRole: "solo",
       covers: "Unity mobile game on Google Play.",
       media: [
@@ -547,6 +541,23 @@ export const site: SiteContent = {
       links: [],
       stats: [], stack: ["Unity", "C#"],
     },
+    {
+      id: "omni-reality", name: "Omni-Reality", group: "xr", order: 32,
+      dates: "Sep 2026", displayRole: "team project, my repo", event: "Hack the North 2026",
+      covers: "A mixed-reality assistant for the Quest 3S that answers in the room: SAM 2 highlights on the object you mean, guided steps, and furniture at life size. Built with my team, and I kept going on the spatial system after the event.",
+      media: [
+        { src: "/projects/omni-reality-0.webp", alt: "Guided Mode: a chips bag on a desk highlighted in blue, with the caption telling the user to move it to the trash. Screenshot by Tim Roch", width: 1200, height: 800 },
+      ],
+      file: "/knowledgebase/projects/omni-reality.md",
+      links: [
+        { label: "GitHub", href: "https://github.com/HasNate618/Omni-Reality" },
+        { label: "Devpost", href: "https://devpost.com/software/omni-reality" },
+        { label: "Video", href: "https://www.youtube.com/watch?v=4t_Sjc5_n_U" },
+      ],
+      stats: [],
+      // Eight pills is the card limit. Meta XR SDK and PyTorch are in the case notes.
+      stack: ["Unity", "C#", "Meta Quest 3S", "SAM 2", "Qwen Omni", "Gemini Live", "Python", "WebSockets"],
+    },
   ],
   hackathons: { entered: 22, awards: 8 },
   awards: [
@@ -554,7 +565,7 @@ export const site: SiteContent = {
     { event: "Hack Western 12", year: "2025", project: "Auralis", prize: "Best AI Application Built with Cloudflare", role: "Team member (repo: rickytang666/auralis)" },
     { event: "TerraHacks", year: "2025", project: "Lumen", prize: "Best Use of MongoDB Atlas", role: "Team member, built the Unity mini-games (repo: Dawgsrlife/lumen)" },
     { event: "Hack the North", year: "2025", project: "Eyecandy", prize: "Snap Spectacles AR Runner Up", role: "Team member (repo: Duck-luv-pie/eyecandy)" },
-    { event: "Spark", year: "2026", project: "CareBridge", prize: "Overall 3rd place", role: "Team contributor (repo: liamma06/Spark)" },
+    { event: "Spark", year: "2026", project: "CareBridge", prize: "Overall 3rd place", role: "Team project (repo: liamma06/Spark)" },
     { event: "GameHACKS 1.0", year: "2023", project: "Street Cleaner", prize: "Second Award", role: "Repo owner" },
     { event: "CTRL+HACK+DEL 2.0", year: "2026", project: "Object-Love-Interface", prize: "Best Useless Hack", role: "Repo owner" },
     { event: "Stupid Hackathon @ Western", year: "2025", project: "Stupid Spotify", prize: "Worst UX", role: "Repo owner" },
@@ -571,10 +582,10 @@ export const site: SiteContent = {
   alsoUsed: ["Cursor", "Claude Code", "C++", "Bash", "Java", "PostgreSQL", "OpenCV", "OnShape"],
 };
 
-/** Featured and also-building rows, in display order. The bot surface uses this so it cannot disagree with /projects. */
+/** Case studies, in display order. /llms.txt uses this so the bot surface matches the projects page. */
 export function highlightProjects(): Project[] {
   return site.projects
-    .filter((p) => p.group === "featured" || p.group === "also-building")
+    .filter((p) => p.group === "featured")
     .slice()
     .sort((a, b) => a.order - b.order);
 }
@@ -606,6 +617,10 @@ export function getProject(id: string): Project | undefined {
 
 export function getExperience(org: string): Experience | undefined {
   return site.experience.find((e) => e.org === org);
+}
+
+export function getExperienceById(id: string): Experience | undefined {
+  return site.experience.find((e) => e.id === id);
 }
 
 export default site;

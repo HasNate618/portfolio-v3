@@ -1,13 +1,20 @@
 ---
 title: Homelab and Hermes Agent
+type: project
 route: /projects/homelab
-projectId: homelab
-description: A NixOS homelab that AI agents help run. Nothing changes without my approval.
+description: Two NixOS machines in one flake, with AI agents that change the config only after I approve.
 priority: start-here
 tags: [nixos, agents, self-hosting]
 related: [index.md, campus.md, aware.md, ../skills.md]
 onThisPage: [tl;dr, Why I built it, What I built, How it works, Models and cost, Results, Stack]
+id: homelab
+dates: "May 2026 to present"
+role: solo
+status: in-progress
+rank: featured
+updated: 2026-10-16
 ---
+# Homelab and Hermes Agent
 
 ## tl;dr
 

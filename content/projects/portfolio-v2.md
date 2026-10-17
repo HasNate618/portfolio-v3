@@ -1,15 +1,17 @@
 ---
 title: "Portfolio v2"
 type: project
+id: portfolio-v2
+description: The previous portfolio: a desktop-first site with a 3D ASCII ocean and a RAG chatbot.
 priority: reference
-rank: other
+rank: archive
 dates: "Jun 2026 (approx.) to present"
 role: "owner"
+status: shipped
 tags: [web-development, 3d-graphics, creative-development, portfolio]
 related: [index.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Portfolio v2
 
 Portfolio v2 is a desktop-first portfolio website built as one continuous 3D ASCII ocean. The background is a tessellated water mesh with real Gerstner vertex displacement, post-processed through a GPU glyph-atlas ASCII shader (Dragonfly / Aniso style).

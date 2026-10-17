@@ -1,16 +1,16 @@
 ---
 title: "Local and cost-aware AI"
-type: hub
+type: page
+description: How Nathan chooses low-cost, local and self-hosted models across projects and work.
 priority: start-here
 dates: "Apr 2026 (approx.) to present"
 tags: [local-ai, inference, models, cost]
 related: [about.md, projects/aware.md, projects/campus.md, projects/homelab.md, experience/terago.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Local and cost-aware AI
 
-Most of Nathan's AI work runs on hosted API models, and he deliberately picks low-cost, efficient ones matched to each task, the way a company would, rather than paying for maximum capability. He also runs models locally where the job calls for it: on an edge board, on his laptop, and in a work prototype.
+Most of Nathan's AI work runs on hosted API models, and he deliberately picks low-cost, efficient ones matched to each task, the way a company would, rather than paying for maximum capability. He also runs models locally where the job calls for it: on an edge board, on his laptop, and in an automation at work.
 
 ## Where models run
 
@@ -21,7 +21,7 @@ Most of Nathan's AI work runs on hosted API models, and he deliberately picks lo
 | flow laptop | llama.cpp serving local GGUF models, set up in his local-llama-setup repo | Local | Apr 2026 (approx.) to present |
 | Homelab server | Open WebUI, a Bifrost gateway that routes between local and cloud models, Whisper speech-to-text | Mixed | May 2026 to present |
 | AWARE | YOLOv8n, YAMNet, Whisper-tiny, Piper TTS and a small GGUF LLM on an Arduino UNO Q | Local, on-device | Jul 2026 |
-| TeraGo | Ollama prototype that extracts details from outage emails | Local | May to Aug 2026 |
+| TeraGo | Ollama automation that extracts details from outage emails and opens Jira issues | Local | May to Aug 2026 |
 
 ## AWARE on-device
 
@@ -35,6 +35,6 @@ His flow laptop runs llama.cpp for local GGUF models. Both Hermes Agent profiles
 
 Campus talks to any OpenAI-compatible endpoint, so the same code runs against a local server or a hosted API. Retrieval combines embedding search, cross-encoder reranking and a lexical SQL prefilter. Details in [Campus](projects/campus.md).
 
-## TeraGo Ollama prototype
+## TeraGo outage ticketing on Ollama
 
-At TeraGo (May to Aug 2026) he built a Python prototype where a local LLM on Ollama extracts the key details from non-standard provider outage emails and the pipeline opens Jira issues. Details in [TeraGo](experience/terago.md).
+At TeraGo (May to Aug 2026) he automated outage ticketing in Python: a local LLM on Ollama extracts the key details from non-standard provider outage emails and the pipeline opens Jira issues. Details in [TeraGo](experience/terago.md).

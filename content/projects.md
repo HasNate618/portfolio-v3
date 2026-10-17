@@ -1,11 +1,14 @@
 ---
 title: Projects
+type: page
 route: /projects
-description: Applied AI projects, hardware, games and mobile apps, most built at hackathons.
+description: Case studies and builds: LLM tools, hardware, AR and VR, apps, and a hackathon archive.
 priority: start-here
-onThisPage: [Featured, Also building, AI and ML, Hackathon team projects, Hardware, Web and mobile]
+onThisPage: [Case studies, AI and LLM, Hardware and embedded, AR and VR, Tools and apps, Archive, Hackathon awards]
+updated: 2026-10-16
 ---
+# Projects
 
-Most of my recent work is applied AI: agents, retrieval, and models picked for cost. I also build hardware, games and mobile apps, a lot of them at hackathons.
+Most of my recent work is applied AI: agents, retrieval, and models picked for cost. Before that it was hardware, games and mobile apps, a lot of them built at hackathons.
 
-On team projects I only claim the parts I can name.
+Team projects are marked as team projects. Where I can't point to my exact part, they live in the archive.

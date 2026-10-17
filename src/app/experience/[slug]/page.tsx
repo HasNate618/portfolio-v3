@@ -2,10 +2,17 @@ import { notFound } from "next/navigation";
 import { PageShell } from "@/components/PageShell";
 import { CaseStudy } from "@/components/CaseStudy";
 import { getPage, listPages } from "@/lib/content";
+import { pageMetadata } from "@/lib/page-metadata";
 
 /** /projects/[slug] is single-segment and cannot carry /experience/terago, so it gets its own route. */
 function experiencePages() {
   return listPages().filter((page) => page.route.startsWith("/experience/"));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const page = getPage(`/experience/${slug}`);
+  return page ? pageMetadata(page, { article: true }) : {};
 }
 
 export function generateStaticParams() {

@@ -1,15 +1,17 @@
 ---
 title: "Auralis"
 type: project
+id: auralis
+description: A team-built virtual healthcare assistant with emotion detection and voice interaction.
 priority: reference
-rank: other
+rank: archive
 dates: "Nov 2025"
 role: "team"
+status: shipped
 tags: [ai, full-stack, 3d, health-tech]
 related: [index.md, ../awards.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Auralis
 
 Virtual 3D healthcare assistant with emotion detection and natural voice interaction for telemedicine. Built with Next.js 16, React 19 and Three.js.

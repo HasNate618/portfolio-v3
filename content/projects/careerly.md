@@ -1,15 +1,17 @@
 ---
 title: "Careerly"
 type: project
+id: careerly
+description: A team-built virtual job fair in Unity with AI mentors for career exploration.
 priority: reference
-rank: other
+rank: archive
 dates: "Feb 2024"
 role: "team"
+status: shipped
 tags: [unity, ai, education, career-development]
 related: [index.md, ../awards.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Careerly
 
 AI-powered virtual job fair built in Unity that makes career exploration fun and inclusive. Built with Unity3D, C# and Cohere API.

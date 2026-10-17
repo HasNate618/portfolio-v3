@@ -4,15 +4,22 @@ import { CaseStudy } from "@/components/CaseStudy";
 import { getPage, listPages } from "@/lib/content";
 import { getProject } from "@/data/site";
 import type { Page } from "@/lib/content";
+import { pageMetadata } from "@/lib/page-metadata";
 
 /** Single-segment route: /experience/terago gets its own [slug] route in Task 13. */
 function projectPages(): Page[] {
   return listPages()
     .filter((page) => page.route.startsWith("/projects/"))
     .sort((a, b) => {
-      const order = (page: Page) => getProject(page.projectId ?? "")?.order ?? Number.MAX_SAFE_INTEGER;
+      const order = (page: Page) => getProject(page.id ?? "")?.order ?? Number.MAX_SAFE_INTEGER;
       return order(a) - order(b);
     });
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const page = getPage(`/projects/${slug}`);
+  return page ? pageMetadata(page, { article: true }) : {};
 }
 
 export function generateStaticParams() {

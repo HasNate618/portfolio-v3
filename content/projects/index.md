@@ -1,12 +1,12 @@
 ---
 title: "Projects"
 type: index
+description: An index of Nathan Espejo's documented software, applied AI, hardware and XR projects.
 priority: reference
 tags: [projects]
 related: [../index.md, ../awards.md, ../skills.md, other.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Projects
 
 Every project Nathan has documented, one file each, with a line on what it covers. Dates, role, event and figures are not repeated here: they come from the typed site data, which is prepended to each project document. Dates marked approx. in that data come from GitHub repo creation dates; hackathon dates come from the event or Devpost.
@@ -23,9 +23,10 @@ Every project Nathan has documented, one file each, with a line on what it cover
 ## Other projects
 
 - [Auralis](auralis.md): What the Auralis virtual doctor does and the stack his team used.
-- [CareBridge](carebridge.md): What the CareBridge rural care prototype does; Nathan contributed on a teammate-owned repo.
+- [CareBridge](carebridge.md): The CareBridge rural care platform from Spark 2026, built by a team; the repo is a teammate's (liamma06/Spark).
 - [Careerly](careerly.md): What the Careerly Unity job fair does and its AI mentor setup.
 - [Lumen](lumen.md): What the Lumen wellness companion does and which part Nathan built.
+- [Omni-Reality](omni-reality.md): Quest 3S mixed-reality assistant built by a team at Hack the North 2026; SAM 2 highlights, guided steps and life-size furniture.
 - [Eyecandy](eyecandy.md): What the Eyecandy AR try-on app does on Snap Spectacles.
 - [VitalSign](vitalsign.md): What the VitalSign ASL-to-speech app does and how it reads gestures and expressions.
 - [NowAndThen](nowandthen.md): What the NowAndThen geotagged memory map does.

@@ -1,15 +1,17 @@
 ---
 title: "CareBridge"
 type: project
+id: carebridge
+description: A team-built rural care platform with patient check-ins, timelines and risk signals for providers.
 priority: reference
-rank: other
+rank: featured
 dates: "Feb 2026"
-role: "team contributor"
+role: team
+status: shipped
 tags: [ai, full-stack, healthcare]
 related: [index.md, ../awards.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # CareBridge
 
 AI healthcare platform connecting rural patients and providers with intelligent check-ins and risk tracking. Built with React 19, TypeScript and Vite.
@@ -18,7 +20,7 @@ AI healthcare platform connecting rural patients and providers with intelligent 
 
 Built at Spark Hackathon 2026. The prize is listed in [awards](../awards.md).
 
-**Nathan's role:** Team contributor. The canonical repository is owned by a teammate (`liamma06/Spark`), not HasNate618.
+**Credit:** Team project. The canonical repository is owned by a teammate (`liamma06/Spark`), not HasNate618.
 
 ## Tech Stack
 

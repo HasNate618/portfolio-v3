@@ -4,6 +4,7 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { SeoJsonLd } from "@/components/SeoJsonLd";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { siteMetadataBase } from "@/lib/site-url";
 import "./globals.css";
 
 const inter = Inter({
@@ -13,8 +14,26 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Nathan Espejo",
-  description: "Software engineer working on applied AI systems.",
+  metadataBase: siteMetadataBase(),
+  title: { default: "Nathan Espejo, Software Engineer", template: "%s · Nathan Espejo" },
+  description:
+    "Nathan Espejo, 3rd-year Software Engineering at Western. I build software and applied AI tools on low-cost and self-hosted models. Looking for Summer 2027.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "profile",
+    siteName: "Nathan Espejo",
+    title: "Nathan Espejo, Software Engineer",
+    description:
+      "Software engineer building applied AI tools on low-cost and self-hosted models. 3rd year at Western, looking for a Summer 2027 internship.",
+    url: "/",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Nathan Espejo, software engineer building applied AI tools" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nathan Espejo, Software Engineer",
+    description: "Software engineer building applied AI tools on low-cost and self-hosted models.",
+    images: ["/og.png"],
+  },
 };
 
 /**

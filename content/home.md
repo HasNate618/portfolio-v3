@@ -1,15 +1,18 @@
 ---
 title: Nathan Espejo
+type: page
 route: /
-description: Applied AI engineer building LLM tools on low-cost or self-hosted models.
+description: Nathan Espejo, 3rd-year Software Engineering at Western. I build software and applied AI tools on low-cost and self-hosted models. Looking for Summer 2027.
 priority: start-here
 onThisPage: [Experience, Projects, Awards]
+updated: 2026-10-16
 ---
+# Nathan Espejo
 
-I build LLM tools for my own work, on low-cost models or models I run myself.
+I'm a software engineer, and most of what I build lately is LLM tooling I actually use. I care about the boring parts too: tests in CI, data that syncs cleanly, changes I can roll back.
 
-In my agent projects, the model proposes a change and plain code applies it, with a log or a rollback behind it.
+I'd rather pick a cheap model that does the job well than pay for the biggest one. In my agent projects the model proposes a change and plain code applies it, with a log or a rollback behind it.
 
-The TypeScript, Python, and retrieval pieces on the resume are where I am strongest.
+Right now: using Campus across six courses while I finish its retrieval evaluation, and approving whatever the homelab agents want to change next.
 
-If you want the short version of any project before reading, the chat answers from the public notes. Trust the case studies first.
+The chat answers from my public notes. It can be wrong, so trust the pages first.

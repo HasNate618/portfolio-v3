@@ -1,14 +1,15 @@
 ---
 title: "Software Developer, WEFirst Robotics"
 type: experience
+id: wefirst
+description: Nathan's work on the swerve drive, closed-loop control and CAN bus drivetrain for Western's robotics team.
 priority: reference
 dates: "Jan 2026 to Apr 2026"
 role: "Software Developer"
 tags: [robotics, control, can-bus]
 related: [index.md, ../skills.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Software Developer, WEFirst Robotics
 
 WEFirst is Western's competitive robotics team, and Nathan worked on its swerve drive from Jan to Apr 2026. He wrote the control code and helped assemble and wire the drivetrain.

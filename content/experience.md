@@ -1,17 +1,20 @@
 ---
 title: Experience
+type: page
 route: /experience
-description: Internship, student team and part-time roles, newest first.
+description: Software engineering internship at TeraGo, VP of Data/ML at 3D Western, and student team roles.
 priority: start-here
 tags: [experience]
 related: [index.md, ../skills.md]
+updated: 2026-10-16
 ---
+# Experience
 
 Roles newest first. Dates, titles and locations come from the site data rather than from this file, so there is one place to correct them.
 
 ## TeraGo
 
-- Built a Python prototype where a local LLM on Ollama pulls details out of non-standard provider outage emails and opens Jira issues, reading mail through Microsoft Graph.
+- Automated outage ticketing in Python: a local LLM on Ollama pulls the details out of non-standard provider outage emails and opens Jira issues, reading mail through Microsoft Graph.
 - Wrote Channel Finder, a Python tool that shortlists clear RF channels from MapInfo spectrum records. Validated on {{stat:TeraGo.testCases}} test cases, shipped as a CLI and a web UI.
 - Deployed a Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
 - Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) with estimated savings over Copilot.

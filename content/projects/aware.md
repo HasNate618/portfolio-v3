@@ -1,13 +1,20 @@
 ---
 title: AWARE
+type: project
 route: /projects/aware
-projectId: aware
-description: Autonomous Witness And Response Engine. An offline device that sees, hears and reacts to a room.
+description: My first solo hack: an offline device on an $80 Arduino that sees, hears and follows plain-English rules.
 priority: start-here
 tags: [edge-ai, on-device, hackathon]
 related: [index.md, campus.md, homelab.md, ../skills.md]
 onThisPage: [tl;dr, Why I built it, What I built, How it works, Models and cost, Results, Stack]
+id: aware
+dates: "Jul 2026"
+role: solo
+status: shipped
+rank: featured
+updated: 2026-10-16
 ---
+# AWARE
 
 ## tl;dr
 
@@ -44,7 +51,7 @@ camera + mic + sensors ─► perception (always on)
 ## Models and cost
 
 ```models aware
-caption: The five models AWARE runs on the board, and what each one does.
+caption: The on-device models AWARE runs on the board, and what each one does.
 ```
 
 The LLM only runs when you add a rule, ask a question, or a digest is due. The 500 ms checks are plain code. No API costs, and nothing leaves the device.

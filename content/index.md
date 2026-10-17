@@ -1,13 +1,13 @@
 ---
 title: "Knowledge base map"
 type: index
+description: A map of Nathan Espejo's public notes about projects, experience, skills and applied AI work.
 priority: reference
 dates: "2023 to present"
 tags: [index]
 related: [about.md, projects/index.md, experience/index.md]
-updated: 2026-10-15
+updated: 2026-10-16
 ---
-
 # Knowledge base map
 
 Start with these five files; the indexes below cover the rest. The full typed map is in site.ts.
