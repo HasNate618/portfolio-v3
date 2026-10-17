@@ -18,28 +18,45 @@
  * "2026 \u2013 20" would read as a colon and only become " to " once the rest of
  * "2025" landed, showing the visitor both. Waiting for one word is cheap; the
  * alternative is text that changes under the reader.
+ *
+ * Whitespace is normalised first, and that is not cosmetic either. A live answer
+ * wrote "Aug 2024\u202f\u2013\u202fMay 2028" with narrow no-break spaces, which
+ * the first version of this file turned into "Aug 2024 :  May 2028": the date
+ * range rule never matched, so a range became a colon with the exotic spaces
+ * left around it.
  */
 
 /** Tail held while no dash is pending. A few characters of latency. */
 const HELD_CHARS = 24;
 
-/** Horizontal space only. A newline has to survive: it may be a list break. */
-const SPACE = "[ \\t]*";
+/**
+ * Spaces that break copy and search, plus the zero-width space. A tab is left
+ * alone: it can be meaningful inside a code block.
+ */
+const EXOTIC_SPACE = /[\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff]/g;
+const ZERO_WIDTH_SPACE = /\u200b/g;
+
+/** Dash-family characters that are not hyphens: em, en and the horizontal bar. */
+const DASH_RANGE = "\\u2013\\u2014\\u2015";
 
 /** A dash before a month or a four-digit year is a date range: "May 2026 to Aug 2026". */
-const DATE_RANGE =
-  /[ \t]*[\u2013\u2014][ \t]*(?=(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b|\d{4}\b)/gi;
-/** Remaining em dashes read as a comma. */
-const EM_DASH = new RegExp(`${SPACE}\\u2014${SPACE}`, "g");
+const DATE_RANGE = new RegExp(
+  ` *[${DASH_RANGE}] *(?=(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\b|\\d{4}\\b)`,
+  "gi",
+);
+/** Remaining em dashes and horizontal bars read as a comma. */
+const EM_DASH = new RegExp(` *[\\u2014\\u2015] *`, "g");
 /** Remaining en dashes read as a colon, which is how they are used mid-sentence. */
-const EN_DASH = new RegExp(`${SPACE}\\u2013${SPACE}`, "g");
+const EN_DASH = / *\u2013 */g;
+/** Hyphen look-alikes, including the non-breaking hyphen, become plain hyphens. */
+const HYPHEN_LIKE = /[\u2010\u2011\u2012]/g;
 
 /**
  * A dash opening a line is a bullet. The line break is captured rather than
  * anchored with ^, because a streamed slice can begin mid-line and match an
  * anchor it has no right to.
  */
-const LIST_DASH = /(^|\n)([ \t]*)[\u2013\u2014]([ \t]*)/g;
+const LIST_DASH = new RegExp(`(^|\\n)( *)[${DASH_RANGE}]( *)`, "g");
 
 function replaceListDashes(text: string, atLineStart: boolean): string {
   return text.replace(LIST_DASH, (match, lead: string) =>
@@ -48,19 +65,22 @@ function replaceListDashes(text: string, atLineStart: boolean): string {
 }
 
 export function sanitizeDashes(text: string, atLineStart = true): string {
-  return replaceListDashes(text, atLineStart)
+  const normalized = text.replace(EXOTIC_SPACE, " ").replace(ZERO_WIDTH_SPACE, "");
+
+  return replaceListDashes(normalized, atLineStart)
     .replace(DATE_RANGE, " to ")
     .replace(EM_DASH, ", ")
     .replace(EN_DASH, ": ")
-    .replace(/\u2011/g, "-");
+    .replace(HYPHEN_LIKE, "-");
 }
 
-const DASH_CHAR = /[\u2013\u2014]/;
+const DASH_CHAR = new RegExp(`[${DASH_RANGE}]`);
 const WORD_CHAR = /[\p{L}\p{N}]/u;
+const EXOTIC_SPACE_CHAR = /[\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff\u200b]/;
 
-/** A space or a dash cannot be the last thing sent: both need what follows. */
+/** A space, an exotic space or a dash cannot be the last thing sent. */
 function needsLookahead(char: string): boolean {
-  return char === " " || char === "\t" || DASH_CHAR.test(char);
+  return char === " " || char === "\t" || DASH_CHAR.test(char) || EXOTIC_SPACE_CHAR.test(char);
 }
 
 /** A cut moved back until nothing that needs lookahead is left dangling. */
