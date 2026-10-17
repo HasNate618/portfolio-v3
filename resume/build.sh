@@ -32,9 +32,9 @@ elif command -v nix >/dev/null 2>&1 && [ -f "$DIR/flake.nix" ]; then
   nix develop "path:$DIR" --command \
     latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir="$BUILD_DIR" "$DIR/$JOB.tex"
 else
-  echo "build:resume — need latexmk on PATH, or nix to provide it via resume/flake.nix" >&2
+  echo "build:resume: need latexmk on PATH, or nix to provide it via resume/flake.nix" >&2
   exit 1
 fi
 
 cp "$BUILD_DIR/$JOB.pdf" "$DEST"
-echo "build:resume — wrote $DEST"
+echo "build:resume: wrote $DEST"
