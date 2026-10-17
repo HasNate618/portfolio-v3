@@ -10,15 +10,22 @@
  * Practical notes:
  * - `rule`, `surface`, `bubble`, `codeBg`, `preBg` and `scrollbar` are non-text,
  *   so they are not contrast-gated.
- * - `fg`, `muted` and `accent` are text and must clear 4.5:1 against `bg`, the
- *   lightest glow composite over it, and the bubble fill. `check:contrast`
- *   tests all three, so the toggle cannot surface an unreadable scheme.
+ * - `fg`, `muted`, `accent` and `heading` are text and must clear 4.5:1 against
+ *   `bg`, the lightest glow composite over it, and the bubble fill.
+ *   `check:contrast` tests all four, so the toggle cannot surface an unreadable
+ *   scheme.
  * - `glows` are the two ambient washes, painted as radial-gradients. Kept as
  *   colour + alpha rather than a CSS string so the checker can composite them.
  */
 export type PaletteTokens = {
   bg: string;
   fg: string;
+  /**
+   * Headings only. Split from `fg` because a heading wants to be a shade of the
+   * scheme's own colour rather than plain ink: the light scheme's warm cream
+   * makes near-black headings read as harsh, so they carry a deep green there.
+   */
+  heading: string;
   muted: string;
   accent: string;
   /** Non-text: hairlines and dividers. */
@@ -58,6 +65,9 @@ export const palettes: Record<PaletteName, Palette> = {
     tokens: {
       bg: "#0a0e0c",
       fg: "#e2e8e3",
+      // The dark scheme's headings stay at body ink: at this level of contrast a
+      // green would read as decoration rather than as a title.
+      heading: "#e2e8e3",
       muted: "#9daaa1",
       accent: "#8cc7a1",
       rule: "rgba(226, 232, 227, 0.09)",
@@ -80,6 +90,7 @@ export const palettes: Record<PaletteName, Palette> = {
     tokens: {
       bg: "#f8f6f1",
       fg: "#2b2823",
+      heading: "#24503a",
       muted: "#6b6459",
       accent: "#2f6b46",
       rule: "rgba(43, 40, 35, 0.13)",
@@ -119,6 +130,7 @@ export function paletteCssVars(tokens: PaletteTokens): Record<string, string> {
   return {
     "--color-bg": tokens.bg,
     "--color-fg": tokens.fg,
+    "--color-heading": tokens.heading,
     "--color-muted": tokens.muted,
     "--color-accent": tokens.accent,
     "--color-rule": tokens.rule,

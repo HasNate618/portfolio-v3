@@ -48,6 +48,7 @@ for (const paletteName of PALETTE_NAMES) {
 
   const textTokens = [
     ["fg", tokens.fg],
+    ["heading", tokens.heading],
     ["muted", tokens.muted],
     ["accent", tokens.accent],
   ];
