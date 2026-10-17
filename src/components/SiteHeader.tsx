@@ -37,8 +37,9 @@ export function isActiveNav(href: string, current: string): boolean {
 
 /*
  * The chat is a call to action, not a nav destination, so it is deliberately
- * not in NAV_LINKS: the header renders it as a button near the identity, and
- * the mobile bar leaves it out entirely (the button is on the page anyway).
+ * not in NAV_LINKS: the header renders it as a button near the identity on the
+ * About page, and the mobile bar leaves it out entirely (four items already
+ * fill a phone width).
  */
 export const CHAT_LINK = { href: "/chat", label: "Ask about me" } as const;
 
@@ -85,20 +86,27 @@ export function SiteHeader({ current }: { current: string }) {
         </div>
 
         {/*
-         * The chat earns a button, not a link: it is the one place a visitor
-         * can do something rather than read something. It lives outside the
-         * `lg`-only nav so mobile readers get it too — in the page, since the
-         * top bar does not carry it.
+         * The chat earns a button, not a link: it is the one place a visitor can
+         * do something rather than read something. The About page only — on every
+         * other route it was a button repeated at the top of the page, pushing
+         * that route's own content down to offer a conversation the reader had
+         * not asked for. It stays outside the `lg`-only nav so a mobile reader on
+         * the About page still gets it, since the top bar does not carry it.
          */}
-        <p className="mt-8">
-          <Link
-            href={CHAT_LINK.href}
-            aria-current={current === CHAT_LINK.href ? "page" : undefined}
-            className="inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-bold text-bg transition-opacity hover:opacity-85"
-          >
-            {CHAT_LINK.label}
-          </Link>
-        </p>
+        {isHome ? (
+          <p className="mt-8">
+            {/*
+             * No aria-current: this button is rendered only on the About page,
+             * so it can never be the page the reader is already on.
+             */}
+            <Link
+              href={CHAT_LINK.href}
+              className="inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-bold text-bg transition-opacity hover:opacity-85"
+            >
+              {CHAT_LINK.label}
+            </Link>
+          </p>
+        ) : null}
 
         {/* Mobile navigates by the top bar, so this list only exists at `lg`
             and up; display:none keeps the second landmark out of the tree. */}

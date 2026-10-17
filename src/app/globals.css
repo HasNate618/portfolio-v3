@@ -14,6 +14,16 @@
  * are not contrast-gated.
  */
 @theme {
+  /*
+   * The width where the layout switches from the single column to the
+   * sidebar-and-content pair, narrowed from Tailwind's 64rem. It is a trade,
+   * not a free win: between 60rem and 64rem the desktop grid leaves the content
+   * column around 440px, tighter than a comfortable measure, in exchange for the
+   * sidebar arriving sooner. Writing it here moves every `lg:` and `max-lg:`
+   * utility at once, so the two navs and the chat geometry cannot disagree.
+   */
+  --breakpoint-lg: 60rem;
+
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   --color-bg: #0a0e0c;
@@ -231,7 +241,6 @@ li {
     display: none;
   }
 }
-
 /*
  * Typography for rendered markdown. `.rich-text` is the page-body container
  * (case studies, resume sections, now), `.markdown` the chat transcript; both
@@ -397,8 +406,11 @@ li {
 /*
  * Motion. Two families:
  *
- * 1. Page entrance. Every route eases in once on load — the header rises, then
- *    the column beside it fades. Deliberately load-triggered, not
+ * 1. Page entrance. The first page of a visit eases in — the header rises, then
+ *    the column beside it fades. Only the first page: every navigation re-mounts
+ *    the left column, and re-animating it on each one read as a loading stutter
+ *    rather than an entrance. The gate is `data-visited`, set before first paint
+ *    by the boot script in the root layout. Deliberately load-triggered, not
  *    scroll-triggered: an earlier version hid content until it scrolled into
  *    view, which made a page look empty below the fold. Nothing here waits on
  *    the viewport, so content below the fold is always present and readable.
@@ -460,11 +472,11 @@ li {
     transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease;
   }
 
-  .page-enter {
+  html:not([data-visited]) .page-enter {
     animation: page-rise 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .page-enter-delayed {
+  html:not([data-visited]) .page-enter-delayed {
     animation: page-fade 480ms cubic-bezier(0.22, 1, 0.36, 1) 110ms both;
   }
 
@@ -480,29 +492,44 @@ li {
 /*
  * Below `lg` a sticky bar carries the nav, and it would cover any heading or
  * section a link scrolls to. Leave room for it on that axis only; desktop has
- * no bar, so anchored targets keep landing flush there.
+ * no bar, so anchored targets keep landing flush there. The value has to track
+ * `--breakpoint-lg` in @theme — a media query cannot read a custom property, so
+ * this is the one place the breakpoint is written out twice.
  */
-@media (max-width: 63.99rem) {
+@media (max-width: 59.99rem) {
   [id] {
     scroll-margin-top: 5rem;
   }
 }
 
 /*
- * The chat column is a fixed height so the page does not grow as an answer
- * streams. svh rather than vh: on a phone the browser chrome coming and going
- * changes vh, which would resize the region mid-conversation, while svh is the
- * stable, smaller measure. The fallback goes through @supports rather than a
- * vh first line because the minifier collapses duplicate declarations and the
- * vh one would be silently dropped.
+ * The chat column fills the viewport rather than stopping at a fixed share of it.
+ * At a flat 62vh the composer sat two-thirds of the way down the screen and
+ * everything below it was empty page — space the transcript can use instead.
+ *
+ * The subtraction is exactly the chrome the column sits inside, and it is one
+ * number because the two axes agree: at phone widths it is the sticky bar (3rem),
+ * PageShell's wrapper padding (6rem), the main column's top padding (3rem) and
+ * the panel's own top margin (1.5rem); at desktop widths it is the main column's
+ * py-24 (12rem) plus the same 1.5rem margin. Subtracting all of it means the page
+ * ends flush with the bottom of the viewport and never scrolls, while the
+ * transcript keeps its own scroll inside. Measured, not derived: an earlier value
+ * missed the panel's margin and left the page 16px too tall to fit.
+ *
+ * svh rather than vh: on a phone the browser chrome coming and going changes vh,
+ * which would resize the region mid-conversation, while svh is the stable,
+ * smaller measure. The fallback goes through @supports rather than a vh first
+ * line because the minifier collapses duplicate declarations and the vh one would
+ * be silently dropped.
  */
 .chat-region {
+  --chat-chrome: 13.5rem;
   height: 62vh;
 }
 
 @supports (height: 1svh) {
   .chat-region {
-    height: 62svh;
+    height: calc(100svh - var(--chat-chrome));
   }
 }
 

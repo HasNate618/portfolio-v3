@@ -46,6 +46,20 @@ export const metadata: Metadata = {
  */
 const THEME_BOOT = `try{var t=localStorage.getItem("portfolio-v3:theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
 
+/**
+ * Marks every page load after the first one of a visit, again before first paint.
+ *
+ * The entrance animation is CSS, so the only way to keep it from replaying on
+ * the second page is to give the stylesheet something to test before it paints.
+ * An attribute on <html> set here does that; doing it in a component's effect
+ * would be too late, and the column would animate and then be cancelled, which
+ * looks worse than animating.
+ *
+ * sessionStorage, not localStorage: a new visit is a new arrival and earns the
+ * animation, while a navigation within the visit does not.
+ */
+const FIRST_LOAD_BOOT = `try{var k="portfolio-v3:visited";if(sessionStorage.getItem(k)){document.documentElement.dataset.visited="1"}else{sessionStorage.setItem(k,"1")}}catch(e){}`;
+
 export default function RootLayout({
   children,
 }: {
@@ -56,6 +70,9 @@ export default function RootLayout({
       <body className="font-sans text-fg antialiased">
         <Script id="theme-boot" strategy="beforeInteractive">
           {THEME_BOOT}
+        </Script>
+        <Script id="first-load-boot" strategy="beforeInteractive">
+          {FIRST_LOAD_BOOT}
         </Script>
         {/* Person + WebSite structured data. Was migrated but never rendered. */}
         <SeoJsonLd />

@@ -93,7 +93,7 @@ export function HomeView({ page }: { page: Page }) {
       </ul>
 
       {/* The newest roles only; the whole record lives on its own page. */}
-      <div className="mt-10 flex items-center gap-4">
+      <div className="mt-6 flex items-center gap-4">
         <span className="h-px flex-1 bg-rule" aria-hidden="true" />
         <Link
           href="/experience"
@@ -174,7 +174,7 @@ export function HomeView({ page }: { page: Page }) {
       </ul>
 
       {/* The way to the full index, centred between hairlines. */}
-      <div className="mt-10 flex items-center gap-4">
+      <div className="mt-6 flex items-center gap-4">
         <span className="h-px flex-1 bg-rule" aria-hidden="true" />
         <Link
           href="/projects"

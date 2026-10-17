@@ -113,3 +113,13 @@ test("the top bar does not carry the chat", () => {
   const html = renderToStaticMarkup(<MobileTopBar current="/" />);
   assert.ok(!html.includes(`href="${CHAT_LINK.href}"`), "the bar must leave the chat to the page button");
 });
+
+/*
+ * The button belongs to the About page: every other route is read for its own
+ * content, and repeating the call to action there pushed that content down to
+ * offer a conversation the reader had not asked for.
+ */
+test("the chat CTA is offered on the about page only", () => {
+  const other = renderToStaticMarkup(<SiteHeader current="/resume" />);
+  assert.ok(!other.includes(`href="${CHAT_LINK.href}"`), "the chat button is about-page only");
+});

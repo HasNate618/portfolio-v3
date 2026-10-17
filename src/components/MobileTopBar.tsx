@@ -4,8 +4,7 @@ import { NAV_LINKS, isActiveNav } from "@/components/SiteHeader";
 /**
  * Below `lg` there is no left column, so the sidebar's nav would scroll away
  * with the identity block. This bar keeps the same destinations pinned to the
- * top of the viewport instead. The chat is not one of them: it has its own
- * button in the header block, and a fifth item would not fit a phone width.
+ * top of the viewport instead.
  *
  * It is a second "Site" nav landmark next to the one in SiteHeader, but never
  * a visible second one: this bar is `lg:hidden` and the header's nav is
@@ -17,6 +16,9 @@ import { NAV_LINKS, isActiveNav } from "@/components/SiteHeader";
  * reads as controls instead of a run of words. The fill is the solid page
  * colour rather than a translucent blur: text scrolling under a translucent
  * bar shows through and competes with the links.
+ *
+ * The chat is deliberately not a fifth item: it has its own button on the About
+ * page, and five pills do not fit a phone width.
  */
 export function MobileTopBar({ current }: { current: string }) {
   return (

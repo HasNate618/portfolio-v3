@@ -3,9 +3,10 @@ import type { ProjectMedia as Media } from "@/data/site";
 import { slugify } from "@/lib/markdown";
 
 /**
- * A project's images as a row of small, uniform thumbnails. Every image renders
- * at the same size regardless of its intrinsic dimensions — the box is fixed and
- * `object-cover` crops — so a row of two and a row of four still line up.
+ * A project's images as a row of small, uniform thumbnails, at desktop widths
+ * only. Every image renders at the same size regardless of its intrinsic
+ * dimensions — the box is fixed and `object-cover` crops — so a row of two and a
+ * row of four still line up.
  *
  * Clicking one opens it expanded, in place. The mechanism is CSS `:target`
  * rather than script: the thumbnail links to the overlay's fragment, the overlay
@@ -17,8 +18,18 @@ import { slugify } from "@/lib/markdown";
 export function ProjectMedia({ media, className = "" }: { media?: Media[]; className?: string }) {
   if (!media?.length) return null;
 
+  /*
+   * Phone widths get no images. The thumbnail is a 160x96 crop, so for a tall
+   * screenshot it is a fragment of the picture rather than a preview of it, and
+   * the row pushed the text a reader came for further down a narrow page.
+   *
+   * Hidden rather than left unrendered because the markup has to be identical at
+   * every width on a site that renders without script, and because next/image
+   * marks these lazy: an image with no box is never fetched, so a phone does not
+   * download them either.
+   */
   return (
-    <ul className={`flex flex-wrap gap-2 ${className}`}>
+    <ul className={`flex flex-wrap gap-2 max-lg:hidden ${className}`}>
       {media.map((item) => {
         const id = `media-${slugify(item.src)}`;
         const thumbId = `${id}-thumb`;
