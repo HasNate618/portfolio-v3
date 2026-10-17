@@ -50,6 +50,9 @@ test("only projects with a case study are linked", () => {
   assert.match(html, /href="\/projects\/campus"/);
   // Wasteland has no content file, so it must not offer a dead case-study link.
   assert.doesNotMatch(html, /href="\/projects\/wasteland"/);
+  // Auralis has a knowledgebase file for the chat corpus but no route, so a
+  // file-backed check would still 404. The route table is the only truth.
+  assert.doesNotMatch(html, /href="\/projects\/auralis"/);
 });
 
 test("on-this-page entries resolve to real heading ids", () => {

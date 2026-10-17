@@ -129,32 +129,25 @@ export function HomeView({ page }: { page: Page }) {
               <div className="mt-3">
                 <StackList projectId={project.id} />
               </div>
+              <div className="mt-3">
+                <LinkRow projectId={project.id} />
+              </div>
             </li>
           );
         })}
       </ul>
 
-      <p className="mt-6">
+      {/* The way to the full index, centred between hairlines. */}
+      <div className="mt-10 flex items-center gap-4">
+        <span className="h-px flex-1 bg-rule" aria-hidden="true" />
         <Link
           href="/projects"
-          className="inline-block rounded-lg border border-rule px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent"
+          className="inline-block rounded-full border border-rule px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent"
         >
           All projects <span aria-hidden="true">→</span>
         </Link>
-      </p>
-
-      <h2 id="ask" className="section-label mt-16">
-        Ask
-      </h2>
-      <p className="mt-6 max-w-[68ch] leading-relaxed">
-        Questions about my projects or experience? The chat answers from my public notes. It can be
-        wrong, so trust the pages first.
-      </p>
-      <p className="mt-4">
-        <Link href="/chat" className="text-accent hover:text-fg">
-          Open chat <span aria-hidden="true">→</span>
-        </Link>
-      </p>
+        <span className="h-px flex-1 bg-rule" aria-hidden="true" />
+      </div>
 
       {/*
        * Awards close the page: the hackathon record first, then the Dean's

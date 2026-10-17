@@ -51,7 +51,7 @@ export function CaseStudy({
 
       {page.projectId ? (
         <div className="mt-4">
-          <LinkRow projectId={page.projectId} />
+          <LinkRow projectId={page.projectId} selfHref={page.route} />
         </div>
       ) : null}
 

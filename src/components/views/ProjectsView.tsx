@@ -2,7 +2,7 @@ import Link from "next/link";
 import { site, awardFor } from "@/data/site";
 import type { Project, ProjectGroup } from "@/data/site";
 import { renderMarkdown, slugify } from "@/lib/markdown";
-import type { Page } from "@/lib/content";
+import { caseStudyHref, type Page } from "@/lib/content";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
 import { StatRow } from "@/components/StatRow";
 import { StackList } from "@/components/StackList";
@@ -88,9 +88,9 @@ export function ProjectsView({ page }: { page: Page }) {
 }
 
 function ProjectCard({ project, showStats }: { project: Project; showStats?: boolean }) {
-  // TeraGo's case study is experience data and lives under /experience.
-  // The ten projects with no content file have no case study to link to.
-  const href = project.id === "terago" ? "/experience/terago" : project.file ? `/projects/${project.id}` : null;
+  // Only a handful of projects have a real case-study route; the rest render
+  // as plain text. LinkRow offers the same route as its first item.
+  const href = caseStudyHref(project);
   const award = awardFor(project.name);
 
   return (
@@ -132,14 +132,6 @@ function ProjectCard({ project, showStats }: { project: Project; showStats?: boo
       <div className="mt-4">
         <LinkRow projectId={project.id} />
       </div>
-      {/* A title alone does not say there is more to read; name the case study. */}
-      {href ? (
-        <p className="mt-4 text-sm">
-          <Link href={href} className="font-medium text-accent hover:text-fg">
-            Read the case study <span aria-hidden="true">→</span>
-          </Link>
-        </p>
-      ) : null}
     </li>
   );
 }

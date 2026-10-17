@@ -214,6 +214,18 @@ export function getPage(route: string): Page | undefined {
   return listPages().find((p) => p.route === route);
 }
 
+/**
+ * The route to a project's case study, or null when there isn't one.
+ * `project.file` is a knowledgebase path — most documented projects have one
+ * for the chat corpus, but a page only exists when a content file declares
+ * the route, so the route table is the only honest check.
+ */
+export function caseStudyHref(project: { id: string }): string | null {
+  // TeraGo's case study is experience data and lives under /experience.
+  const route = project.id === "terago" ? "/experience/terago" : `/projects/${project.id}`;
+  return getPage(route) ? route : null;
+}
+
 /** Every content/**\/*.md path relative to content/. */
 export function listCorpusFiles(): string[] {
   return listCorpusFilesFrom(CONTENT_ROOT);

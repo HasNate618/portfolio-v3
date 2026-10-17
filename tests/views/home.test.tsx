@@ -52,7 +52,17 @@ test("the awards section closes the page, table and Dean's Honour List included"
   assert.match(html, /<caption/);
   assert.match(html, /scope="col"/);
   assert.match(html, /Dean&#x27;s Honour List \(2024, 2025\)/);
-  assert.ok(html.indexOf('id="ask"') < html.indexOf('id="awards"'), "awards should be the last section");
+  assert.ok(html.indexOf('id="projects"') < html.indexOf('id="awards"'), "awards should be the last section");
+});
+
+test("the Ask section is gone; the chat lives in the header button", () => {
+  assert.doesNotMatch(html, /id="ask"/);
+});
+
+test("the featured cards offer their outward links", () => {
+  // Homelab and aware both have case-study routes and external links.
+  assert.match(html, /Case study/);
+  assert.match(html, /href="\/projects\/homelab"/);
 });
 
 test("the home page has no award-winning featured cards to frame", () => {
