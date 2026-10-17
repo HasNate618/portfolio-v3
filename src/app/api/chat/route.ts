@@ -6,7 +6,8 @@ import { generateFollowups, formatFollowupsTail } from "./lib/generate-followups
 import { buildFallbackFollowups, DEFAULT_FOLLOWUPS, isNonAnswer } from "./lib/followup-fallback";
 import { checkChatDailyCap, checkRateLimit, SITE_KEY } from "./lib/rate-limit";
 import { MAX_BODY_CHARS, isBrowserRequest, trimHistory } from "./lib/request-guards";
-import { DashFilter, sanitizeDashes } from "./lib/sanitize-dashes";
+import { sanitizeDashes } from "./lib/sanitize-dashes";
+import { streamAnswer } from "./lib/stream-answer";
 import { getCohereClient, MAX_CHAT_MESSAGE_LENGTH, CHAT_MODEL, CHAT_MAX_TOKENS, CHAT_THINKING_ENABLED } from "./lib/cohere";
 import { FOLLOWUP_DELIMITER, stripBodyPrefix } from "@/lib/tts/stream-delimiters";
 
@@ -126,20 +127,23 @@ export async function POST(req: Request) {
 
     const cohere = getCohereClient();
 
-    const stream = await cohere.v2.chatStream({
-      model: CHAT_MODEL,
-      messages: [
-        { role: "system", content: systemPrompt },
-        ...safeHistory.map((m) => ({
-          role: (m.role === "user" ? "user" : "assistant") as "user" | "assistant",
-          content: m.content,
-        })),
-        { role: "user", content: trimmedMessage },
-      ],
-      temperature: 0.2,
-      maxTokens: CHAT_MAX_TOKENS,
-      thinking: CHAT_THINKING_ENABLED,
-    });
+    const startChatStream = () =>
+      cohere.v2.chatStream({
+        model: CHAT_MODEL,
+        messages: [
+          { role: "system", content: systemPrompt },
+          ...safeHistory.map((m) => ({
+            role: (m.role === "user" ? "user" : "assistant") as "user" | "assistant",
+            content: m.content,
+          })),
+          { role: "user", content: trimmedMessage },
+        ],
+        temperature: 0.2,
+        maxTokens: CHAT_MAX_TOKENS,
+        thinking: CHAT_THINKING_ENABLED,
+      });
+
+    const stream = await startChatStream();
 
     return new Response(
       new ReadableStream({
@@ -168,14 +172,9 @@ export async function POST(req: Request) {
 
           req.signal.addEventListener("abort", closeStream, { once: true });
 
-          let totalChars = 0;
-          const MAX_CHARS = 32000;
-          let accumulated = "";
-          const dashes = new DashFilter();
-
-          const followupInput = () => ({
+          const followupInput = (visible: string) => ({
             userMessage: trimmedMessage,
-            aiResponse: stripBodyPrefix(accumulated),
+            aiResponse: stripBodyPrefix(visible),
             chunkSources: context.map((c) => c.source),
             history: safeHistory,
           });
@@ -188,32 +187,28 @@ export async function POST(req: Request) {
            */
           let followupsPending: Promise<string[]> | null = null;
 
-          try {
-            for await (const chunk of stream) {
-              if (closed || req.signal.aborted) break;
-              if (chunk.type === "content-delta") {
-                const content = chunk.delta?.message?.content;
-                if (content?.thinking) continue;
-                const text = content?.text ?? "";
-                totalChars += text.length;
-                if (totalChars > MAX_CHARS) break;
-                const safe = dashes.push(text);
-                accumulated += safe;
-                enqueueText(safe);
-                if (!followupsPending && accumulated.length >= FOLLOWUP_START_CHARS) {
-                  followupsPending = generateFollowups(followupInput());
-                }
-              }
-            }
+          // The first attempt is the stream already opened above; a retry opens a
+          // new one, which is the only way an empty answer can be replaced without
+          // the visitor seeing it replaced.
+          let started = 0;
+          const nextStream = async () => {
+            started += 1;
+            return started === 1 ? stream : startChatStream();
+          };
 
-            // The filter holds a short tail back, so the answer is not finished
-            // until that is released. It goes out before the delimiter that says
-            // the answer is done.
-            const tail = dashes.flush();
-            if (tail) {
-              accumulated += tail;
-              enqueueText(tail);
-            }
+          try {
+            const result = await streamAnswer({
+              start: nextStream,
+              emit: enqueueText,
+              onProgress: (visible) => {
+                if (!followupsPending && visible.length >= FOLLOWUP_START_CHARS) {
+                  followupsPending = generateFollowups(followupInput(visible));
+                }
+              },
+              stopped: () => closed || req.signal.aborted,
+            });
+
+            const accumulated = result.text;
 
             if (!closed && !req.signal.aborted && !accumulated.includes(FOLLOWUP_DELIMITER)) {
               // The delimiter goes out first: it is what tells the client the
@@ -227,7 +222,7 @@ export async function POST(req: Request) {
               const followups = isNonAnswer(body)
                 ? DEFAULT_FOLLOWUPS
                 : await withinFollowupBudget(
-                    followupsPending ?? generateFollowups(followupInput()),
+                    followupsPending ?? generateFollowups(followupInput(accumulated)),
                     () => buildFallbackFollowups(trimmedMessage, body)
                   );
               enqueueText(sanitizeDashes(formatFollowupsTail(followups)));

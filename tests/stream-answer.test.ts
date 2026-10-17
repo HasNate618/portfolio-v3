@@ -1,0 +1,103 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { streamAnswer, type AnswerDelta, type StreamAnswerOptions } from "../src/app/api/chat/lib/stream-answer";
+
+/** Deltas as the Cohere stream delivers them: content, sometimes thinking. */
+function attempt(...deltas: Array<{ text?: string; thinking?: boolean }>): AsyncIterable<AnswerDelta> {
+  return (async function* () {
+    for (const delta of deltas) {
+      yield { type: "content-delta", delta: { message: { content: delta } } };
+    }
+  })();
+}
+
+/** Hands out one iterable per attempt, repeating the last one if called again. */
+function sources(...streams: AsyncIterable<AnswerDelta>[]): () => Promise<AsyncIterable<AnswerDelta>> {
+  let index = 0;
+  return () => Promise.resolve(streams[Math.min(index++, streams.length - 1)]);
+}
+
+async function collect(options: Omit<StreamAnswerOptions, "emit">) {
+  const emitted: string[] = [];
+  const result = await streamAnswer({ ...options, emit: (text) => emitted.push(text) });
+  return { ...result, emitted: emitted.join("") };
+}
+
+test("an answer with visible text is used as it is", async () => {
+  const result = await collect({ start: sources(attempt({ text: "Campus runs 308 tests." })) });
+  assert.equal(result.text, "Campus runs 308 tests.");
+  assert.equal(result.attempts, 1);
+  assert.equal(result.emitted, "Campus runs 308 tests.");
+  assert.equal(result.retried, false);
+});
+
+test("a stream that returns only thinking is retried once", async () => {
+  const result = await collect({
+    start: sources(
+      attempt({ text: "reasoning about the question", thinking: true }),
+      attempt({ text: "He runs 308 tests in CI." }),
+    ),
+  });
+
+  assert.equal(result.text, "He runs 308 tests in CI.");
+  assert.equal(result.attempts, 2);
+  assert.equal(result.retried, true);
+  assert.equal(result.emitted, "He runs 308 tests in CI.", "the empty first attempt emitted nothing");
+  assert.ok(!result.emitted.includes("reasoning"), "thinking must never be emitted");
+});
+
+test("a whitespace-only answer counts as empty", async () => {
+  const result = await collect({
+    start: sources(attempt({ text: "\n\n  " }), attempt({ text: "760 test cases at TeraGo." })),
+  });
+  assert.equal(result.text, "760 test cases at TeraGo.");
+  assert.equal(result.attempts, 2);
+  assert.equal(result.retried, true);
+});
+
+test("two empty answers are not retried again", async () => {
+  const result = await collect({ start: sources(attempt({ thinking: true }), attempt({ thinking: true })) });
+  assert.equal(result.text, "");
+  assert.equal(result.attempts, 2);
+  assert.equal(result.retried, true, "it tried again, and stopped");
+});
+
+test("dashes are converted as the text streams", async () => {
+  const result = await collect({
+    start: sources(attempt({ text: "He was VP of Data/ML " }, { text: "\u2013 he co-led two developers." })),
+  });
+  assert.equal(result.text, "He was VP of Data/ML: he co-led two developers.");
+});
+
+test("the character cap stops a runaway answer", async () => {
+  const result = await collect({
+    start: sources(attempt({ text: "x".repeat(500) }, { text: "y".repeat(500) })),
+    maxChars: 300,
+  });
+  assert.equal(result.truncated, true);
+  assert.ok(result.text.length <= 300 + 24, `emitted ${result.text.length}`);
+});
+
+test("an aborted request consumes nothing and does not retry", async () => {
+  const result = await collect({
+    start: sources(attempt({ text: "never sent" }), attempt({ text: "also never sent" })),
+    stopped: () => true,
+  });
+  assert.equal(result.text, "");
+  assert.equal(result.attempts, 1);
+  assert.equal(result.emitted, "");
+});
+
+test("an abort mid-answer keeps the text already sent and does not retry", async () => {
+  let checks = 0;
+  const result = await collect({
+    start: sources(attempt({ text: "He built " }, { text: "and more" }), attempt({ text: "never sent" })),
+    stopped: () => {
+      checks += 1;
+      return checks > 1;
+    },
+  });
+  assert.equal(result.text, "He built ");
+  assert.equal(result.attempts, 1, "a partial answer must not be retried");
+  assert.equal(result.emitted, "He built ");
+});
