@@ -16,8 +16,16 @@ test("chat renders starters and the JS-off notice in the HTML", () => {
   assert.match(html, /\/llms\.txt/);
 });
 
-test("chat states its limits and carries no phone number", () => {
-  assert.match(html, /can be wrong/i);
+/*
+ * The page is the chat and nothing else: no title to read before it, no footnote
+ * after it, no keyboard legend under it. The h1 stays for structure, which is
+ * also what keeps this from being a headingless document.
+ */
+test("the chat page is chat only: no visible title, disclaimer or key hints", () => {
+  assert.equal((html.match(/<h1/g) ?? []).length, 1, "exactly one h1");
+  assert.match(html, /<h1 class="sr-only">/, "the h1 must stay for structure, unseen");
+  assert.doesNotMatch(text, /can be wrong/i);
+  assert.doesNotMatch(text, /Enter to send/);
   assert.doesNotMatch(html, /\b\d{3}-\d{3}-\d{4}\b/);
 });
 
@@ -49,8 +57,14 @@ test("every starter is addressed to the assistant, not to Nathan", () => {
   }
 });
 
-test("the disclaimer links to the public text surface", () => {
-  assert.match(html, /mailto:/);
+/*
+ * The intro is server-rendered into the panel, so a reader without script still
+ * lands on something that says what the page is even though the composer cannot
+ * work for them.
+ */
+test("the assistant's opening message is in the server-rendered HTML", () => {
+  assert.match(html, /bubble-assistant/);
+  assert.match(html, /class="markdown /, "the intro must render as markdown, not raw");
 });
 
 test("the idle state shows the input and none of the failure copy", () => {

@@ -315,7 +315,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
         }}
       >
         <label htmlFor="chat-input" className="sr-only">
-          Ask the assistant about Campus, TeraGo, or anything else
+          Ask about Nathan&rsquo;s work
         </label>
         <div
           className={`flex items-center gap-2 rounded-3xl border border-rule bg-surface p-2 ${
@@ -334,7 +334,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
                 void send(input);
               }
             }}
-            placeholder="Ask the assistant about Campus, TeraGo, or anything else"
+            placeholder="Ask about Nathan's work"
             className="composer-field max-h-40 w-full resize-none bg-transparent px-2 py-2 leading-relaxed text-fg placeholder:text-muted"
           />
           <button
@@ -355,9 +355,6 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
             </svg>
           </button>
         </div>
-        <p className="kbd-hint px-2 pt-1 text-xs text-muted">
-          Enter to send, Shift+Enter for a new line.
-        </p>
       </form>
     </div>
   );
