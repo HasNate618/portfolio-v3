@@ -11,6 +11,7 @@
     "build": "next build",
     "start": "next start -p 3100",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "test": "TSX_TSCONFIG_PATH=tsconfig.test.json node --import tsx --test \"tests/**/*.test.ts\" \"tests/**/*.test.tsx\"",
     "build-embeddings": "tsx scripts/build-embeddings.mjs",
     "check:content": "tsx scripts/check-content.mjs",

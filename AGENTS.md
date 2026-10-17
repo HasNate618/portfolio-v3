@@ -18,6 +18,7 @@ npm install
 npm run dev          # port 3100
 npm run build
 npm run lint
+npm run typecheck   # tsc over src/ and tests/
 npm run test
 npm run check:content     # content/index/SEO consistency
 npm run check:contrast    # 4.5:1 text contrast

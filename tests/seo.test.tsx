@@ -48,7 +48,9 @@ test("route metadata comes from frontmatter and marks case studies as articles",
   const metadata = pageMetadata(campus, { article: true });
   assert.equal(metadata.title, campus.title);
   assert.equal(metadata.description, campus.description);
-  assert.equal(metadata.openGraph?.type, "article");
+  // Next types `openGraph` as a union whose base member has no `type`, so read it structurally.
+  const openGraph: { type?: string } = metadata.openGraph as { type?: string };
+  assert.equal(openGraph.type, "article");
   assert.equal(metadata.alternates?.canonical, "/projects/campus");
 });
 
