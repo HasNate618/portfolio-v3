@@ -11,8 +11,14 @@ export interface GenerateFollowupsInput {
   history?: Array<{ role: string; content: string }>;
 }
 
-export function formatFollowupsBlock(followups: string[]): string {
-  return `<<FOLLOWUPS>>${followups.join("|||")}|||`;
+/**
+ * The questions as the client parses them: `|||`-separated, trailing separator
+ * included. Sent separately from the delimiter that precedes them, because the
+ * delimiter goes out as soon as the answer is written while the questions may
+ * still be a second away.
+ */
+export function formatFollowupsTail(followups: string[]): string {
+  return `${followups.join("|||")}|||`;
 }
 
 function parseFollowupLines(raw: string): string[] {

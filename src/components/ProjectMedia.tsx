@@ -25,12 +25,11 @@ export function ProjectMedia({ media, className = "" }: { media?: Media[]; class
 
         return (
           <li key={item.src}>
-            <a
-              id={thumbId}
-              href={`#${id}`}
-              aria-label={`Expand: ${item.alt}`}
-              className="block cursor-zoom-in"
-            >
+            {/*
+             * The image's own alt is the link's name: an aria-label saying
+             * "Expand:" would replace the description with an instruction.
+             */}
+            <a id={thumbId} href={`#${id}`} className="block cursor-zoom-in">
               <Image
                 src={item.src}
                 alt={item.alt}
@@ -48,7 +47,7 @@ export function ProjectMedia({ media, className = "" }: { media?: Media[]; class
              * backdrop is one full-bleed close link, so a click anywhere outside
              * the image dismisses it.
              */}
-            <div id={id} className="lightbox">
+            <div id={id} className="lightbox" tabIndex={-1}>
               <a
                 href={`#${thumbId}`}
                 className="lightbox-backdrop"
@@ -75,7 +74,6 @@ export function ProjectMedia({ media, className = "" }: { media?: Media[]; class
                   >
                     Open the full-size file
                   </a>
-                  , or press the close link above.
                 </figcaption>
               </figure>
             </div>

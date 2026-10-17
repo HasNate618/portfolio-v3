@@ -573,6 +573,17 @@ li {
   background-color: rgb(0 0 0 / 0.85);
 }
 
+/*
+ * Escape closes through this flag. `:target` alone cannot do it: clearing the
+ * fragment with history.replaceState leaves `:target` matching in Chromium, so
+ * the URL read as closed while the overlay stayed on screen. Opening is still
+ * pure `:target`, so this changes nothing for a reader without JavaScript — they
+ * close with the close or backdrop link, both of which are real navigations.
+ */
+.lightbox[data-closed] {
+  display: none;
+}
+
 .lightbox-frame {
   position: relative;
   display: flex;

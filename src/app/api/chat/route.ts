@@ -1,7 +1,8 @@
 import { retrieveRelevantChunks, rerankChunks } from "./lib/rag";
 import { buildRetrievalQuery } from "./lib/retrieval-query";
 import { buildSystemPrompt } from "./lib/system-prompt";
-import { generateFollowups, formatFollowupsBlock } from "./lib/generate-followups";
+import { generateFollowups, formatFollowupsTail } from "./lib/generate-followups";
+import { buildFallbackFollowups } from "./lib/followup-fallback";
 import { checkRateLimit } from "./lib/rate-limit";
 import { getCohereClient, MAX_CHAT_MESSAGE_LENGTH, CHAT_MODEL, CHAT_MAX_TOKENS, CHAT_THINKING_ENABLED } from "./lib/cohere";
 import { FOLLOWUP_DELIMITER, stripBodyPrefix } from "@/lib/tts/stream-delimiters";
@@ -9,6 +10,33 @@ import { FOLLOWUP_DELIMITER, stripBodyPrefix } from "@/lib/tts/stream-delimiters
 interface ChatHistoryMessage {
   role: string;
   content: string;
+}
+
+/**
+ * The follow-up prompt only reads the first 600 characters of the answer, so the
+ * call can start as soon as there is a few hundred and run alongside the rest of
+ * the answer instead of after it.
+ */
+const FOLLOWUP_START_CHARS = 400;
+
+/**
+ * The questions are a nicety; the answer is the product. Cap the wait and fall
+ * back to the local questions rather than holding the stream open — an unusually
+ * slow follow-up call used to prolong every answer by however long it took.
+ */
+const FOLLOWUP_TIMEOUT_MS = 6000;
+
+function withinFollowupBudget(
+  pending: Promise<string[]>,
+  fallback: () => string[]
+): Promise<string[]> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<string[]>((resolve) => {
+    timer = setTimeout(() => resolve(fallback()), FOLLOWUP_TIMEOUT_MS);
+  });
+  return Promise.race([pending.catch(fallback), timeout]).finally(() => {
+    if (timer) clearTimeout(timer);
+  });
 }
 
 export async function POST(req: Request) {
@@ -111,6 +139,22 @@ export async function POST(req: Request) {
           let totalChars = 0;
           const MAX_CHARS = 32000;
           let accumulated = "";
+
+          const followupInput = () => ({
+            userMessage: trimmedMessage,
+            aiResponse: stripBodyPrefix(accumulated),
+            chunkSources: reranked.map((c) => c.source),
+            history: safeHistory,
+          });
+
+          /*
+           * Started mid-answer, not after it. This is a second, unstreamed model
+           * call, and waiting for the answer to finish before starting it is what
+           * made the questions feel slow: the visitor paid for the whole answer,
+           * then paid again for the questions.
+           */
+          let followupsPending: Promise<string[]> | null = null;
+
           try {
             for await (const chunk of stream) {
               if (closed || req.signal.aborted) break;
@@ -122,17 +166,22 @@ export async function POST(req: Request) {
                 if (totalChars > MAX_CHARS) break;
                 accumulated += text;
                 enqueueText(text);
+                if (!followupsPending && accumulated.length >= FOLLOWUP_START_CHARS) {
+                  followupsPending = generateFollowups(followupInput());
+                }
               }
             }
 
             if (!closed && !req.signal.aborted && !accumulated.includes(FOLLOWUP_DELIMITER)) {
-              const followups = await generateFollowups({
-                userMessage: trimmedMessage,
-                aiResponse: stripBodyPrefix(accumulated),
-                chunkSources: reranked.map((c) => c.source),
-                history: safeHistory,
-              });
-              enqueueText(formatFollowupsBlock(followups));
+              // The delimiter goes out first: it is what tells the client the
+              // answer is finished, so the answer stops reading as in flight
+              // while the questions are still being written.
+              enqueueText(FOLLOWUP_DELIMITER);
+              const followups = await withinFollowupBudget(
+                followupsPending ?? generateFollowups(followupInput()),
+                () => buildFallbackFollowups(trimmedMessage, stripBodyPrefix(accumulated))
+              );
+              enqueueText(formatFollowupsTail(followups));
             }
 
             closeStream();

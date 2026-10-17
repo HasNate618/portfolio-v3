@@ -36,6 +36,17 @@ test("the JS-off path lists the starters as text, not buttons", () => {
   assert.ok(!noscript.includes("<button"), "a no-JS reader cannot press a button");
 });
 
+/*
+ * A starter is a question the visitor asks the assistant, so it has to refer to
+ * Nathan in the third person. "How do you keep model costs low?" reads as if the
+ * visitor is asking Nathan himself, which is the one thing the chat is not.
+ */
+test("every starter is addressed to the assistant, not to Nathan", () => {
+  for (const starter of page.starters ?? []) {
+    assert.doesNotMatch(starter, /\byou\b|\byour\b/i, `starter speaks to Nathan: ${starter}`);
+  }
+});
+
 test("the disclaimer links to the public text surface", () => {
   assert.match(html, /mailto:/);
 });

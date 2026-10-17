@@ -22,6 +22,15 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [followups, setFollowups] = useState<string[]>([]);
+  /*
+   * The stream carries the answer and then the follow-up questions behind a
+   * delimiter. The server now sends that delimiter the moment the answer is
+   * written, before it waits on the questions, so this is what lets the answer
+   * stop looking like it is still arriving while the questions are still being
+   * written. Without it the fade stayed on the finished answer for as long as
+   * the second model call took.
+   */
+  const [answerDone, setAnswerDone] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
   const busy = status === "loading";
@@ -78,6 +87,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
 
     setInput("");
     setFollowups([]);
+    setAnswerDone(false);
     setMessages((prev) => [
       ...prev,
       { role: "user", content: text },
@@ -125,7 +135,12 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
         raw += decoder.decode(value, { stream: true });
         // The followups block arrives behind a delimiter inside the same stream,
         // so the body is re-derived on every tick rather than shown then removed.
-        replaceLast(splitStreamBuffer(raw).body);
+        // The delimiter alone is enough to call the answer finished.
+        const segments = splitStreamBuffer(raw);
+        replaceLast(segments.body);
+        // Set once, not on every tick: this only ever flips one way, and a state
+        // call per chunk would re-render the transcript for nothing.
+        if (segments.followupsRaw !== null) setAnswerDone(true);
       }
 
       const { body, followupsRaw } = splitStreamBuffer(raw);
@@ -166,20 +181,22 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
               <p className="text-xs font-bold uppercase tracking-widest text-muted">Assistant</p>
               <div
                 className="markdown mt-1.5 max-w-[68ch] leading-relaxed text-fg"
+                // pi-lens-ignore: dangerously-set-inner-html
                 dangerouslySetInnerHTML={{ __html: introHtml }}
               />
             </div>
           </li>
 
           {messages.map((message, index) => {
-            const thinking = busy && index === messages.length - 1 && message.role === "assistant";
+            const streaming =
+              busy && !answerDone && index === messages.length - 1 && message.role === "assistant";
 
             /*
              * An answer with no text yet renders nothing: an empty bubble was
              * just a pill with a label in it. The status line below carries the
              * "working" signal until the first chunk lands.
              */
-            if (thinking && message.content.length === 0) return null;
+            if (streaming && message.content.length === 0) return null;
 
             return (
               <li key={index} className="chat-message">
@@ -202,7 +219,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
                      */}
                     <div
                       className={`markdown mt-1.5 max-w-[68ch] leading-relaxed text-fg ${
-                        thinking ? "streaming-text" : ""
+                        streaming ? "streaming-text" : ""
                       }`}
                       dangerouslySetInnerHTML={{
                         __html: message.content ? md.render(message.content) : "",
@@ -237,7 +254,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
           </ul>
         ) : null}
 
-        {busy ? (
+        {busy && !answerDone ? (
           <p className="mt-5 flex items-center gap-2 text-sm text-muted" role="status">
             <span className="chat-spinner" aria-hidden="true" />
             Searching Nathan&rsquo;s notes&hellip;
