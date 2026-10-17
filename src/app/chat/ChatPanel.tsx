@@ -161,8 +161,12 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
      * A fixed-height column: the transcript fills what the composer does not
      * use. Without a fixed height the block grew with every message, so the
      * page itself kept getting longer as an answer streamed in.
+     *
+     * No top margin: the transcript's own padding is the space above the first
+     * message, and on a page with no visible title the margin was a second gap
+     * stacked on the page's own, which read as the chat starting halfway down.
      */
-    <div className="chat-region mt-6 flex min-h-[20rem] flex-col">
+    <div className="chat-region flex min-h-[20rem] flex-col">
       {/*
        * The transcript scrolls on its own but carries no chrome: no card, no
        * border, no fill. The conversation reads as part of the page rather than

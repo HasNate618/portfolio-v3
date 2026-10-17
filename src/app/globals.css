@@ -507,14 +507,17 @@ li {
  * At a flat 62vh the composer sat two-thirds of the way down the screen and
  * everything below it was empty page — space the transcript can use instead.
  *
- * The subtraction is exactly the chrome the column sits inside, and it is one
- * number because the two axes agree: at phone widths it is the sticky bar (3rem),
- * PageShell's wrapper padding (6rem), the main column's top padding (3rem) and
- * the panel's own top margin (1.5rem); at desktop widths it is the main column's
- * py-24 (12rem) plus the same 1.5rem margin. Subtracting all of it means the page
- * ends flush with the bottom of the viewport and never scrolls, while the
- * transcript keeps its own scroll inside. Measured, not derived: an earlier value
- * missed the panel's margin and left the page 16px too tall to fit.
+ * The subtraction is exactly the chrome the column sits inside, and it differs by
+ * axis: at phone widths the sticky bar's flow box (3rem), the main column's top
+ * padding (3rem) and the wrapper's bottom padding (1.5rem); at desktop widths the
+ * main column's py-24 (12rem), with no bar above it. Subtracting all of it means
+ * the page ends flush with the bottom of the viewport and never scrolls, while
+ * the transcript keeps its own scroll inside.
+ *
+ * Both numbers have to track the spacing in PageShell — that is the price of a
+ * region that fills the screen exactly. They are measured rather than derived:
+ * the bar renders 12px lower than its flow box, so the flow height is the term
+ * that belongs here, not the pill's visual bottom.
  *
  * svh rather than vh: on a phone the browser chrome coming and going changes vh,
  * which would resize the region mid-conversation, while svh is the stable,
@@ -523,13 +526,20 @@ li {
  * be silently dropped.
  */
 .chat-region {
-  --chat-chrome: 13.5rem;
+  --chat-chrome: 7.5rem;
   height: 62vh;
 }
 
 @supports (height: 1svh) {
   .chat-region {
     height: calc(100svh - var(--chat-chrome));
+  }
+}
+
+/* No bar up top at desktop widths, and the column is padded by py-24 instead. */
+@media (min-width: 60rem) {
+  .chat-region {
+    --chat-chrome: 12rem;
   }
 }
 

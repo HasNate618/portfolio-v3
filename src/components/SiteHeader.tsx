@@ -73,7 +73,14 @@ export function SiteHeader({ current }: { current: string }) {
           Skip to content
         </a>
 
-        <div className={firstPageOnly}>
+        {/*
+         * Below `lg` the identity block sits above the content rather than beside
+         * it, and the content column clears the floating bar with pt-12 — so the
+         * block needs the same clearance of its own. Without it the name started
+         * at the bar's flow edge and read as tucked behind the pill, which hangs
+         * 12px below that edge.
+         */}
+        <div className={firstPageOnly ?? "max-lg:mt-12"}>
           <p className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">
             <Link href="/" className="hover:text-accent">
               {site.identity.name}
