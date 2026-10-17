@@ -11,7 +11,7 @@ export type ProjectGroup = "featured" | "ai" | "hardware" | "xr" | "tools" | "ar
 /**
  * Home-page prominence. Distinct from `group`, which is how /projects files them.
  * This was previously implicit as `p.id !== "campus"` in HomeView, which meant the
- * corpus projection had no way to say that Campus is the flagship — and so the
+ * corpus projection had no way to say that Campus is the flagship, and so the
  * chat could not retrieve Campus for "what is his flagship project?".
  */
 export type ProjectRank = "flagship" | "featured";
@@ -101,17 +101,17 @@ export const site: SiteContent = {
   },
   experience: [
     { id: "terago", org: "TeraGo", role: "Software Engineering Intern", location: "Markham, ON", terms: [{ start: "2026-05", end: "2026-08" }], dates: "May 2026 to Aug 2026", onResume: true, file: "/knowledgebase/experience/terago.md",
-      summary: "Automated outage ticketing: a local LLM on Ollama reads non-standard provider outage emails and opens Jira issues. Also built Channel Finder, a Python RF tool with a 760-case validation harness that shortlists clear channels from MapInfo spectrum records, plus a Copilot Studio agent and a self-hosted LLM proposal to cut Copilot licensing costs.",
+      summary: "Built a working outage-email parser: a local LLM on Ollama reads providers' non-standard outage emails and opens Jira issues. It works end to end, but TeraGo hasn't deployed it yet; they've started revisiting it. Also wrote Channel Finder, a Python tool that shortlists clear RF channels from MapInfo spectrum records, validated on 760 test cases, and deployed a Copilot Studio agent that answers engineers' RF questions.",
       stats: [{ key: "testCases", label: "test cases", value: "760" }],
       stack: ["Python", "Ollama", "Microsoft Graph", "Jira", "Copilot Studio", "SharePoint", "MapInfo data"] },
     { id: "3d-western", org: "3D Western", role: "VP of Data/ML (promoted from Software Developer)", location: "London, ON", terms: [{ start: "2025-09", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
-      summary: "Started on the Dockerized print pipeline, then was promoted to VP and led two developers building the print-approval dataset: 4,127 scraped 3D models, rendered in Blender and labelled by a VLM. We used it to benchmark base vision models, and the best one was right on 84.2% of 2,559 clean renders. Ran alongside my TeraGo internship.",
+      summary: "Started on the Dockerized print pipeline, then was promoted to VP and led two developers building the print-approval dataset: 4,127 scraped 3D models, rendered in Blender and labelled by a VLM. We used it to benchmark base vision models, and the best one agreed with those labels on 84.2% of 2,559 clean renders. Ran alongside my TeraGo internship.",
       stats: [{ key: "dataset", label: "scraped 3D models", value: "4,127" }] },
     { id: "wemars", org: "WEMars", role: "Software team member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2024 to Apr 2025, rejoined Sep 2026", onResume: false, file: "/knowledgebase/experience/wemars.md",
       summary: "Western's Mars rover team. I rejoined in Sep 2026 to work on AI and autonomy. In 2024-25 I built wireless ESP32-CAM streaming." },
     { id: "wefirst", org: "WEFirst Robotics", role: "Software Developer", location: "London, ON", terms: [{ start: "2026-01", end: "2026-04" }], dates: "Jan 2026 to Apr 2026", onResume: false, file: "/knowledgebase/experience/wefirst.md",
       summary: "Programmed the swerve drive to turn Xbox controller input into omnidirectional motion, tuned closed-loop control, and assembled the CAN bus drivetrain." },
-    { id: "mcc", org: "Microcomputer Consulting Inc.", role: "IT Intern (part-time)", location: "Mississauga, ON", terms: [{ start: "2024-05", end: "2024-08" }], dates: "May 2024 to Aug 2024", onResume: false, file: "/knowledgebase/experience/mcc.md",
+    { id: "mcc", org: "Microcomputer Consulting Inc.", role: "IT Intern (part-time)", location: "Mississauga, ON", terms: [{ start: "2025-05", end: "2025-08" }], dates: "May 2025 to Aug 2025", onResume: false, file: "/knowledgebase/experience/mcc.md",
       summary: "Set up and deployed Windows workstations for client organizations." },
   ],
   projects: [
@@ -155,7 +155,7 @@ export const site: SiteContent = {
       stats: [
         { key: "machines", label: "machines, one NixOS flake", value: "2" },
         { key: "containers", label: "hardened containers", value: "27" },
-        { key: "sessions", label: "agent sessions since June 2026", value: "472" },
+        { key: "sessions", label: "agent sessions since June 2026", value: "472", home: false },
         { key: "skills", label: "agent skills in git", value: "191", home: false },
         { key: "toolCalls", label: "tool calls", value: "58,000", home: false },
       ],
@@ -164,7 +164,7 @@ export const site: SiteContent = {
     {
       id: "aware", name: "AWARE", group: "featured", order: 3,
       dates: "Jul 2026", displayRole: "solo", event: "Hack the 6ix 2026",
-      covers: "My first solo hack, at Hack the 6ix 2026. I pitched it to three teams, but it wasn't a fit for any of them, so I built it alone. It watches a camera, listens for sounds and reads sensors, and you set automations in plain English, like \"when glass breaks after 10pm, alert me.\" A 1B model turns that into a rule, and vision, audio and the LLM all run offline on one $80 board.",
+      covers: "Built solo at Hack the 6ix 2026. It watches a camera, listens for sounds and reads sensors, and you set automations in plain English, like \"when glass breaks after 10pm, alert me.\" A 1B model turns that into a rule, plain code checks every rule each 500 ms, and vision, audio and the LLM all run on one $80 board with no cloud inference.",
       media: [
         { src: "/projects/aware-0.webp", alt: "AWARE device on an Arduino UNO Q", width: 1200, height: 676 },
         { src: "/projects/aware-1.webp", alt: "AWARE web dashboard", width: 1200, height: 1122 },
@@ -191,11 +191,10 @@ export const site: SiteContent = {
 
     // ── also building ─────────────────────────────────────────────────────
     {
-      id: "agntos", name: "AgntOS", group: "ai", order: 5,
-      dates: "2026", displayRole: "solo", displayStatus: "concept",
-      covers: "A concept for a NixOS system run by an LLM agent. Every change is proposed, approved, applied with nixos-rebuild, logged, and reversible. Mostly Rust.",
+      id: "agntos", name: "AgntOS", group: "archive", order: 12,
+      dates: "2026", displayRole: "solo", displayStatus: "abandoned",
+      covers: "An AI system just for configuring NixOS, with its own memory, inspired by running Hermes Agent on NixOS. I started it in Rust, then got impatient because I wanted to be on NixOS already. So I switched, ran Hermes on it, and it worked really well. That became my homelab.",
       media: [
-        { src: "/projects/agntos-0.webp", alt: "AgntOS Dev VM Running KDE Plasma", width: 1200, height: 750 },
         { src: "/projects/agntos-1.webp", alt: "AgntOS Banner", width: 1200, height: 355 },
       ],
       file: "/knowledgebase/projects/agntos.md",
@@ -220,7 +219,7 @@ export const site: SiteContent = {
     },
     {
       id: "agenticarmy", name: "AgenticArmy", group: "ai", order: 7,
-      dates: "Mar 2026", displayRole: "repo on my GitHub", event: "GenAI Genesis 2026",
+      dates: "Mar 2026", displayRole: "team project", event: "GenAI Genesis 2026",
       covers: "VS Code extension and FastAPI backend for running several coding agents in parallel, with a human approving the plan.",
       media: [
         { src: "/projects/agenticarmy-0.webp", alt: "AgenticArmy Title Card", width: 1055, height: 1024 },
@@ -236,7 +235,7 @@ export const site: SiteContent = {
     // ── ai and ml ─────────────────────────────────────────────────────────
     {
       id: "gaming-mental-health-analyzer", name: "Gaming and Mental Health Analyzer", group: "ai", order: 8,
-      dates: "Mar 2026 (approx.)", displayRole: "solo", event: "Dataquest",
+      dates: "Mar 2026 (approx.)", displayRole: "team project", event: "Dataquest",
       covers: "scikit-learn models that predict five wellbeing risks from gaming habits, trained on a 1,000-row Kaggle dataset.",
       media: [
         { src: "/projects/gaming-mental-health-analyzer-0.webp", alt: "Gaming & Mental Health Results Dashboard", width: 1200, height: 1354 },
@@ -263,7 +262,7 @@ export const site: SiteContent = {
     {
       id: "animarker", name: "Animarker", group: "tools", order: 10,
       dates: "May 2023", displayRole: "solo", event: "Washington Justice Encode",
-      covers: "Android wildlife tracker. A TensorFlow CNN identifies the species and the sighting goes on a map.",
+      covers: "My first hackathon, done solo. An Android wildlife tracker: a TensorFlow CNN identifies the species and the sighting goes on a map.",
       media: [
         { src: "/projects/animarker-0.webp", alt: "Animarker Overview", width: 1024, height: 500 },
         { src: "/projects/animarker-1.webp", alt: "Animarker Map View", width: 271, height: 573 },
@@ -288,9 +287,9 @@ export const site: SiteContent = {
         { src: "/projects/auralis-4.webp", alt: "Auralis Health Report", width: 806, height: 546 },
       ],
       file: "/knowledgebase/projects/auralis.md",
-      links: [{ label: "Live", href: "https://auralis.vercel.app" }, { label: "Devpost", href: "https://devpost.com/software/docai-evq74t" }, { label: "GitHub", href: "https://github.com/rickytang666/auralis" }],
+      links: [{ label: "Live", href: "https://stop-googling-symptoms.tech" }, { label: "Devpost", href: "https://devpost.com/software/docai-evq74t" }, { label: "GitHub", href: "https://github.com/rickytang666/auralis" }],
       stats: [],
-      stack: ["React", "Three.js", "Cloudflare", "Python"],
+      stack: ["Next.js", "Three.js", "face-api.js", "FastAPI"],
     },
     {
       id: "carebridge", name: "CareBridge", group: "featured", order: 4, rank: "featured",
@@ -358,7 +357,7 @@ export const site: SiteContent = {
       file: "/knowledgebase/projects/lumen.md",
       links: [{ label: "Live", href: "https://llumen.netlify.app" }, { label: "Devpost", href: "https://devpost.com/software/lumen-qsgcn4" }, { label: "GitHub", href: "https://github.com/Dawgsrlife/lumen" }],
       stats: [],
-      stack: ["Unity", "C#", "MongoDB Atlas", "Next.js"],
+      stack: ["Unity", "C#", "React", "TypeScript", "MongoDB Atlas"],
     },
     {
       id: "careerly", name: "Careerly", group: "archive", order: 17,
@@ -377,17 +376,17 @@ export const site: SiteContent = {
 
     // ── hardware ──────────────────────────────────────────────────────────
     {
-      id: "cyberdeck", name: "Cyberdeck", group: "hardware", order: 18,
-      dates: "2026", displayRole: "solo",
-      covers: "Handheld Raspberry Pi 3B that boots straight into a terminal. No desktop, just the terminal.",
+      id: "cyberdeck", name: "Cyberdeck", group: "archive", order: 18,
+      dates: "2026", displayRole: "solo", displayStatus: "abandoned",
+      covers: "A handheld Raspberry Pi 3B that boots straight into a terminal. I got the terminal setup and a stats screen working and modeled a case in Blender, then dropped it.",
       media: [
-        { src: "/projects/cyberdeck-0.webp", alt: "Cyberdeck Work-in-Progress Build", width: 1200, height: 1209 },
+        { src: "/projects/cyberdeck-0.webp", alt: "Cyberdeck parts, before I set the project aside", width: 1200, height: 1209 },
         { src: "/projects/cyberdeck-1.webp", alt: "Cyberdeck CAD Render", width: 1172, height: 1072 },
       ],
       file: "/knowledgebase/projects/cyberdeck.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Cyberdeck" }],
       stats: [],
-      stack: ["Raspberry Pi", "Linux", "3D printing"],
+      stack: ["Raspberry Pi", "Linux", "Python", "Blender"],
     },
     {
       id: "flexfire-x", name: "FLEXFIRE-X", group: "hardware", order: 19,
@@ -414,7 +413,7 @@ export const site: SiteContent = {
       ],
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Rubber-Band-Turret" }],
       stats: [],
-      stack: ["Arduino", "Bluetooth", "Kotlin"],
+      stack: ["Arduino", "C++", "Bluetooth", "Android"],
     },
 
     // ── web and mobile ────────────────────────────────────────────────────
@@ -456,7 +455,7 @@ export const site: SiteContent = {
     // ── games and smaller builds ──────────────────────────────────────────
     {
       id: "wasteland", name: "Wasteland", group: "hardware", order: 24,
-      dates: "Feb 2025", displayRole: "solo", event: "MakeUofT 2025",
+      dates: "Feb 2025", displayRole: "team project", event: "MakeUofT 2025",
       covers: "Horror game you play with a sensor glove.",
       media: [
         { src: "/projects/wasteland-0.webp", alt: "Wasteland Gameplay", width: 806, height: 459 },
@@ -467,7 +466,7 @@ export const site: SiteContent = {
     },
     {
       id: "vr-odm-gear-sim", name: "VR ODM Gear Sim", group: "xr", order: 25,
-      dates: "Sep 2023", displayRole: "solo", event: "Hack the North 2023",
+      dates: "Sep 2023", displayRole: "team project", event: "Hack the North 2023",
       covers: "Cardboard VR sim with an Arduino glove controller.",
       media: [
         { src: "/projects/vr-odm-gear-sim-0.webp", alt: "VR ODM Gear Gameplay", width: 806, height: 372 },
@@ -478,7 +477,7 @@ export const site: SiteContent = {
     },
     {
       id: "street-cleaner", name: "Street Cleaner", group: "archive", order: 26,
-      dates: "May 2023", displayRole: "my repo", event: "GameHACKS 1.0",
+      dates: "May 2023", displayRole: "team project", event: "GameHACKS 1.0",
       covers: "Mobile recycling game on Google Play.",
       media: [
         { src: "/projects/street-cleaner-0.webp", alt: "Street Cleaner How To Play", width: 1080, height: 1920 },
@@ -490,18 +489,18 @@ export const site: SiteContent = {
     },
     {
       id: "object-love-interface", name: "Object-Love-Interface", group: "hardware", order: 27,
-      dates: "Feb 2026", displayRole: "my repo", event: "CTRL+HACK+DEL 2.0",
+      dates: "Feb 2026", displayRole: "team project", event: "CTRL+HACK+DEL 2.0",
       covers: "IoT objects with voices and personalities.",
       media: [
         { src: "/projects/object-love-interface-0.webp", alt: "OLI Device Open", width: 573, height: 322 },
         { src: "/projects/object-love-interface-1.webp", alt: "OLI Product Shot", width: 1200, height: 1347 },
       ],
       links: [{ label: "Devpost", href: "https://devpost.com/software/object-love-interface" }, { label: "GitHub", href: "https://github.com/HasNate618/Object-Love-Interface" }],
-      stats: [], stack: ["ESP32", "Arduino", "Python"],
+      stats: [], stack: ["ESP32", "Arduino", "Python", "Node.js"],
     },
     {
       id: "stupid-spotify", name: "Stupid Spotify", group: "archive", order: 28,
-      dates: "Nov 2025", displayRole: "my repo", event: "Stupid Hackathon @ Western",
+      dates: "Nov 2025", displayRole: "team project", event: "Stupid Hackathon @ Western",
       covers: "A deliberately bad Spotify clone. Its chatbot gaslights you about your music choices.",
       media: [
         { src: "/projects/stupid-spotify-0.webp", alt: "Stupid Spotify Dashboard", width: 806, height: 504 },
@@ -545,8 +544,8 @@ export const site: SiteContent = {
     },
     {
       id: "omni-reality", name: "Omni-Reality", group: "xr", order: 32,
-      dates: "Sep 2026", displayRole: "team project, my repo", event: "Hack the North 2026",
-      covers: "A mixed-reality assistant for the Quest 3S that answers in the room: SAM 2 highlights on the object you mean, guided steps, and furniture at life size. Built with my team, and I kept going on the spatial system after the event. Screenshot by Tim Roch.",
+      dates: "Sep 2026", displayRole: "team project; the post-event work is mine", event: "Hack the North 2026",
+      covers: "A mixed-reality assistant for the Quest 3S that answers in the room: SAM 2 highlights on the object you mean, guided steps, and furniture at life size. Built with my team, and I kept going on the spatial system after the event.",
       media: [
         { src: "/projects/omni-reality-0.webp", alt: "Guided Mode: a chips bag on a desk highlighted in blue, with the caption telling the user to move it to the trash. Screenshot by Tim Roch", width: 1200, height: 800 },
       ],
@@ -568,9 +567,9 @@ export const site: SiteContent = {
     { event: "TerraHacks", year: "2025", project: "Lumen", prize: "Best Use of MongoDB Atlas", role: "Team project; I built the Unity mini-games" },
     { event: "Hack the North", year: "2025", project: "Eyecandy", prize: "Snap Spectacles AR Runner Up", role: "Team project" },
     { event: "Spark", year: "2026", project: "CareBridge", prize: "Overall 3rd place", role: "Team project" },
-    { event: "GameHACKS 1.0", year: "2023", project: "Street Cleaner", prize: "Second Award", role: "Repo owner" },
-    { event: "CTRL+HACK+DEL 2.0", year: "2026", project: "Object-Love-Interface", prize: "Best Useless Hack", role: "Repo owner" },
-    { event: "Stupid Hackathon @ Western", year: "2025", project: "Stupid Spotify", prize: "Worst UX", role: "Repo owner" },
+    { event: "GameHACKS 1.0", year: "2023", project: "Street Cleaner", prize: "Second Award", role: "Team project" },
+    { event: "CTRL+HACK+DEL 2.0", year: "2026", project: "Object-Love-Interface", prize: "Best Useless Hack", role: "Team project" },
+    { event: "Stupid Hackathon @ Western", year: "2025", project: "Stupid Spotify", prize: "Worst UX", role: "Team project" },
   ],
   skills: [
     { group: "AI and ML", items: ["LLM agents", "Tool calling", "RAG", "Embeddings and reranking", "MCP", "VLMs", "Model evaluation", "Ollama", "llama.cpp", "GGUF on-device LLMs", "YOLOv8", "ONNX", "MediaPipe", "face-api.js", "PyTorch", "Reinforcement learning (PPO)", "TensorFlow", "scikit-learn"] },
