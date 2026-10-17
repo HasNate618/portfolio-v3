@@ -69,7 +69,7 @@ export type Experience = {
 };
 
 export type SiteContent = {
-  identity: { name: string; headline: string; positioning?: string; seeking: string; location: string; year: string;
+  identity: { name: string; headline: string; positioning?: string; seeking: string; location: string; year: string; program: string;
     education: { school: string; degree: string; honors: string; start: string; end: string; location: string } };
   contact: { email: string; links: { label: string; href: string }[] };
   experience: Experience[];
@@ -87,6 +87,7 @@ export const site: SiteContent = {
     seeking: "Summer 2027 software engineering or applied AI internship",
     location: "Brampton and London, ON",
     year: "3rd year (2026-27)",
+    program: "Software Engineering",
     education: { school: "Western University", degree: "Bachelor of Engineering Science in Software Engineering", honors: "Dean's Honour List (2024, 2025)", start: "2024-08", end: "2028-05", location: "London, ON" },
   },
   contact: {

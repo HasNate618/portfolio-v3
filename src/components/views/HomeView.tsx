@@ -49,7 +49,7 @@ export function HomeView({ page }: { page: Page }) {
       <h1 className="sr-only">{page.title}</h1>
 
       <p className="max-w-[68ch] text-fg">
-        {site.identity.year} at {site.identity.education.school}. Looking for a{" "}
+        {site.identity.year} in {site.identity.program} at {site.identity.education.school}. Looking for a{" "}
         {site.identity.seeking}.
       </p>
 
