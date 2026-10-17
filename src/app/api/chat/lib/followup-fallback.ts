@@ -111,11 +111,29 @@ const TOPIC_RULES: FollowupRule[] = [
   },
 ];
 
-const DEFAULT_FOLLOWUPS = [
+/**
+ * Shown when the answer is not an answer: a refusal, the injection line, or the
+ * "couldn't find that" fallback. Generated questions in those cases asked the
+ * visitor to follow up on facts the chat had just said it did not have.
+ */
+export const DEFAULT_FOLLOWUPS = [
   "What is Campus?",
   "What did he build at TeraGo?",
   "How can I contact Nathan?",
 ];
+
+/** The three fixed bodies from rules 4, 6 and 11. */
+const NON_ANSWER_PATTERNS = [
+  /couldn['\u2019]?t find that/i,
+  /could not find that/i,
+  /that instruction does not apply/i,
+  /i only answer questions about nathan/i,
+];
+
+/** True when the body is one of the fixed lines rather than an answer about Nathan. */
+export function isNonAnswer(body: string): boolean {
+  return NON_ANSWER_PATTERNS.some((pattern) => pattern.test(body));
+}
 
 const AI_DIRECTED = /\b(you|your|chatbot|assistant)\b/i;
 

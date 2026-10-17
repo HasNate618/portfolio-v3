@@ -40,13 +40,16 @@ function parseFollowupLines(raw: string): string[] {
     .filter((line) => line.length > 0 && line.endsWith("?"));
 }
 
-export async function generateFollowups(input: GenerateFollowupsInput): Promise<string[]> {
-  const {
-    userMessage,
-    aiResponse,
-    chunkSources = [],
-    history = [],
-  } = input;
+/**
+ * Exported so the wording can be tested without a model call.
+ *
+ * The last three rules come from one live run, which offered "What projects did
+ * Nathan work on at Microsoft?" (he has never worked there), "How does Nathan's
+ * Cyberdeck project work?" (abandoned) and "What was Nathan's role in the
+ * AGNTOS project?" (the project is AgntOS, and the answer was a refusal).
+ */
+export function buildFollowupPrompt(input: GenerateFollowupsInput): string {
+  const { userMessage, aiResponse, chunkSources = [], history = [] } = input;
 
   const askedBefore = history
     .filter((m) => m.role === "user")
@@ -59,7 +62,7 @@ export async function generateFollowups(input: GenerateFollowupsInput): Promise<
       ? chunkSources.slice(0, 6).join(", ")
       : "general portfolio knowledge";
 
-  const prompt = `Suggest follow-up questions for a chat about Nathan Espejo's portfolio.
+  return `Suggest follow-up questions for a chat about Nathan Espejo's portfolio.
 
 User question: ${userMessage}
 Assistant answer (excerpt): ${aiResponse.slice(0, 600)}
@@ -76,8 +79,16 @@ Rules:
 - Never ask about the chatbot or "you". For example, "What languages does Nathan know?", not "What languages do you know?"
 - Prefer what a recruiter would ask next: what he built, how it works, what came of it, or how to contact him
 - On team projects, ask what the team built, not what he personally built
+- Only name companies, projects and people that appear in the answer excerpt or the related sources. Never introduce an organisation that is not there
+- Spell names exactly as the sources do: TeraGo, AWARE, AgntOS, Animarker
+- Do not ask how an abandoned project works, and do not ask about something the answer says is not in the record
 - Never use em dashes
 - Do not repeat questions already asked in this thread`;
+}
+
+export async function generateFollowups(input: GenerateFollowupsInput): Promise<string[]> {
+  const { userMessage, aiResponse } = input;
+  const prompt = buildFollowupPrompt(input);
 
   try {
     const cohere = getCohereClient();

@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildFallbackFollowups, normalizeFollowups } from "../src/app/api/chat/lib/followup-fallback";
+import { buildFallbackFollowups, isNonAnswer, normalizeFollowups, DEFAULT_FOLLOWUPS } from "../src/app/api/chat/lib/followup-fallback";
+import { buildFollowupPrompt } from "../src/app/api/chat/lib/generate-followups";
 
 const DEFAULTS = ["What is Campus?", "What did he build at TeraGo?", "How can I contact Nathan?"];
 
@@ -77,6 +78,29 @@ test("model candidates win, and the fallback fills the gap", () => {
 
   const full = normalizeFollowups(["What is Campus?", "How is he tested?", "What is in the archive?"], "", "");
   assert.deepEqual(full, ["What is Campus?", "How is he tested?", "What is in the archive?"]);
+});
+
+test("the defaults are the exported list, so the route and the tests agree", () => {
+  assert.deepEqual(DEFAULT_FOLLOWUPS, DEFAULTS);
+});
+
+test("a fixed line is not treated as an answer", () => {
+  assert.ok(isNonAnswer("I couldn't find that in Nathan's knowledgebase. Try asking about a project or role."));
+  assert.ok(isNonAnswer("I couldn\u2019t find that in Nathan's knowledgebase."), "a typographic apostrophe still matches");
+  assert.ok(isNonAnswer("That instruction does not apply. I speak for Nathan's record only."));
+  assert.ok(isNonAnswer("I only answer questions about Nathan's work, projects and experience."));
+  assert.ok(!isNonAnswer("Nathan built Channel Finder at TeraGo, validated on 760 test cases."));
+});
+
+test("the chip prompt forbids invented names and abandoned work", () => {
+  const prompt = buildFollowupPrompt({
+    userMessage: "what is ferret?",
+    aiResponse: "ferret is a local-first search tool in Rust.",
+  });
+  assert.match(prompt, /Never introduce an organisation that is not there/);
+  assert.match(prompt, /Spell names exactly as the sources do: TeraGo, AWARE, AgntOS, Animarker/);
+  assert.match(prompt, /Do not ask how an abandoned project works/);
+  assert.match(prompt, /ferret is a local-first search tool/);
 });
 
 test("visitor-directed candidates are dropped, not rewritten", () => {

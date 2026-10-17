@@ -2,7 +2,7 @@ import { retrieveRelevantChunks, rerankChunks } from "./lib/rag";
 import { buildRetrievalQuery } from "./lib/retrieval-query";
 import { buildSystemPrompt } from "./lib/system-prompt";
 import { generateFollowups, formatFollowupsTail } from "./lib/generate-followups";
-import { buildFallbackFollowups } from "./lib/followup-fallback";
+import { buildFallbackFollowups, DEFAULT_FOLLOWUPS, isNonAnswer } from "./lib/followup-fallback";
 import { checkRateLimit } from "./lib/rate-limit";
 import { DashFilter, sanitizeDashes } from "./lib/sanitize-dashes";
 import { getCohereClient, MAX_CHAT_MESSAGE_LENGTH, CHAT_MODEL, CHAT_MAX_TOKENS, CHAT_THINKING_ENABLED } from "./lib/cohere";
@@ -189,10 +189,16 @@ export async function POST(req: Request) {
               // answer is finished, so the answer stops reading as in flight
               // while the questions are still being written.
               enqueueText(FOLLOWUP_DELIMITER);
-              const followups = await withinFollowupBudget(
-                followupsPending ?? generateFollowups(followupInput()),
-                () => buildFallbackFollowups(trimmedMessage, stripBodyPrefix(accumulated))
-              );
+              const body = stripBodyPrefix(accumulated);
+              // A refusal or a "couldn't find that" answer has nothing to follow
+              // up on, and asking the model anyway produced questions about a
+              // company he never worked at.
+              const followups = isNonAnswer(body)
+                ? DEFAULT_FOLLOWUPS
+                : await withinFollowupBudget(
+                    followupsPending ?? generateFollowups(followupInput()),
+                    () => buildFallbackFollowups(trimmedMessage, body)
+                  );
               enqueueText(sanitizeDashes(formatFollowupsTail(followups)));
             }
 
