@@ -40,7 +40,7 @@ This was internal work, so there's no code or screenshots here.
 
 > **Copilot Studio agent.** Answers engineers' RF questions from SharePoint documents.
 
-> **Self-hosted LLM proposal.** LibreChat with SharePoint and Jira integrations, with estimated savings over Copilot.
+> **Self-hosted LLM proposal.** LibreChat with SharePoint and Jira integrations, to cut per-user Copilot licensing costs.
 
 ## How it works
 
