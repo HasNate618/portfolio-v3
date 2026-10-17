@@ -1,6 +1,7 @@
 import { retrieveRelevantChunks, rerankChunks } from "./lib/rag";
 import { buildRetrievalQuery } from "./lib/retrieval-query";
 import { buildSystemPrompt } from "./lib/system-prompt";
+import { withCoverageFloor } from "./lib/context";
 import { generateFollowups, formatFollowupsTail } from "./lib/generate-followups";
 import { buildFallbackFollowups, DEFAULT_FOLLOWUPS, isNonAnswer } from "./lib/followup-fallback";
 import { checkChatDailyCap, checkRateLimit, SITE_KEY } from "./lib/rate-limit";
@@ -117,7 +118,11 @@ export async function POST(req: Request) {
 
     const topChunks = await retrieveRelevantChunks(retrievalQuery, 30);
     const reranked = await rerankChunks(retrievalQuery, topChunks, 10);
-    const systemPrompt = buildSystemPrompt(reranked);
+    // Retrieval that comes back with no project and no role is how a broad
+    // question turns into invented detail: the floor pins the work the home
+    // page leads with, and only then.
+    const context = withCoverageFloor(reranked);
+    const systemPrompt = buildSystemPrompt(context);
 
     const cohere = getCohereClient();
 
@@ -171,7 +176,7 @@ export async function POST(req: Request) {
           const followupInput = () => ({
             userMessage: trimmedMessage,
             aiResponse: stripBodyPrefix(accumulated),
-            chunkSources: reranked.map((c) => c.source),
+            chunkSources: context.map((c) => c.source),
             history: safeHistory,
           });
 

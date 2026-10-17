@@ -63,6 +63,16 @@ function factsFor(rel: string): string[] {
   return [];
 }
 
+/**
+ * The same facts block the index serves, for a document retrieval did not reach.
+ * The coverage floor pins these, so they must stay the projection rather than a
+ * second, hand-written summary that could drift from the indexed one.
+ */
+export function factsBlockFor(rel: string): string | null {
+  const facts = factsFor(rel);
+  return facts.length > 0 ? facts.join("\n") : null;
+}
+
 function rewriteRelativeLinks(markdown: string, fromDir: string): string {
   // Relative .md links break for a crawler that lands mid-tree; point them at
   // absolute /knowledgebase/ URLs so the map stays traversable.
