@@ -2,7 +2,7 @@
 title: Résumé
 type: page
 route: /resume
-description: My résumé as text, matching the PDF.
+description: My résumé as text. The PDF is the one-page version.
 priority: reference
 tags: [resume]
 related: [index.md, ../skills.md]
@@ -14,12 +14,18 @@ skills:
   - group: Web & Infra
     items: [React, FastAPI, Next.js, NixOS, Linux, Docker, Tailscale, Caddy, Git, GitHub Actions]
   - group: Tools
-    items: [Cursor, Claude Code, Hermes Agent, Microsoft Graph, Copilot Studio, Jira, SharePoint, Blender]
+    items: [Hermes Agent, Microsoft Graph, Copilot Studio, Jira, SharePoint, Blender]
 updated: 2026-10-16
 ---
 # Résumé
 
 ## Experience
+
+### 3D Western
+
+- Co-led two data developers through Jira tickets and PR review on the print-approval dataset and benchmark.
+- Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender with labels checked by a VLM.
+- Benchmarked small vision models as a binary safe-or-flag gate: 84.2% best agreement with VLM-checked labels.
 
 ### TeraGo
 
@@ -27,12 +33,6 @@ updated: 2026-10-16
 - Wrote Channel Finder, a Python tool that finds clear RF channels in MapInfo data, validated on {{stat:TeraGo.testCases}} test cases.
 - Deployed a Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
 - Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) to cut per-user Copilot licensing costs.
-
-### 3D Western
-
-- Co-led two data developers through Jira tickets and PR review on the print-approval dataset and benchmark.
-- Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender with labels checked by a VLM.
-- Benchmarked small vision models as a binary safe-or-flag gate: 84.2% best agreement with VLM-checked labels.
 
 ## Projects
 
