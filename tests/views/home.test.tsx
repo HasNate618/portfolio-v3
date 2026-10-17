@@ -46,3 +46,16 @@ test("the Campus card links out to real anchors", () => {
   // Email lives in the header icon row now, not on the page body.
   assert.match(html, /github\.com\/HasNate618/);
 });
+
+test("the awards section closes the page, table and Dean's Honour List included", () => {
+  assert.match(html, /id="awards"/);
+  assert.match(html, /<caption/);
+  assert.match(html, /scope="col"/);
+  assert.match(html, /Dean&#x27;s Honour List \(2024, 2025\)/);
+  assert.ok(html.indexOf('id="ask"') < html.indexOf('id="awards"'), "awards should be the last section");
+});
+
+test("the home page has no award-winning featured cards to frame", () => {
+  // Every winner is a hackathon team project; those render on /projects.
+  assert.doesNotMatch(html, /border-accent\/50 bg-accent\/5/);
+});

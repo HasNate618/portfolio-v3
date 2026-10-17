@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { site } from "@/data/site";
+import { site, awardFor } from "@/data/site";
 import type { Project, ProjectGroup } from "@/data/site";
 import { renderMarkdown, slugify } from "@/lib/markdown";
 import type { Page } from "@/lib/content";
@@ -7,7 +7,6 @@ import { ProjectMetaRow } from "@/components/ProjectMetaRow";
 import { StatRow } from "@/components/StatRow";
 import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
-import { AwardsTable } from "@/components/AwardsTable";
 import { ProjectMedia } from "@/components/ProjectMedia";
 import { AwardBadge } from "@/components/AwardBadge";
 
@@ -69,18 +68,8 @@ export function ProjectsView({ page }: { page: Page }) {
         </section>
       ))}
 
-      <section className="mt-16">
-        <h2 id="awards" className="section-label">
-          Awards
-        </h2>
-        <p className="mt-4 max-w-[68ch] leading-relaxed">
-          {site.hackathons.awards} awards across {site.hackathons.entered} hackathons. Most were
-          team projects.
-        </p>
-        <div className="mt-6">
-          <AwardsTable />
-        </div>
-      </section>
+      {/* The awards table lives at the bottom of the home page now; this page
+          only carries the badges on the cards that won. */}
 
       {/* Eight games would bury the rest of the page; a native disclosure keeps
           them reachable without JavaScript. */}
@@ -102,9 +91,21 @@ function ProjectCard({ project, showStats }: { project: Project; showStats?: boo
   // TeraGo's case study is experience data and lives under /experience.
   // The ten projects with no content file have no case study to link to.
   const href = project.id === "terago" ? "/experience/terago" : project.file ? `/projects/${project.id}` : null;
+  const award = awardFor(project.name);
 
   return (
-    <li className="rounded-lg border border-rule bg-surface p-6 transition-colors hover:border-accent/40">
+    /*
+     * A winning card wears the win on its frame, not just in a badge: the
+     * accent-tinted border and fill set it apart from the plain cards before
+     * a word is read.
+     */
+    <li
+      className={`rounded-lg border p-6 transition-colors ${
+        award
+          ? "border-accent/50 bg-accent/5 hover:border-accent"
+          : "border-rule bg-surface hover:border-accent/40"
+      }`}
+    >
       <h3 className="text-lg font-medium leading-snug text-fg">
         {href ? (
           <Link href={href} className="hover:text-accent">
@@ -131,6 +132,14 @@ function ProjectCard({ project, showStats }: { project: Project; showStats?: boo
       <div className="mt-4">
         <LinkRow projectId={project.id} />
       </div>
+      {/* A title alone does not say there is more to read; name the case study. */}
+      {href ? (
+        <p className="mt-4 text-sm">
+          <Link href={href} className="font-medium text-accent hover:text-fg">
+            Read the case study <span aria-hidden="true">→</span>
+          </Link>
+        </p>
+      ) : null}
     </li>
   );
 }

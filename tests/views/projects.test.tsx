@@ -18,7 +18,6 @@ test("projects renders every group label", () => {
     "Hardware",
     "Web and mobile",
     "Games and smaller builds",
-    "Awards",
   ]) {
     assert.ok(html.includes(h), `missing ${h}`);
   }
@@ -29,9 +28,15 @@ test("the games list is a native disclosure", () => {
   assert.match(html, /<summary/);
 });
 
-test("the awards table is captioned and scoped", () => {
-  assert.match(html, /<caption/);
-  assert.match(html, /scope="col"/);
+test("the awards table lives on the home page, not here", () => {
+  assert.doesNotMatch(html, /<caption/);
+  assert.doesNotMatch(html, /id="awards"/);
+});
+
+test("winning projects wear the accent frame and a trophy badge", () => {
+  // Auralis won at Hack Western 12, so its card is framed differently.
+  assert.match(html, /border-accent\/50 bg-accent\/5/);
+  assert.match(html, /border-accent\/40 bg-accent\/10/);
 });
 
 test("every project in site.ts is rendered exactly once", () => {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { site, featuredProjects, flagshipProject } from "@/data/site";
+import { site, featuredProjects, flagshipProject, awardFor } from "@/data/site";
 import { renderMarkdown } from "@/lib/markdown";
 import { getPage, type Page } from "@/lib/content";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
@@ -8,6 +8,7 @@ import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
 import { ProjectMedia } from "@/components/ProjectMedia";
 import { AwardBadge } from "@/components/AwardBadge";
+import { AwardsTable } from "@/components/AwardsTable";
 
 /**
  * The home page carries the whole story: who he is, the roles, then the
@@ -103,27 +104,34 @@ export function HomeView({ page }: { page: Page }) {
       </section>
 
       <ul className="mt-8 flex flex-col gap-6">
-        {featured.map((project) => (
-          <li
-            key={project.id}
-            className="rounded-lg border border-rule bg-surface p-6 transition-colors hover:border-accent/40"
-          >
-            <h3 className="text-lg font-medium leading-snug text-fg">
-              <Link href={`/projects/${project.id}`} className="hover:text-accent">
-                {project.name}
-              </Link>
-            </h3>
-            <div className="mt-1">
-              <ProjectMetaRow projectId={project.id} />
-            </div>
-            <AwardBadge projectName={project.name} />
-            <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
-            <ProjectMedia media={project.media} className="mt-3" />
-            <div className="mt-3">
-              <StackList projectId={project.id} />
-            </div>
-          </li>
-        ))}
+        {featured.map((project) => {
+          const award = awardFor(project.name);
+          return (
+            <li
+              key={project.id}
+              className={`rounded-lg border p-6 transition-colors ${
+                award
+                  ? "border-accent/50 bg-accent/5 hover:border-accent"
+                  : "border-rule bg-surface hover:border-accent/40"
+              }`}
+            >
+              <h3 className="text-lg font-medium leading-snug text-fg">
+                <Link href={`/projects/${project.id}`} className="hover:text-accent">
+                  {project.name}
+                </Link>
+              </h3>
+              <div className="mt-1">
+                <ProjectMetaRow projectId={project.id} />
+              </div>
+              <AwardBadge projectName={project.name} />
+              <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
+              <ProjectMedia media={project.media} className="mt-3" />
+              <div className="mt-3">
+                <StackList projectId={project.id} />
+              </div>
+            </li>
+          );
+        })}
       </ul>
 
       <p className="mt-6">
@@ -134,13 +142,6 @@ export function HomeView({ page }: { page: Page }) {
           All projects <span aria-hidden="true">→</span>
         </Link>
       </p>
-      <p className="mt-3 text-sm text-muted">
-        {site.hackathons.awards} hackathon awards across {site.hackathons.entered} events —{" "}
-        <Link href="/projects#awards" className="text-accent underline hover:text-fg">
-          see the winners
-        </Link>
-        .
-      </p>
 
       <h2 id="ask" className="section-label mt-16">
         Ask
@@ -150,9 +151,29 @@ export function HomeView({ page }: { page: Page }) {
         wrong, so trust the pages first.
       </p>
       <p className="mt-4">
-        <Link href="/chat" className="text-accent underline hover:text-fg">
+        <Link href="/chat" className="text-accent hover:text-fg">
           Open chat <span aria-hidden="true">→</span>
         </Link>
+      </p>
+
+      {/*
+       * Awards close the page: the hackathon record first, then the Dean's
+       * Honour List years, which come from the education entry rather than a
+       * second list so the two can never disagree.
+       */}
+      <h2 id="awards" className="section-label mt-16">
+        Awards
+      </h2>
+      <p className="mt-4 max-w-[68ch] leading-relaxed">
+        {site.hackathons.awards} awards across {site.hackathons.entered} hackathons. Most were team
+        projects.
+      </p>
+      <div className="mt-6">
+        <AwardsTable />
+      </div>
+      <p className="mt-6 max-w-[68ch] leading-relaxed">
+        Off the hackathon circuit: {site.identity.education.honors} at{" "}
+        {site.identity.education.school}.
       </p>
     </article>
   );
