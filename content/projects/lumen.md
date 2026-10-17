@@ -6,7 +6,7 @@ description: A team-built wellness companion that selects a mini-game from a moo
 priority: reference
 rank: archive
 dates: "Aug 2025"
-role: "team (built the Unity mini-games)"
+role: "team"
 status: shipped
 tags: [ai, games, mental-health]
 related: [index.md, ../awards.md, ../skills.md]

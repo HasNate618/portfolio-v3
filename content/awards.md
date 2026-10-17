@@ -19,7 +19,7 @@ Nathan has won 8 awards across 22 hackathons. Most were team efforts, and the ro
 |---|---|---|---|---|
 | NSBEHacks | 2024 | [Careerly](projects/careerly.md) | 3rd overall; Cohere's Challenge 1st place | Team project |
 | Hack Western 12 | 2025 | [Auralis](projects/auralis.md) | Best AI Application Built with Cloudflare | Team project |
-| TerraHacks | 2025 | [Lumen](projects/lumen.md) | Best Use of MongoDB Atlas | Team project; I built the Unity mini-games |
+| TerraHacks | 2025 | [Lumen](projects/lumen.md) | Best Use of MongoDB Atlas | Team project |
 | Hack the North | 2025 | [Eyecandy](projects/eyecandy.md) | Snap Spectacles AR Runner Up | Team project |
 | Spark | 2026 | [CareBridge](projects/carebridge.md) | Overall 3rd place | Team project |
 | GameHACKS 1.0 | 2023 | [Street Cleaner](projects/other.md#street-cleaner) | Second Award | Team project |

@@ -27,11 +27,11 @@ Unity on the Quest sends frames and speech to a Python coordinator over WebSocke
 
 ## After the hackathon
 
-Nathan kept building on his repo from Sep 21 to 23: model output limited to scene ops validated against JSON Schema, placement anchored to capture-time pose, generated furniture fitted to a listing's stated size with one uniform scale, headset acknowledgements before speech, and a redacted audit ledger.
+I kept building on my repo from Sep 21 to 23: model output limited to scene ops validated against JSON Schema, placement anchored to capture-time pose, generated furniture fitted to a listing's stated size with one uniform scale, headset acknowledgements before speech, and a redacted audit ledger.
 
 ## Credit
 
-Team project: Tim Roch, Wahib Barqawi, Zikora Chinedu and Nathan Espejo. The repo is Nathan's. The site screenshot is by Tim Roch.
+Team project: Tim Roch, Wahib Barqawi, Zikora Chinedu and Nathan Espejo. The repo is mine. The site screenshot is by Tim Roch.
 
 ## Links
 
