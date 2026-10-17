@@ -37,6 +37,12 @@ export type Project = {
   displayStatus?: string;
   event?: string;
   covers: string;
+  /**
+   * What the project does not do, where a neighbouring project does. Carried into
+   * the corpus because four live answers in five gave Campus the homelab's
+   * approval gate and rollback, and rule 3's denial did not stop them.
+   */
+  limits?: string;
   /** Content doc describing this project. Absent for card-only rows, and for rows covered by projects/other.md. */
   file?: string;
   links: { label: string; href: string }[];
@@ -123,6 +129,7 @@ export const site: SiteContent = {
       id: "campus", name: "Campus", group: "featured", order: 1,
       dates: "Aug 2026 to present", displayRole: "solo",
       covers: "My courses are spread across six Brightspace pages, so I built one place to check deadlines, study from slides and test a draft against the brief. Campus syncs everything into SQLite and answers from the course files with hybrid retrieval: a lexical prefilter, embeddings and a cross-encoder reranker. Its 20-tool agent logs every change it makes to my notes or due dates, and it runs on any OpenAI-compatible endpoint, local or hosted.",
+      limits: "The agent edits notes and due dates directly and logs every write with the before and after. Campus has no approval gate and no rollback; the NixOS homelab is the project that gates changes and rolls them back.",
       media: [
         { src: "/projects/campus-0.svg", alt: "Campus wordmark", width: 2221, height: 763, contain: true },
         { src: "/projects/campus-1.webp", alt: "Campus course hub and chat, with an exact citation", width: 1200, height: 675 },

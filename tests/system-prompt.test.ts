@@ -132,6 +132,15 @@ test("rule 19 forbids the production-grade phrasing", () => {
   assert.match(prompt, /say what is actually in use/);
 });
 
+/*
+ * Live answers kept naming an approval gate or a rollback for Campus, which is
+ * the homelab. Rule 3 states the denial and was not enough, so rule 7b names
+ * where the gate belongs instead of only saying where it does not.
+ */
+test("rule 7b sends an approval gate or a rollback to the homelab", () => {
+  assert.match(prompt, /When you mention an approval gate or a rollback, mention the homelab/);
+});
+
 test("the prompt carries both hiring facts, with readable dates", () => {
   assert.match(prompt, /Aug 2024 to May 2028/);
   assert.doesNotMatch(prompt, /2024 08/, "the raw site.ts date must not leak into the prompt");

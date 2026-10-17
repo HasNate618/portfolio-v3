@@ -38,6 +38,9 @@ function projectFacts(p: Project): string[] {
   // of scalars, and a broad question ("his strongest projects") has almost
   // nothing in it to match on, so the doc never reaches the model.
   if (p.covers) lines.push(`Summary: ${p.covers}`);
+  // A denial the model can hedge is weaker than a statement it can repeat: the
+  // chat kept borrowing the homelab's approval gate and rollback for Campus.
+  if (p.limits) lines.push(`Limits: ${p.limits}`);
   return lines;
 }
 

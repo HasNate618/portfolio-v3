@@ -91,3 +91,21 @@ test("a Summary line is never empty or the word undefined", () => {
     assert.notEqual(line.trim(), "undefined", `${doc.path} wrote undefined`);
   }
 });
+
+/*
+ * Asked what the most impressive thing Nathan built is, four live answers in five
+ * gave Campus the homelab's approval gate and rollback. Rule 3 already says
+ * "Campus does not roll back", so the fix is a fact the model repeats rather than
+ * another rule it can hedge.
+ */
+test("a project that states its limits carries them into its doc", () => {
+  const limited = site.projects.filter((project) => project.limits);
+  assert.ok(limited.length > 0, "no project states its limits");
+
+  for (const project of limited) {
+    assert.ok(project.file, `${project.name} states limits but has no doc`);
+    const text = getCorpusDoc(project.file!.replace("/knowledgebase/", ""))!.text;
+    assert.match(text, /^Limits: /m, `${project.name} has no Limits line`);
+    assert.ok(text.includes(project.limits!), `${project.name} lost its limits text`);
+  }
+});
