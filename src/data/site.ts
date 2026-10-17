@@ -119,7 +119,7 @@ export const site: SiteContent = {
     {
       id: "campus", name: "Campus", group: "featured", order: 1,
       dates: "Aug 2026 to present", displayRole: "solo",
-      covers: "My courses are spread across six Brightspace pages, and I wanted one place to check deadlines, study from slides and test a draft against the brief. Campus syncs them into SQLite and answers from the course files, using a lexical prefilter, embeddings and a cross-encoder reranker. The 20-tool agent logs every change it makes to my notes or due dates, and it runs on any OpenAI-compatible endpoint, local or hosted. Retrieval and answer quality: evaluation in progress.",
+      covers: "My courses are spread across six Brightspace pages, so I built one place to check deadlines, study from slides and test a draft against the brief. Campus syncs everything into SQLite and answers from the course files with hybrid retrieval: a lexical prefilter, embeddings and a cross-encoder reranker. Its 20-tool agent logs every change it makes to my notes or due dates, and it runs on any OpenAI-compatible endpoint, local or hosted.",
       media: [
         { src: "/projects/campus-0.svg", alt: "Campus wordmark", width: 2221, height: 763, contain: true },
         { src: "/projects/campus-1.webp", alt: "Campus course hub and chat, with an exact citation", width: 1200, height: 675 },
@@ -129,9 +129,9 @@ export const site: SiteContent = {
       rank: "flagship",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Campus" }],
       stats: [
-        { key: "chunks", label: "chunks from 215 course files", value: "4,687" },
+        { key: "courses", label: "courses, in daily use (I'm the only user)", value: "6" },
         { key: "tests", label: "tests in CI on every push", value: "308" },
-        { key: "courses", label: "courses I use it in", value: "6" },
+        { key: "chunks", label: "chunks", value: "4,687", home: false },
         { key: "files", label: "course files", value: "215", home: false },
         { key: "tools", label: "agent tools", value: "20", home: false },
       ],
@@ -142,9 +142,9 @@ export const site: SiteContent = {
       stack: ["Python", "FastAPI", "SQLite", "embeddings", "cross-encoder reranking", "React"],
     },
     {
-      id: "homelab", name: "Homelab and Hermes Agent", group: "featured", order: 2,
+      id: "homelab", name: "NixOS homelab", group: "featured", order: 2,
       dates: "May 2026 to present", displayRole: "solo",
-      covers: "My laptop and a home server built from used parts run from one NixOS flake. Hermes Agent profiles make the config changes, but every change waits for my approval and can roll back to the last good build. One bug I won't forget: a VPN set as the server's default route. When the peer died, the whole machine went dark until I reset it by hand.",
+      covers: "My laptop and a home server built from used parts run from one NixOS flake. Hermes Agent, from Nous Research, proposes the config changes, but nothing applies until I approve it, and a failed build rolls back to the last good one. One bug I won't forget: I set a WireGuard VPN as the server's default route, the peer died, and the whole machine went dark until I reset it by hand. Now the VPN lives inside the one container that needs it.",
       media: [
         { src: "/projects/homelab-0.webp", alt: "Homelab Dashboard and Service Overview", width: 1155, height: 891 },
       ],
@@ -153,9 +153,10 @@ export const site: SiteContent = {
       rank: "featured",
       links: [{ label: "GitHub (public NixOS config)", href: "https://github.com/HasNate618/nixos-config-public" }, { label: "GitHub (llama.cpp setup)", href: "https://github.com/HasNate618/local-llama-setup" }],
       stats: [
+        { key: "machines", label: "machines, one NixOS flake", value: "2" },
         { key: "containers", label: "hardened containers", value: "27" },
         { key: "sessions", label: "agent sessions since June 2026", value: "472" },
-        { key: "skills", label: "agent skills in git", value: "191" },
+        { key: "skills", label: "agent skills in git", value: "191", home: false },
         { key: "toolCalls", label: "tool calls", value: "58,000", home: false },
       ],
       stack: ["NixOS", "Nix flakes", "Docker", "Tailscale", "Hermes Agent", "llama.cpp"],
@@ -163,7 +164,7 @@ export const site: SiteContent = {
     {
       id: "aware", name: "AWARE", group: "featured", order: 3,
       dates: "Jul 2026", displayRole: "solo", event: "Hack the 6ix 2026",
-      covers: "My first solo hack. I pitched the idea to three teams at Hack the 6ix and none had the background, so I built it alone. It watches a camera, listens for sounds and reads sensors, and you set automations in plain English, like \"when glass breaks after 10pm, alert me.\" A 1B model turns that into a rule, and everything runs offline. Demo video and latency numbers: not posted yet.",
+      covers: "My first solo hack, at Hack the 6ix 2026. I pitched it to three teams, but it wasn't a fit for any of them, so I built it alone. It watches a camera, listens for sounds and reads sensors, and you set automations in plain English, like \"when glass breaks after 10pm, alert me.\" A 1B model turns that into a rule, and vision, audio and the LLM all run offline on one $80 board.",
       media: [
         { src: "/projects/aware-0.webp", alt: "AWARE device on an Arduino UNO Q", width: 1200, height: 676 },
         { src: "/projects/aware-1.webp", alt: "AWARE web dashboard", width: 1200, height: 1122 },
@@ -173,6 +174,7 @@ export const site: SiteContent = {
       rank: "featured",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/AWARE" }, { label: "Devpost", href: "https://devpost.com/software/a-w-a-r-e-autonomous-witness-and-response-engine" }],
       stats: [
+        { key: "ruleTick", label: "rule checks, no LLM in that loop", value: "500 ms" },
         { key: "boardCost", label: "Arduino UNO Q, all inference on board", value: "$80" },
       ],
       // Vision, audio, the small model and the board it all runs on: the four
@@ -190,8 +192,8 @@ export const site: SiteContent = {
     // ── also building ─────────────────────────────────────────────────────
     {
       id: "agntos", name: "AgntOS", group: "ai", order: 5,
-      dates: "2026", displayRole: "solo", displayStatus: "work in progress",
-      covers: "Still a concept: a NixOS system run by an LLM agent. Every change is proposed, approved, applied with nixos-rebuild, logged, and reversible. Mostly Rust.",
+      dates: "2026", displayRole: "solo", displayStatus: "concept",
+      covers: "A concept for a NixOS system run by an LLM agent. Every change is proposed, approved, applied with nixos-rebuild, logged, and reversible. Mostly Rust.",
       media: [
         { src: "/projects/agntos-0.webp", alt: "AgntOS Dev VM Running KDE Plasma", width: 1200, height: 750 },
         { src: "/projects/agntos-1.webp", alt: "AgntOS Banner", width: 1200, height: 355 },
@@ -293,7 +295,7 @@ export const site: SiteContent = {
     {
       id: "carebridge", name: "CareBridge", group: "featured", order: 4, rank: "featured",
       dates: "Feb 2026", displayRole: "team project", event: "Spark 2026",
-      covers: "A team build at Spark 2026. We started from how a winter storm that cut off a regional hospital led to missed referrals and follow-ups. Patients check in by chat or voice, and providers get one timeline with risk signals pulled from those conversations. Built as a team; the repo is my teammate's.",
+      covers: "Overall 3rd at Spark 2026, built with my team. We started from a winter storm that cut off a regional hospital and led to missed referrals and follow-ups. Patients check in by chat or voice, and providers get one timeline with risk signals pulled from those conversations.",
       media: [
         { src: "/projects/carebridge-0.webp", alt: "CareBridge Provider Dashboard", width: 806, height: 564 },
         { src: "/projects/carebridge-1.webp", alt: "CareBridge Financials View", width: 1200, height: 913 },
@@ -301,7 +303,7 @@ export const site: SiteContent = {
       ],
       file: "/knowledgebase/projects/carebridge.md",
       links: [{ label: "Devpost", href: "https://devpost.com/software/care-bridge-ai" }, { label: "GitHub (teammate's repo)", href: "https://github.com/liamma06/Spark" }],
-      stats: [{ key: "place", label: "overall, Spark 2026", value: "3rd" }],
+      stats: [],
       stack: ["React", "TypeScript", "Vite", "FastAPI", "Supabase", "Cohere", "ElevenLabs"],
     },
     {
@@ -376,7 +378,7 @@ export const site: SiteContent = {
     // ── hardware ──────────────────────────────────────────────────────────
     {
       id: "cyberdeck", name: "Cyberdeck", group: "hardware", order: 18,
-      dates: "2026", displayRole: "solo", displayStatus: "in progress",
+      dates: "2026", displayRole: "solo",
       covers: "Handheld Raspberry Pi 3B that boots straight into a terminal. No desktop, just the terminal.",
       media: [
         { src: "/projects/cyberdeck-0.webp", alt: "Cyberdeck Work-in-Progress Build", width: 1200, height: 1209 },
@@ -544,7 +546,7 @@ export const site: SiteContent = {
     {
       id: "omni-reality", name: "Omni-Reality", group: "xr", order: 32,
       dates: "Sep 2026", displayRole: "team project, my repo", event: "Hack the North 2026",
-      covers: "A mixed-reality assistant for the Quest 3S that answers in the room: SAM 2 highlights on the object you mean, guided steps, and furniture at life size. Built with my team, and I kept going on the spatial system after the event.",
+      covers: "A mixed-reality assistant for the Quest 3S that answers in the room: SAM 2 highlights on the object you mean, guided steps, and furniture at life size. Built with my team, and I kept going on the spatial system after the event. Screenshot by Tim Roch.",
       media: [
         { src: "/projects/omni-reality-0.webp", alt: "Guided Mode: a chips bag on a desk highlighted in blue, with the caption telling the user to move it to the trash. Screenshot by Tim Roch", width: 1200, height: 800 },
       ],
