@@ -26,7 +26,7 @@ updated: 2026-10-16
 - Automated outage ticketing for non-standard provider emails: a local LLM on Ollama extracts the key details and the pipeline opens Jira issues through Microsoft Graph.
 - Wrote Channel Finder, a Python tool that finds clear RF channels in MapInfo data, validated on {{stat:TeraGo.testCases}} test cases.
 - Deployed a Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
-- Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) with estimated savings over Copilot.
+- Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) to cut per-user Copilot licensing costs.
 
 ### 3D Western
 
