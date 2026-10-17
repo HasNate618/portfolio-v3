@@ -133,8 +133,6 @@ export const site: SiteContent = {
       stats: [
         { key: "courses", label: "courses, in daily use (I'm the only user)", value: "6" },
         { key: "tests", label: "tests in CI on every push", value: "308" },
-        { key: "chunks", label: "chunks", value: "4,687", home: false },
-        { key: "files", label: "course files", value: "215", home: false },
         { key: "tools", label: "agent tools", value: "20", home: false },
       ],
       // Six pills per project, at most: a card is a summary, and a stack of

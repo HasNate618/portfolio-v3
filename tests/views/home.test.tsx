@@ -13,7 +13,7 @@ test("home renders identity, seeking and the Campus card", () => {
   assert.match(html, /Campus/);
   assert.match(html, /courses, in daily use/);
   assert.match(html, /308/);
-  assert.doesNotMatch(html, /4,687/, "the chunk count stays in the case study and résumé");
+  assert.doesNotMatch(html, /4,687/, "the exact chunk count is not published anywhere");
 });
 
 test("home has exactly one h1", () => {

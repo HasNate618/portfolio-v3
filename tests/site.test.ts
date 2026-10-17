@@ -12,8 +12,6 @@ import {
 
 test("Campus carries the figures the draft states", () => {
   const stats = Object.fromEntries(getProject("campus")!.stats.map((s) => [s.key, s.value]));
-  assert.equal(stats.chunks, "4,687");
-  assert.equal(stats.files, "215");
   assert.equal(stats.tests, "308");
   assert.equal(stats.courses, "6");
   assert.ok(getProject("campus")!.stack.includes("FastAPI"));

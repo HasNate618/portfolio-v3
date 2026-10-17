@@ -64,8 +64,8 @@ test("StackList renders every declared item, capped nowhere", () => {
 test("StatRow renders every keyed stat as a description list", () => {
   const html = renderToStaticMarkup(<StatRow projectId="campus" />);
   assert.match(html, /<dl/);
-  assert.match(html, /4,687/);
   assert.match(html, /308/);
+  assert.match(html, /20/);
 });
 
 test("LinkRow renders project links", () => {
