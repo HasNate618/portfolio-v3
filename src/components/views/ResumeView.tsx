@@ -4,13 +4,7 @@ import type { Page } from "@/lib/content";
 import { ExperienceMetaRow } from "@/components/ExperienceMetaRow";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
 import { StackList } from "@/components/StackList";
-
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-function monthYear(iso: string): string {
-  const [year, month] = iso.split("-");
-  return `${MONTHS[Number(month) - 1]} ${year}`;
-}
+import { monthYear } from "@/lib/dates";
 
 /** A `## Group` section, split into its `### Name` subsections in site.ts order. */
 function subsections(body: string, group: string): string[] {
@@ -105,7 +99,7 @@ export function ResumeView({ page }: { page: Page }) {
           </span>
           <br />
           {education.degree}, {education.honors} · {monthYear(education.start)} to{" "}
-          {monthYear(education.end)}
+          {monthYear(education.end)} (expected)
         </p>
       </section>
 

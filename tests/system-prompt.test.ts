@@ -87,3 +87,10 @@ test("the prompt tells the model to admit a thin record instead of filling it", 
   assert.match(prompt, /detail is not in the record/);
   assert.match(prompt, /Do not borrow detail from another project/);
 });
+
+test("the prompt carries both hiring facts, with readable dates", () => {
+  assert.match(prompt, /Aug 2024 to May 2028/);
+  assert.doesNotMatch(prompt, /2024 08/, "the raw site.ts date must not leak into the prompt");
+  assert.match(prompt, /graduates in May 2028/);
+  assert.match(prompt, /23\. For questions about availability/);
+});

@@ -10,6 +10,7 @@ const html = renderToStaticMarkup(<HomeView page={page} />);
 test("home renders identity, seeking and the Campus card", () => {
   assert.match(html, /Nathan Espejo/);
   assert.match(html, /Summer 2027 software engineering or applied AI internship/);
+  assert.match(html, /, graduating May 2028\. Looking for a /);
   assert.match(html, /Campus/);
   assert.match(html, /courses, in daily use/);
   assert.match(html, /308/);

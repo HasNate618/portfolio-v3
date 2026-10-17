@@ -1,4 +1,5 @@
 import { featuredProjects, flagshipProject, site } from "@/data/site";
+import { monthYear } from "@/lib/dates";
 import { EMBED_MODEL } from "./cohere";
 
 interface PromptChunk {
@@ -16,10 +17,10 @@ const LANGUAGES =
   site.skills.find((group) => group.group === "Languages")?.items.join(", ") ?? "";
 
 const HIGHLIGHTS = [
-  `${site.identity.year}, ${site.identity.education.degree} at ${site.identity.education.school} (${site.identity.education.start.replace("-", " ")} to ${site.identity.education.end.replace("-", " ")})`,
+  `${site.identity.year}, ${site.identity.education.degree} at ${site.identity.education.school} (${monthYear(site.identity.education.start)} to ${monthYear(site.identity.education.end)}, graduating ${site.identity.graduation})`,
   ...site.experience.map((role) => `${role.role} at ${role.org} (${role.dates})`),
   `${site.hackathons.awards} awards across ${site.hackathons.entered} hackathons`,
-  `Looking for a ${site.identity.seeking}`,
+  `Looking for a ${site.identity.seeking}; graduates ${site.identity.graduation}`,
   `Based in ${site.identity.location}`,
   LANGUAGES ? `Programming: ${LANGUAGES}` : "",
 ]
@@ -93,6 +94,7 @@ STRICT RULES:
 20. Solo and team are facts. Call a project solo only when its Role in CONTEXT says solo, and never call anything his "first" unless CONTEXT says so.
 21. If someone asks whether Nathan fits a role, answer with the matching evidence from CONTEXT and point them to his email. Do not rate him or promise anything for him.
 22. There is no phone number in the record. Never give one; offer the email and LinkedIn instead.
+23. For questions about availability, internships or hiring, give both facts: he is looking for a ${site.identity.seeking}, and he graduates in ${site.identity.graduation}.
 
 RESUME HIGHLIGHTS:
 ${HIGHLIGHTS}

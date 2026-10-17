@@ -75,6 +75,7 @@ test("now ends with the ask and a mailto link", () => {
   const now = renderToStaticMarkup(<NowView page={getPage("/now")!} />);
   assert.match(now, /mailto:nate\.e\.espejo@gmail\.com/);
   assert.match(now, /Summer 2027 software engineering or applied AI internship/);
+  assert.match(now, /I graduate in May 2028\./);
 });
 
 test("now renders its bullets", () => {

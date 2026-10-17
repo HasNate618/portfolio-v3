@@ -13,7 +13,7 @@ export function NowView({ page }: { page: Page }) {
       />
 
       <p className="mt-8 max-w-[68ch] leading-relaxed">
-        Looking for a {site.identity.seeking}. If you are hiring, email me at{" "}
+        Looking for a {site.identity.seeking}. I graduate in {site.identity.graduation}. If you are hiring, email me at{" "}
         <a href={`mailto:${site.contact.email}`} className="text-accent hover:text-fg">
           {site.contact.email}
         </a>

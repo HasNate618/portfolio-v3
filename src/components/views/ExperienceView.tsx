@@ -4,14 +4,7 @@ import { renderMarkdown, slugify, stripLeadingH1 } from "@/lib/markdown";
 import type { Page } from "@/lib/content";
 import { getPage } from "@/lib/content";
 import { ExperienceMetaRow } from "@/components/ExperienceMetaRow";
-
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-/** "2024-08" to "Aug 2024". Education dates stay in site.ts rather than in prose. */
-function monthYear(iso: string): string {
-  const [year, month] = iso.split("-");
-  return `${MONTHS[Number(month) - 1]} ${year}`;
-}
+import { monthYear } from "@/lib/dates";
 
 /**
  * The content file holds one `## ` section per role, in site.ts order, so the
