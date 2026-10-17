@@ -12,7 +12,7 @@ export function pageMetadata(page: Page, options?: { home?: boolean; article?: b
   return {
     title,
     description: page.description,
-    alternates: { canonical: page.route },
+    alternates: { canonical: page.route, types: { "text/markdown": "/llms.txt" } },
     openGraph: {
       title: ogTitle,
       description: page.description,
