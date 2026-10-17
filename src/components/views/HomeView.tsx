@@ -45,17 +45,18 @@ export function HomeView({ page }: { page: Page }) {
 
   return (
     <article>
-      <h1 className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">{page.title}</h1>
+      {/* The sidebar already shows the name at this size, so keep the heading for structure only. */}
+      <h1 className="sr-only">{page.title}</h1>
+
+      <p className="max-w-[68ch] text-fg">
+        {site.identity.year} at {site.identity.education.school}. Looking for a{" "}
+        {site.identity.seeking}.
+      </p>
 
       <div
         className="rich-text mt-6 max-w-[68ch] leading-relaxed"
         dangerouslySetInnerHTML={{ __html: renderMarkdown(stripLeadingH1(page.body, page.title)) }}
       />
-
-      <p className="mt-6 max-w-[68ch] text-muted">
-        {site.identity.year} at {site.identity.education.school}. Looking for a{" "}
-        {site.identity.seeking}.
-      </p>
 
       <h2 id="experience" className="section-label mt-16">
         Experience
