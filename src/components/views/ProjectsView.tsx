@@ -24,7 +24,7 @@ export const GROUP_LABELS: Record<ProjectGroup, string> = {
   archive: "Archive",
 };
 
-const OPEN_GROUPS: ProjectGroup[] = ["featured", "ai", "hardware", "xr", "tools"];
+const OPEN_GROUPS: ProjectGroup[] = ["featured", "ai", "tools", "hardware", "xr"];
 
 function byGroup(group: ProjectGroup): Project[] {
   return site.projects.filter((p) => p.group === group).sort((a, b) => a.order - b.order);
@@ -45,6 +45,7 @@ export function ProjectsView({ page }: { page: Page }) {
 
       <div
         className="rich-text mt-6 max-w-[68ch] leading-relaxed"
+        // pi-lens-ignore: dangerouslySetInnerHTML
         dangerouslySetInnerHTML={{ __html: renderMarkdown(stripLeadingH1(page.body, page.title)) }}
       />
 
@@ -63,7 +64,7 @@ export function ProjectsView({ page }: { page: Page }) {
 
       <details id="archive" className="mt-16">
         <summary className="cursor-pointer text-xs font-bold uppercase tracking-widest text-fg hover:text-accent">
-          Archive: older and smaller builds, and team hacks where I can&apos;t name my part
+          Archive: earlier builds, small games and team hackathon projects
         </summary>
         <ArchiveTable projects={byGroup("archive")} />
       </details>
@@ -113,7 +114,7 @@ function ArchiveTable({ projects }: { projects: Project[] }) {
       <div className="mt-6 hidden sm:block">
         <table className="w-full border-collapse text-left text-sm">
           <caption className="sr-only">
-            Archive: older and smaller builds, and team hacks where I can&apos;t name my part
+            Archive: earlier builds, small games and team hackathon projects
           </caption>
           <thead>
             <tr className="border-b border-rule">
