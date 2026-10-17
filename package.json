@@ -23,6 +23,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": { "node": ">=22" },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
     "cohere-ai": "^8.1.0",
