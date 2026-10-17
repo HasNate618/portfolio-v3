@@ -81,4 +81,4 @@ A cursed Spotify clone with an intentional terrible early 2000s aesthetic. Featu
 
 - Devpost: https://devpost.com/software/stupid-spotify
 - GitHub: https://github.com/HasNate618/stupid-spotify
-- Live Demo: stupid-spotify-sigma.vercel.app
+- Live Demo: https://stupid-spotify-sigma.vercel.app

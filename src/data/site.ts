@@ -511,7 +511,7 @@ export const site: SiteContent = {
         { src: "/projects/stupid-spotify-0.webp", alt: "Stupid Spotify Dashboard", width: 806, height: 504 },
         { src: "/projects/stupid-spotify-1.webp", alt: "Stupid Spotify Face CAPTCHA", width: 806, height: 481 },
       ],
-      links: [{ label: "Devpost", href: "https://devpost.com/software/stupid-spotify" }, { label: "GitHub", href: "https://github.com/HasNate618/Stupid-Spotify" }],
+      links: [{ label: "Live", href: "https://stupid-spotify-sigma.vercel.app" }, { label: "Devpost", href: "https://devpost.com/software/stupid-spotify" }, { label: "GitHub", href: "https://github.com/HasNate618/Stupid-Spotify" }],
       stats: [], stack: ["Next.js", "TypeScript"],
     },
     {
