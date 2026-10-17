@@ -28,7 +28,7 @@ He built a labelled dataset from 4,127 scraped 3D models, rendered in Blender an
 
 ## Benchmark
 
-He benchmarked base vision models on the clean dataset, with safe, unsafe and grey classes, as groundwork for future fine-tuning.
+He benchmarked base vision models on the 2,559 clean renders, with safe, unsafe and grey classes, as groundwork for future fine-tuning. The best scored 84.2% accuracy.
 
 ## Earlier work as Software Developer
 

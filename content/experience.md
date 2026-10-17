@@ -10,14 +10,14 @@ updated: 2026-10-16
 ---
 # Experience
 
-Roles newest first. Dates, titles and locations come from the site data rather than from this file, so there is one place to correct them.
+Roles newest first.
 
 ## TeraGo
 
 - Automated outage ticketing in Python: a local LLM on Ollama pulls the details out of non-standard provider outage emails and opens Jira issues, reading mail through Microsoft Graph.
 - Wrote Channel Finder, a Python tool that shortlists clear RF channels from MapInfo spectrum records. Validated on {{stat:TeraGo.testCases}} test cases, shipped as a CLI and a web UI.
 - Deployed a Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
-- Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) with estimated savings over Copilot.
+- Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) to cut per-user Copilot licensing costs.
 
 ## 3D Western
 
@@ -25,7 +25,7 @@ Roles newest first. Dates, titles and locations come from the site data rather t
 
 - As VP (May to Aug 2026, alongside TeraGo), led two developers through GitHub tickets and PR review to build the club's print-approval dataset and benchmark.
 - Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender and class-checked by a VLM.
-- Benchmarked base vision models on the clean dataset (safe, unsafe and grey classes) as groundwork for fine-tuning.
+- Benchmarked base vision models on the 2,559 clean renders (safe, unsafe and grey classes) as groundwork for fine-tuning. The best scored 84.2% accuracy.
 - As Software Developer (Sep 2025 to Apr 2026), worked on the Dockerized print pipeline (slicing, orientation, supports, printability checks) and wrote the scraping and rendering scripts.
 
 ## WEMars
