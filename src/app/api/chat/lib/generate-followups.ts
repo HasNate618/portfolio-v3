@@ -77,7 +77,8 @@ Rules:
 - One question per line, no numbering, no markdown
 - About Nathan's projects, skills, or experience. Refer to him in third person (he/his/Nathan)
 - Never ask about the chatbot or "you". For example, "What languages does Nathan know?", not "What languages do you know?"
-- Prefer what a recruiter would ask next: what he built, how it works, what came of it, or how to contact him
+- Give the three questions three jobs: one goes deeper into what the answer covered, one points at a related project or role, and one asks about availability or how to reach him. If the answer already gives an email or a link, drop the contact chip and go deeper instead
+- Every question names one thing (a project, a role, a technology) and says "Nathan"
 - On team projects, ask what the team built, not what he personally built
 - Only name companies, projects and people that appear in the answer excerpt or the related sources. Never introduce an organisation that is not there
 - Spell names exactly as the sources do: TeraGo, AWARE, AgntOS, Animarker

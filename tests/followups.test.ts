@@ -103,6 +103,23 @@ test("the chip prompt forbids invented names and abandoned work", () => {
   assert.match(prompt, /ferret is a local-first search tool/);
 });
 
+/*
+ * Three chips answering the same question three ways was the live pattern: e.g.
+ * all three about Campus. A hiring reader gets more from one that goes deeper,
+ * one that points at related work, and one that leads to contact.
+ */
+test("the chip prompt gives the three questions three jobs", () => {
+  const prompt = buildFollowupPrompt({
+    userMessage: "what is Campus?",
+    aiResponse: "Campus is a self-hosted study assistant.",
+  });
+  assert.match(prompt, /one goes deeper into what the answer covered/);
+  assert.match(prompt, /one points at a related project or role/);
+  assert.match(prompt, /one asks about availability or how to reach him/);
+  assert.match(prompt, /If the answer already gives an email or a link, drop the contact chip/);
+  assert.doesNotMatch(prompt, /Prefer what a recruiter would ask next/);
+});
+
 test("visitor-directed candidates are dropped, not rewritten", () => {
   const questions = normalizeFollowups(["What can you do?"], "", "");
   assert.doesNotMatch(questions.join(" "), /\byou\b|\byour\b/i);

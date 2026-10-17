@@ -123,6 +123,22 @@ test("the prompt keeps AWARE from reading as offline", () => {
 });
 
 /*
+ * A hiring reader should never reach the end of an answer without a next step,
+ * and a fixed line should never be followed by a pitch. Two rules, one for the
+ * pointer and one for the visitor who says they are hiring.
+ */
+test("rule 28 closes with a single next step, and not after a fixed line", () => {
+  assert.match(prompt, /28\. Close with one short line pointing at the single most useful next step/);
+  assert.match(prompt, /Use a URL that appears in CONTEXT or RESUME HIGHLIGHTS, never invent one/);
+  assert.match(prompt, /Never after the fallback in rule 4 or the off-topic reply in rule 11/);
+});
+
+test("rule 21 covers a visitor who says they are hiring", () => {
+  assert.match(prompt, /21\. If someone asks whether Nathan fits a role, or says they are hiring/);
+  assert.match(prompt, /offer his email or LinkedIn/);
+});
+
+/*
  * A live answer called Campus "a mature, production-grade tool" and gave it the
  * homelab's approval gate and rollback. Rule 19 already says a status word needs
  * CONTEXT, but the phrase itself is the model's habit, so it is named.
