@@ -23,6 +23,11 @@ export function PageShell({ current, children }: { current: string; children: Re
           <main id="content" className="page-enter-delayed pt-12 lg:py-24">{children}</main>
         </div>
       </div>
+      <footer className="px-6 pb-12 text-xs text-muted lg:px-12">
+        <a href="/llms.txt" className="hover:text-fg">llms.txt</a>
+        <span className="mx-2" aria-hidden="true">·</span>
+        <span>Machine-readable index of this site.</span>
+      </footer>
     </div>
   );
 }
