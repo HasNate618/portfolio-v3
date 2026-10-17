@@ -5,6 +5,38 @@ interface FollowupRule {
 
 const TOPIC_RULES: FollowupRule[] = [
   {
+    test: /\bcampus|retrieval|brightspace|course\b/i,
+    questions: [
+      "How does Campus rank search results?",
+      "How is Campus tested?",
+      "What does the Campus agent log?",
+    ],
+  },
+  {
+    test: /\bterago|internship|3d western|experience|role\b/i,
+    questions: [
+      "What is Channel Finder?",
+      "What did he lead at 3D Western?",
+      "What internship is he looking for?",
+    ],
+  },
+  {
+    test: /\baware|edge|arduino|on-device\b/i,
+    questions: [
+      "How does AWARE turn English into rules?",
+      "Which models run on AWARE's board?",
+      "How does Nathan keep model costs low?",
+    ],
+  },
+  {
+    test: /\bcontact|hire|email|resume|résumé\b/i,
+    questions: [
+      "How can I contact Nathan?",
+      "Where is his résumé?",
+      "What internship is he looking for?",
+    ],
+  },
+  {
     test: /\bagenticarmy|agentic army|multi-agent\b/i,
     questions: [
       "How does AgenticArmy coordinate agents?",
@@ -16,7 +48,7 @@ const TOPIC_RULES: FollowupRule[] = [
     test: /\brust\b/i,
     questions: [
       "Which projects use Rust?",
-      "What did Nathan build with AgntOS?",
+      "How is his homelab defined in Nix?",
       "How does Rust fit his stack?",
     ],
   },
@@ -31,7 +63,7 @@ const TOPIC_RULES: FollowupRule[] = [
   {
     test: /\bweb\b|frontend|react|next\.?js\b/i,
     questions: [
-      "Which web projects has he shipped?",
+      "What has he built with React and FastAPI?",
       "What frontend stack does he use?",
       "What full-stack projects has he built?",
     ],
@@ -39,14 +71,15 @@ const TOPIC_RULES: FollowupRule[] = [
   {
     test: /\bai\b|llm|rag|machine learning|agent\b/i,
     questions: [
-      "What AI stack does his homelab run?",
-      "How does his homelab support AI?",
-      "What agentic systems has he built?",
+      "How does Campus retrieve answers?",
+      "What did he build at TeraGo?",
+      "How does AWARE run models on-device?",
     ],
   },
   {
-    test: /\bhomelab|infra|docker|proxmox|linux\b/i,
+    test: /\bhomelab|infra|docker|nixos|linux\b/i,
     questions: [
+      "How do his Hermes Agent profiles change config safely?",
       "What services run on his homelab?",
       "How does he secure remote access?",
       "What AI tools does his homelab host?",
@@ -56,15 +89,15 @@ const TOPIC_RULES: FollowupRule[] = [
     test: /\bmobile|android|kotlin\b/i,
     questions: [
       "What Android apps has he built?",
-      "What is Street-Cleaner?",
-      "What mobile features did he design?",
+      "What is Animarker?",
+      "What is SafeRoute?",
     ],
   },
   {
     test: /\bhackathon|award|win\b/i,
     questions: [
       "Which hackathons has he won?",
-      "What was his best AI hackathon project?",
+      "What did he build at Hack the 6ix?",
       "What awards has he received?",
     ],
   },
@@ -79,9 +112,9 @@ const TOPIC_RULES: FollowupRule[] = [
 ];
 
 const DEFAULT_FOLLOWUPS = [
-  "What is his homelab?",
-  "Which AI systems did he build?",
-  "What hackathons has he won?",
+  "What is Campus?",
+  "What did he build at TeraGo?",
+  "How can I contact Nathan?",
 ];
 
 const AI_DIRECTED = /\b(you|your|chatbot|assistant)\b/i;
