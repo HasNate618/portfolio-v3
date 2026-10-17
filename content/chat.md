@@ -4,7 +4,7 @@ type: page
 route: /chat
 description: Ask questions about my projects and experience. Answers come from my public notes.
 priority: reference
-starters: [What are Nathan's strongest projects?, What did Nathan build at TeraGo and 3D Western?, How does Campus answer from his course files?, What software engineering work has he done beyond AI?, What internship is he looking for and how do I reach him?]
+starters: [What does Nathan build?, What did Nathan do at his internship?, What's Nathan's proudest project?, Is Nathan looking for a Summer 2027 internship?]
 updated: 2026-10-16
 ---
 # Ask about me

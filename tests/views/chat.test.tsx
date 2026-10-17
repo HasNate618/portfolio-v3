@@ -11,7 +11,7 @@ const html = renderToStaticMarkup(<ChatView page={page} />);
 const text = html.replace(/&#x27;/g, "'");
 
 test("chat renders starters and the JS-off notice in the HTML", () => {
-  assert.match(text, /What are Nathan's strongest projects\?/);
+  assert.match(text, /What does Nathan build\?/);
   assert.match(html, /needs JavaScript/);
   assert.match(html, /\/llms\.txt/);
 });
@@ -33,7 +33,7 @@ test("no Sources line is rendered", () => {
   assert.doesNotMatch(html, />Sources:/);
 });
 
-test("all five starters are offered as buttons for JS users", () => {
+test("every starter is offered as a button for JS users", () => {
   for (const starter of page.starters ?? []) {
     assert.ok(text.includes(starter), `missing starter: ${starter}`);
     assert.ok(text.includes(`>${starter}</button>`), `starter is not a button: ${starter}`);
