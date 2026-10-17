@@ -471,19 +471,19 @@ li {
  * each other by utility sort order.
  */
 
-/* A bubble with one squared-off corner: the side the message came from. */
+/* A bubble with one nearly-square corner: the side the message came from. */
 .bubble-user {
-  border-radius: 1.5rem 1.5rem 0.5rem 1.5rem;
+  border-radius: 1.5rem 1.5rem 0.25rem 1.5rem;
 }
 
 .bubble-assistant {
-  border-radius: 1.5rem 1.5rem 1.5rem 0.5rem;
+  border-radius: 1.5rem 1.5rem 1.5rem 0.25rem;
 }
 
 /* Messages passing under the top edge dissolve instead of being sliced off. */
 .scroll-fade-top {
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 2.5rem);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 2.5rem);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 1.25rem);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 1.25rem);
 }
 
 /*

@@ -151,9 +151,10 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
       {/*
        * The transcript scrolls on its own but carries no chrome: no card, no
        * border, no fill. The conversation reads as part of the page rather than
-       * as a widget in a pane, and it ends flush against the composer.
+       * as a widget in a pane. The top padding lifts the first message clear
+       * of the fade; the bottom one keeps suggestions off the composer.
        */}
-      <div ref={scrollRef} className="scroll-pane scroll-fade-top flex-1 overflow-y-auto">
+      <div ref={scrollRef} className="scroll-pane scroll-fade-top flex-1 overflow-y-auto pt-6 pb-4">
         <ol aria-live="polite" className="flex flex-col gap-4">
           {/*
            * The page's intro is content, not chrome: it arrives the way every
@@ -300,7 +301,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
           Ask the assistant about Campus, TeraGo, or anything else
         </label>
         <div
-          className={`flex items-end gap-2 rounded-2xl border border-rule bg-surface p-2 ${
+          className={`flex items-center gap-2 rounded-3xl border border-rule bg-surface p-2 ${
             keyboardFocus ? "focus-within:ring-2 focus-within:ring-accent/40" : ""
           }`}
         >
