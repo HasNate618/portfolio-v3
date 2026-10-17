@@ -122,6 +122,16 @@ test("the prompt keeps AWARE from reading as offline", () => {
   assert.match(prompt, /no cloud inference/i);
 });
 
+/*
+ * A live answer called Campus "a mature, production-grade tool" and gave it the
+ * homelab's approval gate and rollback. Rule 19 already says a status word needs
+ * CONTEXT, but the phrase itself is the model's habit, so it is named.
+ */
+test("rule 19 forbids the production-grade phrasing", () => {
+  assert.match(prompt, /Never call a project "production-grade" or "production-ready"/);
+  assert.match(prompt, /say what is actually in use/);
+});
+
 test("the prompt carries both hiring facts, with readable dates", () => {
   assert.match(prompt, /Aug 2024 to May 2028/);
   assert.doesNotMatch(prompt, /2024 08/, "the raw site.ts date must not leak into the prompt");
