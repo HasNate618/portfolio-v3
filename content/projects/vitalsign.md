@@ -75,6 +75,5 @@ Many accessibility tools focus on word translation and miss emotional context. V
 
 ## Links
 
-- Live Demo: https://www.sure-heres-a-list-of-funny-domain-names-you-can-get-using.tech/
 - Devpost: https://devpost.com/software/vital-sign
 - GitHub: https://github.com/liamma06/VitalSign

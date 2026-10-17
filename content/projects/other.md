@@ -20,7 +20,6 @@ A mobile game that teaches players what kinds of waste items go in which bins th
 
 - Devpost: https://devpost.com/software/street-cleaner
 - GitHub: https://github.com/HasNate618/Street-Cleaner-Game
-- Google Play: https://play.google.com/store/apps/details?id=com.NathanEspejo.StreetCleaner
 
 ## VR ODM Gear Sim
 <a id="vr-odm-gear"></a>
@@ -57,21 +56,15 @@ Bluetooth-controlled rubber band turret with smooth servo movement and wireless 
 
 Take down ninjas using quick reflexes in this action mobile game. Built with Unity3D, C# and Google Play. (undated.)
 
-- Google Play: https://play.google.com/store/apps/details?id=com.NathanEspejo.Mtaru
-
 ## Zenith Tower
 <a id="zenith-tower"></a>
 
 Ascend an endless futuristic dungeon tower in this fast-paced mobile crawler. Built with Unity3D, C# and Google Play. (undated.)
 
-- Google Play: https://play.google.com/store/apps/details?id=com.NathanEspejo.ZenithTower
-
 ## Tic Tac Toe Ultimate
 <a id="tic-tac-toe-ultimate"></a>
 
 The Ultimate Tic Tac Toe experience on Android. Built with Unity3D, C# and Google Play. (undated.)
-
-- Google Play: https://play.google.com/store/apps/details?id=com.NathanEspejo.TicTacToeUltimate
 
 ## Object-Love-Interface
 <a id="object-love-interface"></a>
