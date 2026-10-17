@@ -1,5 +1,6 @@
 import { rerankChunks, retrieveRelevantChunks } from "../chat/lib/rag";
 import { checkSearchDailyCap, checkSearchRateLimit, SITE_KEY } from "../chat/lib/rate-limit";
+import { parseSearchParams, shapeHits } from "./lib/params";
 import { siteBaseUrl } from "@/lib/site-url";
 
 /**
@@ -11,59 +12,10 @@ import { siteBaseUrl } from "@/lib/site-url";
  * query twice is free because the response is cacheable.
  *
  * The full text stays at /knowledgebase/*.md. This ranks it, it does not hide it.
+ *
+ * The route file exports the handler and nothing else: the build type-checks the
+ * exports of a route module, and a helper exported here fails it.
  */
-
-const DEFAULT_LIMIT = 5;
-const MAX_LIMIT = 10;
-const MIN_QUERY_CHARS = 2;
-const MAX_QUERY_CHARS = 200;
-
-export interface SearchParams {
-  query: string;
-  limit: number;
-}
-
-export function parseSearchParams(params: URLSearchParams): SearchParams | { error: string } {
-  const query = (params.get("q") ?? "").trim();
-
-  if (query.length < MIN_QUERY_CHARS) {
-    return { error: `Add a q parameter of at least ${MIN_QUERY_CHARS} characters.` };
-  }
-
-  if (query.length > MAX_QUERY_CHARS) {
-    return { error: `q must be ${MAX_QUERY_CHARS} characters or fewer.` };
-  }
-
-  const requested = Number.parseInt(params.get("limit") ?? "", 10);
-  const limit = Number.isFinite(requested) && requested > 0 ? Math.min(requested, MAX_LIMIT) : DEFAULT_LIMIT;
-
-  return { query, limit };
-}
-
-export interface SearchHit {
-  score: number;
-  source: string;
-  section: string;
-  url: string;
-  text: string;
-}
-
-interface RankedChunk {
-  score: number;
-  source: string;
-  section: string;
-  text: string;
-}
-
-export function shapeHits(chunks: RankedChunk[], base: string): SearchHit[] {
-  return chunks.map((chunk) => ({
-    score: Number(chunk.score.toFixed(4)),
-    source: chunk.source,
-    section: chunk.section,
-    url: `${base}/knowledgebase/${chunk.source}`,
-    text: chunk.text,
-  }));
-}
 
 function json(body: unknown, status: number, headers: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(body), {

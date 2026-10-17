@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { GET, parseSearchParams, shapeHits } from "../src/app/api/search/route";
+import { GET } from "../src/app/api/search/route";
+import { parseSearchParams, shapeHits } from "../src/app/api/search/lib/params";
 
 test("q is required, trimmed and bounded", () => {
   assert.ok("error" in parseSearchParams(new URLSearchParams()), "no q");
