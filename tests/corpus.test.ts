@@ -44,6 +44,11 @@ test("lookup is exact, not normalized", () => {
   assert.equal(getCorpusDoc("./about.md"), undefined);
 });
 
+test("AWARE is not described as offline", () => {
+  const aware = getCorpusDoc("projects/aware.md")!;
+  assert.match(aware.text, /No cloud inference, but not offline/);
+});
+
 test("every corpus path is unique and relative", () => {
   const paths = getCorpusDocs().map((d) => d.path);
   assert.equal(new Set(paths).size, paths.length, "duplicate corpus path");

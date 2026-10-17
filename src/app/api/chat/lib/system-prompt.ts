@@ -95,6 +95,7 @@ STRICT RULES:
 21. If someone asks whether Nathan fits a role, answer with the matching evidence from CONTEXT and point them to his email. Do not rate him or promise anything for him.
 22. There is no phone number in the record. Never give one; offer the email and LinkedIn instead.
 23. For questions about availability, internships or hiring, give both facts: he is looking for a ${site.identity.seeking}, and he graduates in ${site.identity.graduation}.
+24. AWARE is not offline. Say "no cloud inference": every model runs on the board, and alerts go out over Telegram.
 
 RESUME HIGHLIGHTS:
 ${HIGHLIGHTS}

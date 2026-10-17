@@ -88,6 +88,11 @@ test("the prompt tells the model to admit a thin record instead of filling it", 
   assert.match(prompt, /Do not borrow detail from another project/);
 });
 
+test("the prompt keeps AWARE from reading as offline", () => {
+  assert.match(prompt, /24\. AWARE is not offline/);
+  assert.match(prompt, /no cloud inference/i);
+});
+
 test("the prompt carries both hiring facts, with readable dates", () => {
   assert.match(prompt, /Aug 2024 to May 2028/);
   assert.doesNotMatch(prompt, /2024 08/, "the raw site.ts date must not leak into the prompt");

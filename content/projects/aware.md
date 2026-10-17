@@ -18,7 +18,7 @@ updated: 2026-10-16
 
 ## tl;dr
 
-- Every model runs on one {{stat:aware.boardCost}} Arduino UNO Q. No cloud inference: the camera and mic are processed on the board, and alerts go out over Telegram.
+- Every model runs on one {{stat:aware.boardCost}} Arduino UNO Q. No cloud inference, but not offline: the camera and mic are processed on the board, and alerts go out over Telegram.
 - You type a rule like "when glass breaks after 10pm alert me". An on-device LLM turns it into a deterministic rule.
 - A rules engine checks every active rule each 500 ms. No LLM in that loop.
 - YOLOv8n runs on the board's Adreno GPU through ONNX Runtime QNN.
