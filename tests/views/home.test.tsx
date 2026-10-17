@@ -11,8 +11,9 @@ test("home renders identity, seeking and the Campus card", () => {
   assert.match(html, /Nathan Espejo/);
   assert.match(html, /Summer 2027 software engineering or applied AI internship/);
   assert.match(html, /Campus/);
-  assert.match(html, /4,687/);
+  assert.match(html, /courses, in daily use/);
   assert.match(html, /308/);
+  assert.doesNotMatch(html, /4,687/, "the chunk count stays in the case study and résumé");
 });
 
 test("home has exactly one h1", () => {

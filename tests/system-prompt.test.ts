@@ -10,7 +10,9 @@ const prompt = buildSystemPrompt([
 test("Campus leads the project order", () => {
   const order = prompt.slice(prompt.indexOf("Order:"));
   assert.ok(order.includes("Campus"), "Campus must appear in the priority list");
-  assert.ok(order.indexOf("Campus") < order.indexOf("Homelab"));
+  // Read the name from site.ts: renaming a project must not break this test.
+  const homelab = site.projects.find((project) => project.id === "homelab")!.name;
+  assert.ok(order.indexOf("Campus") < order.indexOf(homelab));
 });
 
 test("no stale v2 interface description survives", () => {

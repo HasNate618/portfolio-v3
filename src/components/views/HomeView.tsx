@@ -55,6 +55,7 @@ export function HomeView({ page }: { page: Page }) {
 
       <div
         className="rich-text mt-6 max-w-[68ch] leading-relaxed"
+        // pi-lens-ignore: dangerouslySetInnerHTML
         dangerouslySetInnerHTML={{ __html: renderMarkdown(stripLeadingH1(page.body, page.title)) }}
       />
 

@@ -26,7 +26,7 @@ test("projects renders every group label", () => {
 test("the archive is a native disclosure with a compact table", () => {
   assert.match(html, /<details/);
   assert.match(html, /<summary/);
-  assert.match(html, /older and smaller builds/);
+  assert.match(html, /earlier builds, small games and team hackathon projects/);
   assert.match(html, /<th scope="col"[^>]*>Role<\/th>/);
 });
 
@@ -69,7 +69,7 @@ test("group labels are the capitalized display form, not the slugs", () => {
 });
 
 test("team projects carry the honesty rule before any credit", () => {
-  const rule = html.indexOf("Team projects are marked as team projects");
+  const rule = html.indexOf("Team projects are labelled as team projects");
   const firstTeam = html.indexOf("Auralis");
   assert.ok(rule !== -1 && rule < firstTeam, "the honesty rule must precede team credits");
 });

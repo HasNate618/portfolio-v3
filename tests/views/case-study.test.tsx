@@ -19,8 +19,8 @@ test("Campus renders its sections and figures", () => {
   for (const h of ["tl;dr", "Why I built it", "How it works", "Models and cost", "Results", "Stack"]) {
     assert.ok(html.includes(h), `missing ${h}`);
   }
-  assert.match(html, /4,687/);
-  assert.match(html, /215/);
+  assert.match(html, /just over 200 of them as of early October 2026/);
+  assert.match(html, /308/);
 });
 
 test("the on-this-page list links to real heading ids", () => {
@@ -54,7 +54,9 @@ test("no figure is typed into the content file", () => {
   for (const figure of ["4,687", "215", "308"]) {
     assert.ok(!page.body.includes(figure), `${figure} must come from site.ts, not the markdown`);
   }
-  assert.match(page.body, /\{\{stat:campus\.chunks\}\}/);
+  assert.match(page.body, /\{\{stat:campus\.tests\}\}/);
+  // The file count is dated prose rather than a stat, so it cannot be resolved from site.ts.
+  assert.match(page.body, /just over 200 of them as of early October 2026/);
 });
 
 test("the stack renders from site.ts rather than the markdown", () => {
