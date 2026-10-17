@@ -151,7 +151,7 @@ export const site: SiteContent = {
       file: "/knowledgebase/projects/homelab.md",
       onResume: true,
       rank: "featured",
-      links: [{ label: "GitHub (public NixOS config)", href: "https://github.com/HasNate618/nixos-config-public" }, { label: "GitHub (llama.cpp setup)", href: "https://github.com/HasNate618/local-llama-setup" }],
+      links: [{ label: "GitHub (public NixOS config)", href: "https://github.com/HasNate618/nixos-config-public" }],
       stats: [
         { key: "machines", label: "machines, one NixOS flake", value: "2" },
         { key: "containers", label: "hardened containers", value: "27" },
