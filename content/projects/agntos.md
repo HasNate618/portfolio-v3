@@ -22,7 +22,7 @@ The system changes through three loops: system changes (propose, apply, nixos-re
 
 ## Status
 
-Work in progress (concept).
+Concept.
 
 ## Tech Stack
 
@@ -61,7 +61,7 @@ The agent manages exactly one directory tree that NixOS imports:
   models.toml        LLM endpoint configuration
 ```
 
-The agent never touches arbitrary user configuration, clean contract, no side effects.
+The agent never touches arbitrary user configuration.
 
 ### Propose → Apply → Audit → Undo Pipeline
 
@@ -74,9 +74,9 @@ Every system mutation goes through a validated pipeline:
 
 ## Key Design Decisions
 
-- **Rust** over Python (too slow for CLI latency) or Go (lacks type safety for audit/config schemas). Rust's type system ensures serde roundtrips are compile-time checked and file path traversal is blocked at the type level.
+- **Rust** over Python (too slow for CLI latency) or Go. Typed serde structs mean the audit and config schemas are checked at compile time.
 - **KDE Plasma 6** for Kirigami-native GUI, Wayland-native security boundaries, KRunner-extensible agent actions, and DBus-addressable system tray/notifications.
-- **No plugin system / MCP**. Pi-inspired read/write/edit/bash primitives replace dozens of specialized tools. Need an API? run_bash + curl. New file format? run_bash + jq/yq/python3.
+- **No plugin system / MCP**. A few read/write/edit/bash primitives replace dozens of specialized tools. Need an API? run_bash + curl. New file format? run_bash + jq/yq/python3.
 - **Single memory system**. Two markdown files (MEMORY.md at 2,200 chars, USER.md at 1,375 chars) curated directly by the agent. Stores preferences and intent, not inspectable system state. No background extraction pipeline, the agent with full in-context judgment is the best arbiter of what matters.
 - **Bash for introspection**. One tool (run_bash) replaces dozens of brittle JSON wrappers for systemctl, journalctl, dmesg, ps, df. Six Nix-specific tools exist because they require structured data that bash cannot easily represent.
 

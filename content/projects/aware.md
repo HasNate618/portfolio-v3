@@ -59,4 +59,3 @@ The LLM only runs when you add a rule, ask a question, or a digest is due. The 5
 ## Results
 
 - Built at Hack the 6ix 2026, with all inference on one {{stat:aware.boardCost}} board.
-- Demo video and latency numbers: not posted yet.

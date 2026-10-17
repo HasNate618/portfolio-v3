@@ -14,7 +14,7 @@ updated: 2026-10-16
 ---
 # CareBridge
 
-AI healthcare platform connecting rural patients and providers with intelligent check-ins and risk tracking. Built with React 19, TypeScript and Vite.
+A care platform for rural patients and providers, built by a team at Spark 2026. Patients check in by chat or voice, and providers see one timeline with risk signals from those check-ins. Built with React 19, TypeScript, Vite and FastAPI.
 
 ## Status
 
@@ -38,7 +38,7 @@ CareBridge AI is a healthcare coordination platform designed for rural communiti
 
 ### Inspiration
 
-A winter storm that cut off access to a regional hospital exposed ongoing problems: missed referrals, fragmented communication, and lack of systematic follow-up escalating into preventable emergencies. We wanted to build a solution that actively closes the loop on care.
+A winter storm that cut off access to a regional hospital exposed ongoing problems: missed referrals, fragmented communication, and lack of systematic follow-up escalating into preventable emergencies. The goal was to catch missed follow-ups before they turned into emergencies.
 
 ### What It Does
 

@@ -1,5 +1,5 @@
 ---
-title: Homelab and Hermes Agent
+title: NixOS homelab
 type: project
 route: /projects/homelab
 description: Two NixOS machines in one flake, with AI agents that change the config only after I approve.
@@ -14,7 +14,7 @@ status: in-progress
 rank: featured
 updated: 2026-10-16
 ---
-# Homelab and Hermes Agent
+# NixOS homelab
 
 ## tl;dr
 
@@ -64,10 +64,9 @@ me: "change X" ─► agent edits NixOS config ─► I approve
 
 ## Models and cost
 
-- The agents mostly run on low-cost hosted models picked per task, not the most capable and most expensive one.
+- The agents mostly run on low-cost hosted models, picked per task.
 - llama.cpp on the laptop serves local GGUF models, and both agent profiles can use it.
 - Bifrost routes between local and cloud models from one endpoint.
-- Monthly API spend: still collecting a full month of data.
 
 ## Results
 
