@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { site, featuredProjects, flagshipProject, awardFor } from "@/data/site";
 import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
-import { getPage, type Page } from "@/lib/content";
+import { caseStudyHref as projectHref, getPage, type Page } from "@/lib/content";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
 import { StatRow } from "@/components/StatRow";
 import { StackList } from "@/components/StackList";
@@ -131,6 +131,9 @@ export function HomeView({ page }: { page: Page }) {
       <ul className="mt-8 flex flex-col gap-6">
         {featured.map((project) => {
           const award = awardFor(project.name);
+          // Same honesty rule as the roles above: a featured project only links
+          // out when a case-study route exists, so no card points at a 404.
+          const href = projectHref(project);
           return (
             <li
               key={project.id}
@@ -141,9 +144,13 @@ export function HomeView({ page }: { page: Page }) {
               }`}
             >
               <h3 className="text-lg font-medium leading-snug text-fg">
-                <Link href={`/projects/${project.id}`} className="hover:text-accent">
-                  {project.name}
-                </Link>
+                {href ? (
+                  <Link href={href} className="hover:text-accent">
+                    {project.name}
+                  </Link>
+                ) : (
+                  project.name
+                )}
               </h3>
               <div className="mt-1">
                 <ProjectMetaRow projectId={project.id} />
@@ -186,7 +193,7 @@ export function HomeView({ page }: { page: Page }) {
         Awards
       </h2>
       <p className="mt-4 max-w-[68ch] leading-relaxed">
-        {site.hackathons.awards} awards across {site.hackathons.entered} hackathons, mostly with teams.
+        {site.hackathons.awards} awards across {site.hackathons.entered} hackathons, all with teams.
         Four I&apos;d point to are below. The rest are on the projects page.
       </p>
       <div className="mt-6">
