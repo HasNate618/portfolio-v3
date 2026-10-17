@@ -8,7 +8,7 @@ export function LinkRow({ projectId }: { projectId: string }) {
     <ul className="flex flex-wrap gap-4">
       {project.links.map((link) => (
         <li key={link.href}>
-          <a href={link.href} className="text-accent underline hover:text-fg">
+          <a href={link.href} className="font-medium text-accent hover:text-fg">
             {link.label} <span aria-hidden="true">→</span>
           </a>
         </li>

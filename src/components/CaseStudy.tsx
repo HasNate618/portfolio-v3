@@ -5,7 +5,6 @@ import { ProjectMetaRow } from "@/components/ProjectMetaRow";
 import { ExperienceMetaRow } from "@/components/ExperienceMetaRow";
 import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
-import { OnThisPage } from "@/components/OnThisPage";
 import { ProjectMedia } from "@/components/ProjectMedia";
 import { AwardBadge } from "@/components/AwardBadge";
 import { getProject } from "@/data/site";
@@ -60,9 +59,8 @@ export function CaseStudy({
 
       <ProjectMedia media={getProject(page.projectId ?? "")?.media} className="mt-8 max-w-2xl" />
 
-      <div className="mt-8">
-        <OnThisPage items={page.onThisPage} />
-      </div>
+      {/* No "On this page" box: a case study is short enough to read
+          straight through, and the box pushed the body below the fold. */}
 
       <div
         className="rich-text mt-10 max-w-[68ch] leading-relaxed"
@@ -82,7 +80,7 @@ export function CaseStudy({
 
       {nextHref && nextLabel ? (
         <p className="mt-16 border-t border-rule pt-6 text-sm">
-          <Link href={nextHref} className="text-accent underline hover:text-fg">
+          <Link href={nextHref} className="text-accent hover:text-fg">
             Next case study: {nextLabel} <span aria-hidden="true">→</span>
           </Link>
         </p>

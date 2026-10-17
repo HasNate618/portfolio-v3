@@ -253,11 +253,11 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
         {status === "error" ? (
           <p className="mt-5 text-sm text-muted" role="alert">
             Something went wrong and the assistant couldn&rsquo;t answer. Try again, or read the{" "}
-            <Link href="/projects" className="text-accent underline hover:text-fg">
+            <Link href="/projects" className="text-accent hover:text-fg">
               projects
             </Link>{" "}
             and{" "}
-            <Link href="/resume" className="text-accent underline hover:text-fg">
+            <Link href="/resume" className="text-accent hover:text-fg">
               resume
             </Link>{" "}
             pages.

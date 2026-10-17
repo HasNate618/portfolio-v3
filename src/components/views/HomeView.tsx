@@ -67,7 +67,7 @@ export function HomeView({ page }: { page: Page }) {
                 ) : null}
                 {href ? (
                   <p className="mt-1">
-                    <Link href={href} className="text-accent underline hover:text-fg">
+                    <Link href={href} className="text-accent hover:text-fg">
                       Case study
                       <span aria-hidden="true"> →</span>
                     </Link>

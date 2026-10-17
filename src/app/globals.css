@@ -53,38 +53,38 @@
   /* The `:not` lets an explicit dark choice survive a light operating system. */
   :root:not([data-theme="dark"]) {
     color-scheme: light;
-    --color-bg: #f7f9f5;
-    --color-fg: #222722;
-    --color-muted: #565f57;
+    --color-bg: #f8f6f1;
+    --color-fg: #2b2823;
+    --color-muted: #6b6459;
     --color-accent: #2f6b46;
-    --color-rule: rgba(34, 39, 34, 0.12);
-    --color-surface: rgba(34, 39, 34, 0.03);
-    --color-bubble: rgba(255, 255, 255, 0.75);
-    --color-code-bg: rgba(34, 39, 34, 0.06);
-    --color-pre-bg: rgba(34, 39, 34, 0.04);
-    --color-selection-fg: #f7fbf6;
-    --color-scrollbar: rgba(34, 39, 34, 0.25);
-    --glow-1: rgba(140, 199, 161, 0.16);
-    --glow-2: rgba(95, 156, 120, 0.1);
+    --color-rule: rgba(43, 40, 35, 0.13);
+    --color-surface: rgba(43, 40, 35, 0.03);
+    --color-bubble: rgba(255, 253, 248, 0.8);
+    --color-code-bg: rgba(43, 40, 35, 0.06);
+    --color-pre-bg: rgba(43, 40, 35, 0.04);
+    --color-selection-fg: #faf7f1;
+    --color-scrollbar: rgba(43, 40, 35, 0.25);
+    --glow-1: rgba(163, 201, 168, 0.14);
+    --glow-2: rgba(203, 179, 127, 0.08);
   }
 }
 
 /* The same scheme, chosen by hand. Survives a dark operating system. */
 :root[data-theme="light"] {
   color-scheme: light;
-  --color-bg: #f7f9f5;
-  --color-fg: #222722;
-  --color-muted: #565f57;
+  --color-bg: #f8f6f1;
+  --color-fg: #2b2823;
+  --color-muted: #6b6459;
   --color-accent: #2f6b46;
-  --color-rule: rgba(34, 39, 34, 0.12);
-  --color-surface: rgba(34, 39, 34, 0.03);
-  --color-bubble: rgba(255, 255, 255, 0.75);
-  --color-code-bg: rgba(34, 39, 34, 0.06);
-  --color-pre-bg: rgba(34, 39, 34, 0.04);
-  --color-selection-fg: #f7fbf6;
-  --color-scrollbar: rgba(34, 39, 34, 0.25);
-  --glow-1: rgba(140, 199, 161, 0.16);
-  --glow-2: rgba(95, 156, 120, 0.1);
+  --color-rule: rgba(43, 40, 35, 0.13);
+  --color-surface: rgba(43, 40, 35, 0.03);
+  --color-bubble: rgba(255, 253, 248, 0.8);
+  --color-code-bg: rgba(43, 40, 35, 0.06);
+  --color-pre-bg: rgba(43, 40, 35, 0.04);
+  --color-selection-fg: #faf7f1;
+  --color-scrollbar: rgba(43, 40, 35, 0.25);
+  --glow-1: rgba(163, 201, 168, 0.14);
+  --glow-2: rgba(203, 179, 127, 0.08);
 }
 
 /*
@@ -262,19 +262,22 @@ li {
   color: var(--color-fg);
 }
 
+/*
+ * Links read by colour alone; the underline only arrives on hover or focus,
+ * as confirmation. The accent is a full shade away from body text in both
+ * schemes, which is what makes this safe to do.
+ */
 .rich-text a,
 .markdown a {
   color: var(--color-accent);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  text-decoration-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
 }
 
 .rich-text a:hover,
 .markdown a:hover {
   color: var(--color-fg);
-  text-decoration-color: var(--color-fg);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
 .rich-text strong,

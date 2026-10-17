@@ -21,7 +21,7 @@ export function ChatView({ page }: { page: Page }) {
         <p className="mt-6 max-w-[68ch] leading-relaxed">
           The chat needs JavaScript. Everything it knows is on the projects, experience and resume
           pages, and in plain text at{" "}
-          <a href="/llms.txt" className="text-accent underline">
+          <a href="/llms.txt" className="text-accent">
             /llms.txt
           </a>
           .
@@ -45,7 +45,7 @@ export function ChatView({ page }: { page: Page }) {
         email{" "}
         <a
           href={`mailto:${site.contact.email}`}
-          className="text-accent underline hover:text-fg"
+          className="text-accent hover:text-fg"
         >
           {site.contact.email}
         </a>
