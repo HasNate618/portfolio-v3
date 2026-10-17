@@ -55,9 +55,14 @@ export function ResumeView({ page }: { page: Page }) {
        */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">{page.title}</h1>
+        {/*
+         * Filled like the chat button, not outlined: this is the one thing a
+         * reader comes to this page to do, and an outlined pill next to a
+         * heading read as decoration.
+         */}
         <a
           href="/Nathan_Espejo_Resume.pdf"
-          className="inline-flex items-center gap-2 rounded-full border border-rule px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:text-accent"
+          className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-bold text-bg transition-opacity hover:opacity-85"
         >
           <svg
             viewBox="0 0 24 24"

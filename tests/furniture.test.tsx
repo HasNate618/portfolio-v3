@@ -50,26 +50,15 @@ test("StackList renders from site.ts", () => {
 });
 
 /*
- * Featured projects carry twelve to nineteen pills, which buries a card's own
- * text. A card shows a capped list plus the count that is left over, linking to
- * the case study where the full stack lives.
+ * There is no cap in the component: a stack is trimmed in site.ts to the pieces
+ * that carry the project, and whatever is declared there is what a card shows.
+ * A silent truncation here is the thing this guards against.
  */
-test("a capped StackList shows the overflow and links to the case study", () => {
-  const stack = getProject("campus")!.stack;
-  const html = renderToStaticMarkup(<StackList projectId="campus" limit={4} />);
-  assert.ok(
-    html.includes(`+${stack.length - 4} more`),
-    `expected a "+${stack.length - 4} more" pill`
-  );
-  assert.match(html, /href="\/projects\/campus"/);
-  assert.ok(!html.includes(stack[stack.length - 1]), "the last pill must be left out");
-});
-
-test("an uncapped StackList still renders everything", () => {
+test("StackList renders every declared item, capped nowhere", () => {
   const stack = getProject("campus")!.stack;
   const html = renderToStaticMarkup(<StackList projectId="campus" />);
-  assert.ok(html.includes(stack[stack.length - 1]), "case studies show the full stack");
-  assert.doesNotMatch(html, /more<\/a>/);
+  for (const item of stack) assert.ok(html.includes(item), `missing pill ${item}`);
+  assert.doesNotMatch(html, /more<\/a>/, "no overflow count belongs on a card");
 });
 
 test("StatRow renders every keyed stat as a description list", () => {

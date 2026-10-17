@@ -127,7 +127,7 @@ function ProjectCard({ project, showStats }: { project: Project; showStats?: boo
         </div>
       ) : null}
       <div className="mt-4">
-        <StackList projectId={project.id} limit={6} />
+        <StackList projectId={project.id} />
       </div>
       <div className="mt-4">
         <LinkRow projectId={project.id} />

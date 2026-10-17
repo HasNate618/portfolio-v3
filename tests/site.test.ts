@@ -19,6 +19,20 @@ test("Campus carries the figures the draft states", () => {
   assert.ok(getProject("campus")!.stack.includes("FastAPI"));
 });
 
+/*
+ * A stack is the short answer to "what is this built with", and a card is where
+ * that answer is read. The three featured projects had grown to twelve,
+ * seventeen and nineteen entries, which turned every card into a wall of tags
+ * and buried the card's own text. The list stays a list; it does not grow into a
+ * manifest.
+ */
+test("no project stack is long enough to bury its card", () => {
+  for (const project of site.projects) {
+    const count = project.stack?.length ?? 0;
+    assert.ok(count <= 8, `${project.id} declares ${count} pills`);
+  }
+});
+
 test("Homelab carries the figures the draft states", () => {
   const stats = Object.fromEntries(getProject("homelab")!.stats.map((s) => [s.key, s.value]));
   assert.equal(stats.sessions, "472");

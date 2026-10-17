@@ -140,7 +140,11 @@ export const site: SiteContent = {
         { key: "courses", label: "courses", value: "6" },
         { key: "tools", label: "agent tools", value: "20" },
       ],
-      stack: ["Python", "FastAPI", "SQLite", "Playwright", "embeddings", "cross-encoder reranking", "React", "TypeScript", "Vite (PWA)", "Docker", "NixOS", "GitHub Actions"],
+      // Six pills per project, at most: a card is a summary, and a stack of
+      // twelve to nineteen turned every card into a wall of tags that buried
+      // its own text. Only the pieces that carry the project stay; the case
+      // study is where the full list would belong if it were worth listing.
+      stack: ["Python", "FastAPI", "SQLite", "embeddings", "cross-encoder reranking", "React"],
     },
     {
       id: "homelab", name: "Homelab and Hermes Agent", group: "featured", order: 2,
@@ -159,7 +163,7 @@ export const site: SiteContent = {
         { key: "skills", label: "agent skills", value: "191" },
         { key: "containers", label: "containers", value: "27" },
       ],
-      stack: ["NixOS", "Nix flakes", "Hermes Agent", "Docker", "Tailscale", "Caddy", "sops-nix", "Open WebUI", "Bifrost", "llama.cpp", "Whisper", "MCP", "Python", "Playwright", "Uptime Kuma", "Netdata", "ntfy"],
+      stack: ["NixOS", "Nix flakes", "Docker", "Tailscale", "Hermes Agent", "llama.cpp"],
     },
     {
       id: "aware", name: "AWARE", group: "featured", order: 3,
@@ -177,7 +181,9 @@ export const site: SiteContent = {
         { key: "boardCost", label: "board cost", value: "$80" },
         { key: "models", label: "models on device", value: "5" },
       ],
-      stack: ["Python 3.12", "FastAPI", "asyncio", "WebSockets", "YOLOv8n", "YAMNet", "Whisper-tiny", "Piper TTS", "MiniCPM5-1B (GGUF)", "ONNX Runtime QNN", "OpenCL", "Arduino UNO Q", "msgpack-rpc", "SQLite", "Docker", "systemd", "ruff", "mypy", "pytest"],
+      // Vision, audio, the small model and the board it all runs on: the four
+      // claims in the summary, and nothing else.
+      stack: ["Python 3.12", "YOLOv8n", "YAMNet", "Whisper-tiny", "MiniCPM5-1B (GGUF)", "Arduino UNO Q"],
       models: [
         { name: "YOLOv8n", job: "object detection", runtime: "ONNX on the Adreno 702 GPU, via QNN" },
         { name: "YAMNet", job: "sound events, 521 classes", runtime: "ONNX" },
