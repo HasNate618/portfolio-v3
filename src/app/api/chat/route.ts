@@ -3,7 +3,8 @@ import { buildRetrievalQuery } from "./lib/retrieval-query";
 import { buildSystemPrompt } from "./lib/system-prompt";
 import { generateFollowups, formatFollowupsTail } from "./lib/generate-followups";
 import { buildFallbackFollowups, DEFAULT_FOLLOWUPS, isNonAnswer } from "./lib/followup-fallback";
-import { checkRateLimit } from "./lib/rate-limit";
+import { checkChatDailyCap, checkRateLimit, SITE_KEY } from "./lib/rate-limit";
+import { MAX_BODY_CHARS, isBrowserRequest, trimHistory } from "./lib/request-guards";
 import { DashFilter, sanitizeDashes } from "./lib/sanitize-dashes";
 import { getCohereClient, MAX_CHAT_MESSAGE_LENGTH, CHAT_MODEL, CHAT_MAX_TOKENS, CHAT_THINKING_ENABLED } from "./lib/cohere";
 import { FOLLOWUP_DELIMITER, stripBodyPrefix } from "@/lib/tts/stream-delimiters";
@@ -40,53 +41,78 @@ function withinFollowupBudget(
   });
 }
 
+function jsonResponse(body: unknown, status: number, headers: Record<string, string> = {}): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json", ...headers },
+  });
+}
+
 export async function POST(req: Request) {
   try {
+    /*
+     * The chat is for browsers on this site. Machines get /api/search: the same
+     * retrieval, no generation, a hundredth of the cost. Headers can be forged,
+     * so this is a speed bump rather than a wall, and its purpose is to make the
+     * cheap path the documented one rather than to keep a secret.
+     */
+    if (!isBrowserRequest(req.headers, req.headers.get("host"))) {
+      return jsonResponse(
+        { error: "The chat is for browsers on this site. Use /api/search for machine access." },
+        403,
+      );
+    }
+
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-    const { allowed, retryAfter } = checkRateLimit(ip);
-    if (!allowed) {
-      return new Response(JSON.stringify({ error: "Rate limit exceeded" }), {
-        status: 429,
-        headers: {
-          "Content-Type": "application/json",
-          "Retry-After": String(retryAfter),
-        },
+
+    const hourly = checkRateLimit(ip);
+    if (!hourly.allowed) {
+      return jsonResponse({ error: "Rate limit exceeded" }, 429, {
+        "Retry-After": String(hourly.retryAfter),
       });
     }
 
-    const { message, history = [] } = (await req.json()) as {
-      message?: string;
-      history?: ChatHistoryMessage[];
-    };
+    const daily = checkChatDailyCap(SITE_KEY);
+    if (!daily.allowed) {
+      return jsonResponse({ error: "Daily limit reached" }, 429, {
+        "Retry-After": String(daily.retryAfter),
+      });
+    }
+
+    const raw = await req.text();
+    if (raw.length > MAX_BODY_CHARS) {
+      return jsonResponse({ error: "Request body is too large" }, 413);
+    }
+
+    let payload: { message?: unknown; history?: unknown };
+    try {
+      payload = JSON.parse(raw) as typeof payload;
+    } catch {
+      return jsonResponse({ error: "Body must be JSON" }, 400);
+    }
+
+    const { message } = payload;
+    const history = Array.isArray(payload.history) ? (payload.history as ChatHistoryMessage[]) : [];
 
     if (!message || typeof message !== "string") {
-      return new Response(JSON.stringify({ error: "Message is required" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      return jsonResponse({ error: "Message is required" }, 400);
     }
 
     const trimmedMessage = message.trim();
     if (!trimmedMessage) {
-      return new Response(JSON.stringify({ error: "Message is required" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      return jsonResponse({ error: "Message is required" }, 400);
     }
 
     if (trimmedMessage.length > MAX_CHAT_MESSAGE_LENGTH) {
-      return new Response(
-        JSON.stringify({
-          error: `Message must be ${MAX_CHAT_MESSAGE_LENGTH} characters or fewer`,
-        }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        },
+      return jsonResponse(
+        { error: `Message must be ${MAX_CHAT_MESSAGE_LENGTH} characters or fewer` },
+        400,
       );
     }
 
-    const safeHistory = history.filter((m) => m.content && m.content.trim().length > 0);
+    const safeHistory = trimHistory(
+      history.filter((m) => m && typeof m.content === "string" && m.content.trim().length > 0),
+    );
     const retrievalQuery = buildRetrievalQuery(trimmedMessage, safeHistory);
 
     const topChunks = await retrieveRelevantChunks(retrievalQuery, 30);
@@ -225,12 +251,6 @@ export async function POST(req: Request) {
     );
   } catch (error) {
     console.error("Chat API error:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to process request" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return jsonResponse({ error: "Failed to process request" }, 500);
   }
 }
