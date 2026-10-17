@@ -61,7 +61,7 @@ export function ProjectMedia({ media, className = "" }: { media?: Media[]; class
                   width={item.width}
                   height={item.height}
                   sizes="90vw"
-                  className={`max-h-[80vh] w-auto rounded-lg border border-rule ${
+                  className={`max-h-[80vh] max-w-[92vw] rounded-lg border border-rule ${
                     item.contain ? "bg-black/20 object-contain" : "object-cover"
                   }`}
                 />

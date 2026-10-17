@@ -387,11 +387,19 @@ li {
 /*
  * Motion. Two families:
  *
- * 1. Page entrance. Every route eases in once on load — header first, then the
- *    column beside it. Deliberately load-triggered, not scroll-triggered: an
- *    earlier version hid content until it scrolled into view, which made a page
- *    look empty below the fold. Nothing here waits on the viewport, so content
- *    below the fold is always present and readable.
+ * 1. Page entrance. Every route eases in once on load — the header rises, then
+ *    the column beside it fades. Deliberately load-triggered, not
+ *    scroll-triggered: an earlier version hid content until it scrolled into
+ *    view, which made a page look empty below the fold. Nothing here waits on
+ *    the viewport, so content below the fold is always present and readable.
+ *
+ *    The content column fades rather than rises, and that is load-bearing: a
+ *    filled animation leaves an identity matrix on the element rather than
+ *    `none`, and any transform — even an identity one — makes that element the
+ *    containing block for `position: fixed` descendants. With a transform on
+ *    <main>, the image overlay resolved against the column instead of the
+ *    viewport: 640px wide, 2807px tall, its image centred 1284px down the page.
+ *    The header still rises; nothing fixed lives inside it.
  * 2. Chat. Each message fades up as it arrives, and a spinner sits beside the
  *    status line while a reply is in flight.
  *
@@ -406,6 +414,15 @@ li {
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes page-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -438,7 +455,7 @@ li {
   }
 
   .page-enter-delayed {
-    animation: page-rise 480ms cubic-bezier(0.22, 1, 0.36, 1) 110ms both;
+    animation: page-fade 480ms cubic-bezier(0.22, 1, 0.36, 1) 110ms both;
   }
 
   .chat-message {
