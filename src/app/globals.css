@@ -97,7 +97,12 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /*
+   * Instant anchor jumps, not smooth scrolling: a half-second glide between
+   * sections reads as lag, an instant jump reads as snappy. (This is also the
+   * reduced-motion choice, so no media-query override is needed.)
+   */
+  scroll-behavior: auto;
   background-color: var(--color-bg);
   /* Scrollbar follows the scheme rather than the OS default chrome. */
   scrollbar-color: var(--color-scrollbar) transparent;
@@ -188,9 +193,6 @@ li {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   *,
   *::before,
   *::after {
@@ -442,7 +444,7 @@ li {
  */
 @media (max-width: 63.99rem) {
   [id] {
-    scroll-margin-top: 4rem;
+    scroll-margin-top: 5rem;
   }
 }
 

@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { renderToStaticMarkup } from "react-dom/server";
-import { SiteHeader, NAV_LINKS } from "../src/components/SiteHeader";
+import { SiteHeader, NAV_LINKS, CHAT_LINK } from "../src/components/SiteHeader";
 import { MobileTopBar } from "../src/components/MobileTopBar";
 
 /*
@@ -82,4 +82,20 @@ test("the top bar carries the mobile skip link, before its nav", () => {
   const html = renderToStaticMarkup(<MobileTopBar current="/" />);
   assert.ok(html.indexOf("Skip to content") < html.indexOf("<nav"));
   assert.ok(html.includes('href="#content"'), "skip link must target the content region");
+});
+
+/*
+ * The chat is a call to action, not a nav destination: the header renders it
+ * as a button near the identity, and the mobile bar leaves it out — four
+ * items do not fit a phone width, and the button is on the page anyway.
+ */
+test("the header offers the chat as a button outside the nav", () => {
+  const html = renderToStaticMarkup(<SiteHeader current="/" />);
+  assert.ok(html.includes(`href="${CHAT_LINK.href}"`), "chat CTA missing");
+  assert.ok(html.indexOf(`href="${CHAT_LINK.href}"`) < html.indexOf("<nav"), "CTA should sit near the top");
+});
+
+test("the top bar does not carry the chat", () => {
+  const html = renderToStaticMarkup(<MobileTopBar current="/" />);
+  assert.ok(!html.includes(`href="${CHAT_LINK.href}"`), "the bar must leave the chat to the page button");
 });

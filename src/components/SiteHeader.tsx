@@ -20,8 +20,14 @@ export const NAV_LINKS = [
   { href: "/#experience", label: "Experience" },
   { href: "/#projects", label: "Projects" },
   { href: "/resume", label: "Resume" },
-  { href: "/chat", label: "Ask about me" },
 ] as const;
+
+/*
+ * The chat is a call to action, not a nav destination, so it is deliberately
+ * not in NAV_LINKS: the header renders it as a button near the identity, and
+ * the mobile bar leaves it out entirely (the button is on the page anyway).
+ */
+export const CHAT_LINK = { href: "/chat", label: "Ask about me" } as const;
 
 export function SiteHeader({ current }: { current: string }) {
   return (
@@ -51,6 +57,22 @@ export function SiteHeader({ current }: { current: string }) {
         {site.identity.positioning ? (
           <p className="mt-4 max-w-xs leading-relaxed text-muted">{site.identity.positioning}</p>
         ) : null}
+
+        {/*
+         * The chat earns a button, not a link: it is the one place a visitor
+         * can do something rather than read something. It lives outside the
+         * `lg`-only nav so mobile readers get it too — in the page, since the
+         * top bar does not carry it.
+         */}
+        <p className="mt-8">
+          <Link
+            href={CHAT_LINK.href}
+            aria-current={current === CHAT_LINK.href ? "page" : undefined}
+            className="inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-bold text-bg transition-opacity hover:opacity-85"
+          >
+            {CHAT_LINK.label}
+          </Link>
+        </p>
 
         {/* Mobile navigates by the top bar, so this list only exists at `lg`
             and up; display:none keeps the second landmark out of the tree. */}
