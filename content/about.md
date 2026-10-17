@@ -12,6 +12,14 @@ updated: 2026-10-16
 
 Nathan Espejo is a 3rd-year Software Engineering student at Western University (2026-27) who builds LLM agents and retrieval systems for his own workflows. He is looking for a Summer 2027 software engineering or applied AI internship.
 
+## In short
+
+- Looking for: a Summer 2027 software engineering or applied AI internship.
+- Program: 3rd-year Software Engineering at Western University, Dean's Honour List 2024 and 2025.
+- Roles: Software Engineering Intern at TeraGo; VP of Data/ML at 3D Western.
+- Start with: Campus, then the NixOS homelab and AWARE.
+- Contact: nate.e.espejo@gmail.com or linkedin.com/in/nathan-espejo.
+
 ## Location
 
 Brampton and London, ON.
@@ -22,7 +30,7 @@ Western University, Bachelor of Engineering Science in Software Engineering, Aug
 
 ## Focus
 
-Campus, his self-hosted study assistant, is the flagship. Next come a NixOS homelab run through Hermes Agent profiles (an AI agent from Nous Research) and the on-device AWARE build. How he chooses between hosted and local models is in [Local and cost-aware AI](local-ai.md). Outside AI he has also built games, mobile apps and hardware, many of them at hackathons.
+Campus, his self-hosted study assistant, is the flagship. Next come a NixOS homelab where AI agents propose config changes that he approves, and the on-device AWARE build. How he chooses between hosted and local models is in [Local and cost-aware AI](local-ai.md). Outside AI he has also built games, mobile apps and hardware, many of them at hackathons.
 
 ## How he works
 

@@ -15,15 +15,15 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 
 ## AI and ML
 
-- **LLM agents**: [Campus](projects/campus.md), [Homelab and NixOS](projects/homelab.md), [AgntOS](projects/agntos.md), [AgenticArmy](projects/agenticarmy.md)
-- **Tool calling**: [Campus](projects/campus.md), [AgntOS](projects/agntos.md)
-- **RAG**: [Campus](projects/campus.md), [Homelab and NixOS](projects/homelab.md), [Portfolio v2](projects/portfolio-v2.md)
+- **LLM agents**: [Campus](projects/campus.md), [NixOS homelab](projects/homelab.md), [AgenticArmy](projects/agenticarmy.md)
+- **Tool calling**: [Campus](projects/campus.md)
+- **RAG**: [Campus](projects/campus.md), [NixOS homelab](projects/homelab.md), [Portfolio v2](projects/portfolio-v2.md)
 - **Embeddings and reranking**: [Campus](projects/campus.md)
-- **MCP**: [Homelab and NixOS](projects/homelab.md)
+- **MCP**: [NixOS homelab](projects/homelab.md)
 - **VLMs**: [3D Western](experience/3d-western.md)
 - **Model evaluation**: [3D Western](experience/3d-western.md)
 - **Ollama**: [TeraGo](experience/terago.md)
-- **llama.cpp**: [Homelab and NixOS](projects/homelab.md)
+- **llama.cpp**: [NixOS homelab](projects/homelab.md)
 - **GGUF on-device LLMs**: [AWARE](projects/aware.md)
 - **YOLOv8**: [AWARE](projects/aware.md)
 - **ONNX**: [AWARE](projects/aware.md)
@@ -38,7 +38,7 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 
 - **Python**: [Campus](projects/campus.md), [AWARE](projects/aware.md), [TeraGo](experience/terago.md), [3D Western](experience/3d-western.md), [AgenticArmy](projects/agenticarmy.md)
 - **TypeScript**: [Campus](projects/campus.md), [Portfolio v2](projects/portfolio-v2.md)
-- **Rust**: [AgntOS](projects/agntos.md)
+- **Rust**: [AgntOS](projects/agntos.md) (abandoned)
 - **C#**: [Glyph](projects/glyph.md), [Careerly](projects/careerly.md)
 - **Kotlin**: [Animarker](projects/animarker.md), [SafeRoute](projects/saferoute.md)
 - **SQL**: [Campus](projects/campus.md)
@@ -49,23 +49,23 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **Next.js**: [Portfolio v2](projects/portfolio-v2.md), [Auralis](projects/auralis.md)
 - **Three.js**: [Portfolio v2](projects/portfolio-v2.md), [Auralis](projects/auralis.md)
 - **FastAPI**: [Campus](projects/campus.md), [AWARE](projects/aware.md), [AgenticArmy](projects/agenticarmy.md), [CareBridge](projects/carebridge.md)
-- **SQLite**: [Campus](projects/campus.md), [AWARE](projects/aware.md), [AgntOS](projects/agntos.md)
+- **SQLite**: [Campus](projects/campus.md), [AWARE](projects/aware.md)
 - **MongoDB**: [Lumen](projects/lumen.md)
 - **Supabase**: [CareBridge](projects/carebridge.md)
 
 ## Infrastructure
 
-- **NixOS**: [Homelab and NixOS](projects/homelab.md), [AgntOS](projects/agntos.md)
-- **Docker**: [Homelab and NixOS](projects/homelab.md), [Campus](projects/campus.md), [AWARE](projects/aware.md), [3D Western](experience/3d-western.md)
-- **Tailscale**: [Homelab and NixOS](projects/homelab.md)
-- **Caddy**: [Homelab and NixOS](projects/homelab.md)
-- **sops-nix**: [Homelab and NixOS](projects/homelab.md)
+- **NixOS**: [NixOS homelab](projects/homelab.md)
+- **Docker**: [NixOS homelab](projects/homelab.md), [Campus](projects/campus.md), [AWARE](projects/aware.md), [3D Western](experience/3d-western.md)
+- **Tailscale**: [NixOS homelab](projects/homelab.md)
+- **Caddy**: [NixOS homelab](projects/homelab.md)
+- **sops-nix**: [NixOS homelab](projects/homelab.md)
 - **GitHub Actions**: [Campus](projects/campus.md)
-- **Playwright**: [Campus](projects/campus.md), [Homelab and NixOS](projects/homelab.md)
+- **Playwright**: [Campus](projects/campus.md), [NixOS homelab](projects/homelab.md)
 
 ## Tools
 
-- **Hermes Agent**: [Homelab and NixOS](projects/homelab.md)
+- **Hermes Agent**: [NixOS homelab](projects/homelab.md)
 - **Microsoft Graph**: [TeraGo](experience/terago.md)
 - **Copilot Studio**: [TeraGo](experience/terago.md)
 - **Jira**: [TeraGo](experience/terago.md)

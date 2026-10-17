@@ -14,16 +14,16 @@ Every project Nathan has documented, one file each, with a line on what it cover
 ## Flagship and featured
 
 - [Campus](campus.md): What Campus is, how its LMS sync, hybrid retrieval and audited 20-tool agent work, and its test and usage numbers.
-- [Homelab and NixOS](homelab.md): How his two NixOS hosts are defined, what the self-hosted AI stack runs, how Hermes Agent profiles change the config behind approval, and llama.cpp on flow.
+- [NixOS homelab](homelab.md): How his two NixOS hosts are defined, what the self-hosted AI stack runs, how Hermes Agent profiles change the config behind approval, and llama.cpp on flow.
 - [AWARE](aware.md): How AWARE runs vision, audio and a small LLM on one Arduino UNO Q, and how plain-English commands become deterministic rules.
-- [AgntOS](agntos.md): Design of an agent-native NixOS concept: the Rust daemon and CLI, the propose/apply/rollback pipeline, and agent memory.
-- [AgenticArmy](agenticarmy.md): How the multi-agent coding workflow plans, splits and merges work with a human approving each step.
-- [Glyph](glyph.md): What Glyph does for Windows keyboard workflows, its config model, and how it ships through WinGet.
+- [CareBridge](carebridge.md): The CareBridge rural care platform from Spark 2026 (overall 3rd), built by a team; the repo is a teammate's (liamma06/Spark).
 
 ## Other projects
 
+- [AgntOS](agntos.md): An AI system for NixOS configuration he stopped building once Hermes Agent on NixOS did the job.
+- [AgenticArmy](agenticarmy.md): How the multi-agent coding workflow plans, splits and merges work with a human approving each step.
+- [Glyph](glyph.md): What Glyph does for Windows keyboard workflows, its config model, and how it ships through WinGet.
 - [Auralis](auralis.md): What the Auralis virtual doctor does and the stack his team used.
-- [CareBridge](carebridge.md): The CareBridge rural care platform from Spark 2026, built by a team; the repo is a teammate's (liamma06/Spark).
 - [Careerly](careerly.md): What the Careerly Unity job fair does and its AI mentor setup.
 - [Lumen](lumen.md): What the Lumen wellness companion does and which part Nathan built.
 - [Omni-Reality](omni-reality.md): Quest 3S mixed-reality assistant built by a team at Hack the North 2026; SAM 2 highlights, guided steps and life-size furniture.
@@ -35,7 +35,7 @@ Every project Nathan has documented, one file each, with a line on what it cover
 - [Animarker](animarker.md): What the Animarker wildlife tracker does with computer vision on Android.
 - [SafeRoute](saferoute.md): What the SafeRoute hazard reporting and routing app does.
 - [FLEXFIRE-X](flexfire-x.md): How the EMG-controlled wearable arm attachment is built and triggered.
-- [Cyberdeck](cyberdeck.md): How the Raspberry Pi cyberdeck is built and boots into a terminal-first setup.
+- [Cyberdeck](cyberdeck.md): An abandoned Raspberry Pi handheld that boots into a terminal.
 - [Portfolio v2](portfolio-v2.md): How nathanespejo.com renders its 3D ASCII ocean and where its chatbot gets answers.
 
 ## Smaller builds and games

@@ -11,4 +11,4 @@ updated: 2026-10-16
 
 Most of my recent work is applied AI: agents, retrieval, and models picked for cost. I also build desktop tools, hardware and mobile apps, a lot of them at hackathons.
 
-Team projects are labelled as team projects, and I only claim the parts I can name.
+Most of my hackathon projects were team efforts and are labelled that way. Where I can name my part, I say it.

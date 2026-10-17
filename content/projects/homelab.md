@@ -5,12 +5,12 @@ route: /projects/homelab
 description: Two NixOS machines in one flake, with AI agents that change the config only after I approve.
 priority: start-here
 tags: [nixos, agents, self-hosting]
-related: [index.md, campus.md, aware.md, ../skills.md]
+related: [index.md, campus.md, aware.md, agntos.md, ../skills.md]
 onThisPage: [tl;dr, Why I built it, What I built, How it works, Models and cost, Results, Stack]
 id: homelab
 dates: "May 2026 to present"
 role: solo
-status: in-progress
+status: active
 rank: featured
 updated: 2026-10-16
 ---
@@ -18,19 +18,19 @@ updated: 2026-10-16
 
 ## tl;dr
 
-- One version-controlled Nix flake defines two machines: my laptop (flow) and a home server (home), plus a NAS.
+- One version-controlled Nix flake defines two machines: my laptop (flow) and a home server (home).
 - {{stat:homelab.containers}} hardened Docker containers and native services, reachable only over Tailscale.
 - One Hermes Agent profile per machine. Agents change the config, I approve, and a safe-rebuild guard applies it.
-- {{stat:homelab.sessions}} agent sessions and {{stat:homelab.toolCalls}} tool calls since June 2026.
 - A git-versioned library of {{stat:homelab.skills}} agent skills.
+- {{stat:homelab.sessions}} agent sessions and {{stat:homelab.toolCalls}} tool calls since June 2026.
 
 ## Why I built it
 
-I used to run a Debian Docker Compose homelab and a separate local AI setup. Both drifted from their config over time. Once AI agents were making changes, I needed every change to be a diff I could read first and undo later.
+I used to run a Debian Docker Compose homelab and a separate local AI setup. Both drifted from their config over time. Once AI agents were making changes, I needed every change to be a diff I could read first and undo later. I started building my own agent for NixOS configuration first (AgntOS), got impatient, and switched to NixOS with Hermes Agent instead. It works really well.
 
 ## What I built
 
-All of it.
+I designed and built everything below. The agents edit config inside it, and I review every change before it applies.
 
 - Moved both old setups to NixOS one service at a time, into one flake.
 - Split services into modules by role: infrastructure, access, media, AI and monitoring.

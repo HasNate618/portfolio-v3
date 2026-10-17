@@ -16,7 +16,7 @@ Start with these five files; the indexes below cover the rest. The full typed ma
 
 1. [About Nathan](about.md)
 2. [Campus](projects/campus.md)
-3. [Homelab and NixOS](projects/homelab.md)
+3. [NixOS homelab](projects/homelab.md)
 4. [Local and cost-aware AI](local-ai.md)
 5. [TeraGo](experience/terago.md)
 

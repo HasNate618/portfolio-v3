@@ -48,7 +48,7 @@ export async function GET(): Promise<Response> {
   lines.push("");
   lines.push("## Highlighted projects");
   for (const project of highlightProjects()) {
-    const file = project.file ? ` — ${base}${project.file}` : "";
+    const file = project.file ? `: ${base}${project.file}` : "";
     lines.push(`- ${project.name} (${project.dates}; ${project.displayRole}): ${project.covers}${file}`);
   }
 
