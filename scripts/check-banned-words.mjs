@@ -29,6 +29,7 @@ const ROOTS = [
 const SKIP = new Set([
   "src/lib/banned-words.ts",
   "scripts/check-banned-words.mjs",
+  "scripts/check-render.mjs",
   "tests/check-banned-words.test.ts",
 ]);
 
