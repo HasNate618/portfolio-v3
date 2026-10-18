@@ -1,4 +1,5 @@
 import { prepareChat } from "./lib/pipeline";
+import { logAnswerChecks } from "./lib/answer-checks";
 import { formatFollowupsTail, generateChips } from "./lib/generate-followups";
 import { DEFAULT_FOLLOWUPS, isNonAnswer } from "./lib/followup-fallback";
 import { askedAboutAbandoned } from "./lib/chips-validate";
@@ -162,6 +163,9 @@ export async function POST(req: Request) {
             if (!closed && !req.signal.aborted && !accumulated.includes(FOLLOWUP_DELIMITER)) {
               enqueueText(FOLLOWUP_DELIMITER);
               const body = stripBodyPrefix(accumulated);
+              // Logged, never enforced: the model is right more often than this is, and
+              // a false positive must not cost a visitor their answer.
+              logAnswerChecks(body, prepared.documents);
               const askedBefore = safeHistory
                 .filter((m) => m.role === "user")
                 .map((m) => m.content);
