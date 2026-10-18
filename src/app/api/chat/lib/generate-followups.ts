@@ -175,10 +175,12 @@ function parseChipSet(text: string): ChipSet | null {
  * what is still wrong afterwards.
  */
 export function applyChipPipeline(raw: ChipSet, input: ChipInputs): ChipEvaluation {
-  const fallback = templateChips(input);
   const slots: ChipSlotName[] = ["deeper", "adjacent", "path"];
   const accepted = new Map<ChipSlotName, string>();
   const failures: ChipFailure[] = [];
+  // Every question spent so far, the visitor's own included. A chip already
+  // accepted counts too: the page shows three, and two identical ones waste one.
+  const used: string[] = [...input.asked];
 
   for (const slot of slots) {
     const chip = raw[slot];
@@ -188,7 +190,7 @@ export function applyChipPipeline(raw: ChipSet, input: ChipInputs): ChipEvaluati
       subject: chip.subject,
       slot,
       answerSubject: input.answerSubject,
-      asked: input.asked,
+      asked: used,
       userAskedAbandoned: input.userAskedAbandoned,
     }).map((failure) => ({ ...failure, slot }));
 
@@ -198,9 +200,21 @@ export function applyChipPipeline(raw: ChipSet, input: ChipInputs): ChipEvaluati
       slotFailures.push({ code: "adjacent", slot });
     }
 
-    if (slotFailures.length === 0) accepted.set(slot, question);
-    else failures.push(...slotFailures);
+    if (slotFailures.length === 0) {
+      accepted.set(slot, question);
+      used.push(question);
+    } else {
+      failures.push(...slotFailures);
+    }
   }
+
+  /*
+   * Built last, against everything already used, because the templates skip a
+   * question that has been asked: the adjacency template is a sentence the model
+   * also writes, so generating it before the model's chips were accepted is how
+   * the same question reached the page twice.
+   */
+  const fallback = templateChips({ ...input, asked: used });
 
   return {
     questions: slots.map((slot) => accepted.get(slot) ?? fallback[slot].question),

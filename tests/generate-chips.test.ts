@@ -94,6 +94,25 @@ test("a dashed document title still names its subject", () => {
   );
 });
 
+/*
+ * Each slot was validated against `asked` and nothing else, so two slots could
+ * carry the identical sentence and the page showed it twice. The likeliest pair
+ * is an accepted chip and the adjacency template, which the model also writes.
+ */
+test("two chips are never the same question", () => {
+  const raw: ChipSet = {
+    deeper: { question: "What did Nathan build at TeraGo?", subject: "terago" },
+    adjacent: { question: "What did Nathan build at TeraGo?", subject: "campus" },
+    path: { question: "When does Nathan graduate?", subject: "campus" },
+  };
+  const result = applyChipPipeline(raw, INPUTS);
+  assert.equal(
+    new Set(result.questions).size,
+    result.questions.length,
+    `duplicate chip in ${JSON.stringify(result.questions)}`,
+  );
+});
+
 test("the schema names the three slots and the subjects the model may use", () => {
   const schema = CHIP_SCHEMA as {
     properties: Record<string, { properties: { subject: { enum: string[] } } }>;
