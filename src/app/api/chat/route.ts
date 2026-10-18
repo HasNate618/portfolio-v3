@@ -1,7 +1,7 @@
-import { retrieveRelevantChunks, rerankChunks } from "./lib/rag";
+import { applyScoreFloor, rerankChunks, retrieveRelevantChunks } from "./lib/rag";
 import { buildRetrievalQuery } from "./lib/retrieval-query";
 import { buildSystemPrompt } from "./lib/system-prompt";
-import { withCoverageFloor } from "./lib/context";
+import { withTopicPins } from "./lib/context";
 import { formatFollowupsTail, generateChips } from "./lib/generate-followups";
 import { routeIntent } from "./lib/intent";
 import { namedSubjectId } from "./lib/name-match";
@@ -96,13 +96,10 @@ export async function POST(req: Request) {
     );
     const retrievalQuery = buildRetrievalQuery(trimmedMessage, safeHistory);
 
-    const topChunks = await retrieveRelevantChunks(retrievalQuery, 30);
-    const reranked = await rerankChunks(retrievalQuery, topChunks, 10);
-    // Retrieval that comes back with no project and no role is how a broad
-    // question turns into invented detail: the floor pins the work the home
-    // page leads with, and only then. A question that names a project or a role
-    // is specific, so it keeps the context retrieval chose for it.
-    const context = withCoverageFloor(reranked, trimmedMessage);
+    // The index maps and chat.md name every project and role, so they win almost any
+    // similarity ranking and push out the doc that answers the question.
+    const topChunks = await retrieveRelevantChunks(retrievalQuery, { excludeNav: true, topK: 40 });
+    const reranked = await rerankChunks(retrievalQuery, topChunks, 8);
 
     /*
      * The question, read with the turn before it: a visitor who says "tell me
@@ -122,6 +119,14 @@ export async function POST(req: Request) {
       contactAsked: contactAsked(trimmedMessage),
       availabilityAsked: availabilityAsked(trimmedMessage),
     });
+
+    /*
+     * Pins come from the topic, not from the home page's lead. An AI question pins
+     * the AI work; a question that names a project or a role pins nothing, because
+     * retrieval chose that context on purpose and a pin would push the named subject
+     * out of its own answer.
+     */
+    const context = withTopicPins(applyScoreFloor(reranked), trimmedMessage, topic.feature);
 
     const systemPrompt = buildSystemPrompt({
       featureIds: topic.feature,

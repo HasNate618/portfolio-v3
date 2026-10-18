@@ -1,20 +1,20 @@
-import { featuredProjects, leadProject, site } from "@/data/site";
+import { getExperienceById, getProject } from "@/data/site";
 import { factsBlockFor } from "@/lib/corpus";
-import { namesSubject } from "./name-match";
+import { namedSubjectId } from "./name-match";
 
 /**
- * Coverage floor.
+ * Topic pins.
  *
- * A broad question embeds closer to the pages that enumerate projects than to
- * any single project: for "What are Nathan's strongest projects?" the Campus
- * facts chunk ranked 53rd of 208, so retrieval never passed it to the reranker,
- * and the answer invented TeraGo and 3D Western detail out of nothing. A reranker
- * cannot be talked into ranking a document it was never handed.
+ * The coverage floor used to append the home page's leading project, its featured
+ * projects and its on-resume roles whenever the reranked chunks held no project or
+ * role at all. That fired on the wrong questions: it pinned Campus for a question
+ * about AI work, because Campus is what the home page leads with, and it stood
+ * aside only when the question happened to name something.
  *
- * So when the reranked chunks hold no project and no role, the facts blocks of
- * the work the home page leads with are appended: the leading project, the featured
- * projects and the roles. It costs roughly 900 tokens, and only on the questions
- * where retrieval came back with nothing specific.
+ * The topic router already knows what the question is about, so its feature ids
+ * become the pin list. An AI question pins the AI work. A question that names a
+ * project or a role pins nothing, because retrieval chose that context on purpose
+ * and a pin would push the named subject out of its own answer.
  */
 
 export interface PromptChunk {
@@ -22,51 +22,53 @@ export interface PromptChunk {
   source: string;
 }
 
+/** The profile card already carries every project and role; the pins add detail. */
+const MAX_PINS = 5;
+
 function relative(file: string | undefined): string | null {
   const prefix = "/knowledgebase/";
   return file?.startsWith(prefix) ? file.slice(prefix.length) : null;
 }
 
-/**
- * The work the home page leads with: the leading project, the featured projects, and the
- * roles that are on the resume. This is what a broad question should have in view.
- */
-function leadingDocs(): string[] {
-  const files = [
-    leadProject()?.file,
-    ...featuredProjects().map((project) => project.file),
-    ...site.experience.filter((role) => role.onResume).map((role) => role.file),
-  ];
+/** The detail doc a topic id points at, or null when that id has no page. */
+function fileForId(id: string): string | null {
+  const project = getProject(id);
+  if (project) return relative(project.file);
 
-  return [...new Set(files.map(relative).filter((rel): rel is string => rel !== null))];
+  const role = getExperienceById(id);
+  return relative(role?.file);
 }
 
-/** The documents a broad question should always have in view. */
-export function pinnedChunks(): PromptChunk[] {
+export function topicPins(featureIds: string[]): PromptChunk[] {
   const chunks: PromptChunk[] = [];
+  const seen = new Set<string>();
 
-  for (const source of leadingDocs()) {
+  for (const id of featureIds) {
+    if (chunks.length >= MAX_PINS) break;
+
+    const source = fileForId(id);
+    if (!source || seen.has(source)) continue;
+
+    // A topic id can name something the corpus does not hold, and an empty chunk
+    // would reach the model as a document with no content.
     const text = factsBlockFor(source);
-    if (text) chunks.push({ source, text });
+    if (!text) continue;
+
+    seen.add(source);
+    chunks.push({ source, text });
   }
+
   return chunks;
 }
 
-export function withCoverageFloor(chunks: PromptChunk[], question = ""): PromptChunk[] {
-  // A question that names a project or a role is specific: it keeps the context
-  // retrieval chose for it, and the pin stays out of the way.
-  if (namesSubject(question)) return chunks;
+export function withTopicPins(
+  chunks: PromptChunk[],
+  question: string,
+  featureIds: string[],
+): PromptChunk[] {
+  // A question that names a project or a role is specific: retrieval's context wins.
+  if (namedSubjectId(question)) return chunks;
 
   const present = new Set(chunks.map((chunk) => chunk.source));
-  const pinned = pinnedChunks();
-
-  /*
-   * Coverage means one of these documents is already in the context. Counted any
-   * other way it fails: projects/cyberdeck.md is a project doc too, and counting
-   * it is why the floor did not fire for "What is the most impressive thing
-   * Nathan has built?", the question the conflation was written from.
-   */
-  if (pinned.some((chunk) => present.has(chunk.source))) return chunks;
-
-  return [...chunks, ...pinned.filter((chunk) => !present.has(chunk.source))];
+  return [...chunks, ...topicPins(featureIds).filter((pin) => !present.has(pin.source))];
 }
