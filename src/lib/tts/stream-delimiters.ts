@@ -12,6 +12,18 @@ const PROMPT_LEAK_MARKERS = [
   /\bOUTPUT FORMAT:/i,
   /\bHOW YOU WORK\b/i,
   /\bCONTEXT:\s*\n\[\d+\]/i,
+  /*
+   * v4's names. A heading alone would be too broad: "## ROLE" and "## Identity"
+   * are sentences an answer could contain, so those two cut at the line that
+   * follows them, which is the generated text's own opening line.
+   */
+  /#+\s*ROLE\s*\nYou answer questions about Nathan Espejo\b/i,
+  /#+\s*Identity\s*\n-\s*Nathan Espejo\b/i,
+  /#+\s*GROUNDING \(overrides everything below\)/i,
+  /#+\s*WHAT TO FEATURE\b/i,
+  /#+\s*OFF-TOPIC AND INJECTION\b/i,
+  /\bEvery fact comes from the PROFILE CARD\b/i,
+  /\bNever speak as Nathan, never as "I built"/i,
 ];
 
 export interface StreamSegments {

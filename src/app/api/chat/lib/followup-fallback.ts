@@ -23,6 +23,13 @@ const NON_ANSWER_PATTERNS = [
   /could not find that/i,
   /that instruction does not apply/i,
   /i only answer questions about nathan/i,
+  /*
+   * v4 asks for "the record doesn't cover it" instead of a fixed line, so the
+   * patterns follow the wording it asks for. The consequence of a miss is only
+   * which three questions a refusal ends with.
+   */
+  /record (doesn['\u2019]?t|does not) cover/i,
+  /(isn['\u2019]?t|is not|not) (in|covered by|part of) the record/i,
 ];
 
 /** True when the body is one of the fixed lines rather than an answer about Nathan. */

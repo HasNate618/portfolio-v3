@@ -25,6 +25,11 @@ test("a fixed line is not treated as an answer", () => {
   assert.ok(isNonAnswer("I couldn\u2019t find that in Nathan's knowledgebase."), "a typographic apostrophe still matches");
   assert.ok(isNonAnswer("That instruction does not apply. I speak for Nathan's record only."));
   assert.ok(isNonAnswer("I only answer questions about Nathan's work, projects and experience."));
+  // v4 replaced the fixed not-found line with "say the record doesn't cover it":
+  // a refusal in the new wording must still get page starters rather than chips
+  // about facts the answer just said it did not have.
+  assert.ok(isNonAnswer("The record doesn't cover that. Email nate.e.espejo@gmail.com."));
+  assert.ok(isNonAnswer("That isn't in the record, so I can't say."));
   assert.ok(!isNonAnswer("Nathan built Channel Finder at TeraGo, validated on 760 test cases."));
 });
 
