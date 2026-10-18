@@ -22,6 +22,10 @@ interface EvalItem {
   q: string;
   broad?: boolean;
   core?: boolean;
+  /** How many of the mustAny groups this question has to name. Defaults to all. */
+  mustAnyMin?: number;
+  /** A yes or no question, answered completely by a short answer. */
+  yesNo?: boolean;
   followUpOf?: string;
   mustAny?: string[][];
   mustNot: string[];
@@ -117,10 +121,20 @@ function checkItem(item: EvalItem, answer: Answer) {
   const mustNotHits: string[] = [];
   const bannedHits: string[] = [];
 
-  for (const group of item.mustAny ?? []) {
-    if (!group.some((pattern) => new RegExp(pattern, "i").test(answer.text))) {
-      misses.push(group.join(" | "));
-    }
+  const groups = item.mustAny ?? [];
+  const allowedMisses = groups.length - (item.mustAnyMin ?? groups.length);
+  const missed = groups.filter(
+    (group) => !group.some((pattern) => new RegExp(pattern, "i").test(answer.text)),
+  );
+
+  /*
+   * A broad question cannot name everything it could: for "strongest projects", three
+   * projects weighed and explained beat six listed. So a question may declare how many
+   * of its groups must be named. Only when that minimum is unmet are misses reported,
+   * and then all of them are, so the table says exactly what was absent.
+   */
+  if (missed.length > allowedMisses) {
+    for (const group of missed) misses.push(group.join(" | "));
   }
 
   for (const pattern of item.mustNot) {
@@ -250,7 +264,9 @@ async function main(): Promise<void> {
     if (DASH.test(answer.text)) dashHits.push(item.id);
     if (!EXEMPT.has(item.id) && HEDGES.test(answer.text)) hedgeHits.push(item.id);
 
-    if (SUBSTANTIVE.has(item.id)) {
+    // A yes/no answer that answers the question is complete; padding it to a word count
+    // would break the voice rules. The length rule applies to questions with a shape.
+    if (SUBSTANTIVE.has(item.id) && !item.yesNo) {
       const count = words(answer.text);
       lengths.push({ id: item.id, words: count });
       if (count < 110 || count > 360) lengthsOutOfRange.push(`${item.id}: ${count}`);

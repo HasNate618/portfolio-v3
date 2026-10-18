@@ -27,7 +27,8 @@
         "(?<!not )(?<!isn't )(?<!n't )\\bin production\\b",
         "AWARE[^.]*offline"
       ],
-      "core": true
+      "core": true,
+      "mustAnyMin": 2
     },
     {
       "id": "ai-work",
@@ -205,7 +206,8 @@
         "Campus[^.]{0,40}\\b(?:has|supports|offers)\\s+rollback",
         "rollback[^.]{0,30}(?:in|for) Campus"
       ],
-      "core": true
+      "core": true,
+      "yesNo": true
     },
     {
       "id": "solo",

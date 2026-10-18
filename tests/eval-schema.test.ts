@@ -13,6 +13,8 @@ interface EvalItem {
   q: string;
   broad?: boolean;
   core?: boolean;
+  mustAnyMin?: number;
+  yesNo?: boolean;
   followUpOf?: string;
   mustAny?: string[][];
   mustNot: string[];
@@ -112,4 +114,24 @@ test("a follow-up names a seed", () => {
 test("the broad questions are the ones the spread is measured on", () => {
   const broad = file.items.filter((item) => item.broad).map((item) => item.id);
   assert.deepEqual(broad, ["strongest", "ai-work", "builds"]);
+});
+
+/*
+ * Two ways a question can be scored loosely enough to stop meaning anything: a minimum
+ * of zero groups, which makes the expectation unfalsifiable, or a yes/no length exemption
+ * on a question that checks nothing else.
+ */
+test("a question's minimum is a real subset of what it asks for", () => {
+  for (const item of file.items) {
+    if (item.mustAnyMin === undefined) continue;
+    const groups = item.mustAny?.length ?? 0;
+    assert.ok(item.mustAnyMin >= 1, `${item.id} requires no groups at all`);
+    assert.ok(item.mustAnyMin <= groups, `${item.id} requires more groups than it declares`);
+  }
+});
+
+test("a yes/no exemption still bans a claim", () => {
+  for (const item of file.items.filter((entry) => entry.yesNo)) {
+    assert.ok(item.mustNot.length > 0, `${item.id} is exempt from the length rule and checks nothing`);
+  }
 });
