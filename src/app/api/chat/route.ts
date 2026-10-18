@@ -6,7 +6,7 @@ import { checkChatDailyCap, checkRateLimit, SITE_KEY } from "./lib/rate-limit";
 import { MAX_BODY_CHARS, isBrowserRequest, trimHistory } from "./lib/request-guards";
 import { sanitizeDashes } from "./lib/sanitize-dashes";
 import { streamAnswer } from "./lib/stream-answer";
-import { getCohereClient, MAX_CHAT_MESSAGE_LENGTH, CHAT_MODEL, CHAT_MAX_TOKENS, CHAT_THINKING_ENABLED } from "./lib/cohere";
+import { getCohereClient, MAX_CHAT_MESSAGE_LENGTH, CHAT_MODEL, CHAT_MAX_TOKENS, CHAT_TEMPERATURE, CHAT_THINKING_ENABLED } from "./lib/cohere";
 import { FOLLOWUP_DELIMITER, stripBodyPrefix } from "@/lib/tts/stream-delimiters";
 
 interface ChatHistoryMessage {
@@ -107,7 +107,7 @@ export async function POST(req: Request) {
         documents: prepared.documents,
         // The SDK spells this citationOptions in TS and sends citation_options.
         citationOptions: { mode: "FAST" },
-        temperature: 0.2,
+        temperature: CHAT_TEMPERATURE,
         maxTokens: CHAT_MAX_TOKENS,
         thinking: CHAT_THINKING_ENABLED,
       });

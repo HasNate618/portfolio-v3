@@ -1,5 +1,6 @@
 import { DashFilter } from "./sanitize-dashes";
 import { BannedPhraseFilter } from "./banned-phrases";
+import { RepeatGuard } from "./repeat-guard";
 
 /**
  * A Cohere stream event, as far as this module needs it. The SDK types the stream
@@ -58,7 +59,7 @@ export interface AnswerResult {
   truncated: boolean;
 }
 
-export const MAX_ANSWER_CHARS = 32000;
+export const MAX_ANSWER_CHARS = 6000;
 export const ANSWER_ATTEMPTS = 2;
 
 /**
@@ -90,6 +91,7 @@ export async function streamAnswer(options: StreamAnswerOptions): Promise<Answer
     let chars = 0;
     const filter = new DashFilter();
     const phrases = new BannedPhraseFilter();
+    const repeats = new RepeatGuard();
 
     try {
       const source = await options.start();
@@ -112,17 +114,32 @@ export async function streamAnswer(options: StreamAnswerOptions): Promise<Answer
         if (accepted.length < delta.length) truncated = true;
         chars += accepted.length;
 
-        const safe = phrases.push(filter.push(accepted));
+        const safe = phrases.push(repeats.push(filter.push(accepted)));
         if (safe) {
           text += safe;
           options.emit(safe);
           options.onProgress?.(text);
         }
+
+        /*
+         * A looping answer is cut like a long one: the visitor keeps everything up to
+         * the repeat, and no further tokens are pulled from the model. The chips still
+         * run, so a truncated answer is not a dead end.
+         */
+        if (repeats.aborted) {
+          truncated = true;
+          break;
+        }
       }
     } finally {
-      // Each filter holds a short tail; the answer is not finished until both
-      // are out. Dashes run first, so the phrase filter sees the final wording.
-      const tail = phrases.push(filter.flush()) + phrases.flush();
+      /*
+       * Each filter holds a short tail, so the answer is not finished until all three
+       * are empty. Order matters: dashes first, then the repeat guard, then the phrase
+       * filter, so the guard judges finished wording and the phrase filter sees the
+       * text that actually ships.
+       */
+      const guardTail = repeats.push(filter.flush()) + repeats.flush();
+      const tail = phrases.push(guardTail) + phrases.flush();
       if (tail) {
         text += tail;
         options.emit(tail);

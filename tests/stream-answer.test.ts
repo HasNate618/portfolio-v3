@@ -78,6 +78,22 @@ test("the character cap stops a runaway answer", async () => {
   assert.ok(result.text.length <= 300 + 24, `emitted ${result.text.length}`);
 });
 
+test("a looping answer is cut at the repeat", async () => {
+  const line = "Nathan built Campus as a study assistant in 2026.";
+  const result = await collect({
+    start: sources(
+      attempt({ text: `${line}\n` }, { text: `${line}\n` }, { text: `${line}\n` }, { text: `${line}\n` }),
+    ),
+  });
+
+  assert.equal(result.truncated, true);
+  assert.equal(
+    result.text.split(line).length - 1,
+    2,
+    `the loop was not cut: ${JSON.stringify(result.text)}`,
+  );
+});
+
 test("an aborted request consumes nothing and does not retry", async () => {
   const result = await collect({
     start: sources(attempt({ text: "never sent" }), attempt({ text: "also never sent" })),

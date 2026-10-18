@@ -5,13 +5,20 @@ let client: CohereClient | null = null;
 /** Primary chat model, for answers and for the follow-up questions. */
 export const CHAT_MODEL = "command-a-plus-05-2026";
 
-/** Total generation budget — must be >= thinking tokenBudget. */
-export const CHAT_MAX_TOKENS = 12000;
+/**
+ * Total generation budget — must be >= thinking tokenBudget. A 300-word answer is
+ * about 450 tokens, so 1500 of thinking plus 1500 of answer leaves room to finish;
+ * 12000 let a looping answer run for pages before anything stopped it.
+ */
+export const CHAT_MAX_TOKENS = 3000;
+
+/** Low, because this is a factual record and not a writing exercise. */
+export const CHAT_TEMPERATURE = 0.3;
 
 /** Reasoning enabled for main chat — thinking tokens are filtered from the stream. */
 export const CHAT_THINKING_ENABLED = {
   type: "enabled" as const,
-  tokenBudget: 5000,
+  tokenBudget: 1500,
 };
 
 /** Followups are short JSON — skip reasoning for latency. */
