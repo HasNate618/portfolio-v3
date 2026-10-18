@@ -63,6 +63,19 @@ export const MAX_ANSWER_CHARS = 6000;
 export const ANSWER_ATTEMPTS = 2;
 
 /**
+ * Whether another attempt could help.
+ *
+ * 422 is Cohere saying it produced nothing usable, which is the transient shape of a
+ * thinking-only generation and is worth one more try. 5xx is the service failing. A 400
+ * is our bug, and retrying it would only hide it: the document-id rejection was a 400,
+ * and swallowing that would have turned a loud failure into a blank answer.
+ */
+export function isRetryable(error: unknown): boolean {
+  const status = (error as { statusCode?: number } | null)?.statusCode;
+  return status === 422 || (typeof status === "number" && status >= 500);
+}
+
+/**
  * Streams one visible answer, retrying once when the model returns nothing visible.
  *
  * Roughly one live call in twelve comes back carrying only reasoning tokens: HTTP
@@ -131,6 +144,15 @@ export async function streamAnswer(options: StreamAnswerOptions): Promise<Answer
           break;
         }
       }
+    } catch (error) {
+      /*
+       * A generation that fails outright is the same situation as one that returns
+       * nothing visible, but only while nothing has been shown: once the visitor has
+       * text, a retry would show it again. Anything a retry cannot fix is rethrown so
+       * it stays visible instead of becoming a blank answer.
+       */
+      if (attempt === limit || text.trim().length > 0 || !isRetryable(error)) throw error;
+      console.warn(`Chat generation failed on attempt ${attempt}:`, error);
     } finally {
       /*
        * Each filter holds a short tail, so the answer is not finished until all three

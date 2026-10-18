@@ -155,7 +155,23 @@ async function main(): Promise<void> {
   const answers: Answer[] = [];
   const seedHistory = new Map<string, HistoryEntry[]>();
 
-  for (const [index, item] of evalFile.items.entries()) {
+  /*
+   * A partial run for checking one fix. It is not a gate: thresholds computed over a
+   * subset are meaningless, so they are printed and not enforced.
+   */
+  const onlyArg = process.argv.find((arg) => arg.startsWith("--only="));
+  const only = onlyArg
+    ? new Set(onlyArg.slice("--only=".length).split(",").map((id) => id.trim()))
+    : null;
+  const items = only ? evalFile.items.filter((item) => only.has(item.id)) : evalFile.items;
+  const partial = only !== null;
+
+  if (partial && items.length === 0) {
+    console.error(`Error: --only matched no item of: ${evalFile.items.map((item) => item.id).join(", ")}`);
+    process.exit(1);
+  }
+
+  for (const [index, item] of items.entries()) {
     if (index > 0) await sleep(PACING_MS);
 
     let history: HistoryEntry[] = [];
@@ -171,7 +187,7 @@ async function main(): Promise<void> {
       history = seedHistory.get(item.followUpOf) ?? [];
     }
 
-    process.stdout.write(`[${index + 1}/${evalFile.items.length}] ${item.id} ... `);
+    process.stdout.write(`[${index + 1}/${items.length}] ${item.id} ... `);
     const result = await runChatTurn(item.q, history);
     answers.push({ id: item.id, text: result.text, result });
     console.log(`${words(result.text)} words, ${result.latencyMs} ms`);
@@ -279,7 +295,7 @@ async function main(): Promise<void> {
     { name: "path slot present", value: `${pathSlotMissing.length} missing`, pass: pathSlotMissing.length === 0 },
   ];
 
-  console.log("\n--- thresholds ---");
+  console.log(partial ? "\n--- thresholds (partial run, not gated) ---" : "\n--- thresholds ---");
   for (const threshold of thresholds) {
     console.log(`${threshold.pass ? "PASS" : "FAIL"}  ${threshold.name}: ${threshold.value}`);
   }
@@ -329,6 +345,11 @@ async function main(): Promise<void> {
     ),
   );
   console.log(`\nwrote ${outFile}`);
+
+  if (partial) {
+    console.log("\npartial run: thresholds not gated");
+    return;
+  }
 
   if (thresholds.some((threshold) => !threshold.pass)) {
     console.error("\neval:chat FAILED");
