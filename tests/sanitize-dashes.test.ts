@@ -29,6 +29,24 @@ test("a date range reads as to, whatever its punctuation", () => {
   assert.equal(sanitizeDashes("2024 \u2013 2025"), "2024 to 2025");
 });
 
+/*
+ * Live regression: an answer wrote "**Animarker** \u2013 May 2023" and the range rule
+ * turned a separator into a range, so the output said the project ran until May
+ * 2023. A range needs a date on both sides of the dash.
+ */
+test("a dash between a name and a month is a separator, not a range", () => {
+  assert.equal(
+    sanitizeDashes("**Animarker** \u2013 May 2023, built solo"),
+    "**Animarker**: May 2023, built solo",
+  );
+  assert.equal(
+    sanitizeDashes("**AWARE** \u2013 Jul 2026, a 1B model"),
+    "**AWARE**: Jul 2026, a 1B model",
+  );
+  // An em dash is an aside, so it keeps reading as a comma; an en dash separates.
+  assert.equal(sanitizeDashes("Campus \u2014 Aug 2026"), "Campus, Aug 2026");
+});
+
 test("a separator reads as a colon, and an aside as a comma", () => {
   assert.equal(sanitizeDashes("**Campus** \u2013 his flagship"), "**Campus**: his flagship");
   assert.equal(
@@ -77,6 +95,7 @@ test("streaming agrees with the whole string, at every split point", () => {
     "It is self\u2011hosted, and every component\u2014from the camera to the rules engine\u2014runs locally.",
     "Aug 2024\u202f\u2013\u202fMay 2028 at Western, with a second range May 2026 \u2014 Aug 2026 here.",
     "What he built\n\u2013 an outage-email parser\n\u2013 Channel Finder",
+    "**Animarker** \u2013 May 2023, built solo at a hackathon.",
   ];
 
   for (const sample of samples) {
@@ -111,7 +130,9 @@ test("a dash at the edge of a chunk is not mistaken for a bullet", () => {
 
 test("a short answer is not lost: the tail arrives on flush", () => {
   const filter = new DashFilter();
-  const first = filter.push("Short \u2013 answer");
-  assert.ok(first.length > 0, "text before an undecided dash is still sent");
-  assert.equal(first + filter.flush(), "Short: answer");
+  // The word before a dash is held with it now, so an answer that starts with a
+  // dash and no earlier text emits nothing until it is decided.
+  const first = filter.push("He built a parser at TeraGo \u2013 a job in Markham");
+  assert.ok(first.length > 0, "text before the held word is still sent");
+  assert.equal(first + filter.flush(), "He built a parser at TeraGo: a job in Markham");
 });

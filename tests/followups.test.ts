@@ -98,9 +98,25 @@ test("the chip prompt forbids invented names and abandoned work", () => {
     aiResponse: "ferret is a local-first search tool in Rust.",
   });
   assert.match(prompt, /Never introduce an organisation that is not there/);
-  assert.match(prompt, /Spell names exactly as the sources do: TeraGo, AWARE, AgntOS, Animarker/);
+  assert.match(prompt, /Spell names exactly as the sources do: TeraGo, AWARE, Animarker, CareBridge/);
+  assert.doesNotMatch(prompt, /AgntOS/, "an abandoned name in the prompt gets echoed back as a chip");
   assert.match(prompt, /Do not ask how an abandoned project works/);
   assert.match(prompt, /ferret is a local-first search tool/);
+});
+
+/*
+ * One bullet said "Refer to him in third person (he/his/Nathan)" and another said
+ * every question "says Nathan". A live sample of 30 chips followed the first: 13
+ * said "Nathan", the rest used he or his.
+ */
+test("the chip prompt asks for Nathan every time, not for he/his", () => {
+  const prompt = buildFollowupPrompt({
+    userMessage: "what is Campus?",
+    aiResponse: "Campus is a study assistant.",
+  });
+  assert.doesNotMatch(prompt, /\(he\/his\/Nathan\)/);
+  assert.match(prompt, /Refer to him as "Nathan"/);
+  assert.match(prompt, /never as "he", "his" or "him"/);
 });
 
 /*

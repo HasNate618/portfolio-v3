@@ -7,10 +7,10 @@
  * break copy and search. A rule that has already failed once does not get to be
  * the only defence, so the answer is cleaned as it streams.
  *
- * Every replacement is decided by what follows the dash, never by what precedes
- * it. That is a streaming constraint rather than a style choice: a chunk can
- * split right at the dash, so the text on the left may already have been sent
- * and cannot be consulted.
+ * Every replacement is decided by what follows the dash, plus the one word kept
+ * back before it. That one word is what tells a date range from a separator: a
+ * chunk can split at the dash, and without the left date "May 2026" a range and
+ * "**Animarker**" look identical from the right.
  *
  * The filter therefore does two things. It holds a short tail, so a dash that
  * arrives split across two chunks is still seen with a character after it. And
@@ -39,9 +39,14 @@ const ZERO_WIDTH_SPACE = /\u200b/g;
 /** Dash-family characters that are not hyphens: em, en and the horizontal bar. */
 const DASH_RANGE = "\\u2013\\u2014\\u2015";
 
-/** A dash before a month or a four-digit year is a date range: "May 2026 to Aug 2026". */
+/**
+ * A dash is a range only between two dates: "May 2026 to Aug 2026", "2024 to
+ * 2025". A live answer wrote "**Animarker** - May 2023", and a rule that looked
+ * only ahead read it as a range, so the page said the project ran until May 2023.
+ */
+const DATE_BEFORE = `(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\.?\\s+\\d{4}|\\d{4}`;
 const DATE_RANGE = new RegExp(
-  ` *[${DASH_RANGE}] *(?=(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\b|\\d{4}\\b)`,
+  `(?<=${DATE_BEFORE}) *[${DASH_RANGE}] *(?=(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\b|\\d{4}\\b)`,
   "gi",
 );
 /** Remaining em dashes and horizontal bars read as a comma. */
@@ -90,6 +95,13 @@ function safeCut(text: string, cut: number): number {
   return index;
 }
 
+/** Where the token ending at `index` begins, so it can stay back with the dash. */
+function tokenStartBefore(text: string, index: number): number {
+  let start = index;
+  while (start > 0 && !/\s/.test(text[start - 1])) start -= 1;
+  return start;
+}
+
 /**
  * Index just past the word following a dash, or -1 while that word may still be
  * arriving. A word that runs to the end of the buffer waits for one more
@@ -125,9 +137,9 @@ export class DashFilter {
       const end = endOfWordAfter(this.held, dash + 1);
       if (end !== -1) return this.release(end);
 
-      // The dash is not decidable yet. What comes before it still is, as long as
-      // the space that belongs to the dash stays behind with it.
-      const before = safeCut(this.held, dash);
+      // The dash is not decidable yet. Keep the word before it too: a range needs
+      // a date on the left of the dash, and "Animarker - May 2023" has none.
+      const before = tokenStartBefore(this.held, safeCut(this.held, dash));
       return before > 0 ? this.release(before) : "";
     }
 
