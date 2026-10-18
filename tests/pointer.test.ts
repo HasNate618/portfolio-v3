@@ -39,8 +39,17 @@ test("a subject with no page and no link falls back to the résumé", () => {
   assert.equal(ask({ namedSubjectId: "wemars" }).url, RESUME);
 });
 
-test("a broad or hiring first turn points at the résumé", () => {
-  assert.equal(ask().url, RESUME);
+/*
+ * A broad question is what the projects page answers. The résumé used to close every one
+ * of them, including "what does he build" and "how does he use AI", where it is the wrong
+ * door: the reader has just been shown the work, not asked for his background.
+ */
+test("a broad question points at the projects page", () => {
+  assert.equal(ask().url, `${siteBaseUrl()}/projects`);
+  assert.equal(ask({ turn: 3 }).url, `${siteBaseUrl()}/projects`);
+});
+
+test("a hiring visitor's first turn still points at the résumé", () => {
   assert.equal(ask({ intent: "recruiter" }).url, RESUME);
 });
 

@@ -39,6 +39,9 @@ const RESUME_POINTER: Pointer = {
   url: contactUrl("Resume PDF") ?? EMAIL_URL,
 };
 
+/** Where a broad question should send a reader who wants the whole set. */
+const PROJECTS_POINTER: Pointer = { label: "Projects", url: `${siteBaseUrl()}/projects` };
+
 const EMAIL_POINTER: Pointer = { label: "Email", url: EMAIL_URL };
 
 const LINKEDIN_POINTER: Pointer = {
@@ -84,7 +87,14 @@ export function choosePointer(input: ChoosePointerInput): Pointer {
   if (intent === "recruiter" && turn >= 2) return EMAIL_POINTER;
   if (contactAsked) return LINKEDIN_POINTER;
 
-  return RESUME_POINTER;
+  /*
+   * A broad question names no subject, and "what does he build" or "how does he use AI"
+   * is answered by the projects page the answer has just described, not by a PDF of his
+   * background. The résumé keeps the questions it is actually the right door for: a
+   * hiring visitor's first turn, and nothing else.
+   */
+  if (intent === "recruiter") return RESUME_POINTER;
+  return PROJECTS_POINTER;
 }
 
 /** True when the visitor asked how to reach him. */
@@ -102,7 +112,12 @@ export function availabilityAsked(text: string): boolean {
  * a test walks every pointer combination to prove none can leave it.
  */
 export function pointerWhitelist(): string[] {
-  const urls = new Set<string>([EMAIL_URL, site.contact.email, ...site.contact.links.map((link) => link.href)]);
+  const urls = new Set<string>([
+    EMAIL_URL,
+    site.contact.email,
+    PROJECTS_POINTER.url,
+    ...site.contact.links.map((link) => link.href),
+  ]);
 
   for (const project of site.projects) {
     const href = caseStudyHref(project);
