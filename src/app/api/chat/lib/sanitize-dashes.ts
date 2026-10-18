@@ -41,10 +41,16 @@ const DASH_RANGE = "\\u2013\\u2014\\u2015";
 
 /**
  * A dash is a range only between two dates: "May 2026 to Aug 2026", "2024 to
- * 2025". A live answer wrote "**Animarker** - May 2023", and a rule that looked
- * only ahead read it as a range, so the page said the project ran until May 2023.
+ * 2025", "May to Aug 2026". A live answer wrote "**Animarker** - May 2023", and a
+ * rule that looked only ahead read it as a range, so the page said the project
+ * ran until May 2023.
+ *
+ * The left side may be a bare month. Requiring a year there missed the shape the
+ * model writes most often -- "May-Aug 2026" -- which then fell through to the
+ * colon rule and read "May: Aug 2026". A proper noun still fails the lookbehind,
+ * so "**Animarker** - May 2023" stays a separator.
  */
-const DATE_BEFORE = `(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\.?\\s+\\d{4}|\\d{4}`;
+const DATE_BEFORE = `(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\.?(?:\\s+\\d{4})?|\\d{4}`;
 const DATE_RANGE = new RegExp(
   `(?<=${DATE_BEFORE}) *[${DASH_RANGE}] *(?=(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\b|\\d{4}\\b)`,
   "gi",

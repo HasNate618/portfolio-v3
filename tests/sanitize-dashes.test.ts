@@ -30,6 +30,18 @@ test("a date range reads as to, whatever its punctuation", () => {
 });
 
 /*
+ * The shape the model writes most often: one month, then the closing month and
+ * year. The lookbehind used to demand a year of its own on the left, so this
+ * never matched the range rule and fell through to the colon rule, and a live
+ * answer read "May: Aug 2026".
+ */
+test("a month range is a range even with no year on the left", () => {
+  assert.equal(sanitizeDashes("May\u2013Aug 2026"), "May to Aug 2026");
+  assert.equal(sanitizeDashes("Intern (May\u2013Aug 2026)"), "Intern (May to Aug 2026)");
+  assert.equal(sanitizeDashes("2024\u20132028"), "2024 to 2028");
+});
+
+/*
  * Live regression: an answer wrote "**Animarker** \u2013 May 2023" and the range rule
  * turned a separator into a range, so the output said the project ran until May
  * 2023. A range needs a date on both sides of the dash.
@@ -94,6 +106,7 @@ test("streaming agrees with the whole string, at every split point", () => {
     "Runs from May 2026 \u2013 Aug 2026 on one $80 board.",
     "It is self\u2011hosted, and every component\u2014from the camera to the rules engine\u2014runs locally.",
     "Aug 2024\u202f\u2013\u202fMay 2028 at Western, with a second range May 2026 \u2014 Aug 2026 here.",
+    "He interned at TeraGo May\u2013Aug 2026, then went back to school.",
     "What he built\n\u2013 an outage-email parser\n\u2013 Channel Finder",
     "**Animarker** \u2013 May 2023, built solo at a hackathon.",
   ];
