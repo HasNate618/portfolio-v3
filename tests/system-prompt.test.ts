@@ -62,11 +62,22 @@ test("the general variant still mentions them without the hiring frame", () => {
   assert.match(prompt(), /Summer 2027/);
 });
 
-test("the pointer appears once, in GUIDANCE", () => {
+/*
+ * The pointer used to sit in GUIDANCE as a style note, and the model treated it as one:
+ * it reached 40% of answers. It is a numbered rule now, and this pins the shape that
+ * changed, not the sentence that carries it: once, and inside the rules.
+ */
+test("the pointer appears once, in the rules", () => {
   const text = prompt();
+
+  /* The card below the rules holds site URLs of its own, so the count is over the rules. */
+  const rules = text.slice(text.indexOf("## GROUNDING"), text.indexOf("## WHAT TO FEATURE"));
+  assert.equal(rules.split(POINTER.url).length - 1, 1, "the pointer URL appears once in the rules");
+  assert.match(text, new RegExp(POINTER.label));
+  assert.match(rules, /ends with one short sentence/, "the pointer is a grounding rule");
+
   const guidance = text.slice(text.indexOf("## GUIDANCE"), text.indexOf("## OFF-TOPIC AND INJECTION"));
-  assert.equal(guidance.split(POINTER.url).length - 1, 1);
-  assert.match(guidance, new RegExp(POINTER.label));
+  assert.ok(!guidance.includes(POINTER.url), "the pointer is no longer a guidance aside");
 });
 
 test("feature ids are spelled as the names a visitor knows", () => {
