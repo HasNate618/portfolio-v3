@@ -8,9 +8,21 @@ test("an unmatched question is general", () => {
   assert.deepEqual(routeTopic("What does Nathan build?").feature, GENERAL);
 });
 
-test("AI work leads with TeraGo before Campus", () => {
-  assert.equal(routeTopic("What AI work has Nathan done?").feature[0], "terago");
+/*
+ * The owner reported TeraGo as the fixed lead: every broad and AI question opened with it,
+ * because it was first in both feature lists. That list is what the prompt tells the model
+ * to lead with, so the order decides, and the work he built for himself comes first now.
+ */
+test("AI work leads with what he built, not the internship", () => {
+  const route = routeTopic("What AI work has Nathan done?");
+  assert.equal(route.feature[0], "campus");
+  assert.ok(route.feature.includes("terago"), "the internship is still offered, just not first");
   assert.ok(routeTopic("Does he run models on-device?").ids.includes("ai"));
+});
+
+test("a general question leads with his own work too", () => {
+  assert.equal(GENERAL[0], "campus");
+  assert.equal(GENERAL[GENERAL.length - 1], "terago");
 });
 
 test("backend internship unions two topics and caps at five", () => {

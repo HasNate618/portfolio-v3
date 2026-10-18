@@ -18,7 +18,7 @@ export interface TopicRoute {
 
 export const TOPICS = [
   { id: "ai",        re: /\b(ai|llm|agent\w*|ml|model\w*|rag|retriev\w*|local|on-device|edge|vision)\b/i,
-    feature: ["terago", "3d-western", "aware", "homelab", "campus", "ferret"] },
+    feature: ["campus", "ferret", "aware", "homelab", "terago", "3d-western"] },
   { id: "industry",  re: /\b(hir(e|ing)|team|industry|intern(?:ship)?s?|work experience|job|professional|company)\b/i,
     feature: ["terago", "3d-western", "carebridge", "omni-reality"] },
   { id: "hackathon", re: /\b(hackathon|award|won|win|prize)\b/i,
@@ -35,7 +35,7 @@ export const TOPICS = [
  * What a question with no topic keywords leads with. The industry roles lead,
  * because a visitor who asked nothing in particular is most often hiring.
  */
-export const GENERAL = ["terago", "3d-western", "homelab", "aware", "campus", "carebridge"];
+export const GENERAL = ["campus", "homelab", "aware", "carebridge", "3d-western", "terago"];
 
 export function routeTopic(text: string): TopicRoute {
   const hit = TOPICS.filter((t) => t.re.test(text));
