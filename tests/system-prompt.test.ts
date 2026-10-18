@@ -94,7 +94,23 @@ test("the style section asks for a shape a reader can scan", () => {
   assert.match(text, /paragraphs of two to four\s+sentences/);
   assert.match(text, /one bullet per project/);
   assert.match(text, /never one running paragraph/);
-  assert.match(text, /no headings/);
+  assert.match(text, /no\s+headings/);
+});
+
+/*
+ * The first run with rule 6 produced bullets and then a summary paragraph, named every
+ * project twice (once in the lead, once in a bullet) and stamped "solo" on all three.
+ */
+test("the shape rule forbids the repetition the first run produced", () => {
+  const text = prompt();
+  assert.match(text, /do not name\s+the items the bullets below them cover/i, "no listing in the lead");
+  assert.match(text, /Nothing stands\s+between the last bullet and the closing sentence/);
+  assert.match(text, /at most once in the whole answer, not on\s+every bullet/);
+});
+
+/* "as shown in his local and cost-aware AI approach" is the record citing itself. */
+test("only a refusal points at the record", () => {
+  assert.match(prompt(), /Only a refusal names the record/);
 });
 
 test("feature ids are spelled as the names a visitor knows", () => {
@@ -137,6 +153,6 @@ test("the prompt states the record's limits rather than defaulting to invention"
  */
 test("a broad answer is told not to lead with TeraGo, and to keep its caveat", () => {
   const text = prompt();
-  assert.match(text, /Do not open a broad answer with TeraGo/);
+  assert.match(text, /TeraGo leads only when the question is/);
   assert.match(text, /not-yet-deployed caveat appears with it/);
 });
