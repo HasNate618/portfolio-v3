@@ -1,7 +1,24 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { getCorpusDocs, getCorpusDoc } from "../src/lib/corpus";
+import { factsBlockFor, getCorpusDocs, getCorpusDoc } from "../src/lib/corpus";
+import { speaksAsNathan, thirdPerson } from "../src/lib/voice";
 import { site } from "../src/data/site";
+
+/*
+ * The facts block is the projection of site.ts, and site.ts carries live
+ * first-person fragments ("Ran alongside my TeraGo internship", "the post-event
+ * work is mine"). The corpus is read as a claim about him and the prompt forbids
+ * speaking as Nathan, so the block is turned around where it is projected.
+ */
+test("the facts block never speaks as Nathan", () => {
+  for (const rel of ["projects/lumen.md", "projects/omni-reality.md", "experience/3d-western.md"]) {
+    const facts = factsBlockFor(rel) ?? "";
+    assert.ok(facts.length > 0, `${rel} has no facts block`);
+    for (const line of facts.split("\n")) {
+      assert.ok(!speaksAsNathan(line), `${rel} speaks in the first person: ${line}`);
+    }
+  }
+});
 
 test("served documents keep public frontmatter and strip page-only keys", () => {
   for (const doc of getCorpusDocs()) {
@@ -85,7 +102,7 @@ test("every file-backed project doc carries its card summary", () => {
     const doc = getCorpusDoc(rel);
     assert.ok(doc, `${rel} must be in the corpus`);
     assert.match(doc.text, /^Summary: /m, `${rel} has no Summary line`);
-    assert.ok(doc.text.includes(project.covers), `${rel} is missing its card text`);
+    assert.ok(doc.text.includes(thirdPerson(project.covers)), `${rel} is missing its card text`);
   }
 });
 

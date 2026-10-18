@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { buildProfileCard } from "../src/app/api/chat/lib/profile-card";
 import { TEAM_NO_ROLE_IDS } from "../src/app/api/chat/lib/chips-validate";
 import { BANNED_WORD_PATTERNS } from "../src/lib/banned-words";
+import { speaksAsNathan } from "../src/lib/voice";
 import { site } from "../src/data/site";
 
 const card = buildProfileCard();
@@ -106,5 +107,17 @@ test("project lines stay short enough to read", () => {
 test("an abandoned project is marked as one", () => {
   for (const project of site.projects.filter((p) => p.displayStatus === "abandoned")) {
     assert.match(projectLine(project.name), /ABANDONED, mention only if asked/);
+  }
+});
+
+/*
+ * The card is a claim about him, and the prompt it is inserted into forbids
+ * speaking as Nathan. site.ts carries two live first-person fragments in
+ * displayRole alone, so the turn-around is asserted over the whole card rather
+ * than over the fields I happened to remember.
+ */
+test("the card never speaks as Nathan", () => {
+  for (const line of card.split("\n")) {
+    assert.ok(!speaksAsNathan(line), `the card speaks in the first person: ${line}`);
   }
 });

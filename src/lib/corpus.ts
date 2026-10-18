@@ -3,6 +3,7 @@ import path from "node:path";
 import { site, type Experience, type Project } from "@/data/site";
 import { listCorpusFilesFrom, publicFrontmatter, stripFrontmatter } from "@/lib/content";
 import { resolveStats } from "@/lib/markdown";
+import { thirdPerson } from "@/lib/voice";
 
 /**
  * The projection that makes "one source per fact" true.
@@ -52,11 +53,14 @@ function experienceFacts(e: Experience): string[] {
 function factsFor(rel: string): string[] {
   const url = `/knowledgebase/${rel}`;
 
+  // site.ts writes his summaries in the first person. The card and the corpus are
+  // both read as claims about him, so the pronouns are turned around at both
+  // boundaries, from one definition: voice.ts.
   const project = site.projects.find((p) => p.file === url);
-  if (project) return projectFacts(project);
+  if (project) return projectFacts(project).map(thirdPerson);
 
   const experience = site.experience.find((e) => e.file === url);
-  if (experience) return experienceFacts(experience);
+  if (experience) return experienceFacts(experience).map(thirdPerson);
 
   return [];
 }

@@ -18,6 +18,7 @@ import type { Experience, Project } from "@/data/site";
 import { caseStudyHref } from "@/lib/content";
 import { monthYear } from "@/lib/dates";
 import { siteBaseUrl } from "@/lib/site-url";
+import { thirdPerson } from "@/lib/voice";
 import { TEAM_NO_ROLE_IDS } from "./chips-validate";
 
 /**
@@ -35,20 +36,6 @@ const CAVEATS = [
   "- Campus has no approval gate and no rollback; the NixOS homelab is the project that gates changes and rolls them back.",
   "- 3D Western's dataset labels were VLM-checked, so its accuracy figures are agreement with those labels, not ground truth.",
 ];
-
-/**
- * site.ts writes his summaries in his own voice. The card is read as a claim
- * *about* him, and the prompt forbids speaking as Nathan, so the first-person
- * pronouns are turned around here rather than left for the model to trip on.
- */
-function thirdPerson(text: string): string {
-  return text
-    .replace(/\bI'm\b/g, "he is")
-    .replace(/\bI've\b/g, "he has")
-    .replace(/\bI\b/g, "he")
-    .replace(/\bmy\b/gi, "his")
-    .replace(/\bme\b/g, "him");
-}
 
 /** The first sentence of a covers block, which is the card's one line of detail. */
 function firstSentence(text: string): string {
@@ -70,7 +57,7 @@ function pageFor(project: Project): string | null {
 function projectLine(project: Project): string {
   const facts = [
     project.dates,
-    project.displayRole,
+    thirdPerson(project.displayRole),
     project.event,
     project.displayStatus,
     awardFor(project.name)?.prize,
@@ -79,7 +66,7 @@ function projectLine(project: Project): string {
     .join(" | ");
 
   const marker = project.displayStatus === "abandoned" ? "ABANDONED, mention only if asked: " : "";
-  const limit = project.limits ? ` Limit: ${project.limits}` : "";
+  const limit = project.limits ? ` Limit: ${thirdPerson(project.limits)}` : "";
   const page = pageFor(project);
 
   return `- ${marker}${project.name} (${facts}): ${detailFor(project)}${limit}${
