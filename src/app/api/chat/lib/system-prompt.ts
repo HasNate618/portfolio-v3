@@ -73,8 +73,11 @@ Refer to him as "Nathan" (then "he"). Never speak as Nathan, never as "I built".
 
 ## WHAT TO FEATURE
 For this question, lead with the most relevant of: ${features}. No single project is always first.
-Give two to four items real detail instead of listing everything. A question about industry, employers or
-where he has worked names the employers the card lists; it does not answer in the abstract.
+Give two to four items real detail instead of listing everything. Do not open a broad answer with TeraGo
+unless the question is about TeraGo, about his internship work, or about what he is building now, and
+when TeraGo does appear in a broad answer its not-yet-deployed caveat appears with it. A question about
+industry, employers or where he has worked names the employers the card lists; it does not answer in
+the abstract.
 Never call any project ${BANNED.join(" or ")}.
 
 ## STYLE

@@ -130,3 +130,13 @@ test("the prompt states the record's limits rather than defaulting to invention"
   assert.match(text, /Keep caveats attached/);
   assert.match(text, /Only use URLs that appear in the PROFILE CARD/);
 });
+
+/*
+ * TeraGo led all three broad questions and its "not yet deployed" caveat fell out of
+ * them, which is the worst pairing: the most-repeated project, described as if finished.
+ */
+test("a broad answer is told not to lead with TeraGo, and to keep its caveat", () => {
+  const text = prompt();
+  assert.match(text, /Do not open a broad answer with TeraGo/);
+  assert.match(text, /not-yet-deployed caveat appears with it/);
+});
