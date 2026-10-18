@@ -11,7 +11,7 @@ updated: 2026-10-16
 
 Every project Nathan has documented, one file each, with a line on what it covers. Dates, role, event and figures are not repeated here: they come from the typed site data, which is prepended to each project document. Dates marked approx. in that data come from GitHub repo creation dates; hackathon dates come from the event or Devpost.
 
-## Flagship and featured
+## Featured
 
 - [Campus](campus.md): What Campus is, how its LMS sync, hybrid retrieval and audited 20-tool agent work, and its test and usage numbers.
 - [NixOS homelab](homelab.md): How his two NixOS hosts are defined, what the self-hosted AI stack runs, how Hermes Agent profiles change the config behind approval, and llama.cpp on flow.

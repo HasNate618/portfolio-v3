@@ -30,7 +30,7 @@ Western University, Bachelor of Engineering Science in Software Engineering, Aug
 
 ## Focus
 
-Campus, his self-hosted study assistant, is the flagship. Next come a NixOS homelab where AI agents propose config changes that he approves, and the on-device AWARE build. How he chooses between hosted and local models is in [Local and cost-aware AI](local-ai.md). Outside AI he has also built games, mobile apps and hardware, many of them at hackathons.
+His main projects are Campus, a self-hosted study assistant; a NixOS homelab where AI agents propose config changes that he approves; and AWARE, an on-device build. His industry work is at TeraGo and 3D Western. How he chooses between hosted and local models is in [Local and cost-aware AI](local-ai.md). Outside AI he has also built games, mobile apps and hardware, many of them at hackathons.
 
 ## How he works
 

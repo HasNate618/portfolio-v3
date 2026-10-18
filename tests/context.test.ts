@@ -46,7 +46,7 @@ test("an index page is not coverage", () => {
   assert.deepEqual(out.slice(0, UNCOVERED.length), UNCOVERED, "retrieved chunks keep their order");
 });
 
-test("the floor pins the flagship, the other featured projects and the roles", () => {
+test("the floor pins the featured projects and the roles", () => {
   const sources = withCoverageFloor(UNCOVERED).map((c) => c.source);
   for (const expected of [
     "projects/campus.md",
@@ -62,7 +62,7 @@ test("the floor pins the flagship, the other featured projects and the roles", (
 
 test("a pinned chunk carries the summary, not only scalars", () => {
   const campus = withCoverageFloor(UNCOVERED).find((c) => c.source === "projects/campus.md");
-  assert.ok(campus, "the flagship must be pinned");
+  assert.ok(campus, "Campus must be pinned");
   assert.match(campus.text, /^Summary: /m);
 });
 
@@ -97,7 +97,7 @@ test("an abandoned project's doc is not coverage", () => {
   const chunks = [...UNCOVERED, { text: "Cyberdeck", source: "projects/cyberdeck.md" }];
   const out = withCoverageFloor(chunks, IMPRESSIVE);
   assert.ok(out.length > chunks.length, "the floor must still fire");
-  assert.ok(out.map((c) => c.source).includes("projects/campus.md"), "the flagship must be pinned");
+  assert.ok(out.map((c) => c.source).includes("projects/campus.md"), "Campus must be pinned");
 });
 
 test("a role that is not on the resume is not coverage", () => {

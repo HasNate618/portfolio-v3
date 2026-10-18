@@ -32,7 +32,7 @@ test("a Proxmox question falls through to the defaults", () => {
   assert.deepEqual(questions, DEFAULTS);
 });
 
-test("the defaults lead with the flagship", () => {
+test("the defaults lead with Campus", () => {
   assert.deepEqual(buildFallbackFollowups("hello", "Hi."), DEFAULTS);
 });
 

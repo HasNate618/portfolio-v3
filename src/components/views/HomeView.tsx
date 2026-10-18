@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { site, featuredProjects, flagshipProject, awardFor } from "@/data/site";
+import { site, featuredProjects, leadProject, awardFor } from "@/data/site";
 import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import { caseStudyHref as projectHref, getPage, type Page } from "@/lib/content";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
@@ -27,7 +27,7 @@ const HOME_ROLES = 2;
 const HOME_AWARDS = ["Careerly", "Auralis", "Eyecandy", "CareBridge"];
 
 export function HomeView({ page }: { page: Page }) {
-  const campus = flagshipProject()!;
+  const campus = leadProject()!;
   const featured = featuredProjects();
 
   /**

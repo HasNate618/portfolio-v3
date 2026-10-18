@@ -1396,7 +1396,7 @@ npm run check:embeddings
 npm run build
 (npx next start -p 3100 &) ; sleep 3
 curl -s -X POST localhost:3100/api/chat -H 'Content-Type: application/json' \
-  -d '{"message":"What is Nathans flagship project?"}' | head -c 300
+  -d '{"message":"What is Nathans main project?"}' | head -c 300
 pkill -f "[n]ext start"
 ```
 

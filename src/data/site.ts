@@ -11,10 +11,9 @@ export type ProjectGroup = "featured" | "ai" | "hardware" | "xr" | "tools" | "ar
 /**
  * Home-page prominence. Distinct from `group`, which is how /projects files them.
  * This was previously implicit as `p.id !== "campus"` in HomeView, which meant the
- * corpus projection had no way to say that Campus is the flagship, and so the
- * chat could not retrieve Campus for "what is his flagship project?".
+ * corpus projection had no way to say which project the home page leads with.
  */
-export type ProjectRank = "flagship" | "featured";
+export type ProjectRank = "lead" | "featured";
 
 export type SiteAward = { event: string; year: string; project: string; prize: string; role: string };
 
@@ -53,7 +52,7 @@ export type Project = {
   models?: ModelRow[];
   /** Shown on /resume. Mirrors Experience.onResume. */
   onResume?: boolean;
-  /** Home-page prominence, carried into the chat corpus so the flagship is retrievable. */
+  /** Home-page prominence. Layout only: not carried into the chat corpus. */
   rank?: ProjectRank;
 };
 
@@ -136,7 +135,7 @@ export const site: SiteContent = {
       ],
       file: "/knowledgebase/projects/campus.md",
       onResume: true,
-      rank: "flagship",
+      rank: "lead",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Campus" }],
       stats: [
         { key: "courses", label: "courses, in daily use (I'm the only user)", value: "6" },
@@ -608,8 +607,8 @@ export function highlightProjects(): Project[] {
 }
 
 /** The one project the home page leads with. */
-export function flagshipProject(): Project | undefined {
-  return site.projects.find((p) => p.rank === "flagship");
+export function leadProject(): Project | undefined {
+  return site.projects.find((p) => p.rank === "lead");
 }
 
 /** The home page's featured cards, in display order. */

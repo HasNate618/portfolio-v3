@@ -7,7 +7,7 @@ const BANNED = /[\u2010-\u2015\u00a0\u202f]/;
 test("no banned dash survives any of the shapes a live answer used", () => {
   const samples = [
     "every component\u2014from the perception pipeline to the rules engine",
-    "**Campus** \u2013 his flagship project",
+    "**Campus** \u2013 his study assistant",
     "May 2026 \u2013 Aug 2026",
     "Sep 2025 \u2014 Aug 2026",
     "his self\u2011hosted study assistant",
@@ -48,7 +48,7 @@ test("a dash between a name and a month is a separator, not a range", () => {
 });
 
 test("a separator reads as a colon, and an aside as a comma", () => {
-  assert.equal(sanitizeDashes("**Campus** \u2013 his flagship"), "**Campus**: his flagship");
+  assert.equal(sanitizeDashes("**Campus** \u2013 his study assistant"), "**Campus**: his study assistant");
   assert.equal(
     sanitizeDashes("one board\u2014no cloud inference"),
     "one board, no cloud inference",

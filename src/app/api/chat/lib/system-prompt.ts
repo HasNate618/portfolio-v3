@@ -1,4 +1,4 @@
-import { featuredProjects, flagshipProject, site } from "@/data/site";
+import { featuredProjects, leadProject, site } from "@/data/site";
 import { monthYear } from "@/lib/dates";
 import { EMBED_MODEL } from "./cohere";
 
@@ -8,7 +8,7 @@ interface PromptChunk {
 }
 
 /** Home and featured projects only, so the chat leads with the same work the home page does. */
-const PROJECT_ORDER = [flagshipProject(), ...featuredProjects()]
+const PROJECT_ORDER = [leadProject(), ...featuredProjects()]
   .filter((project) => project !== undefined)
   .map((project) => `**${project.name}**`)
   .join(", ");

@@ -11,7 +11,6 @@ id: campus
 dates: "Aug 2026 to present"
 role: solo
 status: active
-rank: flagship
 updated: 2026-10-16
 ---
 # Campus

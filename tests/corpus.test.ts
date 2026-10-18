@@ -56,9 +56,9 @@ test("every corpus path is unique and relative", () => {
   assert.ok(paths.every((p) => !p.startsWith("/") && !p.includes("..")));
 });
 
-test("a ranked project's doc states its rank, so the flagship is retrievable", () => {
-  assert.match(getCorpusDoc("projects/campus.md")!.text, /^Rank: flagship project$/m);
-  assert.match(getCorpusDoc("projects/homelab.md")!.text, /^Rank: featured project$/m);
+test("no rank label reaches the corpus", () => {
+  assert.doesNotMatch(getCorpusDoc("projects/campus.md")!.text, /^Rank:/m);
+  assert.doesNotMatch(getCorpusDoc("projects/homelab.md")!.text, /^Rank:/m);
 });
 
 test("an unranked project's doc claims no rank", () => {

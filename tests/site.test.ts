@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
   site,
   highlightProjects,
-  flagshipProject,
+  leadProject,
   featuredProjects,
   getProject,
   getExperience,
@@ -116,8 +116,8 @@ test("highlightProjects is sorted by order and contains case studies only", () =
   assert.ok(hi.every((p) => p.group === "featured"));
 });
 
-test("the flagship is explicit data, not a hardcoded id in a view", () => {
-  assert.equal(flagshipProject()?.id, "campus");
+test("the lead project is explicit data, not a hardcoded id in a view", () => {
+  assert.equal(leadProject()?.id, "campus");
 });
 
 test("the featured cards are the ranked projects, in display order", () => {
@@ -127,8 +127,8 @@ test("the featured cards are the ranked projects, in display order", () => {
   );
 });
 
-test("every ranked project exists and exactly one is the flagship", () => {
+test("every ranked project exists and exactly one is the lead", () => {
   const ranked = site.projects.filter((p) => p.rank);
-  assert.equal(ranked.filter((p) => p.rank === "flagship").length, 1);
-  assert.equal(ranked.length, 4, "campus (flagship) plus three featured");
+  assert.equal(ranked.filter((p) => p.rank === "lead").length, 1);
+  assert.equal(ranked.length, 4, "campus (lead) plus three featured");
 });

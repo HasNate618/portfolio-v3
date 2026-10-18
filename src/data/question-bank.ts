@@ -13,7 +13,7 @@ export interface BankQuestion {
 export const QUESTION_BANK: BankQuestion[] = [
   { id: "starter-builds", question: "What does Nathan build?", stage: "builds", subject: "Nathan Espejo", sources: ["about.md"], answerMustContain: ["LLM agents", "retrieval systems"], starter: true },
   { id: "starter-internship", question: "What did Nathan do at his internship?", stage: "builds", subject: "TeraGo", sources: ["experience/terago.md"], answerMustContain: ["outage-email parser", "Channel Finder"], starter: true },
-  { id: "starter-proudest", question: "What's Nathan's proudest project?", stage: "builds", subject: "Campus", sources: ["projects/campus.md"], answerMustContain: ["flagship", "20-tool agent"], starter: true },
+  { id: "starter-proudest", question: "What's Nathan's proudest project?", stage: "builds", subject: "Campus", sources: ["projects/campus.md"], answerMustContain: ["20-tool agent", "hybrid retrieval"], starter: true },
   { id: "starter-internship-search", question: "Is Nathan looking for a Summer 2027 internship?", stage: "availability", subject: "Nathan Espejo", sources: ["about.md"], answerMustContain: ["Summer 2027 software engineering or applied AI internship", "Summer 2027"], starter: true },
 
   { id: "campus-builds", question: "How does Nathan's Campus store and retrieve?", stage: "proof", subject: "Campus", sources: ["projects/campus.md"], answerMustContain: ["SQLite", "hybrid retrieval"] },

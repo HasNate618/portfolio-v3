@@ -22,11 +22,6 @@ export type CorpusDoc = { path: string; text: string };
 
 function projectFacts(p: Project): string[] {
   const lines = [`Dates: ${p.dates}`, `Role: ${p.displayRole}`];
-  // Carried into the corpus so the flagship is retrievable: the word appears in
-  // the navigation docs, and without this line the specific doc could not match
-  // "what is his flagship project?" at all.
-  if (p.rank === "flagship") lines.push("Rank: flagship project");
-  if (p.rank === "featured") lines.push("Rank: featured project");
   if (p.displayStatus) lines.push(`Status: ${p.displayStatus}`);
   if (p.event) lines.push(`Event: ${p.event}`);
   if (p.stack.length > 0) lines.push(`Stack: ${p.stack.join(" · ")}`);

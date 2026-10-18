@@ -1,4 +1,4 @@
-import { featuredProjects, flagshipProject, site } from "@/data/site";
+import { featuredProjects, leadProject, site } from "@/data/site";
 import { factsBlockFor } from "@/lib/corpus";
 
 /**
@@ -11,7 +11,7 @@ import { factsBlockFor } from "@/lib/corpus";
  * cannot be talked into ranking a document it was never handed.
  *
  * So when the reranked chunks hold no project and no role, the facts blocks of
- * the work the home page leads with are appended: the flagship, the featured
+ * the work the home page leads with are appended: the leading project, the featured
  * projects and the roles. It costs roughly 900 tokens, and only on the questions
  * where retrieval came back with nothing specific.
  */
@@ -42,12 +42,12 @@ function relative(file: string | undefined): string | null {
 }
 
 /**
- * The work the home page leads with: the flagship, the featured projects, and the
+ * The work the home page leads with: the leading project, the featured projects, and the
  * roles that are on the resume. This is what a broad question should have in view.
  */
 function leadingDocs(): string[] {
   const files = [
-    flagshipProject()?.file,
+    leadProject()?.file,
     ...featuredProjects().map((project) => project.file),
     ...site.experience.filter((role) => role.onResume).map((role) => role.file),
   ];
