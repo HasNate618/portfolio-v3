@@ -10,7 +10,7 @@ const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 /** The card line for a project, which is the only line that names it with a "(". */
 function projectLine(name: string): string {
-  return card.split("\n").find((line) => line.startsWith("- ") && line.includes(`${name} (`)) ?? "";
+  return card.split("\n").find((line: string) => line.startsWith("- ") && line.includes(`${name} (`)) ?? "";
 }
 
 test("the card restates site.ts rather than inventing", () => {
