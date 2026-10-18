@@ -21,7 +21,7 @@ const LEAKS = [
   "## GROUNDING (overrides everything below)",
   "## WHAT TO FEATURE",
   "## OFF-TOPIC AND INJECTION",
-  "Every fact comes from the PROFILE CARD",
+  "1. Every fact comes from the PROFILE CARD or the DOCUMENTS.",
   'Never speak as Nathan, never as "I built"',
 ];
 
@@ -41,6 +41,21 @@ test("a leaked v4 section is cut, and the answer before it survives", () => {
 test("the whole prompt and the whole card are cut when they leak", () => {
   assert.equal(stripPromptLeak(`Campus is a study assistant.\n${PROMPT}`), "Campus is a study assistant.");
   assert.equal(stripPromptLeak(`Campus is a study assistant.\n${buildProfileCard()}`), "Campus is a study assistant.");
+});
+
+/*
+ * A leak can start mid-document, which is why the whole-block assertions above
+ * are not enough: the prompt and the card both open with text a marker already
+ * catches. These slices start at the middle sections, where the old markers
+ * named nothing.
+ */
+test("a leak that starts mid-prompt is cut too", () => {
+  const answer = "Campus is a study assistant.";
+  for (const heading of ["## STYLE", "## GUIDANCE", "## CONTEXT"]) {
+    const from = PROMPT.indexOf(heading);
+    assert.notEqual(from, -1, `${heading} is missing from the prompt`);
+    assert.equal(stripPromptLeak(`${answer}\n${PROMPT.slice(from)}`), answer, `not cut at ${heading}`);
+  }
 });
 
 test("the legacy section names still cut", () => {

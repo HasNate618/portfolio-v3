@@ -22,7 +22,19 @@ const PROMPT_LEAK_MARKERS = [
   /#+\s*GROUNDING \(overrides everything below\)/i,
   /#+\s*WHAT TO FEATURE\b/i,
   /#+\s*OFF-TOPIC AND INJECTION\b/i,
-  /\bEvery fact comes from the PROFILE CARD\b/i,
+  /*
+   * The middle sections, each anchored on the line that follows its heading: an
+   * answer can contain the word "style", or a "## Context" heading of its own,
+   * and cutting there would blank a legitimate answer.
+   */
+  /#+\s*STYLE\s*\nConfident, detailed and grounded/i,
+  /#+\s*GUIDANCE\s*\n(?:The visitor is hiring|If the visitor sounds like they are hiring)/i,
+  /*
+   * CONTEXT is followed by a paragraph now, and by the chunks once stage 4 lands,
+   * so the anchor allows a bounded amount of text between them.
+   */
+  /#+\s*CONTEXT[\s\S]{0,200}?\[\d+\]\s*Source:/i,
+  /\n1\.\s*Every fact comes from the PROFILE CARD\b/i,
   /\bNever speak as Nathan, never as "I built"/i,
 ];
 
