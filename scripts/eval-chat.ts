@@ -21,9 +21,16 @@ interface EvalItem {
   id: string;
   q: string;
   broad?: boolean;
+  core?: boolean;
   followUpOf?: string;
   mustAny?: string[][];
   mustNot: string[];
+}
+
+/** The items to run: --only, then --all, then the core subset. */
+function selected(file: EvalFile, only: Set<string> | null, all: boolean): EvalItem[] {
+  if (only) return file.items.filter((item) => only.has(item.id));
+  return all ? file.items : file.items.filter((item) => item.core);
 }
 
 interface EvalFile {
@@ -164,12 +171,25 @@ async function main(): Promise<void> {
   const only = onlyArg
     ? new Set(onlyArg.slice("--only=".length).split(",").map((id) => id.trim()))
     : null;
-  const items = only ? evalFile.items.filter((item) => only.has(item.id)) : evalFile.items;
+  const all = process.argv.includes("--all");
+
+  /*
+   * Core by default: twenty questions cost thirteen minutes and a paid call each, and a
+   * fix gets checked far more often than a stage is accepted. Acceptance stays --all, so
+   * a green subset can never stand in for the set it was drawn from.
+   */
+  const items = selected(evalFile, only, all);
   const partial = only !== null;
 
   if (partial && items.length === 0) {
     console.error(`Error: --only matched no item of: ${evalFile.items.map((item) => item.id).join(", ")}`);
     process.exit(1);
+  }
+
+  if (!partial && !all) {
+    console.log(
+      `Core run: ${items.length} of ${evalFile.items.length} questions. A stage is accepted only by --all.`,
+    );
   }
 
   for (const [index, item] of items.entries()) {

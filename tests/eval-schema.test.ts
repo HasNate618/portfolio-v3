@@ -12,6 +12,7 @@ interface EvalItem {
   id: string;
   q: string;
   broad?: boolean;
+  core?: boolean;
   followUpOf?: string;
   mustAny?: string[][];
   mustNot: string[];
@@ -28,6 +29,32 @@ const file = JSON.parse(
 
 test("the eval has twenty questions", () => {
   assert.equal(file.items.length, 20);
+});
+
+/*
+ * The default run is the core twelve, so the core has to be able to see every threshold
+ * the full run gates: spread is measured over the broad items, the claim bans and the
+ * seeded follow-up each need a representative. Without this, a future tidy-up could
+ * shrink the fast loop until it passes for want of a question.
+ */
+test("the core subset can reach every threshold", () => {
+  const core = file.items.filter((item) => item.core);
+  const coreIds = new Set(core.map((item) => item.id));
+
+  assert.equal(core.length, 12, "core is twelve questions");
+
+  for (const item of file.items.filter((entry) => entry.broad)) {
+    assert.ok(coreIds.has(item.id), `${item.id} is broad, and spread is measured over broad items`);
+  }
+
+  assert.ok(
+    core.some((item) => item.mustNot.length > 0),
+    "no core question forbids a claim, so the mustNot row would always pass",
+  );
+  assert.ok(
+    core.some((item) => item.followUpOf !== undefined),
+    "no core question follows up on a seed, so the seeded history path is unexercised",
+  );
 });
 
 test("ids are unique", () => {
