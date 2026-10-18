@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { QUESTION_BANK } from "../src/data/question-bank";
+import { STARTERS } from "../src/app/api/chat/lib/followup-fallback";
 import { getCorpusDocs } from "../src/lib/corpus";
 import { site } from "../src/data/site";
 
@@ -93,9 +94,11 @@ test("starter questions match content/chat.md", () => {
   assert.ok(match, "content/chat.md has no starters list");
   const starters = match[1].split(",").map((value) => value.trim()).filter(Boolean);
 
-  const bankStarters = QUESTION_BANK.filter((entry) => entry.starter).map((entry) => entry.question);
-  assert.equal(bankStarters.length, starters.length, "starter count mismatch");
-  assert.deepEqual(new Set(bankStarters), new Set(starters), "starter questions mismatch");
+  // The bank's own starter rows are no longer the source of truth: the four
+  // lines now live in STARTERS, which the fallback list is cut from.
+  assert.equal(STARTERS.length, starters.length, "starter count mismatch");
+  assert.deepEqual(new Set(STARTERS), new Set(starters), "starter questions mismatch");
+  assert.ok(QUESTION_BANK.some((entry) => entry.starter), "the bank still carries starters until it is removed");
 });
 
 /*

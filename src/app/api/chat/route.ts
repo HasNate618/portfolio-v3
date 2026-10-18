@@ -1,11 +1,10 @@
 import { retrieveRelevantChunks, rerankChunks } from "./lib/rag";
-import { selectChips } from "./lib/chips";
-import { QUESTION_BANK } from "@/data/question-bank";
 import { buildRetrievalQuery } from "./lib/retrieval-query";
 import { buildSystemPrompt } from "./lib/system-prompt";
 import { withCoverageFloor } from "./lib/context";
-import { formatFollowupsTail } from "./lib/generate-followups";
-import { isNonAnswer } from "./lib/followup-fallback";
+import { CHIP_FEATURE_DEFAULT, formatFollowupsTail, generateChips } from "./lib/generate-followups";
+import { DEFAULT_FOLLOWUPS, isNonAnswer } from "./lib/followup-fallback";
+import { askedAboutAbandoned } from "./lib/chips-validate";
 import { checkChatDailyCap, checkRateLimit, SITE_KEY } from "./lib/rate-limit";
 import { MAX_BODY_CHARS, isBrowserRequest, trimHistory } from "./lib/request-guards";
 import { sanitizeDashes } from "./lib/sanitize-dashes";
@@ -92,7 +91,7 @@ export async function POST(req: Request) {
     );
     const retrievalQuery = buildRetrievalQuery(trimmedMessage, safeHistory);
 
-    const { chunks: topChunks, queryVector } = await retrieveRelevantChunks(retrievalQuery, 30);
+    const topChunks = await retrieveRelevantChunks(retrievalQuery, 30);
     const reranked = await rerankChunks(retrievalQuery, topChunks, 10);
     // Retrieval that comes back with no project and no role is how a broad
     // question turns into invented detail: the floor pins the work the home
@@ -169,9 +168,28 @@ export async function POST(req: Request) {
             if (!closed && !req.signal.aborted && !accumulated.includes(FOLLOWUP_DELIMITER)) {
               enqueueText(FOLLOWUP_DELIMITER);
               const body = stripBodyPrefix(accumulated);
+              const askedBefore = safeHistory
+                .filter((m) => m.role === "user")
+                .map((m) => m.content);
+              /*
+               * The visitor's own question is in `asked` as well: a chip that
+               * repeats it is the likeliest duplicate of all. pathIndex stays on
+               * the questions asked before this one, so the rotation is stable.
+               */
               const followups = isNonAnswer(body)
-                ? QUESTION_BANK.filter((entry) => entry.starter).map((entry) => entry.question).slice(0, 3)
-                : selectChips({ queryVector, question: trimmedMessage, asked: safeHistory.filter((m) => m.role === "user").map((m) => m.content) });
+                ? DEFAULT_FOLLOWUPS
+                : await generateChips({
+                    userMessage: trimmedMessage,
+                    answer: body,
+                    docs: context.map((chunk) => ({
+                      title: chunk.source,
+                      firstLine: chunk.text.split("\n")[0]?.slice(0, 160) ?? "",
+                    })),
+                    featureIds: CHIP_FEATURE_DEFAULT,
+                    asked: [...askedBefore, trimmedMessage],
+                    userAskedAbandoned: askedAboutAbandoned(trimmedMessage),
+                    pathIndex: askedBefore.length,
+                  });
               enqueueText(sanitizeDashes(formatFollowupsTail(followups)));
             }
 

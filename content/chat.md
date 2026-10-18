@@ -4,7 +4,7 @@ type: page
 route: /chat
 description: Ask questions about my projects and experience. Answers come from my public notes.
 priority: reference
-starters: [What does Nathan build?, What did Nathan do at his internship?, What's Nathan's proudest project?, Is Nathan looking for a Summer 2027 internship?]
+starters: [What does Nathan build?, What did Nathan build at TeraGo?, What are Nathan's strongest projects?, Is Nathan looking for a Summer 2027 internship?]
 updated: 2026-10-16
 ---
 # Ask about me

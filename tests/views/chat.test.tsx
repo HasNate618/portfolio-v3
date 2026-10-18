@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { renderToStaticMarkup } from "react-dom/server";
 import { ChatView } from "../../src/components/views/ChatView";
 import { getPage } from "../../src/lib/content";
+import { STARTERS } from "../../src/app/api/chat/lib/followup-fallback";
 
 const page = getPage("/chat")!;
 const html = renderToStaticMarkup(<ChatView page={page} />);
@@ -38,6 +39,19 @@ test("every starter is offered as a button for JS users", () => {
     assert.ok(text.includes(starter), `missing starter: ${starter}`);
     assert.ok(text.includes(`>${starter}</button>`), `starter is not a button: ${starter}`);
   }
+});
+
+/*
+ * The served starters and the fallback starters are the same four questions. The
+ * page opens with them, and a failed answer falls back to the first three, so if
+ * the two lists drift apart the fallback offers questions the page never showed.
+ */
+test("the served starters are the fallback starters", () => {
+  assert.deepEqual(page.starters, [...STARTERS], "content/chat.md and STARTERS must agree");
+  for (const starter of STARTERS) {
+    assert.ok(text.includes(`>${starter}</button>`), `missing starter button: ${starter}`);
+  }
+  assert.doesNotMatch(text, /proudest/);
 });
 
 test("the JS-off path lists the starters as text, not buttons", () => {

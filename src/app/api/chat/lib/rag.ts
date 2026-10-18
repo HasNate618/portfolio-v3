@@ -31,12 +31,7 @@ export function isNavigationDoc(source: string): boolean {
   return NAVIGATION_DOC.test(source);
 }
 
-export interface RetrievedChunks {
-  chunks: ScoredChunk[];
-  queryVector: number[];
-}
-
-export async function retrieveRelevantChunks(query: string, topK = 20): Promise<RetrievedChunks> {
+export async function retrieveRelevantChunks(query: string, topK = 20): Promise<ScoredChunk[]> {
   const embeddings = loadEmbeddings();
   if (!embeddings || embeddings.length === 0) {
     throw new Error("No embeddings loaded. Run build-embeddings script first.");
@@ -52,7 +47,7 @@ export async function retrieveRelevantChunks(query: string, topK = 20): Promise<
 
   scored.sort((a, b) => b.score - a.score);
 
-  return { chunks: scored.slice(0, topK), queryVector };
+  return scored.slice(0, topK);
 }
 
 export async function rerankChunks(
