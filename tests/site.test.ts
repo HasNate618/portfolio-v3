@@ -132,3 +132,17 @@ test("every ranked project exists and exactly one is the lead", () => {
   assert.equal(ranked.filter((p) => p.rank === "lead").length, 1);
   assert.equal(ranked.length, 4, "campus (lead) plus three featured");
 });
+
+/*
+ * The entry flattened a promotion into one title over one window, so answers dated the VP
+ * role to Sep 2025. The body always had it right: Software Developer from Sep 2025,
+ * promoted to VP of Data/ML for May to Aug 2026.
+ */
+test("3D Western states both titles and both windows", () => {
+  const role = site.experience.find((entry) => entry.id === "3d-western");
+  assert.ok(role, "3d-western is in site.experience");
+  assert.match(role.role, /Software Developer \(Sep 2025 to Apr 2026\)/);
+  assert.match(role.role, /VP of Data\/ML \(May 2026 to Aug 2026\)/);
+  assert.equal(role.terms.length, 2, "the two terms are separate windows");
+  assert.doesNotMatch(role.role, /promoted from/, "the flat phrasing is what misread");
+});

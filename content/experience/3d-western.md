@@ -9,7 +9,7 @@ related: [index.md, ../projects/index.md, ../skills.md]
 onThisPage: [tl;dr, The team and my role, Building the dataset, Benchmarking small vision models, Shieldstral vs Qwen, Handoff, What I'd do next, Stack]
 id: 3d-western
 dates: "Sep 2025 to Aug 2026"
-role: "VP of Data/ML (promoted from Software Developer)"
+role: "Software Developer (Sep 2025 to Apr 2026), then VP of Data/ML (May 2026 to Aug 2026)"
 updated: 2026-10-17
 ---
 # 3D Western
