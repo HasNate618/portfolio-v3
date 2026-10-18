@@ -26,6 +26,7 @@ npm run lint
 npm test
 npm run build             # tsc and the tests cannot see a bad route export; this can
 npm run check:content     # a page may not restate a figure or stack list from site.ts
+npm run check:words       # no banned word on a surface a reader can reach
 npm run check:contrast    # 4.5:1 text contrast, both palettes
 npm run check:embeddings  # the chat index is newer than the corpus
 npm run check:render      # JS-off served HTML, against a running npm start

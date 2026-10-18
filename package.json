@@ -16,6 +16,7 @@
     "build:resume": "bash resume/build.sh",
     "build-embeddings": "tsx scripts/build-embeddings.mjs",
     "check:content": "tsx scripts/check-content.mjs",
+    "check:words": "tsx scripts/check-banned-words.mjs",
     "check:contrast": "tsx scripts/check-contrast.mjs",
     "check:render": "node scripts/check-render.mjs",
     "check:embeddings": "tsx scripts/check-embeddings.mjs"
