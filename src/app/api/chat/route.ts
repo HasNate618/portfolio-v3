@@ -207,8 +207,8 @@ export async function POST(req: Request) {
                * repeats it is the likeliest duplicate of all. pathIndex stays on
                * the questions asked before this one, so the rotation is stable.
                */
-              const followups = isNonAnswer(body)
-                ? DEFAULT_FOLLOWUPS
+              const chips = isNonAnswer(body)
+                ? null
                 : await generateChips({
                     userMessage: trimmedMessage,
                     answer: body,
@@ -221,6 +221,7 @@ export async function POST(req: Request) {
                     userAskedAbandoned: askedAboutAbandoned(trimmedMessage),
                     pathIndex: askedBefore.length,
                   });
+              const followups = chips?.questions ?? DEFAULT_FOLLOWUPS;
               enqueueText(sanitizeDashes(formatFollowupsTail(followups)));
             }
 

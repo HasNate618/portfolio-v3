@@ -113,6 +113,29 @@ test("two chips are never the same question", () => {
   );
 });
 
+/*
+ * The eval computes the accept rate from these. A templated slot used to leave no
+ * trace anywhere, and that silence hid a defect that made every live chip a
+ * template while the model call was succeeding.
+ */
+test("the pipeline reports where each chip came from", () => {
+  const raw: ChipSet = {
+    deeper: { question: "How does Nathan's Campus retrieve answers?", subject: "campus" },
+    adjacent: { question: "What did Nathan build at 3D Western?", subject: "3d-western" },
+    path: { question: "When does Nathan graduate?", subject: "campus" },
+  };
+  assert.deepEqual(applyChipPipeline(raw, INPUTS).sources, ["model", "model", "model"]);
+});
+
+test("a rejected chip is reported as templated", () => {
+  const raw: ChipSet = {
+    deeper: { question: "How does Campus retrieve?", subject: "campus" },
+    adjacent: { question: "What did Nathan build at 3D Western?", subject: "3d-western" },
+    path: { question: "When does Nathan graduate?", subject: "campus" },
+  };
+  assert.equal(applyChipPipeline(raw, INPUTS).sources[0], "template");
+});
+
 test("the schema names the three slots and the subjects the model may use", () => {
   const schema = CHIP_SCHEMA as {
     properties: Record<string, { properties: { subject: { enum: string[] } } }>;

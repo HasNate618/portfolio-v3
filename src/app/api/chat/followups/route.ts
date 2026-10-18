@@ -32,7 +32,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "userMessage and aiResponse required" }, { status: 400 });
     }
 
-    const followups = await generateChips({
+    const { questions: followups } = await generateChips({
       userMessage,
       answer: aiResponse,
       docs: [],

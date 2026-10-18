@@ -36,9 +36,14 @@ export interface ChipInputs {
   pathIndex: number;
 }
 
+/** Where a chip came from: what the eval's accept rate is computed from. */
+export type ChipSource = "model" | "repaired" | "template";
+
 export interface ChipEvaluation {
   /** Three questions: what passed validation, and templates for what did not. */
   questions: string[];
+  /** Parallel to `questions`: written as-is, accepted after repair, or templated. */
+  sources: ChipSource[];
   /** Why a slot was replaced, for the one regenerate. */
   failures: ChipFailure[];
 }
@@ -177,6 +182,7 @@ function parseChipSet(text: string): ChipSet | null {
 export function applyChipPipeline(raw: ChipSet, input: ChipInputs): ChipEvaluation {
   const slots: ChipSlotName[] = ["deeper", "adjacent", "path"];
   const accepted = new Map<ChipSlotName, string>();
+  const sources = new Map<ChipSlotName, ChipSource>();
   const failures: ChipFailure[] = [];
   // Every question spent so far, the visitor's own included. A chip already
   // accepted counts too: the page shows three, and two identical ones waste one.
@@ -202,6 +208,7 @@ export function applyChipPipeline(raw: ChipSet, input: ChipInputs): ChipEvaluati
 
     if (slotFailures.length === 0) {
       accepted.set(slot, question);
+      sources.set(slot, question === chip.question.trim() ? "model" : "repaired");
       used.push(question);
     } else {
       failures.push(...slotFailures);
@@ -218,6 +225,7 @@ export function applyChipPipeline(raw: ChipSet, input: ChipInputs): ChipEvaluati
 
   return {
     questions: slots.map((slot) => accepted.get(slot) ?? fallback[slot].question),
+    sources: slots.map((slot) => sources.get(slot) ?? "template"),
     failures,
   };
 }
@@ -246,7 +254,7 @@ async function requestChipSet(prompt: string): Promise<ChipSet | null> {
  * with the failures attached. Anything still rejected becomes a template, so
  * the page always shows three questions that can be answered.
  */
-export async function generateChips(input: GenerateChipsInput): Promise<string[]> {
+export async function generateChips(input: GenerateChipsInput): Promise<ChipEvaluation> {
   const pipelineInput: ChipInputs = {
     answerSubject: answerSubjectFor(input),
     featureIds: input.featureIds,
@@ -259,17 +267,44 @@ export async function generateChips(input: GenerateChipsInput): Promise<string[]
     const first = await requestChipSet(buildChipPrompt(input));
     if (first) {
       const evaluation = applyChipPipeline(first, pipelineInput);
-      if (evaluation.failures.length === 0) return evaluation.questions;
+      if (evaluation.failures.length === 0) return reportChips(evaluation);
 
-      const second = await requestChipSet(buildChipPrompt(input, evaluation.failures));
-      if (second) return applyChipPipeline(second, pipelineInput).questions;
-      return evaluation.questions;
+      /*
+       * One regenerate for the rejected slots. If it throws, or its chips are
+       * rejected too, the first pass's accepted chips stay: replacing all three
+       * with templates would throw away the ones that were right.
+       */
+      try {
+        const second = await requestChipSet(buildChipPrompt(input, evaluation.failures));
+        if (second) return reportChips(applyChipPipeline(second, pipelineInput));
+      } catch (error) {
+        console.warn("[chips] the regenerate failed, keeping the first pass:", error);
+      }
+      return reportChips(evaluation);
     }
   } catch (error) {
     console.warn("[chips] generation failed, using templates:", error);
   }
 
-  return questionsOf(templateChips(pipelineInput));
+  return reportChips({
+    questions: questionsOf(templateChips(pipelineInput)),
+    sources: ["template", "template", "template"],
+    failures: [],
+  });
+}
+
+/**
+ * A rejected slot is replaced by a template with no other trace, and that silence
+ * once hid a defect that made every live chip a template while the model call was
+ * succeeding. The eval reports the accept rate, so it is always computed here.
+ */
+function reportChips(evaluation: ChipEvaluation): ChipEvaluation {
+  const templated = evaluation.sources.filter((source) => source === "template").length;
+  if (templated > 0) {
+    const reasons = evaluation.failures.map((failure) => `${failure.slot}:${failure.code}`).join(",");
+    console.warn(`[chips] ${templated} of 3 slots templated (${reasons || "no model chips"})`);
+  }
+  return evaluation;
 }
 
 /**
