@@ -104,7 +104,7 @@ export function validateChip(input: {
     failures.push({ code });
   };
 
-  if (!/\bNathan\b/.test(question)) fail("nathan");
+  if (!/\bNathan\b/i.test(question)) fail("nathan");
   if (/\b(he|his|him)\b/i.test(question)) fail("pronoun");
 
   const trimmed = question.trim();

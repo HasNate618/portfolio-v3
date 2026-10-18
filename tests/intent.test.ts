@@ -55,3 +55,18 @@ test("only the last two visitor turns count", () => {
   ];
   assert.equal(routeIntent("tell me more", history), "general");
 });
+
+test("the plural of both words still counts", () => {
+  assert.equal(routeIntent("We're hiring interns for the summer", []), "recruiter");
+  assert.equal(routeIntent("Does he take interns?", []), "recruiter");
+});
+
+/*
+ * "resume" is a verb as well. The résumé alternative is anchored on a possessive
+ * or an article, which is also why it sits outside the \b…\b group: an accented
+ * letter is not a \w, so a trailing \b can never close "résumé".
+ */
+test("resume as a verb is not a hiring question", () => {
+  assert.equal(routeIntent("How does Nathan resume a failed sync?", []), "general");
+  assert.equal(routeIntent("Can you send his résumé?", []), "recruiter");
+});

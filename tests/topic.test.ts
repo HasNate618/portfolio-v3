@@ -33,6 +33,17 @@ test("each topic leads with its own work", () => {
 });
 
 /*
+ * A stem inside \b…\b closes on itself: \bretriev\b matches nothing at all, and
+ * \bagent\b cannot match "agents". These are the shapes visitors type.
+ */
+test("plurals and stems still choose the topic", () => {
+  assert.ok(routeTopic("What models does it run?").ids.includes("ai"));
+  assert.ok(routeTopic("How does the retrieval work?").ids.includes("ai"));
+  assert.ok(routeTopic("How many agents does Campus have?").ids.includes("ai"));
+  assert.ok(routeTopic("We're hiring interns").ids.includes("industry"));
+});
+
+/*
  * A typo in a feature id is invisible until a broad answer leads with nothing,
  * so every id is checked against the data the card is built from.
  */

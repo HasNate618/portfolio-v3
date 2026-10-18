@@ -17,9 +17,9 @@ export interface TopicRoute {
 }
 
 export const TOPICS = [
-  { id: "ai",        re: /\b(ai|llm|agent|ml|model|rag|retriev|local|on-device|edge|vision)\b/i,
+  { id: "ai",        re: /\b(ai|llm|agent\w*|ml|model\w*|rag|retriev\w*|local|on-device|edge|vision)\b/i,
     feature: ["terago", "3d-western", "aware", "homelab", "campus", "ferret"] },
-  { id: "industry",  re: /\b(hir(e|ing)|team|industry|interns?hips?|work experience|job|professional|company)\b/i,
+  { id: "industry",  re: /\b(hir(e|ing)|team|industry|intern(?:ship)?s?|work experience|job|professional|company)\b/i,
     feature: ["terago", "3d-western", "carebridge", "omni-reality"] },
   { id: "hackathon", re: /\b(hackathon|award|won|win|prize)\b/i,
     feature: ["awards", "aware", "omni-reality", "carebridge"] },

@@ -15,12 +15,13 @@ export type Intent = "recruiter" | "general";
  * `availab`, `recruit` and the accent-free résumé are written as the shapes
  * visitors actually type: "available", "recruiting", "resume".
  *
- * The résumé alternative sits outside the `\b…\b` group: an accented letter is
- * not a `\w`, so a trailing `\b` can never close "résumé" and the pattern went
- * on matching the unaccented spelling only.
+ * The résumé alternative sits outside the `\b…\b` group for two reasons: an
+ * accented letter is not a `\w`, so a trailing `\b` can never close "résumé", and
+ * the word is also a verb ("resume a failed sync"). Anchoring it on a possessive
+ * or an article keeps both right.
  */
 const RECRUITER =
-  /\b(hir(e|ing)|interns?hips?|fit|role|position|candidate|availab\w*|summer|recruit\w*|cv)\b|r[eé]sum[eé]s?/i;
+  /\b(hir(e|ing)|intern(?:ship)?s?|fit|role|position|candidate|availab\w*|summer|recruit\w*|cv)\b|(?:his|the|a|my)\s+r[eé]sum[eé]s?/i;
 
 export function routeIntent(
   message: string,

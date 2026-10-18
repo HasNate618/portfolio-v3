@@ -31,6 +31,12 @@ test("a chip says Nathan", () => {
   assert.ok(codes({ question: "How does Campus retrieve answers?" }).includes("nathan"));
 });
 
+// Every neighbouring rule is case-insensitive; this one was not, so a chip that
+// wrote "nathan" was templated for no stated reason.
+test("the name counts in any case", () => {
+  assert.ok(!codes({ question: "How does nathan's Campus retrieve answers?" }).includes("nathan"));
+});
+
 test("a chip does not use a pronoun", () => {
   assert.ok(codes({ question: "How does Nathan's Campus read his notes?" }).includes("pronoun"));
 });

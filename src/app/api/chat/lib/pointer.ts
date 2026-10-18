@@ -94,7 +94,7 @@ export function contactAsked(text: string): boolean {
 
 /** True when the visitor asked whether he is available. */
 export function availabilityAsked(text: string): boolean {
-  return /\b(available|availability|hiring|internship|summer 2027)\b/i.test(text);
+  return /\b(available|availability|hiring|intern(?:ship)?s?|summer 2027)\b/i.test(text);
 }
 
 /**

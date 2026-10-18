@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { choosePointer, pointerWhitelist } from "../src/app/api/chat/lib/pointer";
+import { availabilityAsked, choosePointer, pointerWhitelist } from "../src/app/api/chat/lib/pointer";
 import { site } from "../src/data/site";
 import { siteBaseUrl } from "../src/lib/site-url";
 
@@ -56,6 +56,12 @@ test("a hiring thread points at the email, and so does an availability question"
  */
 test("a contact question points at LinkedIn", () => {
   assert.equal(ask({ contactAsked: true, turn: 2 }).url, LINKEDIN);
+});
+
+test("the availability question is recognised in its plural shapes", () => {
+  assert.ok(availabilityAsked("Is he available for internships?"));
+  assert.ok(availabilityAsked("Any internship openings?"));
+  assert.ok(!availabilityAsked("What does Campus do?"));
 });
 
 test("every pointer is a URL the site actually offers", () => {
