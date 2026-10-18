@@ -9,7 +9,6 @@ const PROMPT = buildSystemPrompt({
   intent: "general",
   pointer: { label: "Resume PDF", url: "https://nathanespejo.com/Nathan_Espejo_Resume.pdf" },
   card: buildProfileCard(),
-  chunks: [{ text: "Campus is a study assistant.", source: "projects/campus.md" }],
 });
 
 /*
@@ -51,7 +50,9 @@ test("the whole prompt and the whole card are cut when they leak", () => {
  */
 test("a leak that starts mid-prompt is cut too", () => {
   const answer = "Campus is a study assistant.";
-  for (const heading of ["## STYLE", "## GUIDANCE", "## CONTEXT"]) {
+  // The headings the prompt actually has: this asserts the marker list still covers
+  // the real text, and it is why a deleted section cannot leave a dead marker behind.
+  for (const heading of ["## STYLE", "## GUIDANCE"]) {
     const from = PROMPT.indexOf(heading);
     assert.notEqual(from, -1, `${heading} is missing from the prompt`);
     assert.equal(stripPromptLeak(`${answer}\n${PROMPT.slice(from)}`), answer, `not cut at ${heading}`);

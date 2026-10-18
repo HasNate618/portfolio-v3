@@ -30,10 +30,11 @@ const PROMPT_LEAK_MARKERS = [
   /#+\s*STYLE\s*\nConfident, detailed and grounded/i,
   /#+\s*GUIDANCE\s*\n(?:The visitor is hiring|If the visitor sounds like they are hiring)/i,
   /*
-   * CONTEXT is followed by a paragraph now, and by the chunks once stage 4 lands,
-   * so the anchor allows a bounded amount of text between them.
+   * No CONTEXT marker any more: the retrieved chunks travel as Cohere documents, so
+   * the prompt cannot leak a section it does not have. The marker that watched for it
+   * was dead from the moment stage 4 landed, which is what the prompt-slicing test in
+   * tests/stream-delimiters.test.ts is there to catch.
    */
-  /#+\s*CONTEXT[\s\S]{0,200}?\[\d+\]\s*Source:/i,
   /\n1\.\s*Every fact comes from the PROFILE CARD\b/i,
   /\bNever speak as Nathan, never as "I built"/i,
 ];

@@ -1,13 +1,5 @@
-import { applyScoreFloor, rerankChunks, retrieveRelevantChunks } from "./lib/rag";
-import { buildRetrievalQuery } from "./lib/retrieval-query";
-import { buildSystemPrompt } from "./lib/system-prompt";
-import { withTopicPins } from "./lib/context";
+import { prepareChat } from "./lib/pipeline";
 import { formatFollowupsTail, generateChips } from "./lib/generate-followups";
-import { routeIntent } from "./lib/intent";
-import { namedSubjectId } from "./lib/name-match";
-import { availabilityAsked, choosePointer, contactAsked } from "./lib/pointer";
-import { buildProfileCard } from "./lib/profile-card";
-import { routeTopic } from "./lib/topic";
 import { DEFAULT_FOLLOWUPS, isNonAnswer } from "./lib/followup-fallback";
 import { askedAboutAbandoned } from "./lib/chips-validate";
 import { checkChatDailyCap, checkRateLimit, SITE_KEY } from "./lib/rate-limit";
@@ -94,47 +86,10 @@ export async function POST(req: Request) {
     const safeHistory = trimHistory(
       history.filter((m) => m && typeof m.content === "string" && m.content.trim().length > 0),
     );
-    const retrievalQuery = buildRetrievalQuery(trimmedMessage, safeHistory);
-
-    // The index maps and chat.md name every project and role, so they win almost any
-    // similarity ranking and push out the doc that answers the question.
-    const topChunks = await retrieveRelevantChunks(retrievalQuery, { excludeNav: true, topK: 40 });
-    const reranked = await rerankChunks(retrievalQuery, topChunks, 8);
-
-    /*
-     * The question, read with the turn before it: a visitor who says "tell me
-     * more" is still asking about the last subject. The topic decides what to
-     * lead with, the intent decides whether to read the visitor as hiring, and
-     * the pointer is chosen from the visitor's own words, because it is the line
-     * the answer ends with.
-     */
-    const lastUserTurn = [...safeHistory].reverse().find((entry) => entry.role === "user")?.content ?? "";
-    const turn = safeHistory.filter((entry) => entry.role === "user").length + 1;
-    const topic = routeTopic(`${trimmedMessage} ${lastUserTurn}`);
-    const intent = routeIntent(trimmedMessage, safeHistory);
-    const pointer = choosePointer({
-      namedSubjectId: namedSubjectId(trimmedMessage),
-      intent,
-      turn,
-      contactAsked: contactAsked(trimmedMessage),
-      availabilityAsked: availabilityAsked(trimmedMessage),
-    });
-
-    /*
-     * Pins come from the topic, not from the home page's lead. An AI question pins
-     * the AI work; a question that names a project or a role pins nothing, because
-     * retrieval chose that context on purpose and a pin would push the named subject
-     * out of its own answer.
-     */
-    const context = withTopicPins(applyScoreFloor(reranked), trimmedMessage, topic.feature);
-
-    const systemPrompt = buildSystemPrompt({
-      featureIds: topic.feature,
-      intent,
-      pointer,
-      card: buildProfileCard(),
-      chunks: context,
-    });
+    // Retrieval, pins, topic, intent and pointer live in one place, so the eval can
+    // run the same pipeline instead of a copy of it.
+    const prepared = await prepareChat(trimmedMessage, safeHistory);
+    const systemPrompt = prepared.systemPrompt;
 
     const cohere = getCohereClient();
 
@@ -149,6 +104,9 @@ export async function POST(req: Request) {
           })),
           { role: "user", content: trimmedMessage },
         ],
+        documents: prepared.documents,
+        // The SDK spells this citationOptions in TS and sends citation_options.
+        citationOptions: { mode: "FAST" },
         temperature: 0.2,
         maxTokens: CHAT_MAX_TOKENS,
         thinking: CHAT_THINKING_ENABLED,
@@ -217,11 +175,11 @@ export async function POST(req: Request) {
                 : await generateChips({
                     userMessage: trimmedMessage,
                     answer: body,
-                    docs: context.map((chunk) => ({
-                      title: chunk.source,
-                      firstLine: chunk.text.split("\n")[0]?.slice(0, 160) ?? "",
+                    docs: prepared.documents.map((doc) => ({
+                      title: doc.data.title,
+                      firstLine: doc.data.snippet.split("\n")[0]?.slice(0, 160) ?? "",
                     })),
-                    featureIds: topic.feature,
+                    featureIds: prepared.topic.feature,
                     asked: [...askedBefore, trimmedMessage],
                     userAskedAbandoned: askedAboutAbandoned(trimmedMessage),
                     pathIndex: askedBefore.length,

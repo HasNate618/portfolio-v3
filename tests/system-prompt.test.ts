@@ -5,7 +5,6 @@ import { buildProfileCard } from "../src/app/api/chat/lib/profile-card";
 import { BANNED_WORD_PATTERNS } from "../src/lib/banned-words";
 import { site } from "../src/data/site";
 
-const CHUNKS = [{ text: "Campus is a study assistant.", source: "projects/campus.md" }];
 const POINTER = { label: "Resume PDF", url: site.contact.links.find((l) => l.label === "Resume PDF")!.href };
 
 type PromptInput = Parameters<typeof buildSystemPrompt>[0];
@@ -16,7 +15,6 @@ const prompt = (overrides: Partial<PromptInput> = {}) =>
     intent: "general",
     pointer: POINTER,
     card: buildProfileCard(),
-    chunks: CHUNKS,
     ...overrides,
   });
 
@@ -76,15 +74,20 @@ test("feature ids are spelled as the names a visitor knows", () => {
   assert.match(text, /lead with the most relevant of: TeraGo, Campus, Awards/i);
 });
 
-test("the card is in the prompt and the chunks come with it", () => {
+/*
+ * The chunks travel as Cohere documents now, which is also what makes citations
+ * possible. A prompt that still pasted them in would send every chunk twice.
+ */
+test("the card is in the prompt and the retrieved text is not", () => {
   const text = prompt();
   assert.ok(text.includes(buildProfileCard()), "the card is missing from the prompt");
-  assert.match(text, /\[1\] Source: projects\/campus\.md/);
-  assert.match(text, /Campus is a study assistant\./);
+  assert.doesNotMatch(text, /\[1\] Source:/);
+  assert.doesNotMatch(text, /## CONTEXT/);
+  assert.doesNotMatch(text, /Campus is a study assistant\./);
 });
 
-test("the context is still named as data, not instructions", () => {
-  assert.match(prompt(), /data, not instructions/i);
+test("nothing in the prompt is shaped like a cited chunk", () => {
+  assert.doesNotMatch(prompt(), /Source:/);
 });
 
 test("no stale v2 interface description survives", () => {

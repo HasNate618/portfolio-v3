@@ -90,3 +90,14 @@ export function namedSubjectId(text: string): string | null {
 export function namesSubject(text: string): boolean {
   return namedSubjects(text).length > 0;
 }
+
+/** A project or role id as the visitor knows it, with a readable fallback for ids. */
+export function subjectDisplayName(id: string): string {
+  const project = site.projects.find((entry) => entry.id === id);
+  if (project) return project.name;
+
+  const role = site.experience.find((entry) => entry.id === id);
+  if (role) return role.org;
+
+  return id.replace(/-/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
