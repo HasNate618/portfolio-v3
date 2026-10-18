@@ -1,87 +1,23 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildFallbackFollowups, isNonAnswer, normalizeFollowups, DEFAULT_FOLLOWUPS } from "../src/app/api/chat/lib/followup-fallback";
-import { buildFollowupPrompt } from "../src/app/api/chat/lib/generate-followups";
+import {
+  DEFAULT_FOLLOWUPS,
+  STARTERS,
+  isNonAnswer,
+} from "../src/app/api/chat/lib/followup-fallback";
+import { buildChipPrompt, formatFollowupsTail } from "../src/app/api/chat/lib/generate-followups";
 
-const DEFAULTS = ["What is Campus?", "What did he build at TeraGo?", "How can I contact Nathan?"];
+const CHIP_INPUT = {
+  userMessage: "what is ferret?",
+  answer: "ferret is a local-first search tool in Rust, with hybrid search over text, images and PDFs.",
+  docs: [{ title: "ferret", firstLine: "Local-first semantic search in Rust." }],
+  featureIds: ["campus", "terago", "aware"],
+  asked: [] as string[],
+  userAskedAbandoned: false,
+};
 
-/** Every suggestion has to be answerable about Nathan, never about the visitor. */
-function assertWellFormed(questions: string[]): void {
-  assert.equal(questions.length, 3, questions.join(" | "));
-  for (const question of questions) {
-    assert.ok(question.endsWith("?"), question);
-    assert.ok(question.length < 120, question);
-    assert.doesNotMatch(question, /\byou\b|\byour\b/i, question);
-  }
-}
-
-test("fallbacks do not ask about AgntOS", () => {
-  const questions = buildFallbackFollowups("has he written Rust?", "He used Rust for AgntOS.");
-  assert.doesNotMatch(questions.join(" "), /AgntOS/);
-  assert.match(questions.join(" "), /Nix/);
-});
-
-test("the AI rule is not three homelab questions", () => {
-  const questions = buildFallbackFollowups("what LLM work has he done?", "Campus, TeraGo and AWARE.");
-  assert.doesNotMatch(questions.join(" "), /homelab/i);
-  assert.match(questions.join(" "), /Campus|TeraGo|AWARE/);
-});
-
-test("a Proxmox question falls through to the defaults", () => {
-  const questions = buildFallbackFollowups("what is proxmox?", "A virtualization platform.");
-  assert.deepEqual(questions, DEFAULTS);
-});
-
-test("the defaults lead with Campus", () => {
-  assert.deepEqual(buildFallbackFollowups("hello", "Hi."), DEFAULTS);
-});
-
-test("the new rules answer the questions a recruiter asks", () => {
-  assert.match(
-    buildFallbackFollowups("how does campus retrieve?", "Hybrid retrieval.").join(" "),
-    /Campus rank search results/,
-  );
-  assert.match(buildFallbackFollowups("how do I hire him?", "By email.").join(" "), /contact Nathan/);
-  assert.match(
-    buildFallbackFollowups("what did he do at his internship?", "TeraGo.").join(" "),
-    /Channel Finder|3D Western|internship/,
-  );
-  assert.match(
-    buildFallbackFollowups("what runs on his homelab?", "NixOS on two machines.").join(" "),
-    /Hermes Agent/,
-  );
-});
-
-test("every rule produces well-formed third-person questions", () => {
-  const probes = [
-    "tell me about agenticarmy",
-    "does he know rust?",
-    "which languages?",
-    "what web apps?",
-    "what ai work?",
-    "what is in his homelab?",
-    "android apps?",
-    "which hackathons?",
-    "how does this chat work?",
-    "nothing matches here",
-  ];
-  for (const probe of probes) {
-    assertWellFormed(buildFallbackFollowups(probe, ""));
-  }
-});
-
-test("model candidates win, and the fallback fills the gap", () => {
-  const asked = "What is his homelab?";
-  const filled = normalizeFollowups([asked], "", "");
-  assert.equal(filled[0], asked);
-  assert.equal(filled.length, 3);
-
-  const full = normalizeFollowups(["What is Campus?", "How is he tested?", "What is in the archive?"], "", "");
-  assert.deepEqual(full, ["What is Campus?", "How is he tested?", "What is in the archive?"]);
-});
-
-test("the defaults are the exported list, so the route and the tests agree", () => {
-  assert.deepEqual(DEFAULT_FOLLOWUPS, DEFAULTS);
+test("the client tail keeps the shape the page parses", () => {
+  assert.equal(formatFollowupsTail(["a?", "b?", "c?"]), "a?|||b?|||c?|||");
 });
 
 test("a fixed line is not treated as an answer", () => {
@@ -92,52 +28,69 @@ test("a fixed line is not treated as an answer", () => {
   assert.ok(!isNonAnswer("Nathan built Channel Finder at TeraGo, validated on 760 test cases."));
 });
 
-test("the chip prompt forbids invented names and abandoned work", () => {
-  const prompt = buildFollowupPrompt({
-    userMessage: "what is ferret?",
-    aiResponse: "ferret is a local-first search tool in Rust.",
-  });
-  assert.match(prompt, /Never introduce an organisation that is not there/);
-  assert.match(prompt, /Spell names exactly as the sources do: TeraGo, AWARE, Animarker, CareBridge/);
-  assert.doesNotMatch(prompt, /AgntOS/, "an abandoned name in the prompt gets echoed back as a chip");
-  assert.match(prompt, /Do not ask how an abandoned project works/);
+test("the defaults are the page starters, so the two cannot drift", () => {
+  assert.equal(DEFAULT_FOLLOWUPS.length, 3);
+  assert.deepEqual(DEFAULT_FOLLOWUPS, STARTERS.slice(0, 3));
+});
+
+test("the chip prompt asks for the three slots by name", () => {
+  const prompt = buildChipPrompt(CHIP_INPUT);
+  assert.match(prompt, /deeper/);
+  assert.match(prompt, /adjacent/);
+  assert.match(prompt, /path/);
+  assert.match(prompt, /"deeper"/);
+});
+
+test("the chip prompt carries the answer and the documents", () => {
+  const prompt = buildChipPrompt(CHIP_INPUT);
   assert.match(prompt, /ferret is a local-first search tool/);
+  assert.match(prompt, /Local-first semantic search in Rust/);
 });
 
 /*
- * One bullet said "Refer to him in third person (he/his/Nathan)" and another said
- * every question "says Nathan". A live sample of 30 chips followed the first: 13
- * said "Nathan", the rest used he or his.
+ * An abandoned name in the prompt comes back as a chip about abandoned work, and
+ * the chat then has to refuse the question it just suggested.
  */
-test("the chip prompt asks for Nathan every time, not for he/his", () => {
-  const prompt = buildFollowupPrompt({
-    userMessage: "what is Campus?",
-    aiResponse: "Campus is a study assistant.",
-  });
+test("the chip prompt names no abandoned project", () => {
+  assert.doesNotMatch(buildChipPrompt(CHIP_INPUT), /AgntOS|Cyberdeck/);
+});
+
+/*
+ * One bullet said "Refer to him in third person (he/his/Nathan)" while another
+ * said every question "says Nathan". A live sample of 30 chips followed the
+ * first: 13 said "Nathan", the rest used he or his.
+ */
+test("the chip prompt asks for Nathan every time, not for he or his", () => {
+  const prompt = buildChipPrompt(CHIP_INPUT);
   assert.doesNotMatch(prompt, /\(he\/his\/Nathan\)/);
-  assert.match(prompt, /Refer to him as "Nathan"/);
-  assert.match(prompt, /never as "he", "his" or "him"/);
+  assert.match(prompt, /says "Nathan"/);
+  assert.match(prompt, /never "he", "his" or "him"/);
 });
 
 /*
- * Three chips answering the same question three ways was the live pattern: e.g.
- * all three about Campus. A hiring reader gets more from one that goes deeper,
- * one that points at related work, and one that leads to contact.
+ * Three chips answering the same question three ways was the live pattern. A
+ * hiring reader gets more from one that goes deeper, one that points at related
+ * work, and one that leads to contact.
  */
-test("the chip prompt gives the three questions three jobs", () => {
-  const prompt = buildFollowupPrompt({
-    userMessage: "what is Campus?",
-    aiResponse: "Campus is a self-hosted study assistant.",
-  });
-  assert.match(prompt, /one goes deeper into what the answer covered/);
-  assert.match(prompt, /one points at a related project or role/);
-  assert.match(prompt, /one asks about availability or how to reach him/);
-  assert.match(prompt, /If the answer already gives an email or a link, drop the contact chip/);
-  assert.doesNotMatch(prompt, /Prefer what a recruiter would ask next/);
+test("the chip prompt gives the three slots three jobs", () => {
+  const prompt = buildChipPrompt(CHIP_INPUT);
+  assert.match(prompt, /a detail the answer raised but did not explain/);
+  assert.match(prompt, /a different project or role/);
+  assert.match(prompt, /the next hiring step/);
 });
 
-test("visitor-directed candidates are dropped, not rewritten", () => {
-  const questions = normalizeFollowups(["What can you do?"], "", "");
-  assert.doesNotMatch(questions.join(" "), /\byou\b|\byour\b/i);
-  assert.deepEqual(questions, DEFAULTS);
+test("the chip prompt carries what the card can be asked about", () => {
+  const prompt = buildChipPrompt(CHIP_INPUT);
+  assert.match(prompt, /campus: Campus \(solo, no award\)/);
+  assert.match(prompt, /carebridge: CareBridge \(team, his part is not on record/);
+  assert.match(prompt, /terago: TeraGo \(role: /);
+});
+
+test("a regenerate prompt lists what was wrong with the first attempt", () => {
+  const prompt = buildChipPrompt(CHIP_INPUT, [
+    { code: "award", slot: "adjacent" },
+    { code: "dup", slot: "path" },
+  ]);
+  assert.match(prompt, /adjacent: award/);
+  assert.match(prompt, /path: dup/);
 });

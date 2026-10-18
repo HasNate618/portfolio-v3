@@ -2,11 +2,8 @@ import { CohereClient } from "cohere-ai";
 
 let client: CohereClient | null = null;
 
-/** Primary chat model for main responses. */
+/** Primary chat model, for answers and for the follow-up questions. */
 export const CHAT_MODEL = "command-a-plus-05-2026";
-
-/** Fast model for follow-up suggestions — avoids command-a JSON/tool issues. */
-export const FOLLOWUP_MODEL = "command-r-plus-08-2024";
 
 /** Total generation budget — must be >= thinking tokenBudget. */
 export const CHAT_MAX_TOKENS = 12000;

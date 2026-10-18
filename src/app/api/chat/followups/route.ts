@@ -1,6 +1,7 @@
 import { checkRateLimit } from "../lib/rate-limit";
-import { generateFollowups } from "../lib/generate-followups";
-import { buildFallbackFollowups } from "../lib/followup-fallback";
+import { CHIP_FEATURE_DEFAULT, generateChips } from "../lib/generate-followups";
+import { askedAboutAbandoned } from "../lib/chips-validate";
+import { DEFAULT_FOLLOWUPS } from "../lib/followup-fallback";
 
 export async function POST(req: Request) {
   let userMessage = "";
@@ -30,15 +31,17 @@ export async function POST(req: Request) {
       return Response.json({ error: "userMessage and aiResponse required" }, { status: 400 });
     }
 
-    const followups = await generateFollowups({
+    const followups = await generateChips({
       userMessage,
-      aiResponse,
+      answer: aiResponse,
+      docs: [],
+      featureIds: CHIP_FEATURE_DEFAULT,
+      asked: [],
+      userAskedAbandoned: askedAboutAbandoned(userMessage),
     });
     return Response.json({ followups });
   } catch (error) {
     console.error("Followups API error:", error);
-    return Response.json({
-      followups: buildFallbackFollowups(userMessage, aiResponse),
-    });
+    return Response.json({ followups: DEFAULT_FOLLOWUPS });
   }
 }

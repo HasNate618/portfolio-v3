@@ -36,6 +36,8 @@ export type ChipFailureCode =
 
 export interface ChipFailure {
   code: ChipFailureCode;
+  /** Which slot failed, added by the pipeline so the regenerate knows where. */
+  slot?: ChipSlotName;
 }
 
 const MAX_CHIP_WORDS = 14;
@@ -43,6 +45,13 @@ const MAX_CHIP_WORDS = 14;
 const ABANDONED_IDS = new Set(
   site.projects.filter((project) => project.displayStatus === "abandoned").map((project) => project.id),
 );
+
+/** True when the visitor named an abandoned project, so a chip about it is fair. */
+export function askedAboutAbandoned(message: string): boolean {
+  const ids = [...ABANDONED_IDS];
+  if (ids.length === 0) return false;
+  return new RegExp(`\\b(?:${ids.map(escapeRegExp).join("|")})\\b`, "i").test(message);
+}
 
 /** Every subject a chip may be about: the live projects, the roles, and Nathan. */
 export function chipSubjectIds(): string[] {
