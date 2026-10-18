@@ -149,3 +149,18 @@ test("a short answer is not lost: the tail arrives on flush", () => {
   assert.ok(first.length > 0, "text before the held word is still sent");
   assert.equal(first + filter.flush(), "He built a parser at TeraGo: a job in Markham");
 });
+
+/*
+ * Full month names and the open-ended words were the gap: the lookahead accepted only
+ * three-letter abbreviations, so "August" fell through to the colon rule and a live
+ * answer read "May: August 2026". "present" is not a month at all, so the same rule
+ * turned "May 2026 - present" into a colon.
+ */
+test("a range ending in a full month name or an open end reads as a range", () => {
+  assert.equal(sanitizeDashes("May \u2013 August 2026"), "May to August 2026");
+  assert.equal(sanitizeDashes("May 2026 \u2013 present"), "May 2026 to present");
+  assert.equal(
+    sanitizeDashes("September 2025 \u2013 December 2026"),
+    "September 2025 to December 2026",
+  );
+});

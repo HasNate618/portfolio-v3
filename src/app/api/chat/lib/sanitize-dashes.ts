@@ -50,11 +50,15 @@ const DASH_RANGE = "\\u2013\\u2014\\u2015";
  * colon rule and read "May: Aug 2026". A proper noun still fails the lookbehind,
  * so "**Animarker** - May 2023" stays a separator.
  */
-const DATE_BEFORE = `(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\.?(?:\\s+\\d{4})?|\\d{4}`;
-const DATE_RANGE = new RegExp(
-  `(?<=${DATE_BEFORE}) *[${DASH_RANGE}] *(?=(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\b|\\d{4}\\b)`,
-  "gi",
-);
+const MONTH = "(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)";
+const DATE_BEFORE = `(?:${MONTH})[a-z]*\\.?(?:\\s+\\d{4})?|\\d{4}`;
+/**
+ * The right side must accept a full month name and the open-ended words a range ends
+ * with. Reading only three-letter abbreviations turned "May - August 2026" into
+ * "May: August 2026" and left "May 2026: present" for the colon rule.
+ */
+const DATE_AFTER = `(?:(?:${MONTH})[a-z]*\\.?|\\d{4}|present|now|today|current)\\b`;
+const DATE_RANGE = new RegExp(`(?<=${DATE_BEFORE}) *[${DASH_RANGE}] *(?=${DATE_AFTER})`, "gi");
 /** Remaining em dashes and horizontal bars read as a comma. */
 const EM_DASH = new RegExp(` *[\\u2014\\u2015] *`, "g");
 /** Remaining en dashes read as a colon, which is how they are used mid-sentence. */
