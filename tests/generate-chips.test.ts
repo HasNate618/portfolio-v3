@@ -79,6 +79,21 @@ test("the answer subject comes from the documents first", () => {
   assert.equal(answerSubjectFor({ ...DOC_INPUT, docs: [], featureIds: [] }), "nathan");
 });
 
+/*
+ * A document title is a corpus path, so the id arrives dashed while the display
+ * name has a space where the dash is. Neither "3D Western" nor "3d western"
+ * matched "experience/3d-western.md", so the subject fell back to the topic's
+ * first feature and the chip prompt named the wrong project, silently.
+ */
+test("a dashed document title still names its subject", () => {
+  const docs = [{ title: "experience/3d-western.md", firstLine: "VP of Data/ML" }];
+  assert.equal(answerSubjectFor({ ...DOC_INPUT, docs }), "3d-western");
+  assert.equal(
+    answerSubjectFor({ ...DOC_INPUT, docs: [{ title: "projects/gaming-mental-health-analyzer.md", firstLine: "Analyzer" }] }),
+    "gaming-mental-health-analyzer",
+  );
+});
+
 test("the schema names the three slots and the subjects the model may use", () => {
   const schema = CHIP_SCHEMA as {
     properties: Record<string, { properties: { subject: { enum: string[] } } }>;

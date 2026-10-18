@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { GENERAL, TOPICS, namedSubjectId, routeTopic } from "../src/app/api/chat/lib/topic";
+import { GENERAL, TOPICS, routeTopic } from "../src/app/api/chat/lib/topic";
 import { site } from "../src/data/site";
 
 test("an unmatched question is general", () => {
@@ -52,15 +52,4 @@ test("GENERAL is six ids and every feature id names something real", () => {
   for (const id of GENERAL) {
     assert.ok(known.has(id), `GENERAL names ${id}`);
   }
-});
-
-/*
- * The pointer needs the id itself: a question about AWARE should end at AWARE's
- * page, and a question about nothing in particular at the résumé.
- */
-test("the subject a question names is the id the pointer needs", () => {
-  assert.equal(namedSubjectId("How does Campus retrieve?"), "campus");
-  assert.equal(namedSubjectId("Tell me about 3D Western"), "3d-western");
-  assert.equal(namedSubjectId("What did Nathan do at TeraGo?"), "terago");
-  assert.equal(namedSubjectId("What does Nathan build?"), null);
 });

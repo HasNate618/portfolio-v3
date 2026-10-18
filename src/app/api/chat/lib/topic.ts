@@ -11,8 +11,6 @@
  * keeps the context retrieval chose for it.
  */
 
-import { site } from "@/data/site";
-
 export interface TopicRoute {
   ids: string[];
   feature: string[];
@@ -43,35 +41,4 @@ export function routeTopic(text: string): TopicRoute {
   const hit = TOPICS.filter((t) => t.re.test(text));
   if (hit.length === 0) return { ids: ["general"], feature: GENERAL };
   return { ids: hit.map((t) => t.id), feature: [...new Set(hit.flatMap((t) => t.feature))].slice(0, 5) };
-}
-
-/** A name as it would appear in a question, escaped for a regex. */
-function escapeName(name: string): string {
-  return name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-/**
- * The project or role a question names, if any.
- *
- * `questionNamesSubject` in context.ts asks the same question and answers it with
- * a boolean, for the coverage floor. The pointer needs the id: a question about
- * AWARE should end at AWARE's page, and a question about nothing in particular
- * should end at the résumé. Both the display name and the id form count, so
- * "3d western" finds "3D Western".
- */
-export function namedSubjectId(text: string): string | null {
-  const subjects = [
-    ...site.projects.map((project) => ({
-      id: project.id,
-      names: [project.name, project.id.replace(/-/g, " ")],
-    })),
-    ...site.experience.map((role) => ({ id: role.id, names: [role.org, role.id.replace(/-/g, " ")] })),
-  ];
-
-  for (const subject of subjects) {
-    const named = subject.names.some((name) => new RegExp(`\\b${escapeName(name)}\\b`, "i").test(text));
-    if (named) return subject.id;
-  }
-
-  return null;
 }

@@ -1,5 +1,6 @@
 import { featuredProjects, leadProject, site } from "@/data/site";
 import { factsBlockFor } from "@/lib/corpus";
+import { namesSubject } from "./name-match";
 
 /**
  * Coverage floor.
@@ -19,21 +20,6 @@ import { factsBlockFor } from "@/lib/corpus";
 export interface PromptChunk {
   text: string;
   source: string;
-}
-
-/**
- * A question that names a project or a role is specific: it keeps the context
- * retrieval chose for it, and the pin stays out of the way.
- */
-function questionNamesSubject(question: string): boolean {
-  const names = [
-    ...site.projects.flatMap((project) => [project.name, project.id.replace(/-/g, " ")]),
-    ...site.experience.flatMap((role) => [role.org, role.id.replace(/-/g, " ")]),
-  ];
-
-  return names.some((name) =>
-    new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(question),
-  );
 }
 
 function relative(file: string | undefined): string | null {
@@ -67,7 +53,9 @@ export function pinnedChunks(): PromptChunk[] {
 }
 
 export function withCoverageFloor(chunks: PromptChunk[], question = ""): PromptChunk[] {
-  if (questionNamesSubject(question)) return chunks;
+  // A question that names a project or a role is specific: it keeps the context
+  // retrieval chose for it, and the pin stays out of the way.
+  if (namesSubject(question)) return chunks;
 
   const present = new Set(chunks.map((chunk) => chunk.source));
   const pinned = pinnedChunks();
