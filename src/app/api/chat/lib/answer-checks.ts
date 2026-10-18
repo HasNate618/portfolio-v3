@@ -24,8 +24,6 @@ export interface AnswerCheckResult {
   numbersMissing: string[];
   /** URLs in the answer that are not on the site's own list. */
   urlsMissing: string[];
-  /** Whitelist URLs in the last paragraph, which is where the pointer belongs. */
-  pointerUrls: number;
 }
 
 /** A number as an answer writes it: 308, 84.2%, 1,200. */
@@ -72,10 +70,7 @@ export function answerChecks(input: AnswerCheckInput): AnswerCheckResult {
   const urls = urlsIn(input.text);
   const urlsMissing = [...new Set(urls.filter((url) => !isWhitelisted(url, input.whitelist)))];
 
-  const lastParagraph = input.text.trim().split(/\n\s*\n/).pop() ?? "";
-  const pointerUrls = urlsIn(lastParagraph).filter((url) => isWhitelisted(url, input.whitelist)).length;
-
-  return { numbersMissing, urlsMissing, pointerUrls };
+  return { numbersMissing, urlsMissing };
 }
 
 /**

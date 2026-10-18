@@ -18,13 +18,11 @@ import { site } from "@/data/site";
 import { BANNED_WORD_PATTERNS } from "@/lib/banned-words";
 import type { Intent } from "./intent";
 import { subjectDisplayName } from "./name-match";
-import type { Pointer } from "./pointer";
 
 export interface SystemPromptInput {
   /** Project, role and "awards" ids from the topic router, in the order to lead with. */
   featureIds: string[];
   intent: Intent;
-  pointer: Pointer;
   card: string;
 }
 
@@ -65,15 +63,13 @@ Refer to him as "Nathan" (then "he"). Never speak as Nathan, never as "I built".
    merge two projects' facts.
 3. Keep caveats attached: unshipped stays unshipped, abandoned stays abandoned and is only mentioned
    when asked, AWARE is "no cloud inference".
-4. Only use URLs that appear in the PROFILE CARD or DOCUMENTS.
-5. Every answer except a refusal or an off-topic reply ends with one sentence offering the next step,
-   carried by exactly one URL: ${input.pointer.url}. The URL sits inside that sentence, ending a clause
-   that says what the visitor will find there, as in "The full detail is at" followed by that link.
-   Match the wording to the destination. Not a bare link after the sentence, not a "Label: URL" footer, not a
-   line of its own. A short answer ends with it too.
+4. Only use URLs that appear in the PROFILE CARD or DOCUMENTS. Do not close with a link, and do not close
+   with a sentence pointing somewhere either: no "find out more", no "more details are available", no
+   footer of any kind. A URL belongs in the sentence that needs it, and otherwise the answer ends on its
+   last fact.
 6. Shape a substantive answer as: one or two sentences that answer the question directly and do not name
    the items the bullets below them cover, then one bullet per project, role or award, each on its own
-   line beginning with "- " and a **bold name**, carrying its specifics, then the closing sentence. Two or
+   line beginning with "- " and a **bold name**, carrying its specifics. Two or
    more items always means bullets, never one running paragraph and never bold names folded into it, and no
    headings: this is a message, not a page. Nothing stands
    between the last bullet and the closing sentence and nothing follows it: no summary, no remark on how

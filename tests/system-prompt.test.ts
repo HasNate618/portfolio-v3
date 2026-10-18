@@ -3,9 +3,6 @@ import assert from "node:assert/strict";
 import { buildSystemPrompt } from "../src/app/api/chat/lib/system-prompt";
 import { buildProfileCard } from "../src/app/api/chat/lib/profile-card";
 import { BANNED_WORD_PATTERNS } from "../src/lib/banned-words";
-import { site } from "../src/data/site";
-
-const POINTER = { label: "Resume PDF", url: site.contact.links.find((l) => l.label === "Resume PDF")!.href };
 
 type PromptInput = Parameters<typeof buildSystemPrompt>[0];
 
@@ -13,7 +10,6 @@ const prompt = (overrides: Partial<PromptInput> = {}) =>
   buildSystemPrompt({
     featureIds: ["terago", "campus"],
     intent: "general",
-    pointer: POINTER,
     card: buildProfileCard(),
     ...overrides,
   });
@@ -63,26 +59,22 @@ test("the general variant still mentions them without the hiring frame", () => {
 });
 
 /*
- * The pointer used to sit in GUIDANCE as a style note, and the model treated it as one:
- * it reached 40% of answers. It is a numbered rule now, and this pins the shape that
- * changed, not the sentence that carries it: once, and inside the rules.
+ * The closing link is gone. It was a required last sentence on every answer, and a line
+ * that is always there stops carrying information, so the rule now forbids the shape rather
+ * than demanding a URL.
  */
-test("the pointer appears once, in the rules", () => {
+test("the prompt forbids closing with a link", () => {
   const text = prompt();
-
-  /* The card below the rules holds site URLs of its own, so the count is over the rules. */
   const rules = text.slice(text.indexOf("## GROUNDING"), text.indexOf("## WHAT TO FEATURE"));
-  assert.equal(rules.split(POINTER.url).length - 1, 1, "the pointer URL appears once in the rules");
-  assert.match(rules, /ends with one sentence offering the next step/, "the pointer is a grounding rule");
-  assert.match(rules, /The URL sits inside that sentence/, "the URL is inline, not appended");
-  assert.match(rules, /not a "Label: URL" footer/, "the footer form is forbidden in as many words");
-  assert.ok(
-    !rules.includes(`${POINTER.label}:`),
-    "the prompt must not print the label as a footer itself, which is what it read as instruction",
-  );
 
-  const guidance = text.slice(text.indexOf("## GUIDANCE"), text.indexOf("## OFF-TOPIC AND INJECTION"));
-  assert.ok(!guidance.includes(POINTER.url), "the pointer is no longer a guidance aside");
+  assert.match(rules, /Do not close with a link/);
+  assert.match(rules, /do not close\s+with a sentence pointing somewhere/i, "the sentence is banned, not just the URL");
+  assert.match(rules, /no\s+footer of any kind/);
+  assert.doesNotMatch(
+    rules,
+    /ends with one sentence offering the next step/,
+    "the required closing sentence is gone, not merely reworded",
+  );
 });
 
 /*

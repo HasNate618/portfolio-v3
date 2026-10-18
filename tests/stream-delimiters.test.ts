@@ -7,7 +7,6 @@ import { buildSystemPrompt } from "../src/app/api/chat/lib/system-prompt";
 const PROMPT = buildSystemPrompt({
   featureIds: ["terago"],
   intent: "general",
-  pointer: { label: "Resume PDF", url: "https://nathanespejo.com/Nathan_Espejo_Resume.pdf" },
   card: buildProfileCard(),
 });
 

@@ -34,33 +34,23 @@ test("a whitelisted URL is not reported", () => {
   assert.deepEqual(out.urlsMissing, []);
 });
 
-test("the pointer is counted in the last paragraph", () => {
-  const out = check(`Campus is a study assistant.\n\nHis resume is at ${RESUME}`);
-  assert.equal(out.pointerUrls, 1);
-});
-
 /*
- * The whitelist holds the address twice, once as a mailto and once bare, so counting
- * whitelist entries found in the paragraph reported two pointers for one email and
- * failed the "exactly one" rule on a correct answer.
+ * The whitelist holds the address twice, once as a mailto and once bare, so a mailto in the
+ * text must not read as two different URLs: that would report an answer as having invented a
+ * link it did not invent.
  */
-test("an email written as a mailto is one pointer, not two", () => {
-  const out = check("The record doesn't cover it.\n\nEmail: mailto:nate.e.espejo@gmail.com", {
+test("a mailto and the bare address are the same URL", () => {
+  const out = check("Reach him at mailto:nate.e.espejo@gmail.com.", {
     whitelist: [...WHITELIST, "mailto:nate.e.espejo@gmail.com", "nate.e.espejo@gmail.com"],
   });
-  assert.equal(out.pointerUrls, 1);
+  assert.deepEqual(out.urlsMissing, []);
 });
 
 test("a URL that ends a sentence is not missing over the period", () => {
   assert.deepEqual(check(`His resume is at ${RESUME}.`).urlsMissing, []);
 });
 
-test("a URL repeated mid-answer is not a pointer", () => {
-  const out = check(`${RESUME} is the link.\n\nCampus is a study assistant.`);
-  assert.equal(out.pointerUrls, 0);
-});
-
 test("an answer with no numbers or URLs reports nothing", () => {
   const out = check("Nathan built Campus with his team.");
-  assert.deepEqual(out, { numbersMissing: [], urlsMissing: [], pointerUrls: 0 });
+  assert.deepEqual(out, { numbersMissing: [], urlsMissing: [] });
 });

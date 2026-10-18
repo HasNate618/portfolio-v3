@@ -11,9 +11,6 @@ import { generateChips } from "./generate-followups";
 import type { ChipSource } from "./generate-followups";
 import { routeIntent } from "./intent";
 import type { Intent } from "./intent";
-import { namedSubjectId } from "./name-match";
-import { availabilityAsked, choosePointer, contactAsked } from "./pointer";
-import type { Pointer } from "./pointer";
 import { buildProfileCard } from "./profile-card";
 import { applyScoreFloor, rerankChunks, retrieveRelevantChunks } from "./rag";
 import { buildRetrievalQuery } from "./retrieval-query";
@@ -44,7 +41,6 @@ export interface PreparedChat {
   documents: ChatDocument[];
   topic: TopicRoute;
   intent: Intent;
-  pointer: Pointer;
 }
 
 /**
@@ -90,23 +86,14 @@ export async function prepareChat(
   history: HistoryEntry[],
 ): Promise<PreparedChat> {
   const lastUserTurn = [...history].reverse().find((entry) => entry.role === "user")?.content ?? "";
-  const turn = history.filter((entry) => entry.role === "user").length + 1;
 
   /*
    * The question, read with the turn before it: a visitor who says "tell me more" is
-   * still asking about the last subject. The topic decides what to lead with, the
-   * intent decides whether to read the visitor as hiring, and the pointer is chosen
-   * from the visitor's own words, because it is the line the answer ends with.
+   * still asking about the last subject. The topic decides what to lead with and the
+   * intent decides whether to read the visitor as hiring.
    */
   const topic = routeTopic(`${message} ${lastUserTurn}`);
   const intent = routeIntent(message, history);
-  const pointer = choosePointer({
-    namedSubjectId: namedSubjectId(message),
-    intent,
-    turn,
-    contactAsked: contactAsked(message),
-    availabilityAsked: availabilityAsked(message),
-  });
 
   const retrievalQuery = buildRetrievalQuery(message, history);
   const topChunks = await retrieveRelevantChunks(retrievalQuery, { excludeNav: true, topK: 40 });
@@ -117,13 +104,11 @@ export async function prepareChat(
     systemPrompt: buildSystemPrompt({
       featureIds: topic.feature,
       intent,
-      pointer,
       card: buildProfileCard(),
     }),
     documents: toDocuments(chunks),
     topic,
     intent,
-    pointer,
   };
 }
 

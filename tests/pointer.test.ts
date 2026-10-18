@@ -1,104 +1,46 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { availabilityAsked, choosePointer, pointerWhitelist } from "../src/app/api/chat/lib/pointer";
+import { pointerWhitelist } from "../src/app/api/chat/lib/pointer";
 import { site } from "../src/data/site";
+import { caseStudyHref } from "../src/lib/content";
 import { siteBaseUrl } from "../src/lib/site-url";
 
-type PointerInput = Parameters<typeof choosePointer>[0];
-
-const ask = (overrides: Partial<PointerInput> = {}) =>
-  choosePointer({
-    namedSubjectId: null,
-    intent: "general",
-    turn: 1,
-    contactAsked: false,
-    availabilityAsked: false,
-    ...overrides,
-  });
+/*
+ * The closing link is gone, so the pointer module is now only the answer to one question:
+ * which URLs may appear in an answer? Everything the site owns, and nothing it does not.
+ */
 
 const linkHref = (label: string) => site.contact.links.find((link) => link.label === label)!.href;
-const RESUME = linkHref("Resume PDF");
-const LINKEDIN = linkHref("LinkedIn");
-const EMAIL = `mailto:${site.contact.email}`;
 
-test("a named project points at its own page, not at the résumé", () => {
-  assert.equal(ask({ namedSubjectId: "aware" }).url, `${siteBaseUrl()}/projects/aware`);
-  assert.equal(ask({ namedSubjectId: "campus" }).url, `${siteBaseUrl()}/projects/campus`);
-});
-
-test("a project with no page points at its own repository", () => {
-  const ferret = site.projects.find((project) => project.id === "ferret")!;
-  assert.equal(ask({ namedSubjectId: "ferret" }).url, ferret.links[0].href);
-});
-
-test("a named role points at its own page", () => {
-  assert.equal(ask({ namedSubjectId: "terago" }).url, `${siteBaseUrl()}/experience/terago`);
-});
-
-test("a subject with no page and no link falls back to the résumé", () => {
-  assert.equal(ask({ namedSubjectId: "wemars" }).url, RESUME);
-});
-
-/*
- * A broad question is what the projects page answers. The résumé used to close every one
- * of them, including "what does he build" and "how does he use AI", where it is the wrong
- * door: the reader has just been shown the work, not asked for his background.
- */
-test("a broad question points at the projects page", () => {
-  assert.equal(ask().url, `${siteBaseUrl()}/projects`);
-  assert.equal(ask({ turn: 3 }).url, `${siteBaseUrl()}/projects`);
-});
-
-test("a hiring visitor's first turn still points at the résumé", () => {
-  assert.equal(ask({ intent: "recruiter" }).url, RESUME);
-});
-
-test("a hiring thread points at the email, and so does an availability question", () => {
-  assert.equal(ask({ intent: "recruiter", turn: 2 }).url, EMAIL);
-  assert.equal(ask({ availabilityAsked: true }).url, EMAIL);
-});
-
-/*
- * The spec's table is a priority order, so a contact question only reaches the
- * LinkedIn row when the rows above it do not fire: it has to also be a second
- * turn, because the first turn always points at the résumé.
- */
-test("a contact question points at LinkedIn", () => {
-  assert.equal(ask({ contactAsked: true, turn: 2 }).url, LINKEDIN);
-});
-
-test("the availability question is recognised in its plural shapes", () => {
-  assert.ok(availabilityAsked("Is he available for internships?"));
-  assert.ok(availabilityAsked("Any internship openings?"));
-  assert.ok(!availabilityAsked("What does Campus do?"));
-});
-
-test("every pointer is a URL the site actually offers", () => {
+test("the allowlist holds the contact links and the address", () => {
   const whitelist = pointerWhitelist();
-  assert.ok(whitelist.includes(RESUME), "the résumé PDF is offerable");
-  assert.ok(whitelist.includes(EMAIL), "the email is offerable");
-  for (const link of site.contact.links) assert.ok(whitelist.includes(link.href), `${link.label} is offerable`);
+  assert.ok(whitelist.includes(linkHref("Resume PDF")), "the résumé is offerable");
+  assert.ok(whitelist.includes(linkHref("LinkedIn")), "LinkedIn is offerable");
+  assert.ok(whitelist.includes(`mailto:${site.contact.email}`), "the mailto address is offerable");
+  assert.ok(whitelist.includes(site.contact.email), "the bare address is offerable");
+});
+
+test("the allowlist holds the projects page, which broad answers cite", () => {
+  assert.ok(pointerWhitelist().includes(`${siteBaseUrl()}/projects`));
+});
+
+test("every case study and role page is offerable", () => {
+  const whitelist = pointerWhitelist();
   for (const project of site.projects) {
-    for (const link of project.links) assert.ok(whitelist.includes(link.href), `${project.name} ${link.label}`);
+    const href = caseStudyHref(project);
+    if (href) assert.ok(whitelist.includes(`${siteBaseUrl()}${href}`), `${project.name} has no case study URL`);
+  }
+  assert.ok(whitelist.includes(`${siteBaseUrl()}/experience/terago`), "a role page is offerable");
+});
+
+test("every entry is a URL or address a browser would follow", () => {
+  /* The bare address is whitelisted on purpose: an answer writes the email, not the mailto. */
+  for (const url of pointerWhitelist()) {
+    assert.match(url, /^(?:https:\/\/|mailto:|[^@\s]+@[^@\s]+$)/, `a whitelist entry is not a URL: ${url}`);
   }
 });
 
-test("no code path can pick a URL outside the whitelist", () => {
-  const whitelist = new Set(pointerWhitelist());
-  const subjects = [null, ...site.projects.map((p) => p.id), ...site.experience.map((role) => role.id)];
-
-  for (const namedSubjectId of subjects) {
-    for (const intent of ["general", "recruiter"] as const) {
-      for (const turn of [1, 2, 3]) {
-        for (const contactAsked of [false, true]) {
-          for (const availabilityAsked of [false, true]) {
-            const pointer = choosePointer({ namedSubjectId, intent, turn, contactAsked, availabilityAsked });
-            assert.ok(pointer.url.startsWith("http") || pointer.url.startsWith("mailto:"), pointer.url);
-            assert.ok(whitelist.has(pointer.url), `${namedSubjectId} ${intent} ${turn} picked ${pointer.url}`);
-            assert.ok(pointer.label.length > 0);
-          }
-        }
-      }
-    }
-  }
+test("the allowlist is deduplicated", () => {
+  const whitelist = pointerWhitelist();
+  assert.equal(new Set(whitelist).size, whitelist.length);
 });

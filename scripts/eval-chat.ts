@@ -241,8 +241,7 @@ async function main(): Promise<void> {
   const lengths: Array<{ id: string; words: number }> = [];
   const lengthsOutOfRange: string[] = [];
   const emptyAnswers: string[] = [];
-  let pointerOk = 0;
-  let pointerTotal = 0;
+  const inventedUrls: string[] = [];
   const latencies: number[] = [];
   const tokens: number[] = [];
   const firstNamed: string[] = [];
@@ -281,12 +280,13 @@ async function main(): Promise<void> {
       if (count < 110 || count > 360) lengthsOutOfRange.push(`${item.id}: ${count}`);
     }
 
-    if (!EXEMPT.has(item.id)) {
-      pointerTotal += 1;
-      const lastParagraph = answer.text.trim().split(/\n\s*\n/).pop() ?? "";
-      const whitelist = pointerWhitelist();
-      const found = urlsIn(lastParagraph).filter((url) => isWhitelisted(url, whitelist)).length;
-      if (found === 1) pointerOk += 1;
+    /*
+     * The pointer is gone: no answer is required to close with a link, so the only URL
+     * question left is whether a URL it did use exists on the site.
+     */
+    const whitelist = pointerWhitelist();
+    for (const url of urlsIn(answer.text)) {
+      if (!isWhitelisted(url, whitelist)) inventedUrls.push(`${item.id}: ${url}`);
     }
 
     if (item.broad) {
@@ -308,7 +308,6 @@ async function main(): Promise<void> {
   const mustAnyRecall = mustAnyTotal === 0 ? 0 : mustAnyHit / mustAnyTotal;
   const chipTotal = chipsModel + chipsRepaired + chipsTemplate;
   const chipAcceptRate = chipTotal === 0 ? 0 : chipsModel / chipTotal;
-  const pointerRate = pointerTotal === 0 ? 0 : pointerOk / pointerTotal;
   const spread = new Set(firstNamed).size;
   const substantiveWords = lengths.map((entry) => entry.words);
 
@@ -332,7 +331,7 @@ async function main(): Promise<void> {
       value: `${lengthsOutOfRange.length} out`,
       pass: lengthsOutOfRange.length === 0,
     },
-    { name: "one pointer URL", value: `${(pointerRate * 100).toFixed(0)}%`, pass: pointerRate >= 0.9 },
+    { name: "invented URLs", value: String(inventedUrls.length), pass: inventedUrls.length === 0 },
     { name: "lead spread (broad)", value: `${spread} distinct`, pass: spread >= 3 },
     {
       name: "chip accept rate",
@@ -356,6 +355,7 @@ async function main(): Promise<void> {
 
   for (const [label, list] of [
     ["mustAny misses", mismatches],
+    ["invented URLs", inventedUrls],
     ["empty answers", emptyAnswers],
     ["mustNot hits", mustNotHits],
     ["banned hits", bannedHits],
