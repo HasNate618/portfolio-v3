@@ -44,7 +44,7 @@ export async function GET(req: Request): Promise<Response> {
       return json({ error: "Daily search limit reached" }, 429, { "Retry-After": String(daily.retryAfter) });
     }
 
-    const candidates = await retrieveRelevantChunks(parsed.query, Math.max(20, parsed.limit * 4));
+    const { chunks: candidates } = await retrieveRelevantChunks(parsed.query, Math.max(20, parsed.limit * 4));
     const ranked = await rerankChunks(parsed.query, candidates, parsed.limit);
 
     return json(

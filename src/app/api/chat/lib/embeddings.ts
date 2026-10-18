@@ -3,8 +3,10 @@ import fs from "fs";
 import path from "path";
 import { loadKnowledgebase } from "./chunks";
 import { embedTexts, EMBED_MODEL, EMBED_DIMENSION } from "./cohere";
+import { QUESTION_BANK } from "@/data/question-bank";
 
 const CACHE_PATH = path.join(process.cwd(), "src", "app", "api", "chat", "lib", "embeddings-cache.json");
+const BANK_CACHE_PATH = path.join(process.cwd(), "src", "data", "question-bank-cache.json");
 
 interface EmbeddingDoc {
   text: string;
@@ -16,6 +18,18 @@ interface EmbeddingDoc {
 interface EmbeddingCache {
   contentHash: string;
   docs: EmbeddingDoc[];
+}
+
+interface BankEmbeddingEntry {
+  id: string;
+  question: string;
+  stage: string;
+  embedding: number[];
+}
+
+interface BankEmbeddingCache {
+  contentHash: string;
+  entries: BankEmbeddingEntry[];
 }
 
 let cachedEmbeddings: EmbeddingDoc[] | null = null;
@@ -48,6 +62,35 @@ export function corpusContentHash(chunks: { text: string; source: string; sectio
     hash.update("\0");
   }
   return hash.digest("hex");
+}
+
+/** Hash for the question bank cache, including model and dimension. */
+export function questionBankContentHash(): string {
+  const hash = createHash("sha256");
+  hash.update("question-bank-v1");
+  hash.update("\0");
+  hash.update(`${EMBED_MODEL}:${EMBED_DIMENSION}`);
+  hash.update("\0");
+  for (const entry of QUESTION_BANK) {
+    hash.update(entry.id);
+    hash.update("\0");
+    hash.update(entry.question);
+    hash.update("\0");
+    hash.update(entry.stage);
+    hash.update("\0");
+  }
+  return hash.digest("hex");
+}
+
+/** The hash recorded in the bank cache, or null when there is no usable cache. */
+export function readBankCacheHash(): string | null {
+  if (!fs.existsSync(BANK_CACHE_PATH)) return null;
+  try {
+    const parsed = JSON.parse(fs.readFileSync(BANK_CACHE_PATH, "utf-8")) as Partial<BankEmbeddingCache>;
+    return typeof parsed.contentHash === "string" ? parsed.contentHash : null;
+  } catch {
+    return null;
+  }
 }
 
 /** The hash recorded in the cache, or null when there is no usable cache. */
@@ -92,14 +135,53 @@ export async function buildEmbeddings() {
   const cache: EmbeddingCache = { contentHash: corpusContentHash(chunks), docs: embeddings };
   fs.writeFileSync(CACHE_PATH, JSON.stringify(cache));
   console.log(`Embeddings saved to ${CACHE_PATH} (hash ${cache.contentHash.slice(0, 12)})`);
+
+  await buildQuestionBankEmbeddings();
+
   return embeddings;
+}
+
+export async function buildQuestionBankEmbeddings() {
+  console.log(`Building question bank embeddings for ${QUESTION_BANK.length} questions with ${EMBED_MODEL}...`);
+
+  const batchSize = 96;
+  const entries: BankEmbeddingEntry[] = [];
+
+  const questions = QUESTION_BANK.map((q) => q.question);
+  for (let i = 0; i < questions.length; i += batchSize) {
+    const batch = questions.slice(i, i + batchSize);
+    const batchEmbeddings = await embedTexts(batch, "search_document");
+    for (let j = 0; j < batch.length; j++) {
+      const entry = QUESTION_BANK[i + j];
+      entries.push({
+        id: entry.id,
+        question: entry.question,
+        stage: entry.stage,
+        embedding: batchEmbeddings[j],
+      });
+    }
+  }
+
+  const cache: BankEmbeddingCache = { contentHash: questionBankContentHash(), entries };
+  fs.writeFileSync(BANK_CACHE_PATH, JSON.stringify(cache));
+  console.log(`Question bank embeddings saved to ${BANK_CACHE_PATH} (hash ${cache.contentHash.slice(0, 12)})`);
+  return entries;
 }
 
 export function loadEmbeddings(): EmbeddingDoc[] | null {
   if (cachedEmbeddings) return cachedEmbeddings;
   if (!fs.existsSync(CACHE_PATH)) return null;
 
-  const parsed = JSON.parse(fs.readFileSync(CACHE_PATH, "utf-8")) as EmbeddingCache | EmbeddingDoc[];
+  const parsed = (() => {
+    try {
+      return JSON.parse(fs.readFileSync(CACHE_PATH, "utf-8")) as EmbeddingCache | EmbeddingDoc[];
+    } catch (error) {
+      // A corrupt cache must not crash a request with a SyntaxError.
+      console.error("embeddings-cache.json is unreadable — run npm run build-embeddings", error);
+      return null;
+    }
+  })();
+  if (parsed === null) return null;
 
   // A bare array is the pre-hash format. It cannot be checked for staleness, and it
   // predates the corpus projection, so serving it would answer from the wrong text.
@@ -113,7 +195,42 @@ export function loadEmbeddings(): EmbeddingDoc[] | null {
   return cachedEmbeddings;
 }
 
+let cachedBankEmbeddings: BankEmbeddingEntry[] | null = null;
+
+export function loadQuestionBankEmbeddings(): BankEmbeddingEntry[] {
+  if (cachedBankEmbeddings) return cachedBankEmbeddings;
+  if (!fs.existsSync(BANK_CACHE_PATH)) {
+    throw new Error("question-bank-cache.json is missing — run npm run build-embeddings");
+  }
+
+  const parsed = (() => {
+    try {
+      return JSON.parse(fs.readFileSync(BANK_CACHE_PATH, "utf-8")) as
+        | Partial<BankEmbeddingCache>
+        | BankEmbeddingEntry[];
+    } catch (error) {
+      console.error("question-bank-cache.json is unreadable", error);
+      throw new Error("question-bank-cache.json is unreadable — run npm run build-embeddings");
+    }
+  })();
+  if (Array.isArray(parsed)) {
+    throw new Error("question-bank-cache.json predates the content hash — run npm run build-embeddings");
+  }
+  if (typeof parsed.contentHash !== "string" || parsed.contentHash !== questionBankContentHash()) {
+    throw new Error("question-bank-cache.json is stale — run npm run build-embeddings");
+  }
+  if (!Array.isArray(parsed.entries)) {
+    throw new Error("question-bank-cache.json is malformed — run npm run build-embeddings");
+  }
+
+  cachedBankEmbeddings = parsed.entries;
+  console.log(`Loaded ${cachedBankEmbeddings.length} cached question bank embeddings`);
+  return cachedBankEmbeddings;
+}
+
 export function cosineSimilarity(a: number[], b: number[]): number {
+  if (a.length !== b.length) return 0;
+
   let dot = 0;
   let normA = 0;
   let normB = 0;
@@ -122,5 +239,10 @@ export function cosineSimilarity(a: number[], b: number[]): number {
     normA += a[i] * a[i];
     normB += b[i] * b[i];
   }
+
+  // A zero vector has no direction. Returning NaN here would poison every
+  // comparison downstream, and a NaN score silently loses to -Infinity.
+  if (normA === 0 || normB === 0) return 0;
+
   return dot / (Math.sqrt(normA) * Math.sqrt(normB));
 }

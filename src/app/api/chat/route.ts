@@ -1,9 +1,11 @@
 import { retrieveRelevantChunks, rerankChunks } from "./lib/rag";
+import { selectChips } from "./lib/chips";
+import { QUESTION_BANK } from "@/data/question-bank";
 import { buildRetrievalQuery } from "./lib/retrieval-query";
 import { buildSystemPrompt } from "./lib/system-prompt";
 import { withCoverageFloor } from "./lib/context";
-import { generateFollowups, formatFollowupsTail } from "./lib/generate-followups";
-import { buildFallbackFollowups, DEFAULT_FOLLOWUPS, isNonAnswer } from "./lib/followup-fallback";
+import { formatFollowupsTail } from "./lib/generate-followups";
+import { isNonAnswer } from "./lib/followup-fallback";
 import { checkChatDailyCap, checkRateLimit, SITE_KEY } from "./lib/rate-limit";
 import { MAX_BODY_CHARS, isBrowserRequest, trimHistory } from "./lib/request-guards";
 import { sanitizeDashes } from "./lib/sanitize-dashes";
@@ -14,33 +16,6 @@ import { FOLLOWUP_DELIMITER, stripBodyPrefix } from "@/lib/tts/stream-delimiters
 interface ChatHistoryMessage {
   role: string;
   content: string;
-}
-
-/**
- * The follow-up prompt only reads the first 600 characters of the answer, so the
- * call can start as soon as there is a few hundred and run alongside the rest of
- * the answer instead of after it.
- */
-const FOLLOWUP_START_CHARS = 400;
-
-/**
- * The questions are a nicety; the answer is the product. Cap the wait and fall
- * back to the local questions rather than holding the stream open — an unusually
- * slow follow-up call used to prolong every answer by however long it took.
- */
-const FOLLOWUP_TIMEOUT_MS = 6000;
-
-function withinFollowupBudget(
-  pending: Promise<string[]>,
-  fallback: () => string[]
-): Promise<string[]> {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  const timeout = new Promise<string[]>((resolve) => {
-    timer = setTimeout(() => resolve(fallback()), FOLLOWUP_TIMEOUT_MS);
-  });
-  return Promise.race([pending.catch(fallback), timeout]).finally(() => {
-    if (timer) clearTimeout(timer);
-  });
 }
 
 function jsonResponse(body: unknown, status: number, headers: Record<string, string> = {}): Response {
@@ -117,7 +92,7 @@ export async function POST(req: Request) {
     );
     const retrievalQuery = buildRetrievalQuery(trimmedMessage, safeHistory);
 
-    const topChunks = await retrieveRelevantChunks(retrievalQuery, 30);
+    const { chunks: topChunks, queryVector } = await retrieveRelevantChunks(retrievalQuery, 30);
     const reranked = await rerankChunks(retrievalQuery, topChunks, 10);
     // Retrieval that comes back with no project and no role is how a broad
     // question turns into invented detail: the floor pins the work the home
@@ -173,21 +148,6 @@ export async function POST(req: Request) {
 
           req.signal.addEventListener("abort", closeStream, { once: true });
 
-          const followupInput = (visible: string) => ({
-            userMessage: trimmedMessage,
-            aiResponse: stripBodyPrefix(visible),
-            chunkSources: context.map((c) => c.source),
-            history: safeHistory,
-          });
-
-          /*
-           * Started mid-answer, not after it. This is a second, unstreamed model
-           * call, and waiting for the answer to finish before starting it is what
-           * made the questions feel slow: the visitor paid for the whole answer,
-           * then paid again for the questions.
-           */
-          let followupsPending: Promise<string[]> | null = null;
-
           // The first attempt is the stream already opened above; a retry opens a
           // new one, which is the only way an empty answer can be replaced without
           // the visitor seeing it replaced.
@@ -201,31 +161,17 @@ export async function POST(req: Request) {
             const result = await streamAnswer({
               start: nextStream,
               emit: enqueueText,
-              onProgress: (visible) => {
-                if (!followupsPending && visible.length >= FOLLOWUP_START_CHARS) {
-                  followupsPending = generateFollowups(followupInput(visible));
-                }
-              },
               stopped: () => closed || req.signal.aborted,
             });
 
             const accumulated = result.text;
 
             if (!closed && !req.signal.aborted && !accumulated.includes(FOLLOWUP_DELIMITER)) {
-              // The delimiter goes out first: it is what tells the client the
-              // answer is finished, so the answer stops reading as in flight
-              // while the questions are still being written.
               enqueueText(FOLLOWUP_DELIMITER);
               const body = stripBodyPrefix(accumulated);
-              // A refusal or a "couldn't find that" answer has nothing to follow
-              // up on, and asking the model anyway produced questions about a
-              // company he never worked at.
               const followups = isNonAnswer(body)
-                ? DEFAULT_FOLLOWUPS
-                : await withinFollowupBudget(
-                    followupsPending ?? generateFollowups(followupInput(accumulated)),
-                    () => buildFallbackFollowups(trimmedMessage, body)
-                  );
+                ? QUESTION_BANK.filter((entry) => entry.starter).map((entry) => entry.question).slice(0, 3)
+                : selectChips({ queryVector, question: trimmedMessage, asked: safeHistory.filter((m) => m.role === "user").map((m) => m.content) });
               enqueueText(sanitizeDashes(formatFollowupsTail(followups)));
             }
 
