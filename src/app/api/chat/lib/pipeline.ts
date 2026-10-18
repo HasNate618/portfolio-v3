@@ -61,7 +61,7 @@ export function toDocuments(chunks: ContextChunk[]): ChatDocument[] {
 
   for (const chunk of chunks) {
     const section = chunk.section || "body";
-    const id = `${chunk.source}#${section}`;
+    const id = `${chunk.source}#${idSafe(section)}`;
     if (seen.has(id)) continue;
 
     seen.add(id);
@@ -69,6 +69,15 @@ export function toDocuments(chunks: ContextChunk[]): ChatDocument[] {
   }
 
   return documents;
+}
+
+/**
+ * Cohere rejects the entire request when a document id contains whitespace, and a
+ * section is a heading somebody wrote: "Focus areas". Only the id is rewritten. The
+ * title keeps the heading as written, because a person reads the title.
+ */
+function idSafe(section: string): string {
+  return section.trim().replace(/[^A-Za-z0-9]+/g, "-");
 }
 
 /**

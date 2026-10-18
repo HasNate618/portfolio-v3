@@ -22,6 +22,20 @@ test("two sections of one doc both survive", () => {
   assert.equal(docs[1].data.title, "projects/campus.md > Results");
 });
 
+/*
+ * Cohere rejects the whole request when a document id contains whitespace:
+ * "invalid request: document id contains whitespace for document index 0". Sections
+ * are prose, so an id built from one has to be made safe. The title keeps the section
+ * as written, because a person reads that and a machine reads the id.
+ */
+test("a document id carries no whitespace, whatever the section is called", () => {
+  const docs = toDocuments([{ text: "x", source: "about.md", section: "Focus areas" }]);
+
+  assert.equal(docs[0].id, "about.md#Focus-areas");
+  assert.doesNotMatch(docs[0].id, /\s/, `${docs[0].id} still has whitespace`);
+  assert.equal(docs[0].data.title, "about.md > Focus areas");
+});
+
 test("the same section twice is one document", () => {
   const docs = toDocuments([
     { text: "first", source: "projects/campus.md", section: "Results" },
