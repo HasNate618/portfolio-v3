@@ -38,7 +38,7 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 
 - **Python**: [Campus](projects/campus.md), [AWARE](projects/aware.md), [TeraGo](experience/terago.md), [3D Western](experience/3d-western.md), [AgenticArmy](projects/agenticarmy.md)
 - **TypeScript**: [Campus](projects/campus.md), [Portfolio v2](projects/portfolio-v2.md)
-- **Rust**: [AgntOS](projects/agntos.md) (abandoned)
+- **Rust**: [ferret](projects/ferret.md), [AgntOS](projects/agntos.md) (abandoned)
 - **C#**: [Glyph](projects/glyph.md), [Careerly](projects/careerly.md)
 - **Kotlin**: [Animarker](projects/animarker.md), [SafeRoute](projects/saferoute.md)
 - **SQL**: [Campus](projects/campus.md)

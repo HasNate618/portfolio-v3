@@ -61,6 +61,17 @@ test("no rank label reaches the corpus", () => {
   assert.doesNotMatch(getCorpusDoc("projects/homelab.md")!.text, /^Rank:/m);
 });
 
+/*
+ * The Rust line named only AgntOS, which is abandoned, so the skills surface sent
+ * a reader to the one project nobody maintains.
+ */
+test("the Rust line names the project that still exists", () => {
+  const line = getCorpusDoc("skills.md")!.text.split("\n").find((l) => l.startsWith("- **Rust**"));
+  assert.ok(line, "the skills doc must list Rust");
+  assert.match(line!, /ferret/);
+  assert.match(line!, /AgntOS/);
+});
+
 test("an unranked project's doc claims no rank", () => {
   assert.doesNotMatch(getCorpusDoc("projects/glyph.md")!.text, /^Rank:/m);
 });
