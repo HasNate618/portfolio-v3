@@ -14,4 +14,4 @@ Updated October 2026.
 
 - School. Third year of Software Engineering at Western.
 - Campus. Using it every day across {{stat:campus.courses}} courses.
-- Homelab. Both NixOS machines run 24/7. Agents propose config changes, and nothing applies until I approve it.
+- Homelab. Both NixOS machines run 24/7. The server's agent waits for my approval on every change; the laptop's commits and asks me to test.

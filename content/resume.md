@@ -45,9 +45,9 @@ updated: 2026-10-16
 
 ### NixOS homelab
 
-- Defined a laptop and home server entirely in version-controlled NixOS config ({{stat:homelab.containers}} hardened containers, Tailscale-only access, sops-nix secrets), so every change is a reviewable, reversible diff.
-- Run one Hermes Agent profile per host that makes changes as config edits, over {{stat:homelab.sessions}} sessions and {{stat:homelab.toolCalls}} tool calls since June, with subagents taking larger investigations.
-- Gated agent changes behind my approval and a nixos-safe-rebuild guard, with rollback to the last good build.
+- Defined a laptop and home server entirely in version-controlled NixOS config ({{stat:homelab.containers}} containers, Tailscale-only access, sops-nix secrets), so every change is a reviewable, reversible diff.
+- Run one Hermes Agent profile per host that makes changes as config edits, over {{stat:homelab.sessions}} sessions since June, with subagents taking larger investigations.
+- Gave each machine's agent its own level of autonomy: the server agent waits for approval on a full diff, the laptop agent commits and asks me to test, and both rebuild through a host-checked guard with generation rollback.
 - Grew a git-versioned library of {{stat:homelab.skills}} agent skills on low-cost models, pruned weekly by a curator that keeps backups of removed skills.
 
 ### AWARE

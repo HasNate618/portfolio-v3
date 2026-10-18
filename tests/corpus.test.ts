@@ -134,6 +134,6 @@ test("a project that states its limits carries them into its doc", () => {
     assert.ok(project.file, `${project.name} states limits but has no doc`);
     const text = getCorpusDoc(project.file!.replace("/knowledgebase/", ""))!.text;
     assert.match(text, /^Limits: /m, `${project.name} has no Limits line`);
-    assert.ok(text.includes(project.limits!), `${project.name} lost its limits text`);
+    assert.ok(text.includes(thirdPerson(project.limits!)), `${project.name} lost its limits text`);
   }
 });

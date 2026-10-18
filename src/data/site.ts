@@ -128,7 +128,7 @@ export const site: SiteContent = {
       id: "campus", name: "Campus", group: "featured", order: 1,
       dates: "Aug 2026 to present", displayRole: "solo",
       covers: "My courses are spread across six Brightspace pages, so I built one place to check deadlines, study from slides and test a draft against the brief. Campus syncs everything into SQLite and answers from the course files with hybrid retrieval: a lexical prefilter, embeddings and a cross-encoder reranker. Its 20-tool agent logs every change it makes to my notes or due dates, and it runs on any OpenAI-compatible endpoint, local or hosted.",
-      limits: "The agent edits notes and due dates directly and logs every write with the before and after. Campus has no approval gate and no rollback; the NixOS homelab is the project that gates changes and rolls them back.",
+      limits: "The agent edits notes and due dates directly and logs every write with the before and after. Campus has no approval gate and no rollback; the NixOS homelab's server profile gates changes and rolls them back.",
       media: [
         { src: "/projects/campus-0.svg", alt: "Campus wordmark", width: 2221, height: 763, contain: true },
         { src: "/projects/campus-1.webp", alt: "Campus course hub and chat, with an exact citation", width: 1200, height: 675 },
@@ -151,9 +151,10 @@ export const site: SiteContent = {
     {
       id: "homelab", name: "NixOS homelab", group: "featured", order: 2,
       dates: "May 2026 to present", displayRole: "solo",
-      covers: "My laptop and a home server built from used parts run from one NixOS flake. Hermes Agent, from Nous Research, proposes the config changes, but nothing applies until I approve it, and a failed build rolls back to the last good one. One bug I won't forget: I set a WireGuard VPN as the server's default route, the peer died, and the whole machine went dark until I reset it by hand. Now the VPN lives inside the one container that needs it.",
+      covers: "My laptop and a home server built from used parts run from one NixOS flake, with a Hermes Agent profile for each. The server's agent plans, shows me the full diff and waits for my approval; the laptop's commits directly and asks me to test. Both rebuild through a guard that refuses the wrong machine, and a Bifrost gateway gives Campus and my other AI services one endpoint for local and cloud models.",
+      limits: "The two profiles differ on purpose: the server profile waits for approval on a full diff, and the laptop profile commits directly and asks me to test. Agent session and skill counts are self-reported by the agents. No one else uses it.",
       media: [
-        { src: "/projects/homelab-0.webp", alt: "Homelab Dashboard and Service Overview", width: 1155, height: 891 },
+        { src: "/projects/homelab-architecture.webp", alt: "Architecture diagram. A git repo holds one Nix flake with hosts, modules and sops-encrypted secrets, and both machines build from it. The laptop, flow, runs two Hermes Agent profiles, llama.cpp on an RTX 4060 and the desktop. The server, home, runs 35 containers and 10 native services and backs up to a NAS. Arrows show the homelab profile reaching the server over SSH, and the server's Bifrost gateway using the laptop's local models.", width: 1600, height: 1011 },
       ],
       file: "/knowledgebase/projects/homelab.md",
       onResume: true,
@@ -161,10 +162,9 @@ export const site: SiteContent = {
       links: [{ label: "GitHub (public NixOS config)", href: "https://github.com/HasNate618/nixos-config-public" }],
       stats: [
         { key: "machines", label: "machines, one NixOS flake", value: "2" },
-        { key: "containers", label: "hardened containers", value: "27" },
-        { key: "sessions", label: "agent sessions since June 2026", value: "472", home: false },
-        { key: "skills", label: "agent skills in git", value: "191", home: false },
-        { key: "toolCalls", label: "tool calls", value: "58,000", home: false },
+        { key: "containers", label: "containers on the server", value: "35" },
+        { key: "sessions", label: "agent sessions, Jun to Oct 2026 (self-reported by the agents)", value: "411", home: false },
+        { key: "skills", label: "saved agent skills (self-reported by the agents)", value: "1,140", home: false },
       ],
       stack: ["NixOS", "Nix flakes", "Docker", "Tailscale", "Hermes Agent", "llama.cpp"],
     },

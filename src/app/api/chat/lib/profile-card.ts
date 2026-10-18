@@ -36,7 +36,7 @@ const SOLO =
 const CAVEATS = [
   "- AWARE runs every model on the board: there is no cloud inference.",
   "- ferret runs fully offline; nothing leaves the machine.",
-  "- Campus has no approval gate and no rollback; the NixOS homelab is the project that gates changes and rolls them back.",
+  "- Campus has no approval gate and no rollback; the NixOS homelab's server profile gates changes and rolls them back, and its laptop profile does not.",
   "- 3D Western's dataset labels were VLM-checked, so its accuracy figures are agreement with those labels, not ground truth.",
 ];
 

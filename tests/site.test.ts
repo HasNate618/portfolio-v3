@@ -34,10 +34,12 @@ test("no project stack is long enough to bury its card", () => {
 
 test("Homelab carries the figures the draft states", () => {
   const stats = Object.fromEntries(getProject("homelab")!.stats.map((s) => [s.key, s.value]));
-  assert.equal(stats.sessions, "472");
-  assert.equal(stats.toolCalls, "58,000");
-  assert.equal(stats.skills, "191");
-  assert.equal(stats.containers, "27");
+  assert.equal(stats.sessions, "411");
+  assert.equal(stats.skills, "1,140");
+  assert.equal(stats.containers, "35");
+  // No tool-call count: the 58,000 came from the Oct 11 report, which counted
+  // child and resumed rows, and the Oct 18 self-reports replaced it.
+  assert.equal(stats.toolCalls, undefined);
 });
 
 test("TeraGo keeps its corrected dates and the 760-case figure", () => {
