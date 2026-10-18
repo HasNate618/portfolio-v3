@@ -2,7 +2,11 @@ import { retrieveRelevantChunks, rerankChunks } from "./lib/rag";
 import { buildRetrievalQuery } from "./lib/retrieval-query";
 import { buildSystemPrompt } from "./lib/system-prompt";
 import { withCoverageFloor } from "./lib/context";
-import { CHIP_FEATURE_DEFAULT, formatFollowupsTail, generateChips } from "./lib/generate-followups";
+import { formatFollowupsTail, generateChips } from "./lib/generate-followups";
+import { routeIntent } from "./lib/intent";
+import { availabilityAsked, choosePointer, contactAsked } from "./lib/pointer";
+import { buildProfileCard } from "./lib/profile-card";
+import { namedSubjectId, routeTopic } from "./lib/topic";
 import { DEFAULT_FOLLOWUPS, isNonAnswer } from "./lib/followup-fallback";
 import { askedAboutAbandoned } from "./lib/chips-validate";
 import { checkChatDailyCap, checkRateLimit, SITE_KEY } from "./lib/rate-limit";
@@ -98,7 +102,33 @@ export async function POST(req: Request) {
     // page leads with, and only then. A question that names a project or a role
     // is specific, so it keeps the context retrieval chose for it.
     const context = withCoverageFloor(reranked, trimmedMessage);
-    const systemPrompt = buildSystemPrompt(context);
+
+    /*
+     * The question, read with the turn before it: a visitor who says "tell me
+     * more" is still asking about the last subject. The topic decides what to
+     * lead with, the intent decides whether to read the visitor as hiring, and
+     * the pointer is chosen from the visitor's own words, because it is the line
+     * the answer ends with.
+     */
+    const lastUserTurn = [...safeHistory].reverse().find((entry) => entry.role === "user")?.content ?? "";
+    const turn = safeHistory.filter((entry) => entry.role === "user").length + 1;
+    const topic = routeTopic(`${trimmedMessage} ${lastUserTurn}`);
+    const intent = routeIntent(trimmedMessage, safeHistory);
+    const pointer = choosePointer({
+      namedSubjectId: namedSubjectId(trimmedMessage),
+      intent,
+      turn,
+      contactAsked: contactAsked(trimmedMessage),
+      availabilityAsked: availabilityAsked(trimmedMessage),
+    });
+
+    const systemPrompt = buildSystemPrompt({
+      featureIds: topic.feature,
+      intent,
+      pointer,
+      card: buildProfileCard(),
+      chunks: context,
+    });
 
     const cohere = getCohereClient();
 
@@ -185,7 +215,7 @@ export async function POST(req: Request) {
                       title: chunk.source,
                       firstLine: chunk.text.split("\n")[0]?.slice(0, 160) ?? "",
                     })),
-                    featureIds: CHIP_FEATURE_DEFAULT,
+                    featureIds: topic.feature,
                     asked: [...askedBefore, trimmedMessage],
                     userAskedAbandoned: askedAboutAbandoned(trimmedMessage),
                     pathIndex: askedBefore.length,

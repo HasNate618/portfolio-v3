@@ -1,5 +1,6 @@
 import { checkRateLimit } from "../lib/rate-limit";
-import { CHIP_FEATURE_DEFAULT, generateChips } from "../lib/generate-followups";
+import { generateChips } from "../lib/generate-followups";
+import { routeTopic } from "../lib/topic";
 import { askedAboutAbandoned } from "../lib/chips-validate";
 import { DEFAULT_FOLLOWUPS } from "../lib/followup-fallback";
 
@@ -35,7 +36,7 @@ export async function POST(req: Request) {
       userMessage,
       answer: aiResponse,
       docs: [],
-      featureIds: CHIP_FEATURE_DEFAULT,
+      featureIds: routeTopic(userMessage).feature,
       asked: [],
       userAskedAbandoned: askedAboutAbandoned(userMessage),
     });

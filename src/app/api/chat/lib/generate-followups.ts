@@ -17,7 +17,6 @@ import {
  * The feature list a chip may point at when nothing has routed the question yet.
  * Stage 3 replaces this at the call sites with the topic router's own list.
  */
-export const CHIP_FEATURE_DEFAULT = ["terago", "3d-western", "homelab", "aware", "campus", "carebridge"];
 
 export interface GenerateChipsInput {
   userMessage: string;
