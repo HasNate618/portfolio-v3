@@ -1,6 +1,7 @@
 import { DashFilter } from "./sanitize-dashes";
 import { BannedPhraseFilter } from "./banned-phrases";
 import { RepeatGuard } from "./repeat-guard";
+import { site } from "@/data/site";
 
 /**
  * A Cohere stream event, as far as this module needs it. The SDK types the stream
@@ -198,6 +199,17 @@ export async function streamAnswer(options: StreamAnswerOptions): Promise<Answer
     if (text.trim().length > 0 || attempt === limit || stopped()) break;
 
     console.warn(`Chat returned no visible answer; retrying (attempt ${attempt + 1} of ${limit})`);
+  }
+
+  /*
+   * Both attempts can come back empty: a thinking-only generation, or a 422, which is
+   * what left a visitor with a blank bubble. An honest line is better than nothing, and
+   * the address in it is a fact the site holds rather than something the model wrote.
+   */
+  if (text.trim().length === 0 && !stopped()) {
+    text = `Nathan's assistant could not put that answer together just now. Ask again, or reach him at ${site.contact.email}.`;
+    options.emit(text);
+    options.onProgress?.(text);
   }
 
   return { text, attempts, retried: attempts > 1, truncated };

@@ -61,11 +61,13 @@ test("a whitespace-only answer counts as empty", async () => {
   assert.equal(result.retried, true);
 });
 
-test("two empty answers are not retried again", async () => {
+test("two empty answers end in an honest line, not a blank bubble", async () => {
   const result = await collect({ start: sources(attempt({ thinking: true }), attempt({ thinking: true })) });
-  assert.equal(result.text, "");
   assert.equal(result.attempts, 2);
   assert.equal(result.retried, true, "it tried again, and stopped");
+  // A blank bubble was the outcome a visitor actually saw when both attempts came back empty.
+  assert.match(result.text, /could not put that answer together/);
+  assert.match(result.text, /@/, "the line offers the address the site holds");
 });
 
 test("dashes are converted as the text streams", async () => {
