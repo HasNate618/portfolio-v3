@@ -8,6 +8,10 @@
  *
  * This is a pronoun swap, not a rewrite: it does not repair a sentence whose
  * grammar depended on the first person.
+ *
+ * A team "we" becomes "the team", never "he". Handing Nathan the first person plural
+ * credits him with everyone else's work, which is the one direction this must not lean,
+ * and it was what "we shaped the concept" became before this rule.
  */
 export function thirdPerson(text: string): string {
   return text
@@ -17,9 +21,9 @@ export function thirdPerson(text: string): string {
     .replace(/\bmy\b/gi, "his")
     .replace(/\bmine\b/gi, "his")
     .replace(/\bme\b/g, "him")
-    .replace(/\bour\b/gi, "his")
-    .replace(/\bwe\b/gi, "he")
-    .replace(/\bus\b/g, "him");
+    .replace(/\bour\b/gi, (match) => (match === "Our" ? "The team's" : "the team's"))
+    .replace(/\bwe\b/gi, (match) => (match === "We" ? "The team" : "the team"))
+    .replace(/\bus\b/g, "the team");
 }
 
 /** True when a line still speaks as Nathan, which is what the card and corpus check. */
