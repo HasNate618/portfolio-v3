@@ -240,6 +240,7 @@ async function main(): Promise<void> {
   const hedgeHits: string[] = [];
   const lengths: Array<{ id: string; words: number }> = [];
   const lengthsOutOfRange: string[] = [];
+  const emptyAnswers: string[] = [];
   let pointerOk = 0;
   let pointerTotal = 0;
   const latencies: number[] = [];
@@ -262,6 +263,14 @@ async function main(): Promise<void> {
     for (const problem of checks.chipProblems) chipProblems.push(`${item.id}: ${problem}`);
 
     if (DASH.test(answer.text)) dashHits.push(item.id);
+
+    /*
+     * A blank answer is the worst thing a visitor can receive, and scoring it as a
+     * threshold miss hides the cause: the generation produced nothing at all. The GPA
+     * question returned an empty answer on one run and its mustAny group was then
+     * reported as a wording failure.
+     */
+    if (answer.text.trim().length === 0) emptyAnswers.push(item.id);
     if (!EXEMPT.has(item.id) && HEDGES.test(answer.text)) hedgeHits.push(item.id);
 
     // A yes/no answer that answers the question is complete; padding it to a word count
@@ -311,6 +320,7 @@ async function main(): Promise<void> {
       pass: mustNotHits.length + bannedHits.length === 0,
     },
     { name: "dashes", value: String(dashHits.length), pass: dashHits.length === 0 },
+    { name: "empty answers", value: String(emptyAnswers.length), pass: emptyAnswers.length === 0 },
     { name: "hedges", value: String(hedgeHits.length), pass: hedgeHits.length === 0 },
     {
       name: "length median (substantive)",
@@ -346,6 +356,7 @@ async function main(): Promise<void> {
 
   for (const [label, list] of [
     ["mustAny misses", mismatches],
+    ["empty answers", emptyAnswers],
     ["mustNot hits", mustNotHits],
     ["banned hits", bannedHits],
     ["hedges", hedgeHits],

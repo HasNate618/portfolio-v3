@@ -50,16 +50,7 @@
       "q": "What team or industry experience does Nathan have?",
       "mustAny": [
         [
-          "760"
-        ],
-        [
-          "2,559|2559"
-        ],
-        [
-          "4,620|4620"
-        ],
-        [
-          "MCC"
+          "Microcomputer Consulting"
         ]
       ],
       "mustNot": [],
