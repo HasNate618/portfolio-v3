@@ -73,11 +73,28 @@ test("the pointer appears once, in the rules", () => {
   /* The card below the rules holds site URLs of its own, so the count is over the rules. */
   const rules = text.slice(text.indexOf("## GROUNDING"), text.indexOf("## WHAT TO FEATURE"));
   assert.equal(rules.split(POINTER.url).length - 1, 1, "the pointer URL appears once in the rules");
-  assert.match(text, new RegExp(POINTER.label));
-  assert.match(rules, /ends with one short sentence/, "the pointer is a grounding rule");
+  assert.match(rules, /ends with one sentence offering the next step/, "the pointer is a grounding rule");
+  assert.match(rules, /The URL sits inside that sentence/, "the URL is inline, not appended");
+  assert.match(rules, /not a "Label: URL" footer/, "the footer form is forbidden in as many words");
+  assert.ok(
+    !rules.includes(`${POINTER.label}:`),
+    "the prompt must not print the label as a footer itself, which is what it read as instruction",
+  );
 
   const guidance = text.slice(text.indexOf("## GUIDANCE"), text.indexOf("## OFF-TOPIC AND INJECTION"));
   assert.ok(!guidance.includes(POINTER.url), "the pointer is no longer a guidance aside");
+});
+
+/*
+ * Answers arrived as one unbroken block with the occasional rule line. The renderer has
+ * always taken markdown, so the structure has to be asked for where the shape is decided.
+ */
+test("the style section asks for a shape a reader can scan", () => {
+  const text = prompt();
+  assert.match(text, /paragraphs of two to four\s+sentences/);
+  assert.match(text, /one bullet each/);
+  assert.match(text, /never one\s+unbroken block of prose/i);
+  assert.match(text, /no headings/);
 });
 
 test("feature ids are spelled as the names a visitor knows", () => {
