@@ -171,3 +171,78 @@ export function repairChip(question: string): string {
     .replace(/\bhim\b/gi, "Nathan")
     .trim();
 }
+
+const GENERAL_DEEPER = "What does Nathan build?";
+const DEFAULT_ADJACENT = "What did Nathan build at TeraGo?";
+
+/** The next step in hiring a student, in the order it becomes relevant. */
+const PATH_TEMPLATES = [
+  "Is Nathan available for a Summer 2027 internship?",
+  "When does Nathan graduate?",
+  "Where is Nathan's résumé?",
+  "How can I contact Nathan?",
+];
+
+/** A question the card can answer by construction, for one subject. */
+function slotFor(id: string): ChipSlot {
+  const role = site.experience.find((entry) => entry.id === id);
+  if (role) return { question: `What did Nathan build at ${role.org}?`, subject: id };
+
+  const project = getProject(id);
+  if (project) return { question: `How does Nathan's ${project.name} work?`, subject: id };
+
+  return { question: GENERAL_DEEPER, subject: "nathan" };
+}
+
+function wasAsked(question: string, asked: string[]): boolean {
+  return asked.some((prior) => normalizeWords(prior) === normalizeWords(question));
+}
+
+function nextFeatureSlot(answerSubject: string, featureIds: string[], asked: string[]): ChipSlot {
+  if (featureIds.length > 0) {
+    // From the answered subject, forwards, wrapping: -1 starts at the first.
+    const start = featureIds.indexOf(answerSubject);
+    for (let step = 1; step <= featureIds.length; step += 1) {
+      const id = featureIds[(start + step) % featureIds.length];
+      if (id === answerSubject) continue;
+      const candidate = slotFor(id);
+      if (!wasAsked(candidate.question, asked)) return candidate;
+    }
+  }
+  return { question: DEFAULT_ADJACENT, subject: "terago" };
+}
+
+function nextPathSlot(pathIndex: number, asked: string[]): ChipSlot {
+  const start = ((pathIndex % PATH_TEMPLATES.length) + PATH_TEMPLATES.length) % PATH_TEMPLATES.length;
+  for (let step = 0; step < PATH_TEMPLATES.length; step += 1) {
+    const question = PATH_TEMPLATES[(start + step) % PATH_TEMPLATES.length];
+    if (!wasAsked(question, asked)) return { question, subject: "nathan" };
+  }
+  // Every path line has been asked. A repeat beats an empty slot.
+  return { question: PATH_TEMPLATES[start], subject: "nathan" };
+}
+
+/**
+ * The last resort, and the reason the page always shows three questions: every
+ * template is answerable from the card alone, so none of them can invent a
+ * premise the answer did not have.
+ */
+export function templateChips(input: {
+  answerSubject: string;
+  featureIds: string[];
+  asked: string[];
+  pathIndex: number;
+}): ChipSet {
+  const { answerSubject, featureIds, asked, pathIndex } = input;
+
+  const primary = slotFor(answerSubject);
+  const deeper = wasAsked(primary.question, asked)
+    ? { question: GENERAL_DEEPER, subject: "nathan" }
+    : primary;
+
+  return {
+    deeper,
+    adjacent: nextFeatureSlot(answerSubject, featureIds, asked),
+    path: nextPathSlot(pathIndex, asked),
+  };
+}

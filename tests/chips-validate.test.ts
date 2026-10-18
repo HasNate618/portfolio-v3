@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   chipSubjectIds,
   repairChip,
+  templateChips,
   validateChip,
   type ChipSlotName,
 } from "../src/app/api/chat/lib/chips-validate";
@@ -135,4 +136,61 @@ test("subjects are the live projects, the roles and Nathan", () => {
   assert.ok(ids.includes("nathan"));
   assert.ok(!ids.includes("agntos"));
   assert.ok(!ids.includes("cyberdeck"));
+});
+
+const FEATURES = ["campus", "terago", "aware"];
+
+function templates(over: Partial<Parameters<typeof templateChips>[0]> = {}) {
+  return templateChips({ answerSubject: "campus", featureIds: FEATURES, asked: [], pathIndex: 0, ...over });
+}
+
+test("templates fill the three slots from the card alone", () => {
+  const chips = templates();
+  assert.equal(chips.deeper.question, "How does Nathan's Campus work?");
+  assert.equal(chips.deeper.subject, "campus");
+  assert.equal(chips.adjacent.question, "What did Nathan build at TeraGo?");
+  assert.equal(chips.adjacent.subject, "terago");
+  assert.equal(chips.path.question, "Is Nathan available for a Summer 2027 internship?");
+  assert.equal(chips.path.subject, "nathan");
+  for (const slot of ["deeper", "adjacent", "path"] as ChipSlotName[]) {
+    const chip = chips[slot];
+    assert.deepEqual(
+      validateChip({ ...chip, slot, answerSubject: "campus", asked: [], userAskedAbandoned: false }),
+      [],
+      `${slot} template must pass validation`,
+    );
+  }
+});
+
+test("a role answer gets the org template, and the next feature follows", () => {
+  const chips = templates({ answerSubject: "terago", pathIndex: 1 });
+  assert.equal(chips.deeper.question, "What did Nathan build at TeraGo?");
+  assert.equal(chips.adjacent.question, "How does Nathan's AWARE work?");
+  assert.equal(chips.adjacent.subject, "aware");
+  assert.equal(chips.path.question, "When does Nathan graduate?");
+});
+
+test("an unanswerable subject still gets three questions", () => {
+  const chips = templates({ answerSubject: "nathan", featureIds: [] });
+  assert.equal(chips.deeper.question, "What does Nathan build?");
+  assert.equal(chips.adjacent.question, "What did Nathan build at TeraGo?");
+});
+
+test("a template already in the thread is skipped", () => {
+  assert.equal(
+    templates({ asked: ["What did Nathan build at TeraGo?"] }).adjacent.question,
+    "How does Nathan's AWARE work?",
+  );
+  assert.equal(
+    templates({ asked: ["How does Nathan's Campus work?"] }).deeper.question,
+    "What does Nathan build?",
+  );
+});
+
+test("the path line rotates with the thread and skips what was asked", () => {
+  assert.equal(templates({ pathIndex: 4 }).path.question, "Is Nathan available for a Summer 2027 internship?");
+  assert.equal(
+    templates({ pathIndex: 0, asked: ["Is Nathan available for a Summer 2027 internship?"] }).path.question,
+    "When does Nathan graduate?",
+  );
 });
