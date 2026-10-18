@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-const BASE = "http://localhost:3100";
+// A port override, because a production server may already own 3100: the checker
+// only needs a freshly built one, not that exact port.
+const BASE = process.env.CHECK_RENDER_BASE ?? "http://localhost:3100";
 
 async function fetchPath(p) {
   const res = await fetch(BASE + p);
@@ -40,6 +42,14 @@ try {
   // --- KB boundary ---
   const kb = await fetchPath("/knowledgebase/not-a-real-file.md");
   pass(kb.status === 404, "/knowledgebase/not-a-real-file.md: expected 404");
+
+  // --- a retired word must not reach the served surface ---
+  for (const p of ["/", "/llms.txt", "/knowledgebase/about.md",
+    "/knowledgebase/projects/campus.md", "/knowledgebase/projects/index.md"]) {
+    const r = p === "/" ? homeR : await fetchPath(p);
+    pass(!/flagship/i.test(r.body), `${p}: contains a word the site has retired`);
+    pass(!/^Rank:/m.test(r.body), `${p}: still carries a rank line`);
+  }
 
   // --- llms.txt / robots / sitemap content types and content ---
   const llms = await fetchPath("/llms.txt");
