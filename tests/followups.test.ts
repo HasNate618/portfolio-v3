@@ -60,10 +60,11 @@ test("the chip prompt names no abandoned project", () => {
  * said every question "says Nathan". A live sample of 30 chips followed the
  * first: 13 said "Nathan", the rest used he or his.
  */
-test("the chip prompt asks for Nathan every time, not for he or his", () => {
+test("the chip prompt requires the word Nathan and shows what that means", () => {
   const prompt = buildChipPrompt(CHIP_INPUT);
   assert.doesNotMatch(prompt, /\(he\/his\/Nathan\)/);
-  assert.match(prompt, /says "Nathan"/);
+  assert.match(prompt, /must contain the word "Nathan"/, "a naming preference is not enough: the model drops it");
+  assert.match(prompt, /How does Nathan's outage-email parser work\?/, "the prompt shows the shape it wants");
   assert.match(prompt, /never "he", "his" or "him"/);
 });
 
