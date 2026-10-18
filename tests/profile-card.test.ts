@@ -4,7 +4,7 @@ import { buildProfileCard } from "../src/app/api/chat/lib/profile-card";
 import { TEAM_NO_ROLE_IDS } from "../src/app/api/chat/lib/chips-validate";
 import { BANNED_WORD_PATTERNS } from "../src/lib/banned-words";
 import { speaksAsNathan } from "../src/lib/voice";
-import { site } from "../src/data/site";
+import { awardFor, site } from "../src/data/site";
 
 const card = buildProfileCard();
 const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -44,6 +44,18 @@ test("every project gets exactly one line", () => {
 test("solo is not an award", () => {
   assert.match(card, /Neither won an award/);
   assert.match(card, /Built solo: AWARE \(Hack the 6ix 2026\) and Animarker \(May 2023\)/);
+});
+
+/*
+ * The sentence above is typed, so the fact it asserts is derived instead: if a solo
+ * hackathon project ever wins something, this fails rather than leaving the card
+ * claiming that neither of the two did.
+ */
+test("the solo sentence names the only solo hackathon projects without an award", () => {
+  const solo = site.projects.filter(
+    (project) => project.displayRole === "solo" && project.event && !awardFor(project.name),
+  );
+  assert.deepEqual(solo.map((project) => project.name), ["AWARE", "Animarker"]);
 });
 
 test("team projects without a recorded role say so", () => {

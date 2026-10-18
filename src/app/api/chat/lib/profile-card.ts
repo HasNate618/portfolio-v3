@@ -24,8 +24,11 @@ import { TEAM_NO_ROLE_IDS } from "./chips-validate";
 /**
  * The one sentence that must not be paraphrased. The prototype turned the solo
  * list into "solo wins", and a negative has to be said out loud to survive.
- * Both halves are checked against site.ts by a test: enforcement stops at the
- * fire, and the two answers to "does it run offline" stay opposite.
+ *
+ * The list is typed rather than derived, because its two parentheticals are of
+ * different kinds: an event for one and a date for the other. What a test pins is
+ * the fact the sentence asserts, that the only solo projects which ran at an event
+ * and won nothing are those two, so "Neither won an award" cannot become false.
  */
 const SOLO =
   "Built solo: AWARE (Hack the 6ix 2026) and Animarker (May 2023). Neither won an award. Every other hackathon project was a team project.";

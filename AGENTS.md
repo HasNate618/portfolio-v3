@@ -21,7 +21,7 @@ npm run lint
 npm run typecheck   # tsc over src/ and tests/
 npm run test
 npm run check:content     # content/index/SEO consistency
-npm run check:words       # banned words, currently "flagship"
+npm run check:words       # banned words; the list lives in src/lib/banned-words.ts
 npm run check:contrast    # 4.5:1 text contrast
 npm run check:embeddings  # embedding cache freshness
 npm run check:render      # JS-off served HTML, against a running `npm start`

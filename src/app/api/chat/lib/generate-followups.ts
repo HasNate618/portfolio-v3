@@ -13,11 +13,6 @@ import {
   type ChipSlotName,
 } from "./chips-validate";
 
-/**
- * The feature list a chip may point at when nothing has routed the question yet.
- * Stage 3 replaces this at the call sites with the topic router's own list.
- */
-
 export interface GenerateChipsInput {
   userMessage: string;
   answer: string;
