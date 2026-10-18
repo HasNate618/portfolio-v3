@@ -34,22 +34,46 @@ const NUMBER = /\d[\d,]*(?:\.\d+)?%?/g;
 /** A URL or mailto, stopping at the whitespace or bracket around it. */
 const URL_PATTERN = /(?:https?:\/\/|mailto:)[^\s)\]]+/g;
 
+/** A bare email address, which is what an answer writes for the pointer. */
+const EMAIL_PATTERN = /[\w.+-]+@[\w-]+\.[\w.]+/g;
+
+/**
+ * Every URL or email in the text, as a reader would recognize them: trailing sentence
+ * punctuation removed, `mailto:` normalized away, duplicates collapsed.
+ *
+ * The whitelist holds both `mailto:nate@…` and `nate@…`, so counting whitelist entries
+ * that appear in a paragraph counted one pointer twice. Counting the URLs the text
+ * actually contains cannot do that.
+ */
+export function urlsIn(text: string): string[] {
+  const found = [...(text.match(URL_PATTERN) ?? []), ...(text.match(EMAIL_PATTERN) ?? [])];
+  return [
+    ...new Set(
+      found.map((url) => url.replace(/[.,;:!?]+$/, "")).map((url) => url.replace(/^mailto:/, "")),
+    ),
+  ];
+}
+
+/** True when the URL is one the site serves or links. */
+export function isWhitelisted(url: string, whitelist: string[]): boolean {
+  const bare = url.replace(/^mailto:/, "");
+  return whitelist.some((allowed) => {
+    const allowedBare = allowed.replace(/^mailto:/, "");
+    return bare === allowedBare || bare.startsWith(allowedBare) || url.startsWith(allowed);
+  });
+}
+
 export function answerChecks(input: AnswerCheckInput): AnswerCheckResult {
   const source = [input.card, ...input.documents.map((doc) => doc.snippet)].join("\n");
 
   const numbers = input.text.match(NUMBER) ?? [];
   const numbersMissing = [...new Set(numbers.filter((number) => !source.includes(number)))];
 
-  const urls = (input.text.match(URL_PATTERN) ?? []).map((url) =>
-    // Sentences end in periods, and a period is not part of the URL.
-    url.replace(/[.,;:!?]+$/, ""),
-  );
-  const urlsMissing = [
-    ...new Set(urls.filter((url) => !input.whitelist.some((allowed) => url.startsWith(allowed)))),
-  ];
+  const urls = urlsIn(input.text);
+  const urlsMissing = [...new Set(urls.filter((url) => !isWhitelisted(url, input.whitelist)))];
 
   const lastParagraph = input.text.trim().split(/\n\s*\n/).pop() ?? "";
-  const pointerUrls = input.whitelist.filter((url) => lastParagraph.includes(url)).length;
+  const pointerUrls = urlsIn(lastParagraph).filter((url) => isWhitelisted(url, input.whitelist)).length;
 
   return { numbersMissing, urlsMissing, pointerUrls };
 }

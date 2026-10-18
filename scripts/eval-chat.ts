@@ -5,6 +5,7 @@ import { runChatTurn, type ChatTurnResult, type HistoryEntry } from "../src/app/
 import { MAX_CHIP_WORDS } from "../src/app/api/chat/lib/chips-validate";
 import { namePattern, subjectAliases } from "../src/app/api/chat/lib/name-match";
 import { pointerWhitelist } from "../src/app/api/chat/lib/pointer";
+import { isWhitelisted, urlsIn } from "../src/app/api/chat/lib/answer-checks";
 import { BANNED_WORD_PATTERNS } from "../src/lib/banned-words";
 
 /**
@@ -238,7 +239,8 @@ async function main(): Promise<void> {
     if (!EXEMPT.has(item.id)) {
       pointerTotal += 1;
       const lastParagraph = answer.text.trim().split(/\n\s*\n/).pop() ?? "";
-      const found = pointerWhitelist().filter((url) => lastParagraph.includes(url)).length;
+      const whitelist = pointerWhitelist();
+      const found = urlsIn(lastParagraph).filter((url) => isWhitelisted(url, whitelist)).length;
       if (found === 1) pointerOk += 1;
     }
 

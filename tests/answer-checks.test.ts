@@ -39,6 +39,22 @@ test("the pointer is counted in the last paragraph", () => {
   assert.equal(out.pointerUrls, 1);
 });
 
+/*
+ * The whitelist holds the address twice, once as a mailto and once bare, so counting
+ * whitelist entries found in the paragraph reported two pointers for one email and
+ * failed the "exactly one" rule on a correct answer.
+ */
+test("an email written as a mailto is one pointer, not two", () => {
+  const out = check("The record doesn't cover it.\n\nEmail: mailto:nate.e.espejo@gmail.com", {
+    whitelist: [...WHITELIST, "mailto:nate.e.espejo@gmail.com", "nate.e.espejo@gmail.com"],
+  });
+  assert.equal(out.pointerUrls, 1);
+});
+
+test("a URL that ends a sentence is not missing over the period", () => {
+  assert.deepEqual(check(`His resume is at ${RESUME}.`).urlsMissing, []);
+});
+
 test("a URL repeated mid-answer is not a pointer", () => {
   const out = check(`${RESUME} is the link.\n\nCampus is a study assistant.`);
   assert.equal(out.pointerUrls, 0);
