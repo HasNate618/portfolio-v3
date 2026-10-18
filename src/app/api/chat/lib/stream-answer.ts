@@ -63,6 +63,28 @@ export const MAX_ANSWER_CHARS = 6000;
 export const ANSWER_ATTEMPTS = 2;
 
 /**
+ * The stream's filter chain, over an answer that arrived whole.
+ *
+ * The eval reads one message instead of a stream, and grading the raw text charged it
+ * for phrases the filter deletes before a visitor sees them: the first stage 4 run
+ * reported "production-ready" in an answer whose served text never contained it. The
+ * order is the stream's own, down to the flush: dashes, then the repeat guard, then the
+ * phrase filter, which only ever sees finished wording.
+ */
+export function finalizeAnswer(text: string, maxChars = MAX_ANSWER_CHARS): string {
+  const dashes = new DashFilter();
+  const phrases = new BannedPhraseFilter();
+  const repeats = new RepeatGuard();
+
+  const capped = text.length > maxChars ? text.slice(0, maxChars) : text;
+  let answer = phrases.push(repeats.push(dashes.push(capped)));
+
+  const guardTail = repeats.push(dashes.flush()) + repeats.flush();
+  answer += phrases.push(guardTail) + phrases.flush();
+  return answer;
+}
+
+/**
  * Whether another attempt could help.
  *
  * 422 is Cohere saying it produced nothing usable, which is the transient shape of a

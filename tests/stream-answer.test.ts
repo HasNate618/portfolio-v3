@@ -1,6 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { streamAnswer, type AnswerDelta, type StreamAnswerOptions } from "../src/app/api/chat/lib/stream-answer";
+import {
+  finalizeAnswer,
+  MAX_ANSWER_CHARS,
+  streamAnswer,
+  type AnswerDelta,
+  type StreamAnswerOptions,
+} from "../src/app/api/chat/lib/stream-answer";
 
 /** Deltas as the Cohere stream delivers them: content, sometimes thinking. */
 function attempt(...deltas: Array<{ text?: string; thinking?: boolean }>): AsyncIterable<AnswerDelta> {
@@ -116,4 +122,34 @@ test("an abort mid-answer keeps the text already sent and does not retry", async
   assert.equal(result.text, "He built ");
   assert.equal(result.attempts, 1, "a partial answer must not be retried");
   assert.equal(result.emitted, "He built ");
+});
+
+/*
+ * The eval reads whole messages, so it needs the stream's filters over a finished
+ * string. Each case is one way the first stage 4 run graded text no visitor received.
+ */
+test("finalizeAnswer deletes a phrase the phrase filter deletes", () => {
+  const out = finalizeAnswer("Campus is a production-ready study tool.");
+  assert.ok(!/production-(?:grade|ready)/i.test(out), out);
+  assert.match(out, /Campus/, "the rest of the sentence survives");
+});
+
+test("finalizeAnswer sanitizes a dash", () => {
+  const out = finalizeAnswer("It is fast \u2014 and local.");
+  assert.ok(!/[\u2013\u2014]/.test(out), out);
+});
+
+test("finalizeAnswer caps the answer at the length a visitor would get", () => {
+  const out = finalizeAnswer("word ".repeat(4000), 100);
+  assert.ok(out.length <= 100, `${out.length} characters`);
+});
+
+/* Every filter holds a short tail. A finished answer that is shorter than the held
+ * window must still come back whole, or the eval would measure a truncated last word. */
+test("finalizeAnswer releases a short answer's held tail", () => {
+  assert.equal(finalizeAnswer("Short answer."), "Short answer.");
+});
+
+test("the default cap is the served cap", () => {
+  assert.equal(MAX_ANSWER_CHARS, 6000);
 });

@@ -17,8 +17,7 @@ import type { Pointer } from "./pointer";
 import { buildProfileCard } from "./profile-card";
 import { applyScoreFloor, rerankChunks, retrieveRelevantChunks } from "./rag";
 import { buildRetrievalQuery } from "./retrieval-query";
-import { sanitizeDashes } from "./sanitize-dashes";
-import { ANSWER_ATTEMPTS, isRetryable } from "./stream-answer";
+import { ANSWER_ATTEMPTS, finalizeAnswer, isRetryable } from "./stream-answer";
 import { buildSystemPrompt } from "./system-prompt";
 import { routeTopic } from "./topic";
 import type { TopicRoute } from "./topic";
@@ -210,7 +209,11 @@ export async function runChatTurn(
   for (let attempt = 1; attempt <= ANSWER_ATTEMPTS; attempt += 1) {
     try {
       response = await request();
-      text = sanitizeDashes(messageText(response.message));
+      /*
+       * The served text, not the raw text: a visitor's answer has been through the dash,
+       * repeat and phrase filters, so the eval must judge what they would have read.
+       */
+      text = finalizeAnswer(messageText(response.message));
       if (text.trim().length > 0 || attempt === ANSWER_ATTEMPTS) break;
       console.warn(`[eval] no visible answer; retrying (attempt ${attempt + 1} of ${ANSWER_ATTEMPTS})`);
     } catch (error) {
