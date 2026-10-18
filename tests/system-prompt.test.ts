@@ -92,8 +92,8 @@ test("the pointer appears once, in the rules", () => {
 test("the style section asks for a shape a reader can scan", () => {
   const text = prompt();
   assert.match(text, /paragraphs of two to four\s+sentences/);
-  assert.match(text, /one bullet each/);
-  assert.match(text, /never one\s+unbroken block of prose/i);
+  assert.match(text, /one bullet per project/);
+  assert.match(text, /never one running paragraph/);
   assert.match(text, /no headings/);
 });
 
