@@ -182,9 +182,9 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
            */}
           <li className="chat-message">
             <div className="bubble-assistant mr-auto w-fit max-w-[92%] border border-rule bg-bubble px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted">Assistant</p>
+              <p className="sr-only">Assistant</p>
               <div
-                className="markdown mt-1.5 max-w-[68ch] leading-relaxed text-fg"
+                className="markdown max-w-[68ch] leading-relaxed text-fg"
                 // pi-lens-ignore: dangerously-set-inner-html
                 dangerouslySetInnerHTML={{ __html: introHtml }}
               />
@@ -211,9 +211,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
                   </div>
                 ) : (
                   <div className="bubble-assistant mr-auto w-fit max-w-[92%] border border-rule bg-bubble px-4 py-3">
-                    <p className="text-xs font-bold uppercase tracking-widest text-muted">
-                      Assistant
-                    </p>
+                    <p className="sr-only">Assistant</p>
                     {/*
                      * Safe by construction: `md` is markdown-it with
                      * `html: false`, so raw HTML in the answer is escaped rather
@@ -222,7 +220,7 @@ export function ChatPanel({ starters, introHtml }: { starters: string[]; introHt
                      * markup reaches the DOM.
                      */}
                     <div
-                      className={`markdown mt-1.5 max-w-[68ch] leading-relaxed text-fg ${
+                      className={`markdown max-w-[68ch] leading-relaxed text-fg ${
                         streaming ? "streaming-text" : ""
                       }`}
                       dangerouslySetInnerHTML={{
