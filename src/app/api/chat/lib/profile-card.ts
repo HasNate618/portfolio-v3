@@ -61,6 +61,12 @@ function projectLine(project: Project): string {
   const facts = [
     project.dates,
     thirdPerson(project.displayRole),
+    /*
+     * A count the model would otherwise estimate by counting list rows, and got wrong:
+     * an answer said AWARE runs four models when the record lists five. Stated here, it
+     * is a fact like any other.
+     */
+    project.models ? `${project.models.length} on-device models` : null,
     project.event,
     project.displayStatus,
     awardFor(project.name)?.prize,

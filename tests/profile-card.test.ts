@@ -133,3 +133,18 @@ test("the card never speaks as Nathan", () => {
     assert.ok(!speaksAsNathan(line), `the card speaks in the first person: ${line}`);
   }
 });
+
+/*
+ * An answer counted the rows of AWARE's model table and said four, when the record lists
+ * five. A count the model derives is a count it can get wrong, so the card states it.
+ */
+test("a project with a model list states how many it runs", () => {
+  const line = card.split("\n").find((entry) => /^- AWARE\b/.test(entry)) ?? "";
+  assert.match(line, /5 on-device models/, line);
+});
+
+test("only a project with a model list carries a count", () => {
+  const lines = card.split("\n").filter((entry) => /on-device models/.test(entry));
+  assert.equal(lines.length, 1, `one project states a model count:\n${lines.join("\n")}`);
+  assert.match(lines[0] ?? "", /^- AWARE\b/);
+});

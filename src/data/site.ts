@@ -444,7 +444,7 @@ export const site: SiteContent = {
     },
     {
       id: "saferoute", name: "SafeRoute", group: "tools", order: 22,
-      dates: "2025", displayRole: "solo",
+      dates: "2025", displayRole: "course project",
       covers: "Android app for reporting hazards and routing around them.",
       media: [
         { src: "/projects/saferoute-0.webp", alt: "SafeRoute title card", width: 999, height: 666 },
