@@ -37,12 +37,11 @@ export async function retrieveRelevantChunks(query: string, topK = 20): Promise<
     throw new Error("No embeddings loaded. Run build-embeddings script first.");
   }
 
-  const queryVectors = await embedTexts([query], "search_query");
-  const queryVector = queryVectors[0];
+  const [queryEmbedding] = await embedTexts([query], "search_query");
 
   const scored = embeddings.map((doc) => ({
     ...doc,
-    score: cosineSimilarity(queryVector, doc.embedding),
+    score: cosineSimilarity(queryEmbedding, doc.embedding),
   }));
 
   scored.sort((a, b) => b.score - a.score);

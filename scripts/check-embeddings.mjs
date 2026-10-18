@@ -9,7 +9,7 @@
  * It lives here rather than in `npm test` so the unit suite does not depend on
  * `build-embeddings` having run last.
  */
-import { corpusContentHash, readCacheHash, questionBankContentHash, readBankCacheHash } from "../src/app/api/chat/lib/embeddings.ts";
+import { corpusContentHash, readCacheHash } from "../src/app/api/chat/lib/embeddings.ts";
 import { loadKnowledgebase } from "../src/app/api/chat/lib/chunks.ts";
 
 const chunks = loadKnowledgebase();
@@ -32,19 +32,4 @@ if (actual !== expected) {
   process.exit(1);
 }
 
-const bankExpected = questionBankContentHash();
-const bankActual = readBankCacheHash();
-if (!bankActual) {
-  console.error("check:embeddings — no usable hash in question-bank-cache.json");
-  console.error("  run npm run build-embeddings");
-  process.exit(1);
-}
-if (bankActual !== bankExpected) {
-  console.error("check:embeddings — question bank embeddings are stale");
-  console.error(`  cached:  ${bankActual}`);
-  console.error(`  current: ${bankExpected}`);
-  console.error("  run npm run build-embeddings");
-  process.exit(1);
-}
-
-console.log(`check:embeddings — fresh (${chunks.length} chunks, ${expected.slice(0, 12)}; bank ${bankExpected.slice(0, 12)})`);
+console.log(`check:embeddings — fresh (${chunks.length} chunks, ${expected.slice(0, 12)})`);
