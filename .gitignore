@@ -8,3 +8,6 @@ private/
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+# eval:chat runs, which hold full answer bodies and cost money to make
+eval-out/

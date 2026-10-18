@@ -41,7 +41,8 @@ export interface ChipFailure {
   slot?: ChipSlotName;
 }
 
-const MAX_CHIP_WORDS = 14;
+/** Exported so the eval checks chips against the same cap the validator uses. */
+export const MAX_CHIP_WORDS = 14;
 
 const ABANDONED_IDS = new Set(
   site.projects.filter((project) => project.displayStatus === "abandoned").map((project) => project.id),

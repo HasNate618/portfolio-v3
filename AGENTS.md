@@ -26,6 +26,7 @@ npm run check:contrast    # 4.5:1 text contrast
 npm run check:embeddings  # embedding cache freshness
 npm run check:render      # JS-off served HTML, against a running `npm start`
 npm run build-embeddings  # rebuild the chat RAG index (needs COHERE_API_KEY)
+npm run eval:chat         # the 20-question gate (needs COHERE_API_KEY; not in the default checks)
 npm run build:resume      # compile resume/Resume.tex into public/Nathan_Espejo_Resume.pdf
 ```
 
