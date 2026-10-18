@@ -1,12 +1,58 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { isNavigationDoc } from "../src/app/api/chat/lib/rag";
+import { applyScoreFloor, detailPool, isNavigationDoc } from "../src/app/api/chat/lib/rag";
+import type { RerankedChunk } from "../src/app/api/chat/lib/rag";
 import { loadKnowledgebase, splitIntoChunks } from "../src/app/api/chat/lib/chunks";
 
 test("the index maps are treated as navigation", () => {
-  for (const source of ["index.md", "projects/index.md", "experience/index.md", "projects/other.md"]) {
+  for (const source of [
+    "index.md",
+    "projects/index.md",
+    "experience/index.md",
+    "projects/other.md",
+    "chat.md",
+  ]) {
     assert.ok(isNavigationDoc(source), `${source} should be demoted`);
   }
+});
+
+/*
+ * The chat path sends the detail docs only. The index maps name every project and
+ * role, so they match almost any query and crowd out the doc that answers it; chat.md
+ * is the starter list, which the visitor has already read.
+ */
+test("the chat pool holds no index map and no chat.md", () => {
+  const pool = detailPool(loadKnowledgebase());
+  assert.ok(pool.length > 0, "the corpus must not be empty");
+  assert.ok(!pool.some((chunk) => isNavigationDoc(chunk.source)), "a nav doc survived");
+  assert.ok(!pool.some((chunk) => chunk.source === "chat.md"), "chat.md survived");
+});
+
+/** The floor reads text, source, section and score; a literal is enough. */
+function chunk(score: number, index = 0): RerankedChunk {
+  return { text: `chunk ${index}`, source: "projects/campus.md", section: `s${index}`, score };
+}
+
+test("the floor drops a chunk below 0.10", () => {
+  const out = applyScoreFloor([chunk(0.4), chunk(0.2, 1), chunk(0.09, 2)]);
+  assert.deepEqual(
+    out.map((c) => c.score),
+    [0.4, 0.2],
+  );
+});
+
+test("a broad question sends at most two chunks", () => {
+  const out = applyScoreFloor(Array.from({ length: 8 }, (_, i) => chunk(0.2, i)));
+  assert.equal(out.length, 2, "a top score under 0.30 is a broad question");
+});
+
+test("a strong retrieval sends up to six", () => {
+  const out = applyScoreFloor([chunk(0.5), ...Array.from({ length: 6 }, (_, i) => chunk(0.4, i + 1))]);
+  assert.equal(out.length, 6);
+});
+
+test("an empty retrieval stays empty", () => {
+  assert.deepEqual(applyScoreFloor([]), []);
 });
 
 test("a chunk that says evaluation is in progress also names Campus", () => {
