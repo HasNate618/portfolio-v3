@@ -21,7 +21,7 @@ const terago = renderToStaticMarkup(
 );
 
 test("homelab carries its own figures via the stat placeholders", () => {
-  for (const value of ["35", "1,140"]) {
+  for (const value of ["35", "212", "34,673"]) {
     assert.ok(homelab.includes(value), `missing ${value}`);
   }
 });
@@ -34,7 +34,7 @@ test("homelab keeps its incident stories", () => {
 
 test("homelab's figures are accessible and open in the lightbox", () => {
   assert.match(homelab, /<figcaption/);
-  for (const src of ["homelab-service-inventory", "homelab-change-loop", "homelab-guardrails"]) {
+  for (const src of ["homelab-service-inventory", "homelab-change-loop", "homelab-guardrails", "homelab-agent-sessions"]) {
     assert.ok(homelab.includes(`id="figure-projects-${src}-webp-thumb"`), `${src} has no thumbnail anchor`);
     assert.ok(homelab.includes(`id="figure-projects-${src}-webp"`), `${src} has no overlay`);
   }

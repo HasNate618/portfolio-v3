@@ -31,7 +31,7 @@ I used to run a Debian server with Docker Compose and a separate local AI setup.
 
 NixOS fixes that because the whole system is declared in files. Every package, service, user and firewall rule is written in Nix and kept in git, and a rebuild turns those files into the running system. That matters even more with agents. When an agent's change is a diff, I can read it before it applies, rebuild the same thing later, and undo it in one step if it's wrong.
 
-I first tried to build my own agent just for NixOS config, with its own memory system ([AgntOS](agntos.md)). I got impatient, because I wanted to be on NixOS already, so I moved both machines over and ran Hermes Agent on them instead. It works really well, especially with cloud models and the broad general knowledge they bring.
+I first tried to build my own agent just for NixOS config, with its own memory system ([AgntOS](https://github.com/HasNate618/AgntOS)). I got impatient, because I wanted to be on NixOS already, so I moved both machines over and ran Hermes Agent on them instead. It works really well, especially with cloud models and the broad general knowledge they bring.
 
 ## How it fits together
 
@@ -91,9 +91,17 @@ One that wasn't a config mistake, and so isn't in the table above:
 
 ## What it does day to day
 
+```figure
+src: /projects/homelab-agent-sessions.webp
+width: 1564
+height: 821
+alt: Grouped bar chart of agent sessions per month, June to October 2026. The flow profile on the laptop ran 33 sessions in June, 33 in July, 41 in August, 36 in September and 64 in October. The homelab profile on the server ran 74 in June, 39 in July, 55 in August, 12 in September and 24 in October. Side panel: 411 sessions across both profiles, 138 of them subagent sessions, and 34,673 tool calls.
+caption: Counted from each profile's session database on Oct 18, 2026. A session is one row, and a subagent session is one row too.
+```
+
 Most days nothing on the server needs me. 13 systemd timers run backups to the NAS, restarts and cleanup. Uptime Kuma watches the services and ntfy pushes an alert when something fails. Vaultwarden holds my passwords, Immich my photos, Nextcloud my files, and Forgejo hosts the git remote for this config.
 
-The agents get asked questions more than anything else. A question usually comes before a change, like how something works or whether an idea is feasible. Hand the server agent a GitHub link to a self-hostable project and it writes the module, adds the Caddy route, wires in what it depends on and rebuilds, using skills it wrote on earlier jobs. Those {{stat:homelab.skills}} skills hold what the agents have learned about these machines, from Bifrost setup to a routine health scan.
+The agents get asked questions more than anything else. A question usually comes before a change, like how something works or whether an idea is feasible. Hand the server agent a GitHub link to a self-hostable project and it writes the module, adds the Caddy route, wires in what it depends on and rebuilds, using skills it wrote on earlier jobs. Between them the two profiles have run {{stat:homelab.sessions}} sessions since June and made {{stat:homelab.toolCalls}} tool calls. Their {{stat:homelab.skills}} saved skills hold what they have learned about these machines, from Bifrost setup to a routine health scan.
 
 ## What I learned
 

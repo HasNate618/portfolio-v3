@@ -152,7 +152,7 @@ export const site: SiteContent = {
       id: "homelab", name: "NixOS homelab", group: "featured", order: 2,
       dates: "May 2026 to present", displayRole: "solo",
       covers: "My laptop and a home server built from used parts run from one NixOS flake, with a Hermes Agent profile for each. The server's agent plans, shows me the full diff and waits for my approval; the laptop's commits directly and asks me to test. Both rebuild through a guard that refuses the wrong machine, and a Bifrost gateway gives Campus and my other AI services one endpoint for local and cloud models.",
-      limits: "The two profiles differ on purpose: the server profile waits for approval on a full diff, and the laptop profile commits directly and asks me to test. Agent session and skill counts are self-reported by the agents. No one else uses it.",
+      limits: "The two profiles differ on purpose: the server profile waits for approval on a full diff, and the laptop profile commits directly and asks me to test. Session and tool-call counts come from each profile's session database. No one else uses it.",
       media: [
         { src: "/projects/homelab-architecture.webp", alt: "Architecture diagram. A git repo holds one Nix flake with hosts, modules and sops-encrypted secrets, and both machines build from it. The laptop, flow, runs two Hermes Agent profiles, llama.cpp on an RTX 4060 and the desktop. The server, home, runs 35 containers and 10 native services and backs up to a NAS. Arrows show the homelab profile reaching the server over SSH, and the server's Bifrost gateway using the laptop's local models.", width: 1600, height: 1011 },
       ],
@@ -163,8 +163,9 @@ export const site: SiteContent = {
       stats: [
         { key: "machines", label: "machines, one NixOS flake", value: "2" },
         { key: "containers", label: "containers on the server", value: "35" },
-        { key: "sessions", label: "agent sessions, Jun to Oct 2026 (self-reported by the agents)", value: "411", home: false },
-        { key: "skills", label: "saved agent skills (self-reported by the agents)", value: "1,140", home: false },
+        { key: "sessions", label: "agent sessions, Jun to Oct 2026", value: "411", home: false },
+        { key: "skills", label: "agent skills saved in git", value: "212", home: false },
+        { key: "toolCalls", label: "tool calls across those sessions", value: "34,673", home: false },
       ],
       stack: ["NixOS", "Nix flakes", "Docker", "Tailscale", "Hermes Agent", "llama.cpp"],
     },

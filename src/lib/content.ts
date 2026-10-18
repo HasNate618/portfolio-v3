@@ -233,6 +233,49 @@ export function listCorpusFilesFrom(root: string): string[] {
   return walk(root);
 }
 
+/**
+ * Marks a line that check-content must read as written even though it names a value
+ * site.ts also holds. The gate reads it off the file on disk; the loader strips it,
+ * because markdown-it escapes raw HTML and the marker would show up as visible text.
+ */
+export const ONE_SOURCE_OK = "<!-- one-source-ok -->";
+
+/**
+ * Content files link their neighbours the way the knowledge base needs them:
+ * `[Campus](campus.md)` resolves inside /knowledgebase/. The same href in HTML
+ * resolves against the page it sits on, so on /projects/homelab a browser asks
+ * for /projects/campus.md and gets a 404. Every relative .md link is therefore
+ * resolved against the page list and rewritten to the route the site serves.
+ *
+ * A link that no route answers is left exactly as written. Guessing at it would
+ * bury a typo, and check-content fails on whatever is left over.
+ */
+const RELATIVE_MD_LINK = /\]\((?!https?:\/\/|\/|#|mailto:)([^)\s]+\.md)(#[^)\s]*)?\)/g;
+
+/** The content slug a relative .md link points at, e.g. "projects/campus". */
+function contentSlugFor(fromSlug: string, target: string): string {
+  const joined = path.posix.join(path.posix.dirname(fromSlug), target);
+  return path.posix.normalize(joined).replace(/\.md$/, "");
+}
+
+/** Relative .md links in `markdown` that no route answers. */
+export function unresolvedContentLinks(
+  markdown: string,
+  fromSlug: string,
+  routes: Map<string, string>
+): string[] {
+  return [...markdown.matchAll(RELATIVE_MD_LINK)]
+    .map((match) => match[1])
+    .filter((target) => !routes.has(contentSlugFor(fromSlug, target)));
+}
+
+function rewriteContentLinks(body: string, fromSlug: string, routes: Map<string, string>): string {
+  return body.replace(RELATIVE_MD_LINK, (match, target: string, hash: string | undefined) => {
+    const route = routes.get(contentSlugFor(fromSlug, target));
+    return route ? `](${route}${hash ?? ""})` : match;
+  });
+}
+
 /** Parse every route file under root. Files without a `route:` key are skipped. */
 export function loadFrom(root: string): Page[] {
   const pages: Page[] = [];
@@ -262,6 +305,14 @@ export function loadFrom(root: string): Page[] {
       onThisPage: asStringArray(data.onThisPage),
       body,
     });
+  }
+
+  // Links are rewritten once the whole set is known, because `home.md` is `/` and
+  // `projects/index.md` is `/projects`: the route cannot be derived from the path.
+  const routes = new Map(pages.map((page) => [page.slug, page.route]));
+  for (const page of pages) {
+    page.body = rewriteContentLinks(page.body, page.slug, routes);
+    page.body = page.body.replaceAll(ONE_SOURCE_OK, "");
   }
 
   return pages;

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { site, type Experience, type Project } from "@/data/site";
-import { listCorpusFilesFrom, publicFrontmatter, stripFrontmatter } from "@/lib/content";
+import { listCorpusFilesFrom, ONE_SOURCE_OK, publicFrontmatter, stripFrontmatter } from "@/lib/content";
 import { resolveStats } from "@/lib/markdown";
 import { thirdPerson } from "@/lib/voice";
 
@@ -90,7 +90,7 @@ function rewriteRelativeLinks(markdown: string, fromDir: string): string {
 function projectDoc(root: string, rel: string): CorpusDoc {
   const raw = fs.readFileSync(path.join(root, rel), "utf-8");
   const frontmatter = publicFrontmatter(raw);
-  const body = stripFrontmatter(raw);
+  const body = stripFrontmatter(raw).replaceAll(ONE_SOURCE_OK, "");
   const withStats = resolveStats(body);
   const withLinks = rewriteRelativeLinks(withStats, path.posix.dirname(rel));
 

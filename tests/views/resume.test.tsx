@@ -38,10 +38,10 @@ test("the five sections appear in the PDF's order", () => {
 });
 
 test("figures resolve from site.ts rather than the markdown", () => {
-  for (const value of ["4,620", "411", "1,140", "760"]) {
+  for (const value of ["4,620", "411", "212", "760"]) {
     assert.ok(html.includes(value), `missing ${value}`);
   }
-  for (const value of ["4,620", "411", "1,140", "760"]) {
+  for (const value of ["4,620", "411", "212", "760"]) {
     assert.ok(!page.body.includes(value), `${value} must not be typed into content`);
   }
 });

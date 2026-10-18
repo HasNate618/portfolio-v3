@@ -83,7 +83,7 @@ alt: Two charts on all 2,559 samples. Accuracy: Qwen3-VL-2B binary_v6 80.6%, Qwe
 caption: We kept Qwen3-VL-2B with binary_v7: the highest agreement and less than half of Shieldstral's false flags, for 26 more misses.
 ```
 
-Shieldstral-1.0-3B is made for image safety. I wrote an eval harness for it on llama.cpp that scores its probability of "yes" from the same render and filename. At the default threshold of 0.5 it got 56.7%. A sweep over the saved scores reached 80.7% at 0.02, again tuned on the same set. It missed 26 fewer than binary_v7 (281 against 307), but it produced more than twice the false flags to review (212 against 97) and it's a bigger model to host, so we kept Qwen.
+Shieldstral-1.0-3B is made for image safety. I wrote an eval harness for it on llama.cpp that scores its probability of "yes" from the same render and filename. At the default threshold of 0.5 it got 56.7%. A sweep over the saved scores reached 80.7% at 0.02, again tuned on the same set. It missed 26 fewer than binary_v7 (281 against 307), but it produced more than twice the false flags to review (212 against 97) and it's a bigger model to host, so we kept Qwen. <!-- one-source-ok -->
 
 To see why Shieldstral needed such a low threshold, I ran a small control. A real photo of an AK-47 scored 0.90 for unsafe, and a clay render of an AK-47 part scored 0.20. My best explanation is domain shift: its encoder learned from photos, and clay renders look like generic mechanical shapes. Two images don't prove it, but scoring renders and photos of the same objects across categories would.
 

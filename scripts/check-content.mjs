@@ -17,7 +17,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { site } from "../src/data/site.ts";
-import { contentProblems, PAGE_ONLY_KEYS } from "../src/lib/content.ts";
+import { contentProblems, listPages, ONE_SOURCE_OK, PAGE_ONLY_KEYS, unresolvedContentLinks } from "../src/lib/content.ts";
 
 const rootIndex = process.argv.indexOf("--root");
 const ROOT =
@@ -25,7 +25,7 @@ const ROOT =
     ? process.argv[rootIndex + 1]
     : "content";
 
-const EXEMPT = "<!-- one-source-ok -->";
+const EXEMPT = ONE_SOURCE_OK;
 
 function walk(dir, prefix = "") {
   const out = [];
@@ -90,6 +90,9 @@ function stackPattern(entry) {
 const STAT_PATTERNS = STAT_VALUES.map((v) => ({ value: v, re: statPattern(v) }));
 const STACK_PATTERNS = STACK_ENTRIES.map((v) => ({ value: v, re: stackPattern(v) }));
 
+/** Slug to route, for the relative-link rule. */
+const ROUTES = new Map(listPages().map((page) => [page.slug, page.route]));
+
 /**
  * A line is list-shaped when it enumerates the stack: known entries make up most
  * of its words, or it uses list punctuation. A prose sentence that happens to
@@ -145,6 +148,13 @@ for (const rel of walk(ROOT)) {
         text: line.trim(),
       });
     }
+
+    // A relative .md link is right for /knowledgebase and wrong for HTML: the
+    // browser resolves it against the page, so `campus.md` asks for
+    // /projects/campus.md. Resolve each one to the route it should have gone to.
+    for (const target of unresolvedContentLinks(line, rel.replace(/\.md$/, ""), ROUTES)) {
+      failures.push({ rel, line: i + 1, kind: "link", value: target, text: line.trim() });
+    }
   });
 }
 
@@ -162,7 +172,7 @@ if (schemaProblems.length > 0) {
 
 if (failures.length > 0) {
   console.error(
-    `check:content — ${failures.length} restated fact(s) in route files under ${ROOT}/\n`
+    `check:content — ${failures.length} problem(s) in route files under ${ROOT}/\n`
   );
   for (const f of failures) {
     console.error(`  ${ROOT}/${f.rel}:${f.line}  [${f.kind}: ${f.value}]`);
@@ -170,7 +180,8 @@ if (failures.length > 0) {
   }
   console.error(
     "\nUse {{stat:<projectId>.<key>}} for figures, StatRow/StackList in templates," +
-      `\nor ${EXEMPT} on a line that genuinely must name the value.`
+      `\nor ${EXEMPT} on a line that genuinely must name the value.` +
+      "\nA relative .md link must name a content file that has a page route."
   );
   process.exitCode = 1;
 } else if (!process.exitCode) {
