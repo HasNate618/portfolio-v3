@@ -108,7 +108,7 @@ test("every file-backed project doc carries its card summary", () => {
 
 test("an experience doc carries its summary", () => {
   const terago = getCorpusDoc("experience/terago.md")!;
-  assert.match(terago.text, /^Summary: Built a working outage-email parser/m);
+  assert.match(terago.text, /^Summary: Built a prototype pipeline/m);
 });
 
 test("a Summary line is never empty or the word undefined", () => {

@@ -107,7 +107,7 @@ test("streaming agrees with the whole string, at every split point", () => {
     "It is self\u2011hosted, and every component\u2014from the camera to the rules engine\u2014runs locally.",
     "Aug 2024\u202f\u2013\u202fMay 2028 at Western, with a second range May 2026 \u2014 Aug 2026 here.",
     "He interned at TeraGo May\u2013Aug 2026, then went back to school.",
-    "What he built\n\u2013 an outage-email parser\n\u2013 Channel Finder",
+    "What he built\n\u2013 an email-to-ticket prototype\n\u2013 an RF channel-planning tool",
     "**Animarker** \u2013 May 2023, built solo at a hackathon.",
   ];
 

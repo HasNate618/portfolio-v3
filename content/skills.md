@@ -66,10 +66,7 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 ## Tools
 
 - **Hermes Agent**: [NixOS homelab](projects/homelab.md)
-- **Microsoft Graph**: [TeraGo](experience/terago.md)
-- **Copilot Studio**: [TeraGo](experience/terago.md)
-- **Jira**: [TeraGo](experience/terago.md)
-- **SharePoint**: [TeraGo](experience/terago.md)
+- **Jira**: [3D Western](experience/3d-western.md)
 - **Blender**: [3D Western](experience/3d-western.md)
 
 ## Hardware and embedded

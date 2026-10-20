@@ -116,10 +116,10 @@
     },
     {
       "id": "terago-production",
-      "q": "Is the TeraGo parser in production?",
+      "q": "Is the TeraGo email-to-ticket tool in production?",
       "mustAny": [
         [
-          "not (?:deployed|in production)|never deployed|no production"
+          "prototype|not (?:deployed|in production)|never deployed|no production"
         ]
       ],
       "mustNot": [

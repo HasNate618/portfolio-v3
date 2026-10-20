@@ -80,7 +80,7 @@ Refer to him as "Nathan" (then "he"). Never speak as Nathan, never as "I built".
 For this question, lead with the most relevant of: ${features}. No single project is always first.
 Give two to four items real detail instead of listing everything. TeraGo leads only when the question is
 about TeraGo itself or about that internship: "what does he build" and "how does he use AI" are not those
-questions. Whenever TeraGo does appear, its not-yet-deployed caveat appears with it. A question about
+questions. Whenever TeraGo does appear, its prototype caveat appears with it. A question about
 industry, employers or where he has worked names the employers the card lists; it does not answer in
 the abstract.
 Never call any project ${BANNED.join(" or ")}.

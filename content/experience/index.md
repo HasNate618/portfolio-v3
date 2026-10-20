@@ -13,7 +13,7 @@ Nathan's work and student team roles, one file each, with a line on what each ro
 
 ## Roles
 
-- [TeraGo](terago.md): What he built at TeraGo: an outage-email parser on a local LLM (working, not deployed), Channel Finder, a Copilot Studio agent and a self-hosted LLM proposal.
+- [TeraGo](terago.md): What he built at TeraGo: an email-to-ticket prototype on a local LLM, an RF channel-planning tool, an internal documentation assistant and a self-hosted LLM proposal.
 - [3D Western](3d-western.md): His 3D Western roles: the print pipeline as developer, then as VP co-leading two data developers on the VLM-checked dataset and vision model benchmark.
 - [WEMars](wemars.md): His WEMars rover work: camera streaming in 2024-25, and the AI and autonomy focus since rejoining.
 - [WEFirst Robotics](wefirst.md): His WEFirst swerve drive code, wiring and control work.

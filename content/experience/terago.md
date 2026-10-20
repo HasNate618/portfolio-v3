@@ -2,70 +2,61 @@
 title: TeraGo
 type: experience
 route: /experience/terago
-description: Software Engineering Intern at TeraGo, May to Aug 2026: an outage-email parser on a local LLM, Channel Finder, and a Copilot Studio agent.
+description: Software Engineering Intern at TeraGo, May to Aug 2026: an email-to-ticket LLM prototype, an RF channel-planning tool, and a documentation assistant.
 priority: start-here
 tags: [internship, local-llm, rf-planning]
 related: [index.md, ../projects/index.md, ../skills.md]
-onThisPage: [tl;dr, The problems, What I built, How it works, Models and cost, Results, Stack]
+onThisPage: [tl;dr, What I built, How it works, Models and cost, Results, Stack]
 id: terago
 dates: "May 2026 to Aug 2026"
 role: contributor
-updated: 2026-10-16
+updated: 2026-10-20
 ---
 # TeraGo
 
-TeraGo is a Canadian provider of cloud, colocation and connectivity services for businesses.
+TeraGo is a Canadian provider of managed network and security services for businesses, including fixed wireless access and private 5G networks.
 
-This was internal work, so there's no code or screenshots here.
+This was internal work, so there's no code or screenshots here, and the details are kept general.
 
 ## tl;dr
 
-- An outage-email parser in Python: a local LLM on Ollama reads provider outage emails and opens Jira issues. It works end to end; TeraGo hasn't deployed it yet.
-- Channel Finder, an RF tool that shortlists clear channels, validated on {{stat:TeraGo.testCases}} test cases.
-- A Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
-- A proposal for a self-hosted LLM platform to cut per-user Copilot licensing costs.
-
-## The problems
-
-- Providers send outage notices in non-standard formats.
-- Picking a clear frequency for a PMP or P2P link means checking candidates against MapInfo spectrum records.
-- The answers to engineers' RF questions sit in SharePoint documents.
-- Copilot is licensed per user.
+- A prototype pipeline in Python that uses a locally hosted LLM on Ollama to turn unstructured emails into structured tickets. It works end to end.
+- An RF channel-planning tool in Python that shortlists clear frequencies for fixed-wireless links, with a validation test suite.
+- An internal RAG assistant that answers engineers' technical questions from company documentation.
+- A proposal for a self-hosted LLM platform integrated with internal tools.
 
 ## What I built
 
-> **Outage emails to Jira (working, not deployed).** Reads the mailbox through Microsoft Graph, has a local LLM on Ollama pull out the key details, and opens a Jira issue. It works end to end, but TeraGo hasn't put it into use yet. They've started revisiting it.
+> **Email-to-ticket prototype.** A locally hosted LLM on Ollama reads each unstructured email, pulls out the key details, and the pipeline creates a structured ticket. It works end to end as a prototype.
 
-> **Channel Finder.** An explainable RF decision-support tool in Python. It checks candidate frequencies against MapInfo spectrum records and shortlists clear ones for PMP and P2P links. Shipped as a CLI and a web UI.
+> **RF channel-planning tool.** A Python tool that shortlists clear frequencies for point-to-point and point-to-multipoint fixed-wireless links. It has a command-line and a web interface and is backed by a validation test suite.
 
-> **Copilot Studio agent.** Answers engineers' RF questions from SharePoint documents.
+> **Documentation assistant.** An internal RAG assistant that answers engineers' technical questions from company documentation.
 
-> **Self-hosted LLM proposal.** LibreChat with SharePoint and Jira integrations, to cut per-user Copilot licensing costs.
+> **Self-hosted LLM proposal.** I researched and proposed a self-hosted LLM platform integrated with internal tools.
 
 ## How it works
 
-Outage-email parser:
+Email-to-ticket prototype:
 
 ```diagram
-alt: The mailbox is read through Microsoft Graph, a local model on Ollama pulls out the key details, and a Jira issue is opened.
-mailbox ─► Microsoft Graph ─► local LLM (Ollama) ─► Jira issue
+alt: An email goes to a locally hosted model on Ollama, which pulls out the key details, and a structured ticket is created.
+email ─► local LLM (Ollama) ─► structured ticket
 ```
 
-Channel Finder:
+RF channel-planning tool:
 
 ```diagram
-alt: A link type and candidate frequencies are checked against MapInfo spectrum records, producing a shortlist of clear frequencies.
-link type + candidates ─► check against spectrum records
-                       ─► shortlist of clear frequencies
+alt: A link type and candidate frequencies are checked by the tool, producing a shortlist of clear frequencies.
+link type + candidate frequencies ─► checks ─► shortlist of clear frequencies
 ```
 
 ## Models and cost
 
-- The parser runs a local model on Ollama, so emails are processed locally, with no per-call API cost.
-- The LibreChat proposal moves chat to a self-hosted platform instead of per-user Copilot licences.
+- The prototype runs a local model on Ollama, so emails are processed locally, with no per-call API cost.
 
 ## Results
 
-- Outage-email parser: works end to end, not deployed yet.
-- Channel Finder validated on {{stat:TeraGo.testCases}} test cases, shipped as a CLI and a web UI.
-- Copilot Studio agent deployed for engineers.
+- Email-to-ticket prototype: working end to end.
+- RF channel-planning tool: shipped with a command-line and a web interface, backed by a validation test suite.
+- Documentation assistant: deployed for engineers.

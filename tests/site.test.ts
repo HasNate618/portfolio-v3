@@ -40,10 +40,9 @@ test("Homelab carries the figures the draft states", () => {
   assert.equal(stats.containers, "35");
 });
 
-test("TeraGo keeps its corrected dates and the 760-case figure", () => {
+test("TeraGo keeps its corrected dates", () => {
   const terago = site.experience.find((e) => e.org === "TeraGo")!;
   assert.equal(terago.dates, "May 2026 to Aug 2026");
-  assert.ok(terago.stats?.some((s) => s.value === "760"));
 });
 
 test("every project has a group, order, role and unique stat keys", () => {
@@ -75,8 +74,7 @@ test("every display group has at least one project", () => {
 test("terago is an experience, not a project", () => {
   // It used to be both, which listed the internship twice on the home page.
   assert.equal(getProject("terago"), undefined, "terago must not be in site.projects");
-  const terago = getExperience("TeraGo")!;
-  assert.ok(terago.stats?.some((s) => s.key === "testCases" && s.value === "760"));
+  assert.ok(getExperience("TeraGo"), "terago must be in site.experience");
 });
 
 test("aware carries the rows its model table renders", () => {

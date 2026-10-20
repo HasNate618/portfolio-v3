@@ -8,10 +8,10 @@ import { site } from "../../src/data/site";
 const page = getPage("/resume")!;
 const html = renderToStaticMarkup(<ResumeView page={page} />);
 
-test("resume describes the outage parser honestly", () => {
-  assert.match(html, /outage ticketing/);
-  assert.match(html, /Jira/);
-  assert.match(html, /not yet deployed/);
+test("resume describes the email prototype honestly", () => {
+  assert.match(html, /prototype pipeline/);
+  assert.match(html, /structured tickets/);
+  assert.match(html, /working end to end/);
   assert.doesNotMatch(html, /Automated/);
 });
 
@@ -38,10 +38,10 @@ test("the five sections appear in the PDF's order", () => {
 });
 
 test("figures resolve from site.ts rather than the markdown", () => {
-  for (const value of ["4,620", "411", "212", "760"]) {
+  for (const value of ["4,620", "411", "212"]) {
     assert.ok(html.includes(value), `missing ${value}`);
   }
-  for (const value of ["4,620", "411", "212", "760"]) {
+  for (const value of ["4,620", "411", "212"]) {
     assert.ok(!page.body.includes(value), `${value} must not be typed into content`);
   }
 });

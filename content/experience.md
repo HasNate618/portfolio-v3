@@ -14,10 +14,10 @@ Roles newest first.
 
 ## TeraGo
 
-- Built a working outage-email parser in Python: a local LLM on Ollama pulls the details out of non-standard provider outage emails and opens Jira issues, reading mail through Microsoft Graph. It works end to end, but TeraGo hasn't deployed it yet.
-- Wrote Channel Finder, a Python tool that shortlists clear RF channels from MapInfo spectrum records. Validated on {{stat:TeraGo.testCases}} test cases, shipped as a CLI and a web UI.
-- Deployed a Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
-- Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) to cut per-user Copilot licensing costs.
+- Built a prototype pipeline that uses a locally hosted LLM (Ollama) to turn unstructured emails into structured tickets, working end to end.
+- Built a Python RF channel-planning tool with a command-line and web interface that shortlists clear frequencies for fixed-wireless links, with a validation test suite.
+- Deployed an internal RAG assistant that answers engineers' technical questions from company documentation.
+- Researched and proposed a self-hosted LLM platform integrated with internal tools.
 
 ## 3D Western
 

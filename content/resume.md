@@ -14,7 +14,7 @@ skills:
   - group: Web & Infra
     items: [React, FastAPI, Next.js, NixOS, Linux, Docker, Tailscale, Caddy, Git, GitHub Actions]
   - group: Tools
-    items: [Hermes Agent, Microsoft Graph, Copilot Studio, Jira, SharePoint, Blender]
+    items: [Hermes Agent, Jira, Blender]
 updated: 2026-10-16
 ---
 # Résumé
@@ -29,10 +29,10 @@ updated: 2026-10-16
 
 ### TeraGo
 
-- Built outage ticketing for non-standard provider emails: a local LLM (Ollama) extracts the key details and opens Jira issues through Microsoft Graph; works end to end, not yet deployed.
-- Wrote Channel Finder, a Python tool that finds clear RF channels in MapInfo data, validated on {{stat:TeraGo.testCases}} test cases.
-- Deployed a Copilot Studio agent that answers engineers' RF questions from SharePoint documents.
-- Proposed a self-hosted LLM platform (LibreChat with SharePoint and Jira) to cut per-user Copilot licensing costs.
+- Built a prototype pipeline that uses a locally hosted LLM (Ollama) to turn unstructured emails into structured tickets, working end to end.
+- Built a Python RF channel-planning tool with a command-line and web interface that shortlists clear frequencies for fixed-wireless links, with a validation test suite.
+- Deployed an internal RAG assistant that answers engineers' technical questions from company documentation.
+- Researched and proposed a self-hosted LLM platform integrated with internal tools.
 
 ## Projects
 

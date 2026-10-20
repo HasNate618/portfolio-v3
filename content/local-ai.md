@@ -21,7 +21,7 @@ Most of Nathan's AI work runs on hosted API models, and he deliberately picks lo
 | flow laptop | llama.cpp serving local GGUF models | Local | Apr 2026 (approx.) to present |
 | Homelab server | Open WebUI, a Bifrost gateway that routes between local and cloud models, Whisper speech-to-text | Mixed | May 2026 to present |
 | AWARE | YOLOv8n, YAMNet, Whisper-tiny, Piper TTS and a small GGUF LLM on an Arduino UNO Q | Local, on-device | Jul 2026 |
-| TeraGo | Ollama parser that extracts details from outage emails and opens Jira issues (working, not deployed) | Local | May to Aug 2026 |
+| TeraGo | Email-to-ticket prototype on Ollama that turns unstructured emails into structured tickets (working end to end) | Local | May to Aug 2026 |
 
 ## AWARE on-device
 
@@ -35,6 +35,6 @@ His flow laptop runs llama.cpp for local GGUF models. Both Hermes Agent profiles
 
 Campus talks to any OpenAI-compatible endpoint, so the same code runs against a local server or a hosted API. Retrieval combines embedding search, cross-encoder reranking and a lexical SQL prefilter. Details in [Campus](projects/campus.md).
 
-## TeraGo outage-email parser on Ollama
+## TeraGo email-to-ticket prototype on Ollama
 
-At TeraGo (May to Aug 2026) he built an outage-email parser in Python: a local LLM on Ollama extracts the key details from non-standard provider outage emails and the pipeline opens Jira issues. It works end to end, but TeraGo hasn't deployed it yet. Details in [TeraGo](experience/terago.md).
+At TeraGo (May to Aug 2026) he built a prototype pipeline in Python that uses a locally hosted LLM on Ollama to turn unstructured emails into structured tickets. It works end to end. Details in [TeraGo](experience/terago.md).

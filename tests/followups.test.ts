@@ -30,7 +30,7 @@ test("a fixed line is not treated as an answer", () => {
   // about facts the answer just said it did not have.
   assert.ok(isNonAnswer("The record doesn't cover that. Email nate.e.espejo@gmail.com."));
   assert.ok(isNonAnswer("That isn't in the record, so I can't say."));
-  assert.ok(!isNonAnswer("Nathan built Channel Finder at TeraGo, validated on 760 test cases."));
+  assert.ok(!isNonAnswer("Nathan built an RF channel-planning tool at TeraGo."));
 });
 
 test("the defaults are the page starters, so the two cannot drift", () => {
@@ -69,7 +69,7 @@ test("the chip prompt requires the word Nathan and shows what that means", () =>
   const prompt = buildChipPrompt(CHIP_INPUT);
   assert.doesNotMatch(prompt, /\(he\/his\/Nathan\)/);
   assert.match(prompt, /must contain the word "Nathan"/, "a naming preference is not enough: the model drops it");
-  assert.match(prompt, /How does Nathan's outage-email parser work\?/, "the prompt shows the shape it wants");
+  assert.match(prompt, /How does Nathan's email-to-ticket prototype work\?/, "the prompt shows the shape it wants");
   assert.match(prompt, /never "he", "his" or "him"/);
 });
 

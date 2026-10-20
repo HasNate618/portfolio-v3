@@ -89,8 +89,8 @@ test("Campus keeps its limit, and the homelab keeps the gate", () => {
 });
 
 test("unshipped work stays unshipped", () => {
-  assert.match(card, /works end to end[^\n]{0,80}(hasn't|has not) deployed it/i);
-  assert.equal((card.match(/works end to end/gi) ?? []).length, 1, "the TeraGo clause is not repeated");
+  assert.match(card, /prototype[^\n]{0,120}working end to end/i);
+  assert.equal((card.match(/working end to end/gi) ?? []).length, 1, "the TeraGo clause is not repeated");
   assert.match(card, /no contributions claimed this term/i);
 });
 

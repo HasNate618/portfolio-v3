@@ -54,9 +54,9 @@ test("a stream that returns only thinking is retried once", async () => {
 
 test("a whitespace-only answer counts as empty", async () => {
   const result = await collect({
-    start: sources(attempt({ text: "\n\n  " }), attempt({ text: "760 test cases at TeraGo." })),
+    start: sources(attempt({ text: "\n\n  " }), attempt({ text: "An RF channel-planning tool at TeraGo." })),
   });
-  assert.equal(result.text, "760 test cases at TeraGo.");
+  assert.equal(result.text, "An RF channel-planning tool at TeraGo.");
   assert.equal(result.attempts, 2);
   assert.equal(result.retried, true);
 });

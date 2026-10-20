@@ -133,7 +133,7 @@ Return this JSON shape:
 {"deeper": {"question": "...", "subject": "..."}, "adjacent": {"question": "...", "subject": "..."}, "path": {"question": "...", "subject": "..."}}
 
 Rules:
-- Every question must contain the word "Nathan" (write "Nathan's" where it fits) and never "he", "his" or "him". A question without it is discarded: "How does the outage-email parser work?" is wrong, "How does Nathan's outage-email parser work?" is right.
+- Every question must contain the word "Nathan" (write "Nathan's" where it fits) and never "he", "his" or "him". A question without it is discarded: "How does the email-to-ticket prototype work?" is wrong, "How does Nathan's email-to-ticket prototype work?" is right.
 - Under 12 words, one subject each, and each ends with "?".
 - deeper: a detail the answer raised but did not explain. Its subject is the answer's main subject, ${answerSubjectFor(input)}.
 - adjacent: a different project or role, from ${featureIds.join(", ") || "the card"}, that relates to what the visitor asked. Its subject must differ from the deeper subject.

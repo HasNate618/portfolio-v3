@@ -142,9 +142,12 @@ test("the prompt states the record's limits rather than defaulting to invention"
 /*
  * TeraGo led all three broad questions and its "not yet deployed" caveat fell out of
  * them, which is the worst pairing: the most-repeated project, described as if finished.
+ * The caveat is the prototype framing now: the record no longer makes a claim about
+ * whether the company shipped it, and the prompt must not ask for one.
  */
 test("a broad answer is told not to lead with TeraGo, and to keep its caveat", () => {
   const text = prompt();
   assert.match(text, /TeraGo leads only when the question is/);
-  assert.match(text, /not-yet-deployed caveat appears with it/);
+  assert.match(text, /prototype caveat appears with it/);
+  assert.doesNotMatch(text, /not-yet-deployed/i);
 });

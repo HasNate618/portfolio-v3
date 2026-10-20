@@ -63,15 +63,10 @@ test("terago shows an experience meta row, not a project one", () => {
   assert.match(terago, /Software Engineering Intern/);
 });
 
-test("terago says the parser works but is not deployed", () => {
-  assert.match(terago, /outage-email parser/i);
-  assert.match(terago, /not deployed/i);
+test("terago says the prototype works end to end", () => {
+  assert.match(terago, /email-to-ticket prototype/i);
+  assert.match(terago, /works end to end/i);
   assert.doesNotMatch(terago, /automated/i);
-});
-
-test("terago's 760 test cases come from site.ts", () => {
-  assert.match(terago, /760/);
-  assert.ok(!getPage("/experience/terago")!.body.includes("760"), "must not be typed in");
 });
 
 test("no case study ever says 'present'", () => {
