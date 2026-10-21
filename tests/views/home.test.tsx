@@ -24,6 +24,12 @@ test("the seeking line comes from site.ts, not from the markdown", () => {
   assert.ok(!page.body.includes("Summer 2027"), "seeking must not be restated in content");
 });
 
+test("the About page carries the new intro copy", () => {
+  assert.match(html, /Most of what I build lately is LLM tooling I use every day/);
+  assert.match(html, /a homelab of two NixOS machines managed from a single repo/);
+  assert.doesNotMatch(html, /care about the boring parts too/);
+});
+
 test("the Campus lead card uses the featured card markup", () => {
   const projects = html.slice(html.indexOf('id="projects"'), html.indexOf('id="awards"'));
   const campusCard = projects.match(/<li[^>]*>[\s\S]*?Campus[\s\S]*?<\/li>/)?.[0] ?? "";

@@ -5,12 +5,10 @@ route: /
 description: Nathan Espejo, 3rd-year Software Engineering at Western. I build software and applied AI tools on low-cost and self-hosted models. Looking for Summer 2027.
 priority: start-here
 onThisPage: [Experience, Projects, Awards]
-updated: 2026-10-16
+updated: 2026-10-21
 ---
 # Nathan Espejo
 
-I'm a software engineer, and most of what I build lately is LLM tooling I actually use. I care about the boring parts too: tests in CI, data that syncs cleanly, changes I can roll back.
+Most of what I build lately is LLM tooling I use every day, and I put as much care into the parts around the model as the model itself, with tests running in CI, data that syncs cleanly and changes I can roll back. I'd rather pick a cheap model that does the job well than pay for the biggest one.
 
-I'd rather pick a cheap model that does the job well than pay for the biggest one. In my homelab the model proposes a change and plain code applies it, with a log or a rollback behind it.
-
-Right now: using Campus every day across my six courses, and running my NixOS homelab, a laptop and a home server defined in a single repo of config that I can review and roll back.
+Right now I'm using Campus, the AI agent I built that reads all six of my courses, and running a homelab of two NixOS machines managed from a single repo, where every change is declared in config, reviewed and easy to roll back.

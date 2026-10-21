@@ -55,8 +55,9 @@ test("route metadata comes from frontmatter and marks case studies as articles",
 });
 
 test("sitemap lastmod uses frontmatter dates", () => {
+  const homePage = listPages().find((page) => page.route === "/")!;
   const home = sitemap().find((entry) => new URL(entry.url).pathname === "/")!;
-  assert.equal((home.lastModified as Date).toISOString(), "2026-10-16T00:00:00.000Z");
+  assert.equal((home.lastModified as Date).toISOString(), new Date(homePage.updated!).toISOString());
 });
 
 test("the person graph cannot break out of its script tag", () => {
