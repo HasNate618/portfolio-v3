@@ -108,12 +108,6 @@
 
 \begin{document}
 
-%----------HEADING----------
-% \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
-%   \textbf{\href{http://sourabhbajaj.com/}{\Large Sourabh Bajaj}} & Email : \href{mailto:sourabh@sourabhbajaj.com}{sourabh@sourabhbajaj.com}\\
-%   \href{http://sourabhbajaj.com/}{http://www.sourabhbajaj.com} & Mobile : +1-123-456-7890 \\
-% \end{tabular*}
-
 \begin{center}
     \textbf{\Huge \scshape Nathan Espejo} \\ \vspace{1pt}
     \small \href{mailto:nate.e.espejo@gmail.com}{\underline{nate.e.espejo@gmail.com}} $|$
@@ -132,12 +126,13 @@
 \section{Experience}
   \resumeSubHeadingListStart
     \resumeSubheading
-      {VP of Data/ML (promoted from Software Developer)}{Sep 2025 - Aug 2026}
+      {VP of Data/ML}{May 2026 - Aug 2026}
       {3D Western}{London, ON}
       \resumeItemListStart
-        \resumeItem{Co-led two data developers through Jira tickets and PR review on the print-approval dataset and benchmark.}
+        \resumeItem{Co-led two data developers on the print-safety dataset and benchmark, tracking work on a GitHub project board.}
         \resumeItem{Built a labelled dataset from 4,620 scraped 3D models, rendered in Blender with labels checked by a VLM.}
         \resumeItem{Benchmarked small vision models as a binary safe-or-flag gate: 84.2\% best agreement with VLM-checked labels.}
+        \resumeItem{On the data team since Sep 2025, first working on the 3D model scraping and the STL rendering pipeline.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -156,9 +151,9 @@
         \resumeProjectHeading
         {\textbf{Campus} $|$ \emph{Python, FastAPI, SQLite, React, TypeScript, Docker}}{Aug 2026 - Present}
         \resumeItemListStart
-          \resumeItem{Built a self-hosted AI study assistant that syncs my LMS courses into SQLite with Playwright and runs on any OpenAI-compatible endpoint, local or hosted.}
-          \resumeItem{Designed hybrid retrieval over course files with embedding search, cross-encoder reranking and a lexical SQL prefilter. Fixed exact phrases that scored below the semantic cutoff.}
-          \resumeItem{Wrote a 20-tool agent harness with an audit log for every AI write and a bounded tool loop, with 308 tests in CI.}
+          \resumeItem{Built an AI agent that reads all six of my courses, syncing them from the LMS into SQLite with Playwright and running on any OpenAI-compatible endpoint, local or hosted.}
+          \resumeItem{Designed search over course files that is lexical by default with optional embeddings and reranking, and added a lexical SQL prefilter for exact phrases that scored below the semantic cutoff.}
+          \resumeItem{Wrote a 20-tool agent harness with an audit log for every AI write and a bounded tool loop, with 403 backend tests in CI.}
           \resumeItem{Use it across six courses for deadline lookups, studying from course slides, and reviewing drafts against briefs.}
         \resumeItemListEnd
 
@@ -190,7 +185,7 @@
         \textbf{AI}{: LLM agents, tool calling, RAG, embeddings and reranking, MCP, VLMs, model evaluation, llama.cpp, Ollama, PyTorch, YOLOv8, ONNX} \\
         \textbf{Languages}{: Python, TypeScript, C\#, C++, SQL, Bash} \\
         \textbf{Web \& Infra}{: React, FastAPI, Next.js, NixOS, Linux, Docker, Tailscale, Caddy, Git, GitHub Actions} \\
-        \textbf{Tools}{: Hermes Agent, Jira, Blender}
+        \textbf{Tools}{: Hermes Agent, Blender}
     }}
  \end{itemize}
 \end{document}

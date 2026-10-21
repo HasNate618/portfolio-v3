@@ -48,7 +48,7 @@ test("a route document keeps the facts only components render", () => {
   const campus = getCorpusDoc("projects/campus.md")!;
   assert.match(campus.text, /Aug 2026/, "dates must survive projection");
   assert.match(campus.text, /FastAPI/, "stack must survive projection");
-  assert.match(campus.text, /308/, "stats must survive projection");
+  assert.match(campus.text, /403/, "stats must survive projection");
 });
 
 test("an experience document keeps its dates and role", () => {

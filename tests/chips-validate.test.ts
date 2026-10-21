@@ -200,3 +200,36 @@ test("the path line rotates with the thread and skips what was asked", () => {
     "When does Nathan graduate?",
   );
 });
+
+test("a path chip is a hiring step, not an interview or a status update", () => {
+  assert.deepEqual(
+    validateChip({
+      ...base,
+      question: "Is Nathan available for a Summer 2027 internship?",
+      subject: "nathan",
+      slot: "path",
+    }),
+    [],
+  );
+  for (const question of [
+    "Can Nathan discuss an interview?",
+    "What is Nathan's start date?",
+    "What are Nathan's portfolio updates?",
+  ]) {
+    assert.ok(codes({ question, subject: "nathan", slot: "path" }).includes("path"), question);
+  }
+});
+
+test("a chip says Nathan once", () => {
+  assert.ok(codes({ question: "How does Nathan's Nathan Campus work?" }).includes("nathan-twice"));
+});
+
+test("an exhausted adjacent list repeats a topic, not TeraGo", () => {
+  const chips = templates({
+    answerSubject: "campus",
+    featureIds: ["campus", "aware", "homelab"],
+    asked: ["How does Nathan's AWARE work?", "How does Nathan's NixOS homelab work?"],
+  });
+  assert.equal(chips.adjacent.subject, "aware");
+  assert.notEqual(chips.adjacent.subject, "terago");
+});

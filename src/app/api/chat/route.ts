@@ -6,7 +6,7 @@ import { askedAboutAbandoned } from "./lib/chips-validate";
 import { checkChatDailyCap, checkRateLimit, SITE_KEY } from "./lib/rate-limit";
 import { MAX_BODY_CHARS, isBrowserRequest, trimHistory } from "./lib/request-guards";
 import { sanitizeDashes } from "./lib/sanitize-dashes";
-import { streamAnswer } from "./lib/stream-answer";
+import { EMPTY_ANSWER_FALLBACK, streamAnswer } from "./lib/stream-answer";
 import { getCohereClient, MAX_CHAT_MESSAGE_LENGTH, CHAT_MODEL, CHAT_MAX_TOKENS, CHAT_TEMPERATURE, CHAT_THINKING_ENABLED } from "./lib/cohere";
 import { FOLLOWUP_DELIMITER, stripBodyPrefix } from "@/lib/tts/stream-delimiters";
 
@@ -119,6 +119,9 @@ export async function POST(req: Request) {
       new ReadableStream({
         async start(controller) {
           let closed = false;
+          /** Whether the answer is finished and the follow-up tail has begun. */
+          let tailStarted = false;
+          let chipsSent = false;
           const encoder = new TextEncoder();
 
           const closeStream = () => {
@@ -161,6 +164,7 @@ export async function POST(req: Request) {
             const accumulated = result.text;
 
             if (!closed && !req.signal.aborted && !accumulated.includes(FOLLOWUP_DELIMITER)) {
+              tailStarted = true;
               enqueueText(FOLLOWUP_DELIMITER);
               const body = stripBodyPrefix(accumulated);
               // Logged, never enforced: the model is right more often than this is, and
@@ -190,18 +194,28 @@ export async function POST(req: Request) {
                   });
               const followups = chips?.questions ?? DEFAULT_FOLLOWUPS;
               enqueueText(sanitizeDashes(formatFollowupsTail(followups)));
+              chipsSent = true;
             }
 
             closeStream();
           } catch (err) {
             if (!closed) {
               console.error("Stream error:", err);
-              try {
-                controller.error(err);
-              } catch {
-                // Consumer already gone.
+              /*
+               * A mid-stream failure used to end the response object, which left
+               * the client with a broken stream. End it the way an empty answer
+               * ends instead: the honest line, then the default questions.
+               */
+              if (!tailStarted) {
+                enqueueText(sanitizeDashes(EMPTY_ANSWER_FALLBACK));
+                enqueueText(FOLLOWUP_DELIMITER);
+                tailStarted = true;
               }
-              closed = true;
+              if (!chipsSent) {
+                enqueueText(sanitizeDashes(formatFollowupsTail(DEFAULT_FOLLOWUPS)));
+                chipsSent = true;
+              }
+              closeStream();
             }
           }
         },

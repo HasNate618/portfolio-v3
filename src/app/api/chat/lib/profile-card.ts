@@ -36,14 +36,25 @@ const SOLO =
 const CAVEATS = [
   "- AWARE runs every model on the board: there is no cloud inference.",
   "- ferret runs fully offline; nothing leaves the machine.",
-  "- Campus has no approval gate and no rollback; the NixOS homelab's server profile gates changes and rolls them back, and its laptop profile does not.",
+  "- Campus has no approval gate and no rollback. On the NixOS homelab the server agent waits for Nathan's approval, while the laptop agent commits directly and asks him to test.",
   "- 3D Western's dataset labels were VLM-checked, so its accuracy figures are agreement with those labels, not ground truth.",
+  "- 3D Western: Nathan was on the data team the whole time, the small vision models were benchmarked rather than trained, and he never worked on a print pipeline.",
 ];
 
 /** The first sentence of a covers block, which is the card's one line of detail. */
 function firstSentence(text: string): string {
   const [first] = text.split(". ");
   return first.endsWith(".") ? first : `${first}.`;
+}
+
+/**
+ * The line of detail. A project whose covers opens with context ("Built solo
+ * at...", "My first hackathon...") carries a descriptive `cardLine` instead, so
+ * the card does not spend its one line repeating the event and role it already
+ * lists in the facts.
+ */
+function detailSentence(project: Project): string {
+  return firstSentence(project.cardLine ?? project.covers);
 }
 
 /**
@@ -91,7 +102,7 @@ function projectLine(project: Project): string {
  * repeated, so the caveat reads as one claim instead of the same claim twice.
  */
 function detailFor(project: Project): string {
-  const covers = thirdPerson(firstSentence(project.covers));
+  const covers = thirdPerson(detailSentence(project));
   if (!(TEAM_NO_ROLE_IDS as readonly string[]).includes(project.id)) return covers;
 
   const clause = "his own part is not on record.";

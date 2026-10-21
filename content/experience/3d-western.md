@@ -14,7 +14,7 @@ updated: 2026-10-17
 ---
 # 3D Western
 
-3D Western is a student club at Western University that runs free makerspaces for students, in partnership with Morrissette Entrepreneurship. I joined as a Software Developer in Sep 2025 and was promoted to VP of Data/ML for May to Aug 2026, alongside my TeraGo internship. The club was building a print service where students submit jobs through its website, and anyone can upload an STL, so it needed a classifier to stop explicit or weapon-like models.
+3D Western is a student club at Western University that runs free makerspaces for students, in partnership with Morrissette Entrepreneurship. I joined the club's data team in Sep 2025, working on the 3D model scraping and the STL rendering pipeline, and I was VP of Data/ML from May to Aug 2026, alongside my TeraGo internship. The club was building a print service where students submit jobs through its website, and anyone can upload an STL, so it needed a classifier to stop explicit or weapon-like models.
 
 ## tl;dr
 
@@ -24,7 +24,7 @@ updated: 2026-10-17
 
 ## The team and my role
 
-Alongside the frontend, backend and infrastructure teams, the data team was two VPs and two developers. The other VP was also VP of Backend, so I ended up running most of the day-to-day: reviewing PRs, testing changes locally and getting them merged. It was my first dev team outside two-day hackathons, run on Jira tickets and a kanban board, and I liked working that way.
+Alongside the frontend, backend and infrastructure teams, the data team was two VPs and two developers. The other VP was also VP of Backend, so I ended up running most of the day-to-day: reviewing PRs, testing changes locally and getting them merged. It was my first dev team outside two-day hackathons, with the work tracked on a GitHub project board, and I liked working that way.
 
 ## Building the dataset
 

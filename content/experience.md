@@ -23,10 +23,10 @@ Roles newest first.
 
 3D Western is a student club that does free 3D printing in Western's makerspace.
 
-- As VP (May to Aug 2026, alongside TeraGo), co-led two data developers through Jira tickets and PR review on the club's print-approval dataset and benchmark.
+- As VP of Data/ML (May to Aug 2026, alongside TeraGo), co-led two data developers on the club's print-safety dataset and benchmark, tracking the work on a GitHub project board.
 - Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender with labels checked by a VLM.
 - Benchmarked small vision models as a binary safe-or-flag gate. The best agreed with the VLM-checked labels on 84.2% with the filename visible, and 76.9% from the image alone on the earlier prompt.
-- As Software Developer (Sep 2025 to Apr 2026), worked on the Dockerized print pipeline (slicing, orientation, supports, printability checks) and wrote the scraping and rendering scripts.
+- On the data team from Sep 2025 to Apr 2026, worked on the 3D model scraping and the STL rendering pipeline that the dataset was built on.
 
 ## WEMars
 

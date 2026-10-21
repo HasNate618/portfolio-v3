@@ -2,7 +2,7 @@
 title: Campus
 type: project
 route: /projects/campus
-description: A self-hosted study assistant for my courses: Brightspace sync, hybrid retrieval and an agent that logs every write.
+description: The AI agent I built that reads all six of my courses, syncing Brightspace into SQLite and logging the before and after of every write it makes.
 priority: start-here
 tags: [local-ai, rag, agents, education-tooling]
 related: [index.md, homelab.md, aware.md, ../skills.md, ../local-ai.md]
@@ -35,7 +35,7 @@ It's a solo project, so everything below is mine.
 
 - LMS sync with Playwright, MFA login included, into SQLite and a local file store.
 - sha256 change detection, so unchanged files are not downloaded again.
-- Hybrid retrieval: embedding search, cross-encoder reranking, and a lexical SQL prefilter.
+- Search that is lexical by default and needs no extra model, with embedding search and cross-encoder reranking switched on in config, plus a lexical SQL prefilter for exact phrases.
 - A fix for exact phrases that scored below the semantic cutoff. They now go through the lexical path.
 - A {{stat:campus.tools}}-tool agent that answers questions, reads files, and edits notes or due dates, in a bounded tool loop.
 - An append-only audit log with the before and after state of every AI write.
@@ -45,7 +45,7 @@ It's a solo project, so everything below is mine.
 ## How it works
 
 ```diagram
-alt: Brightspace syncs into SQLite and a local file store. Those files are split into an index of chunks. Retrieval reads the index and feeds an agent with twenty tools, which answers questions and writes every change to an audit log with the before and after state.
+alt: Brightspace syncs into SQLite and a local file store. Those files are split into an index of chunks. Retrieval reads the index and feeds an agent with twenty tools. The agent answers questions and writes every change to an audit log with the before and after state.
 Brightspace ─► sync ─► SQLite + files ─► index
                                           │
      answer ◄── agent (20 tools) ◄── retrieve

@@ -164,3 +164,14 @@ test("a range ending in a full month name or an open end reads as a range", () =
     "September 2025 to December 2026",
   );
 });
+
+/*
+ * A two-digit closing year is shorthand, so it keeps a hyphen instead of becoming
+ * a colon. And the range lookbehind must not read a month out of the end of an
+ * ordinary word: "summary" ends in "mary", which was "Mar" + "y".
+ */
+test("a two-digit year stays a hyphen, and a word ending in a month is not a date", () => {
+  assert.equal(sanitizeDashes("In 2024\u201325"), "In 2024-25");
+  assert.equal(sanitizeDashes("the summary \u2013 2025"), "the summary: 2025");
+  assert.equal(sanitizeDashes("the dismay \u2013 2025"), "the dismay: 2025");
+});

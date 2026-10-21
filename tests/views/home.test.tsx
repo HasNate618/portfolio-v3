@@ -13,7 +13,7 @@ test("home renders identity, seeking and the Campus card", () => {
   assert.match(html, /, graduating May 2028\. Looking for a /);
   assert.match(html, /Campus/);
   assert.match(html, /courses, in daily use/);
-  assert.match(html, /308/);
+  assert.match(html, /403/);
   assert.doesNotMatch(html, /4,687/, "the exact chunk count is not published anywhere");
 });
 

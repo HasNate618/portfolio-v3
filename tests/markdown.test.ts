@@ -11,7 +11,7 @@ test("headings map to h1, h2 and h3 with ids", () => {
 });
 
 test("stat placeholders resolve from site data", () => {
-  assert.match(renderMarkdown("over {{stat:campus.tests}} tests"), /over 308 tests/);
+  assert.match(renderMarkdown("over {{stat:campus.tests}} tests"), /over 403 tests/);
 });
 
 test("an unknown stat key throws rather than rendering blank", () => {
@@ -25,7 +25,7 @@ test("lists and inline code render", () => {
 });
 
 test("resolveStats substitutes without rendering markdown", () => {
-  assert.equal(resolveStats("over {{stat:campus.tests}} tests"), "over 308 tests");
+  assert.equal(resolveStats("over {{stat:campus.tests}} tests"), "over 403 tests");
   assert.ok(
     !resolveStats("**bold** {{stat:campus.tests}}").includes("<strong>"),
     "resolveStats must return plain text, not HTML"

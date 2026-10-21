@@ -51,7 +51,7 @@ AI is the biggest group on the server, and the part I use most:
 
 - **Bifrost** is the gateway. It puts local and cloud models behind one OpenAI-compatible endpoint, so a service never needs to know which model answers. Campus, Open WebUI and trawl all route through it, and I run my own fork of it for session affinity.
 - **Local models** run on my laptop's RTX 4060 through a CUDA build of llama.cpp, and Bifrost reaches them over Tailscale. A local 9B model runs at about 20 tokens a second there, while the server's GTX 960 is too old for modern LLMs. Harder work goes to low-cost cloud models.
-- **[Campus](campus.md)**, my study assistant, runs here in a hardened container. It syncs my course material, extracts new PDFs overnight and embeds them, so I can ask what's due this week or have it explain a specific slide, with citations.
+- **[Campus](campus.md)**, the AI agent I built that reads all six of my courses, runs here in a hardened container. It syncs my course material, extracts new PDFs overnight and embeds them, so I can ask what's due this week or have it explain a specific slide, with citations.
 - **trawl** is an MCP server I built for web search and page reading in one tool. Both agent profiles use it. It searches through Exa, falls back to my own SearXNG and DeGoog, and reads pages with crawl4ai.
 - **Brightspace MCP** is the other MCP server. It exposes my courses, assignments, grades and announcements, so a coursework question gets answered from the source instead of from something I pasted in.
 - **EmbeddingGemma** gives the GTX 960 a job it can do: local text, image and audio embeddings in one vector space.

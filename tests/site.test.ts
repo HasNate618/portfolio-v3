@@ -13,7 +13,7 @@ import { caseStudyHref } from "../src/lib/content";
 
 test("Campus carries the figures the draft states", () => {
   const stats = Object.fromEntries(getProject("campus")!.stats.map((s) => [s.key, s.value]));
-  assert.equal(stats.tests, "308");
+  assert.equal(stats.tests, "403");
   assert.equal(stats.courses, "6");
   assert.ok(getProject("campus")!.stack.includes("FastAPI"));
 });
@@ -134,7 +134,7 @@ test("every ranked project exists and exactly one is the lead", () => {
 /*
  * The entry flattened a promotion into one title over one window, so answers dated the VP
  * role to Sep 2025. The body always had it right: Software Developer from Sep 2025,
- * promoted to VP of Data/ML for May to Aug 2026.
+ * then VP of Data/ML for May to Aug 2026.
  */
 test("3D Western states both titles and both windows", () => {
   const role = site.experience.find((entry) => entry.id === "3d-western");

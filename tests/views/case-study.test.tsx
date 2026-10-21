@@ -20,7 +20,7 @@ test("Campus renders its sections and figures", () => {
     assert.ok(html.includes(h), `missing ${h}`);
   }
   assert.match(html, /just over 200 of them as of early October 2026/);
-  assert.match(html, /308/);
+  assert.match(html, /403/);
 });
 
 test("the on-this-page list links to real heading ids", () => {
@@ -51,7 +51,7 @@ test("the diagram is hidden from assistive tech and captioned instead", () => {
 });
 
 test("no figure is typed into the content file", () => {
-  for (const figure of ["4,687", "215", "308"]) {
+  for (const figure of ["4,687", "215", "403"]) {
     assert.ok(!page.body.includes(figure), `${figure} must come from site.ts, not the markdown`);
   }
   assert.match(page.body, /\{\{stat:campus\.tests\}\}/);

@@ -143,6 +143,20 @@ test("a project with a model list states how many it runs", () => {
   assert.match(line, /5 on-device models/, line);
 });
 
+/*
+ * Both covers open with context ("Built solo at...", "My first hackathon..."),
+ * which repeated the event and role the facts already list. The card's one line
+ * of detail has to describe what the project does.
+ */
+test("AWARE and Animarker describe the project, not just the event", () => {
+  const aware = card.split("\n").find((entry) => /^- AWARE\b/.test(entry)) ?? "";
+  const animarker = card.split("\n").find((entry) => /^- Animarker\b/.test(entry)) ?? "";
+  assert.match(aware, /watches a camera/i);
+  assert.doesNotMatch(aware, /: Built solo at Hack the 6ix 2026\./);
+  assert.match(animarker, /wildlife tracker/i);
+  assert.doesNotMatch(animarker, /: His first hackathon, done solo\./);
+});
+
 test("only a project with a model list carries a count", () => {
   const lines = card.split("\n").filter((entry) => /on-device models/.test(entry));
   assert.equal(lines.length, 1, `one project states a model count:\n${lines.join("\n")}`);

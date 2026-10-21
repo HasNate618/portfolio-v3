@@ -24,6 +24,7 @@ export interface ChipSet {
 
 export type ChipFailureCode =
   | "nathan"
+  | "nathan-twice"
   | "pronoun"
   | "length"
   | "banned"
@@ -33,6 +34,7 @@ export type ChipFailureCode =
   | "award"
   | "solo"
   | "led"
+  | "path"
   | "dup";
 
 export interface ChipFailure {
@@ -106,6 +108,7 @@ export function validateChip(input: {
   };
 
   if (!/\bNathan\b/i.test(question)) fail("nathan");
+  if ((question.match(/\bNathan\b/gi) ?? []).length > 1) fail("nathan-twice");
   if (/\b(he|his|him)\b/i.test(question)) fail("pronoun");
 
   const trimmed = question.trim();
@@ -124,6 +127,15 @@ export function validateChip(input: {
   }
 
   if (slot === "adjacent" && normalizeWords(subject) === normalizeWords(answerSubject)) fail("adjacent");
+
+  /*
+   * A path chip is the next step in hiring: availability, graduation, the
+   * résumé or contact. An interview request, a discussion or a start date is a
+   * different ask, and a portfolio status update is not a hiring step at all.
+   */
+  const pathTopic = /\b(available|availability|graduat\w*|r[ée]sum[ée]|contact|email|reach)\b/i;
+  const pathOffTopic = /\b(interview\w*|discuss\w*|start(?:ing)? dates?|portfolio|updates?)\b/i;
+  if (slot === "path" && (!pathTopic.test(question) || pathOffTopic.test(question))) fail("path");
 
   // awardFor() matches on the project name, not the id.
   const project = getProject(subject);
@@ -193,6 +205,16 @@ function nextFeatureSlot(answerSubject: string, featureIds: string[], asked: str
       if (id === answerSubject) continue;
       const candidate = slotFor(id);
       if (!wasAsked(candidate.question, asked)) return candidate;
+    }
+    /*
+     * Every other subject in this topic has been asked. Repeat the nearest one
+     * rather than dropping to a hardcoded project: the fallback has to follow
+     * the conversation, not always land on TeraGo.
+     */
+    for (let step = 1; step <= featureIds.length; step += 1) {
+      const id = featureIds[(start + step) % featureIds.length];
+      if (id === answerSubject) continue;
+      return slotFor(id);
     }
   }
   return { question: DEFAULT_ADJACENT, subject: "terago" };

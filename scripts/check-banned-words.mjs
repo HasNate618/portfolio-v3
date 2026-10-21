@@ -3,9 +3,8 @@
  * Banned words, as a build gate.
  *
  * The word list lives in `src/lib/banned-words.ts` so the chip validator rejects
- * the same words this fails on. The `docs/` tree is deliberately not scanned:
- * a design document has to be able to name the word it bans, and the two
- * superpowers files that said "flagship" are listed individually below.
+ * the same words this fails on. Design documents are not part of the served tree
+ * and are not scanned: a design document has to be able to name the word it bans.
  *
  * Usage: check-banned-words.mjs [--root <dir-or-file>]   (default: the served tree)
  */
@@ -21,8 +20,6 @@ const ROOTS = [
   "tests",
   "scripts",
   "README.md",
-  "docs/superpowers/specs/2026-10-15-portfolio-v3-text-design.md",
-  "docs/superpowers/plans/2026-10-15-portfolio-v3-text-site.md",
 ];
 
 /** Files that have to name a banned word to do their job. */

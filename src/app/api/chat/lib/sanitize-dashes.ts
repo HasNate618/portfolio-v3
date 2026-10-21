@@ -51,7 +51,11 @@ const DASH_RANGE = "\\u2013\\u2014\\u2015";
  * so "**Animarker** - May 2023" stays a separator.
  */
 const MONTH = "(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)";
-const DATE_BEFORE = `(?:${MONTH})[a-z]*\\.?(?:\\s+\\d{4})?|\\d{4}`;
+/*
+ * The word boundary keeps a month from matching the end of an ordinary word:
+ * "the summary - 2025" was read as "Mar" + "y" and became a range.
+ */
+const DATE_BEFORE = `\\b(?:(?:${MONTH})[a-z]*\\.?(?:\\s+\\d{4})?|\\d{4})`;
 /**
  * The right side must accept a full month name and the open-ended words a range ends
  * with. Reading only three-letter abbreviations turned "May - August 2026" into
@@ -59,6 +63,12 @@ const DATE_BEFORE = `(?:${MONTH})[a-z]*\\.?(?:\\s+\\d{4})?|\\d{4}`;
  */
 const DATE_AFTER = `(?:(?:${MONTH})[a-z]*\\.?|\\d{4}|present|now|today|current)\\b`;
 const DATE_RANGE = new RegExp(`(?<=${DATE_BEFORE}) *[${DASH_RANGE}] *(?=${DATE_AFTER})`, "gi");
+/**
+ * Shorthand such as "2024-25" is written with a hyphen. The right side is two
+ * digits, so the date-range rule does not accept it and the colon rule turned it
+ * into "2024: 25".
+ */
+const COMPACT_YEAR_RANGE = new RegExp(`(?<=\\d{4}) *[${DASH_RANGE}] *(?=\\d{2}\\b)`, "g");
 /** Remaining em dashes and horizontal bars read as a comma. */
 const EM_DASH = new RegExp(` *[\\u2014\\u2015] *`, "g");
 /** Remaining en dashes read as a colon, which is how they are used mid-sentence. */
@@ -83,6 +93,7 @@ export function sanitizeDashes(text: string, atLineStart = true): string {
   const normalized = text.replace(EXOTIC_SPACE, " ").replace(ZERO_WIDTH_SPACE, "");
 
   return replaceListDashes(normalized, atLineStart)
+    .replace(COMPACT_YEAR_RANGE, "-")
     .replace(DATE_RANGE, " to ")
     .replace(EM_DASH, ", ")
     .replace(EN_DASH, ": ")

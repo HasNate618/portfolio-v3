@@ -37,6 +37,12 @@ export type Project = {
   event?: string;
   covers: string;
   /**
+   * The card's one line of detail, for a project whose covers opens with
+   * context rather than a description ("Built solo at...", "My first
+   * hackathon..."). Falls back to the first sentence of `covers`.
+   */
+  cardLine?: string;
+  /**
    * What the project does not do, where a neighbouring project does. Carried into
    * the corpus because four live answers in five gave Campus the homelab's
    * approval gate and rollback, and rule 3's denial did not stop them.
@@ -111,9 +117,9 @@ export const site: SiteContent = {
       summary: "Built a prototype pipeline that uses a locally hosted LLM (Ollama) to turn unstructured emails into structured tickets, working end to end. Also built a Python RF channel-planning tool that shortlists clear frequencies for fixed-wireless links, and deployed an internal RAG assistant that answers engineers' technical questions from company documentation.",
       stack: ["Python", "Ollama", "RAG"] },
     { id: "3d-western", org: "3D Western", role: "Software Developer (Sep 2025 to Apr 2026), then VP of Data/ML (May 2026 to Aug 2026)", location: "London, ON", terms: [{ start: "2025-09", end: "2026-04" }, { start: "2026-05", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
-      summary: "Started on the Dockerized print pipeline, then as VP co-led two data developers: a print-safety dataset of 2,559 clean renders from 4,620 scraped 3D models, rendered in Blender and checked by a VLM. The best small vision model agreed with those labels on 84.2% with the filename visible, and 76.9% from the image alone on the earlier prompt. Ran alongside my TeraGo internship.",
+      summary: "I was on the data team from Sep 2025, working on the 3D model scraping and the STL rendering pipeline, and as VP of Data/ML I co-led two data developers on a print-safety dataset and benchmark, tracking the work on a GitHub project board. The dataset has 2,559 clean renders from 4,620 scraped 3D models, every one checked by a VLM, and the best small vision model, Qwen3-VL-2B, agreed with those labels on 84.2% with the filename visible and 76.9% from the image alone on the earlier prompt. Ran alongside my TeraGo internship.",
       stats: [{ key: "dataset", label: "scraped 3D models", value: "4,620" }],
-      stack: ["Python", "Blender", "Qwen3-VL-2B", "Shieldstral", "llama.cpp", "Docker", "Jira"] },
+      stack: ["Python", "Blender", "Qwen3-VL-2B", "Shieldstral", "llama.cpp", "Docker"] },
     { id: "wemars", org: "WEMars", role: "Software team member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2024 to Apr 2025, rejoined Sep 2026", onResume: false, file: "/knowledgebase/experience/wemars.md",
       summary: "Western's Mars rover team. I rejoined in Sep 2026 to work on AI and autonomy. In 2024-25 I built wireless ESP32-CAM streaming." },
     { id: "wefirst", org: "WEFirst Robotics", role: "Software Developer", location: "London, ON", terms: [{ start: "2026-01", end: "2026-04" }], dates: "Jan 2026 to Apr 2026", onResume: false, file: "/knowledgebase/experience/wefirst.md",
@@ -138,7 +144,7 @@ export const site: SiteContent = {
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Campus" }],
       stats: [
         { key: "courses", label: "courses, in daily use (I'm the only user)", value: "6" },
-        { key: "tests", label: "tests in CI on every push", value: "308" },
+        { key: "tests", label: "backend tests in CI on every push", value: "403" },
         { key: "tools", label: "agent tools", value: "20", home: false },
       ],
       // Six pills per project, at most: a card is a summary, and a stack of
@@ -172,6 +178,7 @@ export const site: SiteContent = {
       id: "aware", name: "AWARE", group: "featured", order: 3,
       dates: "Jul 2026", displayRole: "solo", event: "Hack the 6ix 2026",
       covers: "Built solo at Hack the 6ix 2026. It watches a camera, listens for sounds and reads sensors, and you set automations in plain English, like \"when glass breaks after 10pm, alert me.\" A 1B model turns that into a rule, plain code checks every rule each 500 ms, and vision, audio and the LLM all run on one $80 board with no cloud inference.",
+      cardLine: "Watches a camera, listens for sounds and reads sensors, with automations set in plain English.",
       media: [
         { src: "/projects/aware-0.webp", alt: "AWARE device on an Arduino UNO Q", width: 1200, height: 676 },
         { src: "/projects/aware-1.webp", alt: "AWARE web dashboard", width: 1200, height: 1122 },
@@ -278,6 +285,7 @@ export const site: SiteContent = {
       id: "animarker", name: "Animarker", group: "tools", order: 10,
       dates: "May 2023", displayRole: "solo", event: "Washington Justice Encode",
       covers: "My first hackathon, done solo. An Android wildlife tracker: a TensorFlow CNN identifies the species and the sighting goes on a map.",
+      cardLine: "An Android wildlife tracker: a TensorFlow CNN identifies the species and the sighting goes on a map.",
       media: [
         { src: "/projects/animarker-0.webp", alt: "Animarker Overview", width: 1024, height: 500 },
         { src: "/projects/animarker-1.webp", alt: "Animarker Map View", width: 271, height: 573 },
@@ -591,7 +599,7 @@ export const site: SiteContent = {
     { group: "Languages", items: ["Python", "TypeScript", "Rust", "C#", "Kotlin", "SQL"] },
     { group: "Web and backend", items: ["React", "Next.js", "Three.js", "FastAPI", "SQLite", "MongoDB", "Supabase"] },
     { group: "Infrastructure", items: ["NixOS", "Docker", "Tailscale", "Caddy", "sops-nix", "GitHub Actions", "Playwright"] },
-    { group: "Tools", items: ["Hermes Agent", "Jira", "Blender"] },
+    { group: "Tools", items: ["Hermes Agent", "Blender"] },
     { group: "Hardware and embedded", items: ["Arduino", "ESP32", "Raspberry Pi", "EMG sensors", "CAN bus and closed-loop control"] },
     { group: "Games and XR", items: ["Unity", "Snap Spectacles"] },
   ],

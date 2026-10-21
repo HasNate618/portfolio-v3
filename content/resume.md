@@ -14,7 +14,7 @@ skills:
   - group: Web & Infra
     items: [React, FastAPI, Next.js, NixOS, Linux, Docker, Tailscale, Caddy, Git, GitHub Actions]
   - group: Tools
-    items: [Hermes Agent, Jira, Blender]
+    items: [Hermes Agent, Blender]
 updated: 2026-10-16
 ---
 # Résumé
@@ -23,7 +23,7 @@ updated: 2026-10-16
 
 ### 3D Western
 
-- Co-led two data developers through Jira tickets and PR review on the print-approval dataset and benchmark.
+- Co-led two data developers on the print-safety dataset and benchmark, tracking work on a GitHub project board.
 - Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender with labels checked by a VLM.
 - Benchmarked small vision models as a binary safe-or-flag gate: 84.2% best agreement with VLM-checked labels.
 
@@ -38,9 +38,9 @@ updated: 2026-10-16
 
 ### Campus
 
-- Built a self-hosted AI study assistant that syncs my LMS courses into SQLite with Playwright and runs on any OpenAI-compatible endpoint, local or hosted.
-- Designed hybrid retrieval over course files with embedding search, cross-encoder reranking and a lexical SQL prefilter. Fixed exact phrases that scored below the semantic cutoff.
-- Wrote a {{stat:campus.tools}}-tool agent harness with an audit log for every AI write and a bounded tool loop, with {{stat:campus.tests}} tests in CI.
+- Built an AI agent that reads all {{stat:campus.courses}} of my courses, syncing them from the LMS into SQLite with Playwright and running on any OpenAI-compatible endpoint, local or hosted.
+- Designed search over course files that is lexical by default with optional embeddings and reranking, and added a lexical SQL prefilter for exact phrases that scored below the semantic cutoff.
+- Wrote a {{stat:campus.tools}}-tool agent harness with an audit log for every AI write and a bounded tool loop, with {{stat:campus.tests}} backend tests in CI.
 - Use it across {{stat:campus.courses}} courses for deadline lookups, studying from course slides, and reviewing drafts against briefs.
 
 ### NixOS homelab

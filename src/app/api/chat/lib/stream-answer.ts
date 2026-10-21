@@ -64,6 +64,12 @@ export const MAX_ANSWER_CHARS = 6000;
 export const ANSWER_ATTEMPTS = 2;
 
 /**
+ * The one honest line for an answer that never arrived. The route uses it too,
+ * so a mid-stream failure ends the same way an empty generation does.
+ */
+export const EMPTY_ANSWER_FALLBACK = `Nathan's assistant could not put that answer together just now. Ask again, or reach him at ${site.contact.email}.`;
+
+/**
  * The stream's filter chain, over an answer that arrived whole.
  *
  * The eval reads one message instead of a stream, and grading the raw text charged it
@@ -207,7 +213,7 @@ export async function streamAnswer(options: StreamAnswerOptions): Promise<Answer
    * the address in it is a fact the site holds rather than something the model wrote.
    */
   if (text.trim().length === 0 && !stopped()) {
-    text = `Nathan's assistant could not put that answer together just now. Ask again, or reach him at ${site.contact.email}.`;
+    text = EMPTY_ANSWER_FALLBACK;
     options.emit(text);
     options.onProgress?.(text);
   }
