@@ -1,16 +1,20 @@
 ---
 title: "About Nathan Espejo"
 type: page
-description: About Nathan Espejo, a Software Engineering student building applied AI systems and software tools.
+description: About Nathan Espejo, a third-year Software Engineering student at Western University building applied AI tools and a NixOS homelab.
 priority: start-here
 dates: "Aug 2024 to present"
 tags: [profile, education, contact, recruiting]
 related: [now.md, local-ai.md, projects/campus.md, projects/homelab.md, experience/index.md]
-updated: 2026-10-16
+updated: 2026-10-21
 ---
 # About Nathan Espejo
 
-Nathan Espejo is a 3rd-year Software Engineering student at Western University (2026-27) who builds LLM agents and retrieval systems for his own workflows. He is looking for a Summer 2027 software engineering or applied AI internship.
+3rd-year Software Engineering student at Western University (graduating May 2028), looking for a Summer 2027 software engineering or applied AI internship.
+
+Most of what I build lately is LLM tooling I use every day, and I put as much care into the parts around the model as the model itself, with tests running in CI, data that syncs cleanly and changes I can roll back. I'd rather pick a cheap model that does the job well than pay for the biggest one.
+
+Right now I'm using Campus, the AI agent I built that reads all six of my courses, and running a homelab of two NixOS machines managed from a single repo, where every change is declared in config, reviewed and easy to roll back.
 
 ## In short
 
@@ -27,14 +31,6 @@ Brampton and London, ON.
 ## Education
 
 Western University, Bachelor of Engineering Science in Software Engineering, Aug 2024 to May 2028 (expected graduation May 2028). Dean's Honour List in 2024 and 2025.
-
-## Focus
-
-His main projects are Campus, the AI agent he built that reads all six of his courses, and a Nix/NixOS homelab where a single repo defines his laptop and his home server, from the services and networking to backups and monitoring, with an AI agent on each machine that makes changes by editing that config. He also built AWARE, an on-device build with no cloud inference. His industry work is at TeraGo and 3D Western. How he chooses between hosted and local models is in [Local and cost-aware AI](local-ai.md). Outside AI he has also built games, mobile apps and hardware, many of them at hackathons.
-
-## How he works
-
-He likes small teams with clear ownership, reproducible setups, and good READMEs. In his homelab the model proposes a change and a deterministic step applies it, with an audit log or rollback behind it.
 
 ## Links
 

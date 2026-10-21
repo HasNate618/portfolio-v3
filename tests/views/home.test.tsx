@@ -24,6 +24,17 @@ test("the seeking line comes from site.ts, not from the markdown", () => {
   assert.ok(!page.body.includes("Summer 2027"), "seeking must not be restated in content");
 });
 
+test("the Campus lead card uses the featured card markup", () => {
+  const projects = html.slice(html.indexOf('id="projects"'), html.indexOf('id="awards"'));
+  const campusCard = projects.match(/<li[^>]*>[\s\S]*?Campus[\s\S]*?<\/li>/)?.[0] ?? "";
+  assert.ok(campusCard, "Campus should render as a project card in the shared list");
+  assert.match(campusCard, /id="campus"/, "the #campus anchor must survive");
+  assert.match(campusCard, /text-lg/, "same heading size as the other cards");
+  assert.doesNotMatch(campusCard, /text-2xl/, "no larger lead heading");
+  assert.match(campusCard, /href="\/projects\/campus"/, "the title links to the case study");
+  assert.match(campusCard, /rounded-lg border p-6/, "same card surface and padding");
+});
+
 test("the featured section links to real case studies, and only those", () => {
   for (const id of ["homelab", "aware"]) {
     assert.ok(html.includes(`href="/projects/${id}"`), `missing case study link for ${id}`);

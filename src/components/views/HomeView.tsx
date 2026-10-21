@@ -26,8 +26,7 @@ const HOME_ROLES = 2;
 const HOME_AWARDS = ["Careerly", "Auralis", "Eyecandy", "CareBridge"];
 
 export function HomeView({ page }: { page: Page }) {
-  const campus = leadProject()!;
-  const featured = featuredProjects();
+  const projects = [leadProject()!, ...featuredProjects()];
 
   /**
    * Only roles that actually have a case study route link out. Deriving the slug
@@ -107,33 +106,18 @@ export function HomeView({ page }: { page: Page }) {
         Projects
       </h2>
 
-      {/* Campus: the strongest proof. */}
-      <section aria-labelledby="campus" className="mt-6 rounded-lg border border-rule bg-surface p-6">
-        <h3 id="campus" className="text-2xl font-semibold text-fg">
-          {campus.name}
-        </h3>
-        <div className="mt-2">
-          <ProjectMetaRow projectId="campus" />
-        </div>
-        <p className="mt-4 max-w-[68ch] leading-relaxed">{campus.covers}</p>
-        <ProjectMedia media={campus.media} className="mt-5 max-w-xl" />
-        <div className="mt-6">
-          <StackList projectId="campus" />
-        </div>
-        <div className="mt-6">
-          <LinkRow projectId="campus" />
-        </div>
-      </section>
-
-      <ul className="mt-8 flex flex-col gap-6">
-        {featured.map((project) => {
+      {/* The lead project gets the same card as the rest; only its place in
+          the list sets it apart. */}
+      <ul className="mt-6 flex flex-col gap-6">
+        {projects.map((project) => {
           const award = awardFor(project.name);
-          // Same honesty rule as the roles above: a featured project only links
-          // out when a case-study route exists, so no card points at a 404.
+          // Same honesty rule as the roles above: a project only links out
+          // when a case-study route exists, so no card points at a 404.
           const href = projectHref(project);
           return (
             <li
               key={project.id}
+              id={project.rank === "lead" ? project.id : undefined}
               className={`rounded-lg border p-6 transition-colors ${
                 award
                   ? "border-accent/50 bg-accent/5 hover:border-accent"
