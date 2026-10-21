@@ -40,7 +40,7 @@ export function ProjectMedia({ media, className = "" }: { media?: Media[]; class
              * The image's own alt is the link's name: an aria-label saying
              * "Expand:" would replace the description with an instruction.
              */}
-            <a id={thumbId} href={`#${id}`} className="block cursor-zoom-in">
+            <a id={thumbId} href={`#${id}`} className="relative z-10 block cursor-zoom-in">
               <Image
                 src={item.src}
                 alt={item.alt}

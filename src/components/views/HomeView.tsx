@@ -1,12 +1,8 @@
 import Link from "next/link";
-import { site, featuredProjects, leadProject, awardFor } from "@/data/site";
+import { site, featuredProjects, leadProject } from "@/data/site";
 import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
-import { caseStudyHref as projectHref, getPage, type Page } from "@/lib/content";
-import { ProjectMetaRow } from "@/components/ProjectMetaRow";
-import { StackList } from "@/components/StackList";
-import { LinkRow } from "@/components/LinkRow";
-import { ProjectMedia } from "@/components/ProjectMedia";
-import { AwardBadge } from "@/components/AwardBadge";
+import { getPage, type Page } from "@/lib/content";
+import { ProjectCard } from "@/components/ProjectCard";
 import { AwardsTable } from "@/components/AwardsTable";
 
 /**
@@ -109,45 +105,13 @@ export function HomeView({ page }: { page: Page }) {
       {/* The lead project gets the same card as the rest; only its place in
           the list sets it apart. */}
       <ul className="mt-6 flex flex-col gap-6">
-        {projects.map((project) => {
-          const award = awardFor(project.name);
-          // Same honesty rule as the roles above: a project only links out
-          // when a case-study route exists, so no card points at a 404.
-          const href = projectHref(project);
-          return (
-            <li
-              key={project.id}
-              id={project.rank === "lead" ? project.id : undefined}
-              className={`rounded-lg border p-6 transition-colors ${
-                award
-                  ? "border-accent/50 bg-accent/5 hover:border-accent"
-                  : "border-rule bg-surface hover:border-accent/40"
-              }`}
-            >
-              <h3 className="text-lg font-medium leading-snug text-fg">
-                {href ? (
-                  <Link href={href} className="hover:text-accent">
-                    {project.name}
-                  </Link>
-                ) : (
-                  project.name
-                )}
-              </h3>
-              <div className="mt-1">
-                <ProjectMetaRow projectId={project.id} />
-              </div>
-              <AwardBadge projectName={project.name} />
-              <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
-              <ProjectMedia media={project.media} className="mt-3" />
-              <div className="mt-3">
-                <StackList projectId={project.id} />
-              </div>
-              <div className="mt-3">
-                <LinkRow projectId={project.id} />
-              </div>
-            </li>
-          );
-        })}
+        {projects.map((project) => (
+          <ProjectCard
+            key={project.id}
+            project={project}
+            id={project.rank === "lead" ? project.id : undefined}
+          />
+        ))}
       </ul>
 
       {/* The way to the full index, centred between hairlines. */}
