@@ -26,6 +26,7 @@ updated: 2026-10-16
 - Co-led two data developers on the print-safety dataset and benchmark, tracking work on a GitHub project board.
 - Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender with labels checked by a VLM.
 - Benchmarked small vision models as a binary safe-or-flag gate: 84.2% best agreement with VLM-checked labels.
+- On the data team since Sep 2025, writing the render scripts and working on the 3D model scraping and the STL rendering pipeline.
 
 ### TeraGo
 
@@ -45,10 +46,10 @@ updated: 2026-10-16
 
 ### NixOS homelab
 
-- Defined a laptop and home server entirely in version-controlled NixOS config ({{stat:homelab.containers}} containers, Tailscale-only access, sops-nix secrets), so every change is a reviewable, reversible diff.
-- Run one Hermes Agent profile per host that makes changes as config edits, over {{stat:homelab.sessions}} sessions since June, with subagents taking larger investigations.
-- Gave each machine's agent its own level of autonomy: the server agent waits for approval on a full diff, the laptop agent commits and asks me to test, and both rebuild through a host-checked guard with generation rollback.
-- Grew a git-versioned library of {{stat:homelab.skills}} agent skills on low-cost models, pruned weekly by a curator that keeps backups of removed skills.
+- Defined a laptop and home server in a single Nix/NixOS repo, so every change can be reviewed and rolled back.
+- Self-host passwords, photos, files, a git remote and AI services behind Caddy and Tailscale, with sops-nix secrets.
+- Set up daily NAS backups, uptime alerts, intrusion detection with CrowdSec, and split-horizon DNS.
+- Run a Hermes Agent per machine that edits only the config, with my approval required on the server.
 
 ### AWARE
 

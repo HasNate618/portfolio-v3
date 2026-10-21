@@ -39,16 +39,14 @@ This was internal work, so there's no code or screenshots here, and the details 
 
 Email-to-ticket prototype:
 
-```diagram
+```diagram terago-email
 alt: An email goes to a locally hosted model on Ollama, which pulls out the key details, and a structured ticket is created.
-email ─► local LLM (Ollama) ─► structured ticket
 ```
 
 RF channel-planning tool:
 
-```diagram
+```diagram terago-rf
 alt: A link type and candidate frequencies are checked by the tool, producing a shortlist of clear frequencies.
-link type + candidate frequencies ─► checks ─► shortlist of clear frequencies
 ```
 
 ## Models and cost

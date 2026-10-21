@@ -6,7 +6,7 @@ description: A wearable launcher triggered by an EMG muscle sensor, with nine 3D
 priority: reference
 rank: archive
 dates: "2025 (approx.)"
-role: "owner"
+role: "solo"
 status: shipped
 tags: [hardware, embedded-systems, cad, 3d-printing]
 related: [index.md, ../skills.md]

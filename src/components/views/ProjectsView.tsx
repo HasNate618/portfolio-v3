@@ -4,7 +4,6 @@ import type { Project, ProjectGroup } from "@/data/site";
 import { renderMarkdown, slugify, stripLeadingH1 } from "@/lib/markdown";
 import { caseStudyHref, type Page } from "@/lib/content";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
-import { StatRow } from "@/components/StatRow";
 import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
 import { ProjectMedia } from "@/components/ProjectMedia";
@@ -56,7 +55,7 @@ export function ProjectsView({ page }: { page: Page }) {
           </h2>
           <ul className="mt-6 flex flex-col gap-6">
             {byGroup(group).map((project) => (
-              <ProjectCard key={project.id} project={project} showStats={group === "featured"} />
+              <ProjectCard key={project.id} project={project} />
             ))}
           </ul>
         </section>
@@ -154,7 +153,7 @@ function ArchiveTable({ projects }: { projects: Project[] }) {
   );
 }
 
-function ProjectCard({ project, showStats }: { project: Project; showStats?: boolean }) {
+function ProjectCard({ project }: { project: Project }) {
   // Only a handful of projects have a real case-study route; the rest render
   // as plain text. LinkRow offers the same route as its first item.
   const href = caseStudyHref(project);
@@ -188,11 +187,6 @@ function ProjectCard({ project, showStats }: { project: Project; showStats?: boo
       <AwardBadge projectName={project.name} />
       <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
       <ProjectMedia media={project.media} className="mt-4 max-w-xl" />
-      {showStats ? (
-        <div className="mt-4">
-          <StatRow projectId={project.id} />
-        </div>
-      ) : null}
       <div className="mt-4">
         <StackList projectId={project.id} />
       </div>

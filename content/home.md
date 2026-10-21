@@ -13,4 +13,4 @@ I'm a software engineer, and most of what I build lately is LLM tooling I actual
 
 I'd rather pick a cheap model that does the job well than pay for the biggest one. In my homelab the model proposes a change and plain code applies it, with a log or a rollback behind it.
 
-Right now: using Campus every day across my six courses, and running my NixOS homelab, where two Hermes agents change both machines only by editing their config.
+Right now: using Campus every day across my six courses, and running my NixOS homelab, a laptop and a home server defined in a single repo of config that I can review and roll back.

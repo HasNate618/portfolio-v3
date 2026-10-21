@@ -34,10 +34,9 @@ test("no project stack is long enough to bury its card", () => {
 
 test("Homelab carries the figures the draft states", () => {
   const stats = Object.fromEntries(getProject("homelab")!.stats.map((s) => [s.key, s.value]));
-  assert.equal(stats.sessions, "411");
-  assert.equal(stats.skills, "212");
-  assert.equal(stats.toolCalls, "34,673");
+  assert.equal(stats.machines, "2");
   assert.equal(stats.containers, "35");
+  assert.equal(stats.sessions, undefined, "agent counts left with the stat tiles");
 });
 
 test("TeraGo keeps its corrected dates", () => {

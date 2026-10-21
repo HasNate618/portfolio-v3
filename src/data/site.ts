@@ -117,7 +117,7 @@ export const site: SiteContent = {
       summary: "Built a prototype pipeline that uses a locally hosted LLM (Ollama) to turn unstructured emails into structured tickets, working end to end. Also built a Python RF channel-planning tool that shortlists clear frequencies for fixed-wireless links, and deployed an internal RAG assistant that answers engineers' technical questions from company documentation.",
       stack: ["Python", "Ollama", "RAG"] },
     { id: "3d-western", org: "3D Western", role: "Software Developer (Sep 2025 to Apr 2026), then VP of Data/ML (May 2026 to Aug 2026)", location: "London, ON", terms: [{ start: "2025-09", end: "2026-04" }, { start: "2026-05", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
-      summary: "I was on the data team from Sep 2025, working on the 3D model scraping and the STL rendering pipeline, and as VP of Data/ML I co-led two data developers on a print-safety dataset and benchmark, tracking the work on a GitHub project board. The dataset has 2,559 clean renders from 4,620 scraped 3D models, every one checked by a VLM, and the best small vision model, Qwen3-VL-2B, agreed with those labels on 84.2% with the filename visible and 76.9% from the image alone on the earlier prompt. Ran alongside my TeraGo internship.",
+      summary: "I was on the data team from Sep 2025, writing the render scripts and working on the 3D model scraping and the STL rendering pipeline, and as VP of Data/ML I co-led two data developers on a print-safety dataset and benchmark, tracking the work on a GitHub project board. We rendered the scraped models in Blender, checked every label with a VLM, and benchmarked small vision models as a safe-or-flag gate, where the best one, Qwen3-VL-2B, agreed with those labels on 84.2% of models with the filename visible. Ran alongside my TeraGo internship.",
       stats: [{ key: "dataset", label: "scraped 3D models", value: "4,620" }],
       stack: ["Python", "Blender", "Qwen3-VL-2B", "Shieldstral", "llama.cpp", "Docker"] },
     { id: "wemars", org: "WEMars", role: "Software team member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2024 to Apr 2025, rejoined Sep 2026", onResume: false, file: "/knowledgebase/experience/wemars.md",
@@ -132,7 +132,7 @@ export const site: SiteContent = {
     {
       id: "campus", name: "Campus", group: "featured", order: 1,
       dates: "Aug 2026 to present", displayRole: "solo",
-      covers: "My courses are spread across six Brightspace pages, so I built one place to check deadlines, study from slides and test a draft against the brief. Campus syncs everything into SQLite and answers from the course files with hybrid retrieval: a lexical prefilter, embeddings and a cross-encoder reranker. Its 20-tool agent logs every change it makes to my notes or due dates, and it runs on any OpenAI-compatible endpoint, local or hosted.",
+      covers: "My courses are spread across six Brightspace pages, so I built one place to check deadlines, study from slides and test a draft against the brief. Campus syncs everything into SQLite and answers from the course files with search that is lexical by default, with embeddings and a cross-encoder reranker switched on in config. Its agent logs every change it makes to my notes or due dates, and it runs on any OpenAI-compatible endpoint, local or hosted.",
       limits: "The agent edits notes and due dates directly and logs every write with the before and after. Campus has no approval gate and no rollback; the NixOS homelab's server profile gates changes and rolls them back.",
       media: [
         { src: "/projects/campus-0.svg", alt: "Campus wordmark", width: 2221, height: 763, contain: true },
@@ -156,8 +156,8 @@ export const site: SiteContent = {
     {
       id: "homelab", name: "NixOS homelab", group: "featured", order: 2,
       dates: "May 2026 to present", displayRole: "solo",
-      covers: "My laptop and a home server built from used parts run from one NixOS flake, with a Hermes Agent profile for each. The server's agent plans, shows me the full diff and waits for my approval; the laptop's commits directly and asks me to test. Both rebuild through a guard that refuses the wrong machine, and a Bifrost gateway gives Campus and my other AI services one endpoint for local and cloud models.",
-      limits: "The two profiles differ on purpose: the server profile waits for approval on a full diff, and the laptop profile commits directly and asks me to test. Session and tool-call counts come from each profile's session database. No one else uses it.",
+      covers: "My laptop and a home server built from used parts are both defined in a single repo of Nix/NixOS config, so every package, service and firewall rule is version-controlled and any change can be reviewed and rolled back. The server hosts my passwords, photos, files, git remote and AI services behind Caddy and Tailscale, backs up to a NAS every day, and pushes an alert when something fails. A Hermes Agent profile on each machine makes changes the way I do, by editing the config and rebuilding.",
+      limits: "No one else uses it. Every backup lives on one NAS with no off-site copy yet, and container images are not pinned to versions yet. The two agent profiles differ on purpose: the server profile waits for approval on a full diff, and the laptop profile commits directly and asks me to test.",
       media: [
         { src: "/projects/homelab-architecture.webp", alt: "Architecture diagram. A git repo holds one Nix flake with hosts, modules and sops-encrypted secrets, and both machines build from it. The laptop, flow, runs two Hermes Agent profiles, llama.cpp on an RTX 4060 and the desktop. The server, home, runs 35 containers and 10 native services and backs up to a NAS. Arrows show the homelab profile reaching the server over SSH, and the server's Bifrost gateway using the laptop's local models.", width: 1600, height: 1011 },
       ],
@@ -168,11 +168,8 @@ export const site: SiteContent = {
       stats: [
         { key: "machines", label: "machines, one NixOS flake", value: "2" },
         { key: "containers", label: "containers on the server", value: "35" },
-        { key: "sessions", label: "agent sessions, Jun to Oct 2026", value: "411", home: false },
-        { key: "skills", label: "agent skills saved in git", value: "212", home: false },
-        { key: "toolCalls", label: "tool calls across those sessions", value: "34,673", home: false },
       ],
-      stack: ["NixOS", "Nix flakes", "Docker", "Tailscale", "Hermes Agent", "llama.cpp"],
+      stack: ["NixOS", "Nix flakes", "Docker", "Tailscale", "Caddy", "sops-nix"],
     },
     {
       id: "aware", name: "AWARE", group: "featured", order: 3,

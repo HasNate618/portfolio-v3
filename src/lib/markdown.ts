@@ -1,6 +1,7 @@
 import { getExperience, getProject } from "@/data/site";
 import { modelTableHtml } from "@/lib/tables";
 import { MARKDOWN_OPTIONS } from "@/lib/markdown-options";
+import { diagramHtml } from "@/lib/diagrams";
 
 /** The id may be a project id or an experience org ("3D Western"), so dots are the only delimiter. */
 const STAT_PATTERN = /\{\{stat:([^.}]+)\.([a-zA-Z0-9_-]+)\}\}/g;
@@ -95,6 +96,12 @@ export function getMd(): AnyMd {
     if (kind === "diagram") {
       const alt = lines[0]?.startsWith("alt: ") ? lines.shift()!.slice("alt: ".length).trim() : "";
       if (!alt) throw new Error("diagram fence is missing its `alt: ` line");
+
+      // `diagram <name>` draws the registered flow from src/lib/diagrams.ts.
+      // A bare `diagram` fence still renders its text art.
+      if (arg) {
+        return ['<figure class="my-6">', diagramHtml(arg), `<figcaption class="sr-only">${esc(alt)}</figcaption>`, "</figure>\n"].join("");
+      }
 
       return [
         '<figure class="my-6">',

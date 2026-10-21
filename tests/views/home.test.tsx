@@ -12,8 +12,7 @@ test("home renders identity, seeking and the Campus card", () => {
   assert.match(html, /Summer 2027 software engineering or applied AI internship/);
   assert.match(html, /, graduating May 2028\. Looking for a /);
   assert.match(html, /Campus/);
-  assert.match(html, /courses, in daily use/);
-  assert.match(html, /403/);
+  assert.ok(!html.includes("text-3xl font-bold"), "cards carry no stat tiles");
   assert.doesNotMatch(html, /4,687/, "the exact chunk count is not published anywhere");
 });
 

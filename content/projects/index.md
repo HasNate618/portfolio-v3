@@ -13,8 +13,8 @@ Every project Nathan has documented, one file each, with a line on what it cover
 
 ## Featured
 
-- [Campus](campus.md): What Campus is, how its LMS sync, hybrid retrieval and audited 20-tool agent work, and its test and usage numbers.
-- [NixOS homelab](homelab.md): How his two NixOS hosts are defined, what the self-hosted AI stack runs, how Hermes Agent profiles change the config behind approval, and llama.cpp on flow.
+- [Campus](campus.md): What Campus is, how its LMS sync, lexical-by-default search and audited agent work, and its test and usage numbers.
+- [NixOS homelab](homelab.md): How his two NixOS hosts are defined in a single repo: what the server hosts, networking and remote access over Tailscale, backups to a NAS, monitoring, and the Hermes Agent profiles that change the config.
 - [AWARE](aware.md): How AWARE runs vision, audio and a small LLM on one Arduino UNO Q, and how plain-English commands become deterministic rules.
 - [CareBridge](carebridge.md): The CareBridge rural care platform from Spark 2026 (overall 3rd), built by a team; the repo is a teammate's (liamma06/Spark).
 

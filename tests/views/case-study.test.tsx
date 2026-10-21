@@ -19,8 +19,8 @@ test("Campus renders its sections and figures", () => {
   for (const h of ["tl;dr", "Why I built it", "How it works", "Models and cost", "Results", "Stack"]) {
     assert.ok(html.includes(h), `missing ${h}`);
   }
-  assert.match(html, /just over 200 of them as of early October 2026/);
-  assert.match(html, /403/);
+  assert.match(html, /just over 200 course files/);
+  assert.match(html, /403 backend tests/);
 });
 
 test("the on-this-page list links to real heading ids", () => {
@@ -46,7 +46,7 @@ test("every on-this-page entry has a heading, including ones the template render
 });
 
 test("the diagram is hidden from assistive tech and captioned instead", () => {
-  assert.match(html, /<pre[^>]*aria-hidden="true"/);
+  assert.match(html, /<div class="flow" aria-hidden="true"/);
   assert.match(html, /<figcaption class="sr-only">Brightspace syncs into SQLite/);
 });
 
@@ -56,7 +56,7 @@ test("no figure is typed into the content file", () => {
   }
   assert.match(page.body, /\{\{stat:campus\.tests\}\}/);
   // The file count is dated prose rather than a stat, so it cannot be resolved from site.ts.
-  assert.match(page.body, /just over 200 of them as of early October 2026/);
+  assert.match(page.body, /synced just over 200 course files/);
 });
 
 test("the stack renders from site.ts rather than the markdown", () => {

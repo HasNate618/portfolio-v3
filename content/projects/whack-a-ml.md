@@ -6,7 +6,7 @@ description: A reinforcement learning agent that trains a simulated robotic arm 
 priority: reference
 rank: archive
 dates: "Jan 2026 (approx.)"
-role: "owner"
+role: "solo"
 status: shipped
 tags: [ai, reinforcement-learning, unity, robotics-simulation]
 related: [index.md, ../skills.md]

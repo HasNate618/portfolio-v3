@@ -2,42 +2,43 @@
 title: NixOS homelab
 type: project
 route: /projects/homelab
-description: Two NixOS machines in one flake, run day to day by two Hermes Agent profiles that change the system only by editing its config.
+description: A laptop and a home server defined in a single repo of Nix/NixOS config, from the services and networking to backups and monitoring.
 priority: start-here
-tags: [nixos, agents, self-hosting, local-ai]
+tags: [nixos, self-hosting, infrastructure, agents]
 related: [index.md, campus.md, aware.md, agntos.md, ../skills.md, ../local-ai.md]
-onThisPage: [tl;dr, Why NixOS, How it fits together, The AI stack, Two agents and two levels of autonomy, Guardrails, What it does day to day, What I learned, What's next, Stack]
+onThisPage: [tl;dr, Why NixOS, The two machines, What the server hosts, Networking and remote access, Storage and backups, Monitoring and upkeep, How changes get made, Guardrails, What I learned, What's next, Stack]
 id: homelab
 dates: "May 2026 to present"
 role: solo
 status: active
 rank: featured
-updated: 2026-10-18
+updated: 2026-10-21
 ---
 # NixOS homelab
 
-My laptop (flow) and a home server built from used parts (home) are both defined by one version-controlled Nix flake. Each machine has its own Hermes Agent profile that does most of the day-to-day work on it. Hermes Agent is an open-source AI agent from Nous Research that works through tools and skills it writes and saves for itself. The agents never change a running system by hand. They edit the Nix config, and a change only goes live through a rebuild.
+My laptop (flow) and a home server I built from used parts (home) are both defined in a single repo of Nix/NixOS config. Every package, service, user and firewall rule is written down there, so each machine runs exactly what the config says, and any change is a diff I can read, review and roll back.
 
 ## tl;dr
 
-- One flake defines both machines. The server runs {{stat:homelab.containers}} containers and 10 native NixOS services, reached over my private Tailscale network.
-- A Bifrost gateway gives every AI service on the server one endpoint for local and cloud models, including the local models on my laptop's GPU.
-- The two agent profiles get different autonomy on purpose. The server profile plans, shows me the full diff and waits for approval. The laptop profile commits directly and asks me to test.
-- Five incidents each turned into a guardrail in the config, and any change can be rolled back.
+- One Nix flake builds both machines, plus a live USB image that reuses the laptop's desktop modules.
+- The server hosts my passwords, photos, files, the git remote for this config and my AI services, all reached through Caddy over my private Tailscale network.
+- Daily timers back up the databases and service configs to a NAS, Uptime Kuma watches the services, and ntfy pushes an alert when something fails.
+- A Hermes Agent profile on each machine makes changes the way I do, by editing the config and rebuilding, and each thing that broke along the way became a guardrail in the config.
 
 ## Why NixOS
 
 I used to run a Debian server with Docker Compose and a separate local AI setup. Both drifted. Packages piled up, manual fixes stacked on each other, and neither machine could be rebuilt from scratch.
 
-NixOS fixes that because the whole system is declared in files. Every package, service, user and firewall rule is written in Nix and kept in git, and a rebuild turns those files into the running system. That matters even more with agents. When an agent's change is a diff, I can read it before it applies, rebuild the same thing later, and undo it in one step if it's wrong.
+NixOS fixes that because the whole system is declared in files. A rebuild turns those files into the running system, a failed build never goes live, and every switch becomes a new generation I can go back to. Since the config lives in git, the history of each machine is the history of the repo, so I can see what changed, when, and why.
 
-I first tried to build my own agent just for NixOS config, with its own memory system ([AgntOS](https://github.com/HasNate618/AgntOS)). I got impatient, because I wanted to be on NixOS already, so I moved both machines over and ran Hermes Agent on them instead. It works really well, especially with cloud models and the broad general knowledge they bring.
+## The two machines
 
-## How it fits together
+- **home**, the server, is built from used desktop parts: an i5-6600K, a GTX 960 and 16 GB of RAM. It's wired, runs around the clock, and holds every service below.
+- **flow**, the laptop, is an ASUS ROG Flow X16 with an RTX 4060. It runs my Hyprland desktop and serves local models through a CUDA build of llama.cpp, which the server reaches over Tailscale.
 
-Both machines build from the same flake. The server's agent profile runs from the laptop and sends its commands over SSH. Its modules are split by role into AI, access, infrastructure, media and monitoring. Each container is a systemd unit that runs Docker with its flags written out in Nix, so its capabilities, memory limit and ports are part of the reviewed config. 28 of the {{stat:homelab.containers}} containers start from zero Linux capabilities, add back only the ones they name, and block privilege escalation. 19 secrets are encrypted in git with sops-nix and decrypted on the server at boot.
+The server's modules are split by role into access, infrastructure, AI, media and monitoring, with one file per service where possible, so adding or removing a service stays a small change in one place.
 
-## The AI stack
+## What the server hosts
 
 ```figure
 src: /projects/homelab-service-inventory.webp
@@ -47,17 +48,28 @@ alt: Horizontal bar chart of services on the home server by category. AI 16, acc
 caption: What the server runs, counted from the config. Native services are the ones NixOS provides as modules, like PostgreSQL, Forgejo and Immich.
 ```
 
-AI is the biggest group on the server, and the part I use most:
+Most services run in Docker, but each container is a systemd unit with its Docker flags written in Nix, so its capabilities, memory limit and ports are part of the reviewed config instead of a compose file on the side. Most containers start with every Linux capability dropped, add back only the ones they name, and block privilege escalation. Services NixOS already packages well, like PostgreSQL, Forgejo and Immich, run as native modules.
 
-- **Bifrost** is the gateway. It puts local and cloud models behind one OpenAI-compatible endpoint, so a service never needs to know which model answers. Campus, Open WebUI and trawl all route through it, and I run my own fork of it for session affinity.
-- **Local models** run on my laptop's RTX 4060 through a CUDA build of llama.cpp, and Bifrost reaches them over Tailscale. A local 9B model runs at about 20 tokens a second there, while the server's GTX 960 is too old for modern LLMs. Harder work goes to low-cost cloud models.
-- **[Campus](campus.md)**, the AI agent I built that reads all six of my courses, runs here in a hardened container. It syncs my course material, extracts new PDFs overnight and embeds them, so I can ask what's due this week or have it explain a specific slide, with citations.
-- **trawl** is an MCP server I built for web search and page reading in one tool. Both agent profiles use it. It searches through Exa, falls back to my own SearXNG and DeGoog, and reads pages with crawl4ai.
-- **Brightspace MCP** is the other MCP server. It exposes my courses, assignments, grades and announcements, so a coursework question gets answered from the source instead of from something I pasted in.
-- **EmbeddingGemma** gives the GTX 960 a job it can do: local text, image and audio embeddings in one vector space.
-- **pdf-parse** replaced a three-container PDF extraction stack with one service built on Cohere Parse and PyMuPDF.
+- **Access and files.** Vaultwarden for passwords, Immich for photos, Nextcloud with Collabora for files and documents, FileBrowser for the NAS, and Forgejo, which hosts the git remote for this config.
+- **Shared infrastructure.** PostgreSQL and Redis for the services that need them, AdGuard Home for DNS, and a VPN egress container.
+- **AI services.** A Bifrost gateway puts local and cloud models behind one OpenAI-compatible endpoint, so Open WebUI, my trawl search server and [Campus](campus.md), the AI agent I built that reads all six of my courses, all call the same place. The GTX 960 is too old for modern LLMs, so it runs EmbeddingGemma for embeddings instead.
+- **Media.** Jellyfin, with the media itself on the NAS.
 
-## Two agents and two levels of autonomy
+## Networking and remote access
+
+Everything is reached over Tailscale, with Caddy as the reverse proxy in front of every web service, and the firewall only opens SSH, DNS, the web ports and Tailscale. AdGuard Home answers DNS for the house, using encrypted upstream DNS with DNSSEC, and a small split-horizon resolver gives devices on the home network the same service names that work over Tailscale, so the same link works whether I'm home or not.
+
+## Storage and backups
+
+Bulk data lives on a NAS that the server mounts over SMB, including Nextcloud's files, my photos and my media. Daily timers dump PostgreSQL and back up Forgejo, Vaultwarden and the service configs to the NAS, keeping seven days of copies. Secrets are encrypted in git with sops-nix and decrypted on the server at boot, so no password sits in the repo in plain text.
+
+## Monitoring and upkeep
+
+Most days nothing on the server needs me. Uptime Kuma watches the services and ntfy pushes an alert when something fails, Netdata shows live resource use, and Glance is a dashboard for the services. CrowdSec reads the system and Caddy logs for intrusion attempts, and fail2ban rate-limits SSH, which only accepts keys. Systemd timers handle the routine work, like backups, restarts and cleanup, and Nix garbage-collects old generations every week.
+
+> **NIC driver bug.** The onboard network driver dropped to 10 Mbps after link hiccups. A systemd timer now checks link speed and reloads the driver.
+
+## How changes get made
 
 ```figure
 src: /projects/homelab-change-loop.webp
@@ -67,11 +79,11 @@ alt: Two rows of six steps. Homelab profile on the server: plan with the full di
 caption: Both profiles go through the same rebuild guard. They differ in where I step in.
 ```
 
-The two profiles are set up differently on purpose. The server holds my data and services that run around the clock, so its profile plans first, shows me the full diff for the whole change and waits for my approval. After the rebuild it checks that the affected units are running and the containers are up, then calls the real endpoints. It never reports "rebuilt" just because the log says so, because a switch can go live with a service still stopped.
+Each machine has its own profile of Hermes Agent, an open-source AI agent from Nous Research, and it changes the system the same way I do, by editing the config and rebuilding. It never changes a running system by hand. The server holds my data, so its profile plans first, shows me the full diff and waits for my approval, then checks that the affected units, containers and endpoints actually came back before it reports success. The laptop is only mine and most of its changes are to the desktop, where I can see right away whether they worked, so its profile commits directly and asks me to test.
 
-The laptop is only mine, and most of its changes are to the desktop, where I can see right away whether they worked. Its profile commits directly, rebuilds and asks me to test, then squashes the work before pushing.
+Both rebuild through `nixos-safe-rebuild`, a small wrapper that refuses to build a config for a different machine than the one it runs on. Most of what I ask the agents are questions, like how something works or whether an idea is feasible. When I hand the server agent a self-hostable project, it writes the module, adds the Caddy route and rebuilds.
 
-The two profiles never talk to each other. Both machines check out the same config repo, though, and both rebuild through `nixos-safe-rebuild`, a small wrapper that refuses to build a config for a different machine than the one it runs on. A failed build never goes live, and every switch is a new generation I can go back to. Across both machines, the repo has 1,094 commits and 28 of them are reverts.
+I first started building my own agent just for NixOS config ([AgntOS](https://github.com/HasNate618/AgntOS)), but I wanted to be on NixOS already, so I moved both machines over and ran Hermes Agent on them instead.
 
 ## Guardrails
 
@@ -83,31 +95,13 @@ alt: Table of five incidents and the guardrails they led to. June 5, server: a s
 caption: Each fix became config instead of a note to be careful. Incidents and dates come from the agents' own reports; each guardrail is in the public repo.
 ```
 
-Most of the rules the agents follow came from something going wrong once. The pattern is the same every time: find the cause, then put the fix in the config so it can't happen again by accident. The agents also carry working rules of their own, like checking `git status` before diagnosing anything, never force-pushing, and confirming what exists before deleting anything.
-
-One that wasn't a config mistake, and so isn't in the table above:
-
-> **NIC driver bug.** The onboard network driver dropped to 10 Mbps after link hiccups. A systemd timer now checks link speed and reloads the driver.
-
-## What it does day to day
-
-```figure
-src: /projects/homelab-agent-sessions.webp
-width: 1564
-height: 821
-alt: Grouped bar chart of agent sessions per month, June to October 2026. The flow profile on the laptop ran 33 sessions in June, 33 in July, 41 in August, 36 in September and 64 in October. The homelab profile on the server ran 74 in June, 39 in July, 55 in August, 12 in September and 24 in October. Side panel: 411 sessions across both profiles, 138 of them subagent sessions, and 34,673 tool calls.
-caption: Counted from each profile's session database on Oct 18, 2026. A session is one row, and a subagent session is one row too.
-```
-
-Most days nothing on the server needs me. 13 systemd timers run backups to the NAS, restarts and cleanup. Uptime Kuma watches the services and ntfy pushes an alert when something fails. Vaultwarden holds my passwords, Immich my photos, Nextcloud my files, and Forgejo hosts the git remote for this config.
-
-The agents get asked questions more than anything else. A question usually comes before a change, like how something works or whether an idea is feasible. Hand the server agent a GitHub link to a self-hostable project and it writes the module, adds the Caddy route, wires in what it depends on and rebuilds, using skills it wrote on earlier jobs. Between them the two profiles have run {{stat:homelab.sessions}} sessions since June and made {{stat:homelab.toolCalls}} tool calls. Their {{stat:homelab.skills}} saved skills hold what they have learned about these machines, from Bifrost setup to a routine health scan.
+Most of the rules in this config came from something going wrong once. The pattern is the same every time: find the cause, then put the fix in the config so it can't happen again by accident.
 
 ## What I learned
 
-- A declarative system is the right surface for an agent. Its output is a diff, and the build checks that diff before anything changes.
-- Autonomy should match what's at stake. The same agent software runs looser on my laptop than on the server that holds my data.
-- Guardrails belong in code as well as in the prompt. The server profile is told to rebuild only through the wrapper, and the wrapper enforces the same rule anyway.
+- Declaring the whole system pays off the first time something breaks, because the fix is a diff I can read, keep and roll back instead of a manual change I'd have to remember.
+- A declarative system is also the right surface for an agent. Its output is a diff, and the build checks that diff before anything changes.
+- Autonomy should match what's at stake, so the same agent software runs looser on my laptop than on the server that holds my data.
 
 ## What's next
 

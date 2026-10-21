@@ -655,3 +655,161 @@ li {
   border-top-color: var(--color-accent);
   border-radius: 9999px;
 }
+/*
+ * Flow diagrams (src/lib/diagrams.ts). Append to src/app/globals.css.
+ *
+ * Only palette tokens are used, so the light scheme, the dark scheme and the
+ * toggle all work with no extra rules. The layout is a container query on the
+ * diagram itself, not a viewport breakpoint, because the content column is
+ * narrower than the viewport whenever the sidebar is showing.
+ */
+.flow {
+  container-type: inline-size;
+  border: 1px solid var(--color-rule);
+  border-radius: 0.5rem;
+  background: var(--color-pre-bg);
+  padding: 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--color-fg);
+}
+
+.flow-grid {
+  display: grid;
+  grid-template-columns: var(--cols-n);
+  gap: 0.25rem;
+  align-items: stretch;
+}
+
+.flow-grid > * {
+  grid-area: var(--n);
+}
+
+.flow-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--color-fg) 22%, transparent);
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--color-fg) 4%, transparent);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.flow-label {
+  font-weight: 500;
+}
+
+.flow-sub {
+  font-size: 0.6875rem;
+  color: var(--color-muted);
+}
+
+/* Where something comes in: a sensor, a command, an email. */
+.flow-input {
+  border-style: dashed;
+  background: transparent;
+}
+
+/* The box the diagram is about. */
+.flow-core {
+  border-color: color-mix(in srgb, var(--color-accent) 70%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+
+.flow-core .flow-label {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* What comes out. */
+.flow-output {
+  border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+}
+
+.flow-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.flow-chip {
+  border: 1px solid var(--color-rule);
+  border-radius: 9999px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.75rem;
+  background: var(--color-bg);
+}
+
+.flow-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+}
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  color: var(--color-accent);
+}
+
+.flow-arrow svg {
+  display: block;
+  flex: none;
+}
+
+.flow-arrow[data-n="down"] svg { transform: rotate(90deg); }
+.flow-arrow[data-n="left"] svg { transform: rotate(180deg); }
+
+@container (min-width: 34rem) {
+  .flow-grid {
+    grid-template-columns: var(--cols-w);
+  }
+
+  .flow-grid > * {
+    grid-area: var(--w);
+  }
+
+  .flow-arrow[data-w="right"] svg { transform: none; }
+  .flow-arrow[data-w="down"] svg { transform: rotate(90deg); }
+  .flow-arrow[data-w="left"] svg { transform: rotate(180deg); }
+}
+
+/* A long straight status line, wrapped as chips (AgenticArmy). */
+.flow-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 0.5rem;
+}
+
+.flow-step-wrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.flow-status {
+  min-height: 0;
+  padding: 0.3rem 0.55rem;
+}
+
+.flow-end {
+  flex-direction: row;
+  gap: 0.4rem;
+}
+
+.flow-or {
+  font-size: 0.6875rem;
+  color: var(--color-muted);
+}
+
+.flow-inline {
+  min-width: 1.75rem;
+}

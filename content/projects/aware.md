@@ -33,13 +33,8 @@ I built it solo, so every part is mine: the perception pipeline, the LLM rule co
 
 ## How it works
 
-```diagram
+```diagram aware
 alt: A camera, microphone and sensors feed an always-on perception pipeline. A plain-English command goes through the on-device language model to become a rule. The rules engine checks every rule every 500 milliseconds and drives a speaker, LEDs, Telegram alerts and video clips.
-camera + mic + sensors ─► perception (always on)
-                                │
-"when glass breaks..." ─► LLM ─► rule ─► rules engine (500 ms)
-                                              │
-                   speaker · LEDs · Telegram · clips ◄┘
 ```
 
 1. Perception, always on. YOLOv8n object detection at 2 Hz, plus BlazeFace, MediaPipe pose and hands, and MiDaS depth. YAMNet sorts sounds into 521 classes at 4 Hz. The STM32 microcontroller reads temperature, distance and motion, with Edge Impulse anomaly detection.
@@ -58,4 +53,4 @@ The LLM only runs when you add a rule, ask a question, or a digest is due. The {
 
 ## Results
 
-- Built at Hack the 6ix 2026, with all inference on one {{stat:aware.boardCost}} board.
+- Built at Hack the 6ix 2026, with all inference on one Arduino UNO Q.

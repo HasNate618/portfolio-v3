@@ -102,6 +102,18 @@ test("the alt line is not part of the art", () => {
   assert.ok(!/<pre[^>]*>[^<]*Words here/.test(html), "alt text must not be drawn inside the pre");
 });
 
+test("a named diagram fence draws the registered flow, with the alt as its caption", () => {
+  const html = renderMarkdown("```diagram aware\nalt: Sensors feed perception.\n```");
+  assert.match(html, /<div class="flow" aria-hidden="true">/);
+  assert.match(html, /rules engine/);
+  assert.match(html, /<figcaption class="sr-only">Sensors feed perception\.<\/figcaption>/);
+  assert.ok(!html.includes("<pre"), "a named diagram is not text art");
+});
+
+test("an unknown diagram name throws rather than shipping a blank figure", () => {
+  assert.throws(() => renderMarkdown("```diagram nope\nalt: Words.\n```"), /unknown diagram/);
+});
+
 test("a diagram fence without an alt line throws rather than shipping silently", () => {
   assert.throws(() => renderMarkdown("```diagram\njust art\n```"), /alt/);
 });

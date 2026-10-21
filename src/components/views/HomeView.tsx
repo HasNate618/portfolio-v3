@@ -3,7 +3,6 @@ import { site, featuredProjects, leadProject, awardFor } from "@/data/site";
 import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import { caseStudyHref as projectHref, getPage, type Page } from "@/lib/content";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
-import { StatRow } from "@/components/StatRow";
 import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
 import { ProjectMedia } from "@/components/ProjectMedia";
@@ -108,7 +107,7 @@ export function HomeView({ page }: { page: Page }) {
         Projects
       </h2>
 
-      {/* Campus: the strongest proof, with checkable numbers. */}
+      {/* Campus: the strongest proof. */}
       <section aria-labelledby="campus" className="mt-6 rounded-lg border border-rule bg-surface p-6">
         <h3 id="campus" className="text-2xl font-semibold text-fg">
           {campus.name}
@@ -118,9 +117,6 @@ export function HomeView({ page }: { page: Page }) {
         </div>
         <p className="mt-4 max-w-[68ch] leading-relaxed">{campus.covers}</p>
         <ProjectMedia media={campus.media} className="mt-5 max-w-xl" />
-        <div className="mt-6">
-          <StatRow projectId="campus" home />
-        </div>
         <div className="mt-6">
           <StackList projectId="campus" />
         </div>
@@ -159,9 +155,6 @@ export function HomeView({ page }: { page: Page }) {
               <AwardBadge projectName={project.name} />
               <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
               <ProjectMedia media={project.media} className="mt-3" />
-              <div className="mt-3">
-                <StatRow projectId={project.id} home />
-              </div>
               <div className="mt-3">
                 <StackList projectId={project.id} />
               </div>

@@ -18,7 +18,7 @@ updated: 2026-10-17
 
 ## tl;dr
 
-- There was no labelled set of 3D models to choose one with, so the data team built one. Teammates wrote the preprocessing pipeline and render scripts. I got them working together, rendered and verified the full set, and fixed the bugs that broke the run: 2,559 clean labelled models from {{stat:3D Western.dataset}} scraped files.
+- There was no labelled set of 3D models to choose one with, so the data team built one. I wrote the render scripts and got them working with the team's preprocessing pipeline. I rendered and verified the full set and fixed the bugs that broke the run: 2,559 clean labelled models from {{stat:3D Western.dataset}} scraped files.
 - Our best small local model, Qwen3-VL-2B with the binary_v7 prompt, matched the labels on 84.2% of models with the filename included, and still missed about 21% of what it should flag. Our best image-only number is 76.9%, from the earlier v6 prompt. It isn't ready to ship.
 - I built the eval that ruled out Shieldstral, a 3B safety model. Reviewing the pipeline, I noticed it only verified labels we already had, while real uploads arrive unlabelled, so we turned toward classification. I handed off a smoke-tested multi-model benchmark for a cluster run.
 
@@ -28,7 +28,7 @@ Alongside the frontend, backend and infrastructure teams, the data team was two 
 
 ## Building the dataset
 
-A teammate's pipeline drops exact duplicates by SHA-256 hash (802), renders each model in Blender, has a cloud VLM check each render against its scraped folder label, and exports the matches. The scraped folders were safe, unsafe and grey. Unsafe held only nudity, and grey held the other categories we'd want to stop: in the clean set, guns, knives, swords and gestures. For a print gate, both count as "flag".
+A teammate's pipeline drops exact duplicates by SHA-256 hash (802), calls my render scripts to render each model in Blender, has a cloud VLM check each render against its scraped folder label, and exports the matches. The scraped folders were safe, unsafe and grey. Unsafe held only nudity, and grey held the other categories we'd want to stop: in the clean set, guns, knives, swords and gestures. For a print gate, both count as "flag".
 
 ```figure
 src: /projects/3d-western-verification-funnel.webp

@@ -16,7 +16,7 @@ function pass(cond, label) {
 }
 
 const req = { "/": "Awards", "/projects": "AR and VR", "/projects/campus": "lexical",
-  "/projects/homelab": "34,673", "/projects/aware": "$80", "/experience/terago": "channel-planning",
+  "/projects/homelab": "Storage and backups", "/projects/aware": "$80", "/experience/terago": "channel-planning",
   "/experience": "May 2026 to Aug 2026", "/now": "mailto:", "/resume": "working end to end",
   "/chat": "needs JavaScript" };
 

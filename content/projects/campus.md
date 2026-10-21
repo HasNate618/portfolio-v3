@@ -18,9 +18,9 @@ updated: 2026-10-16
 ## tl;dr
 
 - Syncs my Brightspace courses into local SQLite and answers questions from the course files.
-- Hybrid retrieval over my course files: just over 200 of them as of early October 2026.
-- A {{stat:campus.tools}}-tool agent that can also edit my notes and due dates. Every write it makes is logged.
-- {{stat:campus.tests}} tests run in CI on every push.
+- Search over my course files that is lexical by default, with embeddings and reranking switched on in config.
+- An agent that can also edit my notes and due dates, and every write it makes is logged.
+- Backend tests, a frontend type-check and a production build run in CI on every push.
 - Works with any OpenAI-compatible endpoint, local or hosted.
 
 ## Why I built it
@@ -37,20 +37,15 @@ It's a solo project, so everything below is mine.
 - sha256 change detection, so unchanged files are not downloaded again.
 - Search that is lexical by default and needs no extra model, with embedding search and cross-encoder reranking switched on in config, plus a lexical SQL prefilter for exact phrases.
 - A fix for exact phrases that scored below the semantic cutoff. They now go through the lexical path.
-- A {{stat:campus.tools}}-tool agent that answers questions, reads files, and edits notes or due dates, in a bounded tool loop.
+- An agent that answers questions, reads files, and edits notes or due dates, in a bounded tool loop.
 - An append-only audit log with the before and after state of every AI write.
 - A React, TypeScript and Vite PWA. <!-- one-source-ok -->
 - CI on GitHub Actions: pytest, frontend type-check and a production build on every push.
 
 ## How it works
 
-```diagram
+```diagram campus
 alt: Brightspace syncs into SQLite and a local file store. Those files are split into an index of chunks. Retrieval reads the index and feeds an agent with twenty tools. The agent answers questions and writes every change to an audit log with the before and after state.
-Brightspace ─► sync ─► SQLite + files ─► index
-                                          │
-     answer ◄── agent (20 tools) ◄── retrieve
-        │
-        └──► audit log (every write, before and after)
 ```
 
 1. Sync. Playwright signs in and pulls course content. Files with an unchanged sha256 are skipped.
@@ -67,7 +62,7 @@ Brightspace ─► sync ─► SQLite + files ─► index
 
 - I use it across {{stat:campus.courses}} courses for deadline lookups, studying from slides, and checking drafts against briefs.
 - As of early October 2026 it had synced just over 200 course files. I'm the only user, so that number is my course load, not adoption.
-- {{stat:campus.tests}} tests pass in CI on every push.
+- {{stat:campus.tests}} backend tests pass in CI on every push.
 - Retrieval and answer quality: evaluation in progress.
 
 ## Next
