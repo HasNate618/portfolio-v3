@@ -63,7 +63,7 @@ test("no project still carries tier, and highlights are the case studies", () =>
 
 test("every display group has at least one project", () => {
   const groups: ProjectGroup[] = [
-    "featured", "ai", "hardware", "xr", "tools", "archive",
+    "featured", "ai", "hardware", "xr", "tools", "games", "archive",
   ];
   for (const g of groups) {
     assert.ok(site.projects.some((p) => p.group === g), `group ${g} is empty`);

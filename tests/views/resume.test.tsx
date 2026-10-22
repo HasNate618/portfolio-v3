@@ -24,9 +24,19 @@ test("the PDF link precedes the body content", () => {
   assert.ok(html.indexOf("Nathan_Espejo_Resume.pdf") < html.indexOf("Education"));
 });
 
-test("skills use the resume's four groups", () => {
-  for (const group of ["AI", "Languages", "Web &amp; Infra", "Tools"]) {
+test("skills use the resume's five groups, Languages first", () => {
+  const groups = ["Languages", "AI/ML", "Web &amp; Data", "Infra", "Hardware &amp; 3D"];
+  for (const group of groups) {
     assert.ok(html.includes(group), `missing ${group}`);
+  }
+  assert.deepEqual(page.skills?.map((g) => g.group), ["Languages", "AI/ML", "Web & Data", "Infra", "Hardware & 3D"]);
+});
+
+test("the skills list names tools only through the projects that used them", () => {
+  const items = (page.skills ?? []).flatMap((g) => g.items);
+  assert.ok(!items.includes("Hermes Agent"), "Hermes Agent is a tool he runs, not a skill line");
+  for (const skill of ["Unity (XR)", "Arduino", "ESP32", "Onshape", "Kotlin"]) {
+    assert.ok(items.includes(skill), `missing ${skill}`);
   }
 });
 

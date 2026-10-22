@@ -15,10 +15,15 @@ export const GROUP_LABELS: Record<ProjectGroup, string> = {
   hardware: "Hardware and embedded",
   xr: "AR and VR",
   tools: "Tools and apps",
+  games: "Games",
   archive: "Archive",
 };
 
-const OPEN_GROUPS: ProjectGroup[] = ["featured", "ai", "tools", "hardware", "xr"];
+/**
+ * Hardware and XR come before AI so the page shows range before the area the
+ * case studies already cover.
+ */
+const OPEN_GROUPS: ProjectGroup[] = ["featured", "hardware", "xr", "ai", "tools", "games"];
 
 function byGroup(group: ProjectGroup): Project[] {
   return site.projects.filter((p) => p.group === group).sort((a, b) => a.order - b.order);
@@ -58,7 +63,7 @@ export function ProjectsView({ page }: { page: Page }) {
 
       <details id="archive" className="mt-16">
         <summary className="cursor-pointer text-xs font-bold uppercase tracking-widest text-fg hover:text-accent">
-          Archive: earlier builds, small games and team hackathon projects
+          Archive: earlier builds and team hackathon projects
         </summary>
         <ArchiveTable projects={byGroup("archive")} />
       </details>
@@ -108,7 +113,7 @@ function ArchiveTable({ projects }: { projects: Project[] }) {
       <div className="mt-6 hidden sm:block">
         <table className="w-full border-collapse text-left text-sm">
           <caption className="sr-only">
-            Archive: earlier builds, small games and team hackathon projects
+            Archive: earlier builds and team hackathon projects
           </caption>
           <thead>
             <tr className="border-b border-rule">

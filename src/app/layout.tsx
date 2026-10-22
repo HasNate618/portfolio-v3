@@ -17,21 +17,21 @@ export const metadata: Metadata = {
   metadataBase: siteMetadataBase(),
   title: { default: "Nathan Espejo, Software Engineer", template: "%s · Nathan Espejo" },
   description:
-    "Nathan Espejo, 3rd-year Software Engineering at Western. I build software and applied AI tools on low-cost and self-hosted models. Looking for Summer 2027.",
+    "Nathan Espejo, 3rd-year Software Engineering at Western. I build full-stack, infrastructure and hardware projects, lately mostly LLM tooling. Looking for Summer 2027.",
   alternates: { canonical: "/", types: { "text/markdown": "/llms.txt" } },
   openGraph: {
     type: "profile",
     siteName: "Nathan Espejo",
     title: "Nathan Espejo, Software Engineer",
     description:
-      "Software engineer building applied AI tools on low-cost and self-hosted models. 3rd year at Western, looking for a Summer 2027 internship.",
+      "Software engineer building full-stack, infrastructure and hardware projects, lately mostly LLM tooling. 3rd year at Western, looking for a Summer 2027 internship.",
     url: "/",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Nathan Espejo, software engineer building applied AI tools" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Nathan Espejo, software engineer" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Nathan Espejo, Software Engineer",
-    description: "Software engineer building applied AI tools on low-cost and self-hosted models.",
+    description: "Software engineer building full-stack, infrastructure and hardware projects, lately mostly LLM tooling.",
     images: ["/og.png"],
   },
 };

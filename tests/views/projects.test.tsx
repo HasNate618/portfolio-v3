@@ -16,6 +16,7 @@ test("projects renders every group label", () => {
     "Hardware and embedded",
     "AR and VR",
     "Tools and apps",
+    "Games",
     "Archive",
     "Hackathon awards",
   ]) {
@@ -26,7 +27,7 @@ test("projects renders every group label", () => {
 test("the archive is a native disclosure with a compact table", () => {
   assert.match(html, /<details/);
   assert.match(html, /<summary/);
-  assert.match(html, /earlier builds, small games and team hackathon projects/);
+  assert.match(html, /earlier builds and team hackathon projects/);
   assert.match(html, /<th scope="col"[^>]*>Role<\/th>/);
 });
 
@@ -60,6 +61,20 @@ test("only projects with a case study are linked", () => {
 test("on-this-page entries resolve to real heading ids", () => {
   for (const item of page.onThisPage) {
     assert.ok(html.includes(`id="${slugify(item)}"`), `no heading for onThisPage entry ${item}`);
+  }
+});
+
+test("hardware and XR come before AI, and games have their own section", () => {
+  const at = (label: string) => html.indexOf(`id="${slugify(label)}"`);
+  assert.ok(at("Hardware and embedded") < at("AI and LLM"), "hardware must come before AI");
+  assert.ok(at("AR and VR") < at("AI and LLM"), "XR must come before AI");
+  assert.ok(at("Games") !== -1, "games section missing");
+});
+
+test("the stronger archive builds sit in open sections, not the collapsed archive", () => {
+  const archive = html.slice(html.indexOf('<details id="archive"'), html.indexOf("</details>"));
+  for (const name of ["Careerly", "Cyberdeck", "NowAndThen", "Street Cleaner"]) {
+    assert.ok(!archive.includes(`>${name}<`), `${name} should not be in the archive`);
   }
 });
 

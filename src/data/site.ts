@@ -6,7 +6,7 @@ export type ProjectStat = { key: string; label: string; value: string; /** Hidde
 /** One row of the AWARE on-device model table. */
 export type ModelRow = { name: string; job: string; runtime: string };
 
-export type ProjectGroup = "featured" | "ai" | "hardware" | "xr" | "tools" | "archive";
+export type ProjectGroup = "featured" | "ai" | "hardware" | "xr" | "tools" | "games" | "archive";
 
 /**
  * Home-page prominence. Distinct from `group`, which is how /projects files them.
@@ -89,12 +89,17 @@ export type SiteContent = {
   awards: SiteAward[];
   skills: { group: string; items: string[] }[];
   alsoUsed: string[];
+  /**
+   * The home page's "Also built" row: one project per kind of work the featured
+   * cards don't show. Ids point into `projects`, so names and links stay single-source.
+   */
+  alsoBuilt: { id: string; kind: string; line: string }[];
 };
 
 export const site: SiteContent = {
   identity: {
     name: "Nathan Espejo",
-    headline: "Software engineer building applied AI tools. 3rd-year Software Engineering at Western.",
+    headline: "Software engineer building full-stack, infrastructure and hardware projects, lately mostly LLM tooling. 3rd-year Software Engineering at Western.",
     seeking: "Summer 2027 software engineering or applied AI internship",
     location: "Brampton and London, ON",
     year: "3rd year (2026-27)",
@@ -174,8 +179,8 @@ export const site: SiteContent = {
     {
       id: "aware", name: "AWARE", group: "featured", order: 3,
       dates: "Jul 2026", displayRole: "solo", event: "Hack the 6ix 2026",
-      covers: "Built solo at Hack the 6ix 2026. It watches a camera, listens for sounds and reads sensors, and you set automations in plain English, like \"when glass breaks after 10pm, alert me.\" A 1B model turns that into a rule, plain code checks every rule each 500 ms, and vision, audio and the LLM all run on one $80 board with no cloud inference.",
-      cardLine: "Watches a camera, listens for sounds and reads sensors, with automations set in plain English.",
+      covers: "A home-awareness device I built solo at Hack the 6ix 2026 on an $80 Arduino UNO Q, with a camera, a microphone and sensors feeding vision and audio models that all run on the board, so there is no cloud inference. You set automations in plain English, like \"when glass breaks after 10pm, alert me\", a small on-board LLM turns each one into a rule, and plain code checks the rules with no LLM in that loop.",
+      cardLine: "A home-awareness device on an Arduino UNO Q, with a camera, a microphone and sensors, and every model running on the board.",
       media: [
         { src: "/projects/aware-0.webp", alt: "AWARE device on an Arduino UNO Q", width: 1200, height: 676 },
         { src: "/projects/aware-1.webp", alt: "AWARE web dashboard", width: 1200, height: 1122 },
@@ -339,7 +344,7 @@ export const site: SiteContent = {
       stack: ["MediaPipe", "face-api.js", "Python", "React"],
     },
     {
-      id: "nowandthen", name: "NowAndThen", group: "archive", order: 14,
+      id: "nowandthen", name: "NowAndThen", group: "tools", order: 14,
       dates: "Jan 2026", displayRole: "team project", event: "UofTHacks 13",
       covers: "Map app for leaving geotagged posts, with AI summaries of places.",
       media: [
@@ -380,7 +385,7 @@ export const site: SiteContent = {
       stack: ["Unity", "C#", "React", "TypeScript", "MongoDB Atlas"],
     },
     {
-      id: "careerly", name: "Careerly", group: "archive", order: 17,
+      id: "careerly", name: "Careerly", group: "ai", order: 17,
       dates: "Feb 2024", displayRole: "team project", event: "NSBEHacks 2024",
       covers: "Unity virtual job fair with AI mentors.",
       media: [
@@ -396,7 +401,7 @@ export const site: SiteContent = {
 
     // ── hardware ──────────────────────────────────────────────────────────
     {
-      id: "cyberdeck", name: "Cyberdeck", group: "archive", order: 18,
+      id: "cyberdeck", name: "Cyberdeck", group: "hardware", order: 33,
       dates: "2026", displayRole: "solo", displayStatus: "abandoned",
       covers: "A handheld Raspberry Pi 3B that boots straight into a terminal. I got the terminal setup and a stats screen working and modeled a case in Blender, then dropped it.",
       media: [
@@ -496,9 +501,9 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "Arduino", "C#"],
     },
     {
-      id: "street-cleaner", name: "Street Cleaner", group: "archive", order: 26,
+      id: "street-cleaner", name: "Street Cleaner", group: "games", order: 26,
       dates: "May 2023", displayRole: "team project", event: "GameHACKS 1.0",
-      covers: "Mobile recycling game on Google Play.",
+      covers: "A drag-and-drop mobile game in Unity that teaches which bin each kind of waste goes in.",
       media: [
         { src: "/projects/street-cleaner-0.webp", alt: "Street Cleaner How To Play", width: 1080, height: 1920 },
         { src: "/projects/street-cleaner-1.webp", alt: "Street Cleaner Gameplay", width: 1080, height: 1920 },
@@ -530,9 +535,9 @@ export const site: SiteContent = {
       stats: [], stack: ["Next.js", "TypeScript"],
     },
     {
-      id: "motaru", name: "Mōtaru", group: "archive", order: 29,
+      id: "motaru", name: "Mōtaru", group: "games", order: 29,
       dates: "2024", displayRole: "solo",
-      covers: "Unity mobile game on Google Play.",
+      covers: "An action mobile game in Unity where you take down ninjas with quick reflexes.",
       media: [
         { src: "/projects/motaru-0.webp", alt: "Mōtaru Character Customization", width: 1080, height: 1920 },
         { src: "/projects/motaru-1.webp", alt: "Mōtaru Gameplay", width: 1080, height: 1920 },
@@ -542,9 +547,9 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "C#"],
     },
     {
-      id: "zenith-tower", name: "Zenith Tower", group: "archive", order: 30,
+      id: "zenith-tower", name: "Zenith Tower", group: "games", order: 30,
       dates: "2024", displayRole: "solo",
-      covers: "Unity mobile game on Google Play.",
+      covers: "A fast mobile dungeon crawler in Unity, climbing an endless futuristic tower.",
       media: [
         { src: "/projects/zenith-tower-0.webp", alt: "Zenith Tower Gameplay", width: 1200, height: 568 },
       ],
@@ -552,9 +557,9 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "C#"],
     },
     {
-      id: "tic-tac-toe-ultimate", name: "Tic Tac Toe Ultimate", group: "archive", order: 31,
+      id: "tic-tac-toe-ultimate", name: "Tic Tac Toe Ultimate", group: "games", order: 31,
       dates: "2024", displayRole: "solo",
-      covers: "Unity mobile game on Google Play.",
+      covers: "Ultimate Tic Tac Toe for Android, built in Unity.",
       media: [
         { src: "/projects/tic-tac-toe-ultimate-0.webp", alt: "Tic Tac Toe Ultimate Gameplay", width: 561, height: 998 },
         { src: "/projects/tic-tac-toe-ultimate-1.webp", alt: "Tic Tac Toe Ultimate Win Screen", width: 333, height: 592 },
@@ -592,15 +597,20 @@ export const site: SiteContent = {
     { event: "Stupid Hackathon @ Western", year: "2025", project: "Stupid Spotify", prize: "Worst UX", role: "Team project" },
   ],
   skills: [
-    { group: "AI and ML", items: ["LLM agents", "Tool calling", "RAG", "Embeddings and reranking", "MCP", "VLMs", "Model evaluation", "Ollama", "llama.cpp", "GGUF on-device LLMs", "YOLOv8", "ONNX", "MediaPipe", "face-api.js", "PyTorch", "Reinforcement learning (PPO)", "TensorFlow", "scikit-learn"] },
-    { group: "Languages", items: ["Python", "TypeScript", "Rust", "C#", "Kotlin", "SQL"] },
-    { group: "Web and backend", items: ["React", "Next.js", "Three.js", "FastAPI", "SQLite", "MongoDB", "Supabase"] },
-    { group: "Infrastructure", items: ["NixOS", "Docker", "Tailscale", "Caddy", "sops-nix", "GitHub Actions", "Playwright"] },
-    { group: "Tools", items: ["Hermes Agent", "Blender"] },
+    { group: "AI and ML", items: ["LLM agents", "Tool calling", "RAG", "Embeddings and reranking", "MCP", "VLMs", "Model evaluation", "Ollama", "llama.cpp", "GGUF on-device LLMs", "YOLOv8", "ONNX", "MediaPipe", "face-api.js", "PyTorch", "Reinforcement learning (PPO)", "TensorFlow", "scikit-learn", "pandas"] },
+    { group: "Languages", items: ["Python", "TypeScript and JavaScript", "Rust", "C#", "C++", "Kotlin", "SQL"] },
+    { group: "Web and backend", items: ["React", "Next.js", "Tailwind CSS", "Three.js", "FastAPI", "Node.js", "SQLite", "MongoDB", "PostgreSQL (Supabase)"] },
+    { group: "Infrastructure", items: ["Nix/NixOS (flakes)", "Linux", "Docker", "Tailscale", "Caddy", "sops-nix", "GitHub Actions", "Playwright"] },
     { group: "Hardware and embedded", items: ["Arduino", "ESP32", "Raspberry Pi", "EMG sensors", "CAN bus and closed-loop control"] },
     { group: "Games and XR", items: ["Unity", "Snap Spectacles"] },
+    { group: "3D and CAD", items: ["Blender", "3D printing"] },
   ],
-  alsoUsed: ["Cursor", "Claude Code", "C++", "Bash", "Java", "PostgreSQL", "OpenCV", "OnShape"],
+  alsoUsed: ["Cursor", "Claude Code", "Bash", "Java", "OpenCV", "Onshape"],
+  alsoBuilt: [
+    { id: "flexfire-x", kind: "Hardware", line: "A forearm launcher that fires when an EMG sensor picks up a flex, with 3D-printed parts." },
+    { id: "omni-reality", kind: "VR", line: "A mixed-reality assistant for the Quest 3S, built with my team." },
+    { id: "careerly", kind: "Unity", line: "A virtual job fair in Unity with AI mentors, built with my team." },
+  ],
 };
 
 /** Case studies, in display order. /llms.txt uses this so the bot surface matches the projects page. */
@@ -630,6 +640,14 @@ export function featuredProjects(): Project[] {
 export function awardFor(projectName: string): SiteAward | undefined {
   const target = projectName.toLowerCase();
   return site.awards.find((award) => award.project.toLowerCase() === target);
+}
+
+/** The "Also built" projects with their label, in display order. Unknown ids are dropped. */
+export function alsoBuiltProjects(): { project: Project; kind: string; line: string }[] {
+  return site.alsoBuilt.flatMap(({ id, kind, line }) => {
+    const project = site.projects.find((p) => p.id === id);
+    return project ? [{ project, kind, line }] : [];
+  });
 }
 
 export function getProject(id: string): Project | undefined {

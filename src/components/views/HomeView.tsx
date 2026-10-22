@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { site, featuredProjects, leadProject } from "@/data/site";
+import { site, featuredProjects, leadProject, alsoBuiltProjects, awardFor } from "@/data/site";
+import { projectLinks } from "@/lib/project-links";
 import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import { getPage, type Page } from "@/lib/content";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -112,6 +113,55 @@ export function HomeView({ page }: { page: Page }) {
             id={project.rank === "lead" ? project.id : undefined}
           />
         ))}
+      </ul>
+
+      {/*
+       * Three small links under the featured cards, one per kind of work the
+       * cards above don't show, so the page doesn't read as AI only. No media,
+       * stack or stats: the full cards live on /projects.
+       */}
+      <h3 id="also-built" className="mt-10 text-xs font-bold uppercase tracking-widest text-muted">
+        Also built
+      </h3>
+      <ul className="mt-4 grid gap-4 sm:grid-cols-3">
+        {alsoBuiltProjects().map(({ project, kind, line }) => {
+          const link = projectLinks(project.id)[0];
+          const award = awardFor(project.name);
+          return (
+            <li
+              key={project.id}
+              className="relative rounded-lg border border-rule bg-surface p-4 transition-colors hover:border-accent/40"
+            >
+              <p className="text-xs uppercase tracking-wide text-muted">
+                {kind}
+                {project.event ? ` · ${project.event}` : ""}
+              </p>
+              <p className="mt-1 font-medium text-fg">
+                {link ? (
+                  link.internal ? (
+                    <Link href={link.href} className="hover:text-accent after:absolute after:inset-0 after:content-['']">
+                      {project.name}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-accent after:absolute after:inset-0 after:content-['']"
+                    >
+                      {project.name}
+                      <span className="sr-only"> ({link.label}, opens in a new tab)</span>
+                    </a>
+                  )
+                ) : (
+                  project.name
+                )}
+              </p>
+              <p className="mt-1 text-sm leading-relaxed">{line}</p>
+              {award ? <p className="mt-2 text-xs font-bold text-accent">{award.prize}</p> : null}
+            </li>
+          );
+        })}
       </ul>
 
       {/* The way to the full index, centred between hairlines. */}

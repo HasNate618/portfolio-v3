@@ -7,15 +7,17 @@ priority: reference
 tags: [resume]
 related: [index.md, ../skills.md]
 skills:
-  - group: AI
-    items: [LLM agents, tool calling, RAG, embeddings and reranking, MCP, VLMs, model evaluation, llama.cpp, Ollama, PyTorch, YOLOv8, ONNX]
   - group: Languages
-    items: [Python, TypeScript, C#, C++, SQL, Bash]
-  - group: Web & Infra
-    items: [React, FastAPI, Next.js, NixOS, Linux, Docker, Tailscale, Caddy, Git, GitHub Actions]
-  - group: Tools
-    items: [Hermes Agent, Blender]
-updated: 2026-10-16
+    items: [Python, TypeScript/JavaScript, Java, C#, C++, Kotlin, SQL, Bash]
+  - group: AI/ML
+    items: [LLM agents, tool calling, RAG, embeddings and reranking, MCP, VLMs, model evaluation, llama.cpp, Ollama, PyTorch, scikit-learn, pandas, YOLOv8, ONNX, MediaPipe]
+  - group: Web & Data
+    items: [React, Next.js, Tailwind, Three.js, FastAPI, Node.js, PostgreSQL (Supabase), MongoDB]
+  - group: Infra
+    items: [Nix/NixOS (flakes), Linux, Docker, GitHub Actions, Tailscale, Caddy, Git]
+  - group: Hardware & 3D
+    items: [Arduino, ESP32, Raspberry Pi, Unity (XR), Blender, Onshape, 3D printing]
+updated: 2026-10-22
 ---
 # Résumé
 

@@ -144,14 +144,15 @@ test("a project with a model list states how many it runs", () => {
 });
 
 /*
- * Both covers open with context ("Built solo at...", "My first hackathon..."),
+ * Animarker's covers opens with context ("My first hackathon..."), and AWARE's
+ * opens with a long sentence that names the event,
  * which repeated the event and role the facts already list. The card's one line
  * of detail has to describe what the project does.
  */
 test("AWARE and Animarker describe the project, not just the event", () => {
   const aware = card.split("\n").find((entry) => /^- AWARE\b/.test(entry)) ?? "";
   const animarker = card.split("\n").find((entry) => /^- Animarker\b/.test(entry)) ?? "";
-  assert.match(aware, /watches a camera/i);
+  assert.match(aware, /home-awareness device on an Arduino UNO Q/i);
   assert.doesNotMatch(aware, /: Built solo at Hack the 6ix 2026\./);
   assert.match(animarker, /wildlife tracker/i);
   assert.doesNotMatch(animarker, /: His first hackathon, done solo\./);

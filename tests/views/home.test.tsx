@@ -16,6 +16,22 @@ test("home renders identity, seeking and the Campus card", () => {
   assert.doesNotMatch(html, /4,687/, "the exact chunk count is not published anywhere");
 });
 
+test("home shows an Also built row of three linked side projects", () => {
+  const start = html.indexOf('id="also-built"');
+  assert.ok(start !== -1, "the Also built heading is missing");
+  const row = html.slice(start, html.indexOf("</ul>", start));
+  for (const name of ["FLEXFIRE-X", "Omni-Reality", "Careerly"]) {
+    assert.ok(row.includes(name), `missing ${name}`);
+  }
+  assert.equal(row.match(/<li/g)?.length, 3);
+  assert.equal(row.match(/<a /g)?.length, 3, "each entry links somewhere");
+  assert.ok(!row.includes("text-3xl"), "no stat tiles");
+});
+
+test("home names the work outside AI", () => {
+  assert.match(html, /Outside of AI I build for fun/);
+});
+
 test("home has exactly one h1", () => {
   assert.equal(html.match(/<h1/g)?.length, 1);
 });

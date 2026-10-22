@@ -7,7 +7,7 @@ dates: "2023 to present"
 role: "self"
 tags: [skills]
 related: [index.md, projects/index.md, experience/index.md]
-updated: 2026-10-16
+updated: 2026-10-22
 ---
 # Skills
 
@@ -33,13 +33,15 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **Reinforcement learning (PPO)**: [Whack-A-ML](projects/whack-a-ml.md)
 - **TensorFlow**: [Animarker](projects/animarker.md)
 - **scikit-learn**: [Gaming and Mental Health Analyzer](projects/gaming-mental-health-analyzer.md)
+- **pandas**: [Gaming and Mental Health Analyzer](projects/gaming-mental-health-analyzer.md)
 
 ## Languages
 
 - **Python**: [Campus](projects/campus.md), [AWARE](projects/aware.md), [TeraGo](experience/terago.md), [3D Western](experience/3d-western.md), [AgenticArmy](projects/agenticarmy.md)
-- **TypeScript**: [Campus](projects/campus.md), [Portfolio v2](projects/portfolio-v2.md)
+- **TypeScript and JavaScript**: [Campus](projects/campus.md), [Portfolio v2](projects/portfolio-v2.md), [Other projects](projects/other.md)
 - **Rust**: [ferret](projects/ferret.md), [AgntOS](projects/agntos.md) (abandoned)
-- **C#**: [Glyph](projects/glyph.md), [Careerly](projects/careerly.md)
+- **C#**: [Glyph](projects/glyph.md), [Careerly](projects/careerly.md), [Omni-Reality](projects/omni-reality.md)
+- **C++**: [FLEXFIRE-X](projects/flexfire-x.md), [Other projects](projects/other.md)
 - **Kotlin**: [Animarker](projects/animarker.md), [SafeRoute](projects/saferoute.md)
 - **SQL**: [Campus](projects/campus.md)
 
@@ -47,26 +49,24 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 
 - **React**: [Campus](projects/campus.md), [CareBridge](projects/carebridge.md)
 - **Next.js**: [Portfolio v2](projects/portfolio-v2.md), [Auralis](projects/auralis.md)
+- **Tailwind CSS**: [CareBridge](projects/carebridge.md), [Portfolio v2](projects/portfolio-v2.md)
 - **Three.js**: [Portfolio v2](projects/portfolio-v2.md), [Auralis](projects/auralis.md)
 - **FastAPI**: [Campus](projects/campus.md), [AWARE](projects/aware.md), [AgenticArmy](projects/agenticarmy.md), [CareBridge](projects/carebridge.md)
+- **Node.js**: [NowAndThen](projects/nowandthen.md), [Other projects](projects/other.md)
 - **SQLite**: [Campus](projects/campus.md), [AWARE](projects/aware.md)
 - **MongoDB**: [Lumen](projects/lumen.md)
-- **Supabase**: [CareBridge](projects/carebridge.md)
+- **PostgreSQL (Supabase)**: [CareBridge](projects/carebridge.md)
 
 ## Infrastructure
 
-- **NixOS**: [NixOS homelab](projects/homelab.md)
+- **Nix/NixOS (flakes)**: [NixOS homelab](projects/homelab.md)
+- **Linux**: [NixOS homelab](projects/homelab.md), [Cyberdeck](projects/cyberdeck.md)
 - **Docker**: [NixOS homelab](projects/homelab.md), [Campus](projects/campus.md), [AWARE](projects/aware.md), [3D Western](experience/3d-western.md)
 - **Tailscale**: [NixOS homelab](projects/homelab.md)
 - **Caddy**: [NixOS homelab](projects/homelab.md)
 - **sops-nix**: [NixOS homelab](projects/homelab.md)
 - **GitHub Actions**: [Campus](projects/campus.md)
 - **Playwright**: [Campus](projects/campus.md), [NixOS homelab](projects/homelab.md)
-
-## Tools
-
-- **Hermes Agent**: [NixOS homelab](projects/homelab.md)
-- **Blender**: [3D Western](experience/3d-western.md)
 
 ## Hardware and embedded
 
@@ -78,9 +78,14 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 
 ## Games and XR
 
-- **Unity**: [Careerly](projects/careerly.md), [Lumen](projects/lumen.md), [Whack-A-ML](projects/whack-a-ml.md), [Other projects](projects/other.md)
+- **Unity**: [Omni-Reality](projects/omni-reality.md), [Careerly](projects/careerly.md), [Lumen](projects/lumen.md), [Whack-A-ML](projects/whack-a-ml.md), [Other projects](projects/other.md)
 - **Snap Spectacles**: [Eyecandy](projects/eyecandy.md)
+
+## 3D and CAD
+
+- **Blender**: [3D Western](experience/3d-western.md), [FLEXFIRE-X](projects/flexfire-x.md), [Cyberdeck](projects/cyberdeck.md)
+- **3D printing**: [FLEXFIRE-X](projects/flexfire-x.md)
 
 ## Also used
 
-On his résumé or profile but not tied to a specific file here: Cursor, Claude Code, C++, Bash, Java, PostgreSQL, OpenCV, OnShape.
+On his résumé or profile but not tied to a specific file here: Cursor, Claude Code, Bash, Java, OpenCV, Onshape.

@@ -17,7 +17,7 @@ export function SeoJsonLd() {
       image: `${base}/og.png`,
       email: `mailto:${site.contact.email}`,
       jobTitle: "Software Engineering student",
-      description: "Software engineer building applied AI tools on low-cost and self-hosted models.",
+      description: "Software engineer building full-stack, infrastructure and hardware projects, lately mostly LLM tooling.",
       affiliation: { "@type": "CollegeOrUniversity", name: site.identity.education.school },
       homeLocation: { "@type": "Place", name: site.identity.location },
       sameAs: site.contact.links
@@ -32,6 +32,7 @@ export function SeoJsonLd() {
         "FastAPI",
         "React",
         "Embedded systems",
+        "Unity",
       ],
       award: site.awards.map((award) => `${award.prize}, ${award.project} (${award.event} ${award.year})`),
     },
