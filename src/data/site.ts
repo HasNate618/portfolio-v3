@@ -599,8 +599,8 @@ export const site: SiteContent = {
   skills: [
     { group: "AI and ML", items: ["LLM agents", "Tool calling", "RAG", "Embeddings and reranking", "MCP", "VLMs", "Model evaluation", "Ollama", "llama.cpp", "GGUF on-device LLMs", "YOLOv8", "ONNX", "MediaPipe", "face-api.js", "PyTorch", "Reinforcement learning (PPO)", "TensorFlow", "scikit-learn", "pandas"] },
     { group: "Languages", items: ["Python", "TypeScript and JavaScript", "Rust", "C#", "C++", "Kotlin", "SQL"] },
-    { group: "Web and backend", items: ["React", "Next.js", "Tailwind CSS", "Three.js", "FastAPI", "Node.js", "SQLite", "MongoDB", "PostgreSQL (Supabase)"] },
-    { group: "Infrastructure", items: ["Nix/NixOS (flakes)", "Linux", "Docker", "Tailscale", "Caddy", "sops-nix", "GitHub Actions", "Playwright"] },
+    { group: "Web and backend", items: ["React", "Next.js", "Tailwind CSS", "Three.js", "FastAPI", "Node.js", "SQLite", "MongoDB", "PostgreSQL (Supabase)", "MySQL"] },
+    { group: "Infrastructure", items: ["Nix/NixOS (flakes)", "Linux", "Docker", "AWS (EC2, S3)", "Tailscale", "Caddy", "sops-nix", "GitHub Actions", "Playwright", "Jira and Confluence"] },
     { group: "Hardware and embedded", items: ["Arduino", "ESP32", "Raspberry Pi", "EMG sensors", "CAN bus and closed-loop control"] },
     { group: "Games and XR", items: ["Unity", "Snap Spectacles"] },
     { group: "3D and CAD", items: ["Blender", "3D printing"] },

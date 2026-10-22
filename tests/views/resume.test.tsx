@@ -40,6 +40,14 @@ test("the skills list names tools only through the projects that used them", () 
   }
 });
 
+test("coursework skills land on the right lines and AWS stays one item", () => {
+  const group = (name: string) => page.skills?.find((g) => g.group === name)?.items ?? [];
+  assert.ok(group("Infra").includes("AWS (EC2, S3)"), "AWS (EC2, S3) should be a single Infra item");
+  assert.ok(!group("Infra").includes("S3)"), "the comma inside AWS (EC2, S3) must not split the item");
+  assert.ok(group("Infra").includes("Jira") && group("Infra").includes("Confluence"));
+  assert.ok(group("Web & Data").includes("MySQL"));
+});
+
 test("the five sections appear in the PDF's order", () => {
   const order = ["Education", "Experience", "Projects", "Hackathon Awards", "Technical Skills"];
   const positions = order.map((heading) => html.indexOf(`id="${heading.toLowerCase().replace(/ /g, "-")}"`));
@@ -69,4 +77,13 @@ test("no role or project stack list is restated in the content file", () => {
 
 test("the resume never says 'present'", () => {
   assert.doesNotMatch(html, /present/i);
+});
+
+test("Jira is never credited to 3D Western, which used a GitHub project board", async () => {
+  const fs = await import("node:fs");
+  for (const file of ["content/experience/3d-western.md", "content/experience.md", "resume/Resume.tex"]) {
+    const text = fs.readFileSync(file, "utf8");
+    const block = file.endsWith(".md") && file.includes("3d-western") ? text : (text.split(/3D Western/)[1] ?? "").split(/\n\s*(?:###|\\resumeSubheading)/)[0];
+    assert.doesNotMatch(block, /Jira/i, `${file} ties Jira to 3D Western`);
+  }
 });

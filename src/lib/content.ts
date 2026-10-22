@@ -70,6 +70,36 @@ function unquote(value: string): string {
  * the content is ours, and a dependency here would be the only thing standing
  * between a typo and a silently empty page.
  */
+/**
+ * Splits a flow list on its top-level commas. A comma inside parentheses or quotes
+ * belongs to the item, so "AWS (EC2, S3)" stays one skill. Only a quote that opens
+ * an item counts, so an apostrophe inside a question does not swallow the next comma.
+ */
+function splitFlowList(inner: string): string[] {
+  const out: string[] = [];
+  let depth = 0;
+  let quote: string | null = null;
+  let current = "";
+  for (const ch of inner) {
+    if (quote) {
+      if (ch === quote) quote = null;
+    } else if ((ch === '"' || ch === "'") && current.trim() === "") {
+      quote = ch;
+    } else if (ch === "(") {
+      depth += 1;
+    } else if (ch === ")") {
+      depth = Math.max(0, depth - 1);
+    } else if (ch === "," && depth === 0) {
+      out.push(current);
+      current = "";
+      continue;
+    }
+    current += ch;
+  }
+  out.push(current);
+  return out;
+}
+
 function parseFrontmatter(raw: string): { data: Frontmatter; body: string } {
   if (!raw.startsWith("---")) return { data: {}, body: raw };
 
@@ -90,9 +120,7 @@ function parseFrontmatter(raw: string): { data: Frontmatter; body: string } {
     const value = rawValue.trim();
 
     if (value.startsWith("[") && value.endsWith("]")) {
-      data[key] = value
-        .slice(1, -1)
-        .split(",")
+      data[key] = splitFlowList(value.slice(1, -1))
         .map(unquote)
         .filter(Boolean);
       continue;
@@ -116,8 +144,7 @@ function parseFrontmatter(raw: string): { data: Frontmatter; body: string } {
 
         const items = /^items:\s*\[(.*)\]$/.exec(nested);
         if (items && current) {
-          current.items = items[1]
-            .split(",")
+          current.items = splitFlowList(items[1])
             .map(unquote)
             .filter(Boolean);
         }

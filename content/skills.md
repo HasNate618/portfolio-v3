@@ -56,17 +56,20 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **SQLite**: [Campus](projects/campus.md), [AWARE](projects/aware.md)
 - **MongoDB**: [Lumen](projects/lumen.md)
 - **PostgreSQL (Supabase)**: [CareBridge](projects/carebridge.md)
+- **MySQL**: SE 3309A coursework at Western, where the fall 2026 term project builds its database in MySQL
 
 ## Infrastructure
 
 - **Nix/NixOS (flakes)**: [NixOS homelab](projects/homelab.md)
 - **Linux**: [NixOS homelab](projects/homelab.md), [Cyberdeck](projects/cyberdeck.md)
 - **Docker**: [NixOS homelab](projects/homelab.md), [Campus](projects/campus.md), [AWARE](projects/aware.md), [3D Western](experience/3d-western.md)
+- **AWS (EC2, S3)**: SE 3316A labs at Western, launching EC2 instances over SSH and storing files in S3
 - **Tailscale**: [NixOS homelab](projects/homelab.md)
 - **Caddy**: [NixOS homelab](projects/homelab.md)
 - **sops-nix**: [NixOS homelab](projects/homelab.md)
 - **GitHub Actions**: [Campus](projects/campus.md)
 - **Playwright**: [Campus](projects/campus.md), [NixOS homelab](projects/homelab.md)
+- **Jira and Confluence**: SE 3352A at Western, where a lab sets up an Atlassian site with both for requirements tracing
 
 ## Hardware and embedded
 

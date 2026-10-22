@@ -12,9 +12,9 @@ skills:
   - group: AI/ML
     items: [LLM agents, tool calling, RAG, embeddings and reranking, MCP, VLMs, model evaluation, llama.cpp, Ollama, PyTorch, scikit-learn, pandas, YOLOv8, ONNX, MediaPipe]
   - group: Web & Data
-    items: [React, Next.js, Tailwind, Three.js, FastAPI, Node.js, PostgreSQL (Supabase), MongoDB]
+    items: [React, Next.js, Tailwind, Three.js, FastAPI, Node.js, PostgreSQL (Supabase), MySQL, MongoDB]
   - group: Infra
-    items: [Nix/NixOS (flakes), Linux, Docker, GitHub Actions, Tailscale, Caddy, Git]
+    items: [Nix/NixOS (flakes), Linux, Docker, AWS (EC2, S3), GitHub Actions, Tailscale, Caddy, Git, Jira, Confluence]
   - group: Hardware & 3D
     items: [Arduino, ESP32, Raspberry Pi, Unity (XR), Blender, Onshape, 3D printing]
 updated: 2026-10-22
