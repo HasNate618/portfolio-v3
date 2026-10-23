@@ -8,15 +8,17 @@ tags: [resume]
 related: [index.md, ../skills.md]
 skills:
   - group: Languages
-    items: [Python, TypeScript/JavaScript, Java, C#, C++, Kotlin, SQL, Bash]
+    items: [Python, TypeScript/JavaScript, Java, C#/.NET, C++, Kotlin (Android), SQL, Bash]
   - group: AI/ML
-    items: [LLM agents, tool calling, RAG, embeddings and reranking, MCP, VLMs, model evaluation, llama.cpp, Ollama, PyTorch, scikit-learn, pandas, YOLOv8, ONNX, MediaPipe]
+    items: [LLM agents, tool calling, RAG, embeddings and reranking, MCP, VLMs, model evaluation, llama.cpp, Ollama, PyTorch, scikit-learn, pandas, YOLOv8, ONNX, MediaPipe, OpenCV]
   - group: Web & Data
-    items: [React, Next.js, Tailwind, Three.js, FastAPI, Node.js, PostgreSQL (Supabase), MySQL, MongoDB]
+    items: [React, Next.js, Node.js, FastAPI, REST APIs, Tailwind, Three.js, PostgreSQL, MySQL, MongoDB]
   - group: Infra
-    items: [Linux (NixOS), Nix flakes, Docker, AWS (EC2, S3), GitHub Actions, Tailscale, Caddy, Git, Jira, Confluence]
+    items: [Linux, Nix/NixOS (flakes), Docker, AWS (EC2, S3), GitHub Actions, pytest, Git, Jira, Confluence]
   - group: Hardware & 3D
-    items: [Arduino, ESP32, Raspberry Pi, Unity (XR), Blender, Onshape, 3D printing]
+    items: [Arduino, ESP32, Raspberry Pi, BLE, UART serial, Blender, Onshape, 3D printing]
+  - group: Games & AR/VR
+    items: [Unity, Meta Quest (Meta XR SDK, XR Interaction Toolkit, OpenXR), Snap Spectacles]
 updated: 2026-10-22
 ---
 # Résumé

@@ -42,7 +42,7 @@ test("the seeking line comes from site.ts, not from the markdown", () => {
 
 test("the About page carries the new intro copy", () => {
   assert.match(html, /Most of what I build lately is LLM tooling I use every day/);
-  assert.match(html, /a homelab of two Linux \(NixOS\) machines managed from a single repo/);
+  assert.match(html, /a homelab of two Linux machines managed from a single repo/);
   assert.doesNotMatch(html, /care about the boring parts too/);
 });
 

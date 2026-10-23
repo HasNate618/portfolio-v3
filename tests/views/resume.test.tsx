@@ -24,18 +24,18 @@ test("the PDF link precedes the body content", () => {
   assert.ok(html.indexOf("Nathan_Espejo_Resume.pdf") < html.indexOf("Education"));
 });
 
-test("skills use the resume's five groups, Languages first", () => {
-  const groups = ["Languages", "AI/ML", "Web &amp; Data", "Infra", "Hardware &amp; 3D"];
+test("skills use the resume's six groups, Languages first", () => {
+  const groups = ["Languages", "AI/ML", "Web &amp; Data", "Infra", "Hardware &amp; 3D", "Games &amp; AR/VR"];
   for (const group of groups) {
     assert.ok(html.includes(group), `missing ${group}`);
   }
-  assert.deepEqual(page.skills?.map((g) => g.group), ["Languages", "AI/ML", "Web & Data", "Infra", "Hardware & 3D"]);
+  assert.deepEqual(page.skills?.map((g) => g.group), ["Languages", "AI/ML", "Web & Data", "Infra", "Hardware & 3D", "Games & AR/VR"]);
 });
 
 test("the skills list names tools only through the projects that used them", () => {
   const items = (page.skills ?? []).flatMap((g) => g.items);
   assert.ok(!items.includes("Hermes Agent"), "Hermes Agent is a tool he runs, not a skill line");
-  for (const skill of ["Unity (XR)", "Arduino", "ESP32", "Onshape", "Kotlin"]) {
+  for (const skill of ["Unity", "Arduino", "ESP32", "BLE", "Onshape", "Kotlin (Android)", "C#/.NET"]) {
     assert.ok(items.includes(skill), `missing ${skill}`);
   }
 });
@@ -46,6 +46,15 @@ test("coursework skills land on the right lines and AWS stays one item", () => {
   assert.ok(!group("Infra").includes("S3)"), "the comma inside AWS (EC2, S3) must not split the item");
   assert.ok(group("Infra").includes("Jira") && group("Infra").includes("Confluence"));
   assert.ok(group("Web & Data").includes("MySQL"));
+});
+
+test("Unity stands alone and AR/VR names the headset and SDKs", () => {
+  const group = (name: string) => page.skills?.find((g) => g.group === name)?.items ?? [];
+  const items = (page.skills ?? []).flatMap((g) => g.items);
+  assert.ok(!items.includes("Unity (XR)"), "Unity is a game engine skill, not an XR qualifier");
+  assert.ok(group("Games & AR/VR").includes("Unity"));
+  assert.ok(group("Games & AR/VR").includes("Meta Quest (Meta XR SDK, XR Interaction Toolkit, OpenXR)"), "the SDK list must stay one item");
+  assert.ok(group("Infra")[0] === "Linux", "Linux leads the Infra line");
 });
 
 test("the five sections appear in the PDF's order", () => {

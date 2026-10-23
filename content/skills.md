@@ -7,7 +7,7 @@ dates: "2023 to present"
 role: "self"
 tags: [skills]
 related: [index.md, projects/index.md, experience/index.md]
-updated: 2026-10-22
+updated: 2026-10-23
 ---
 # Skills
 
@@ -32,6 +32,7 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **PyTorch**: [Whack-A-ML](projects/whack-a-ml.md)
 - **Reinforcement learning (PPO)**: [Whack-A-ML](projects/whack-a-ml.md)
 - **TensorFlow**: [Animarker](projects/animarker.md)
+- **OpenCV**: [AWARE](projects/aware.md), [Omni-Reality](projects/omni-reality.md)
 - **scikit-learn**: [Gaming and Mental Health Analyzer](projects/gaming-mental-health-analyzer.md)
 - **pandas**: [Gaming and Mental Health Analyzer](projects/gaming-mental-health-analyzer.md)
 
@@ -40,9 +41,9 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **Python**: [Campus](projects/campus.md), [AWARE](projects/aware.md), [TeraGo](experience/terago.md), [3D Western](experience/3d-western.md), [AgenticArmy](projects/agenticarmy.md)
 - **TypeScript and JavaScript**: [Campus](projects/campus.md), [Portfolio v2](projects/portfolio-v2.md), [Other projects](projects/other.md)
 - **Rust**: [ferret](projects/ferret.md), [AgntOS](projects/agntos.md) (abandoned)
-- **C#**: [Glyph](projects/glyph.md), [Careerly](projects/careerly.md), [Omni-Reality](projects/omni-reality.md)
+- **C# and .NET**: [Glyph](projects/glyph.md) (.NET 8 and WPF), [Careerly](projects/careerly.md), [Omni-Reality](projects/omni-reality.md)
 - **C++**: [FLEXFIRE-X](projects/flexfire-x.md), [Other projects](projects/other.md)
-- **Kotlin**: [Animarker](projects/animarker.md), [SafeRoute](projects/saferoute.md)
+- **Kotlin (Android)**: [Animarker](projects/animarker.md), [SafeRoute](projects/saferoute.md)
 - **SQL**: [Campus](projects/campus.md)
 
 ## Web and backend
@@ -53,6 +54,8 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **Three.js**: [Portfolio v2](projects/portfolio-v2.md), [Auralis](projects/auralis.md)
 - **FastAPI**: [Campus](projects/campus.md), [AWARE](projects/aware.md), [AgenticArmy](projects/agenticarmy.md), [CareBridge](projects/carebridge.md)
 - **Node.js**: [NowAndThen](projects/nowandthen.md), [Other projects](projects/other.md)
+- **REST APIs**: [Campus](projects/campus.md), [AWARE](projects/aware.md), [CareBridge](projects/carebridge.md)
+- **WebSockets**: [Omni-Reality](projects/omni-reality.md), [AWARE](projects/aware.md)
 - **SQLite**: [Campus](projects/campus.md), [AWARE](projects/aware.md)
 - **MongoDB**: [Lumen](projects/lumen.md)
 - **PostgreSQL (Supabase)**: [CareBridge](projects/carebridge.md)
@@ -68,6 +71,8 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **Caddy**: [NixOS homelab](projects/homelab.md)
 - **sops-nix**: [NixOS homelab](projects/homelab.md)
 - **GitHub Actions**: [Campus](projects/campus.md)
+- **pytest**: [Campus](projects/campus.md), [AWARE](projects/aware.md)
+- **xUnit**: [Glyph](projects/glyph.md)
 - **Playwright**: [Campus](projects/campus.md), [NixOS homelab](projects/homelab.md)
 - **Jira and Confluence**: SE 3352A at Western, where a lab sets up an Atlassian site with both for requirements tracing
 
@@ -76,13 +81,17 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **Arduino**: [AWARE](projects/aware.md), [Other projects](projects/other.md)
 - **ESP32**: [WEMars](experience/wemars.md)
 - **Raspberry Pi**: [Cyberdeck](projects/cyberdeck.md)
+- **BLE**: [Other projects](projects/other.md) (Rubber Band Turret and Wasteland)
+- **UART serial**: [AWARE](projects/aware.md)
 - **EMG sensors**: [FLEXFIRE-X](projects/flexfire-x.md)
 - **CAN bus and closed-loop control**: [WEFirst Robotics](experience/wefirst.md)
 
-## Games and XR
+## Games and AR/VR
 
 - **Unity**: [Omni-Reality](projects/omni-reality.md), [Careerly](projects/careerly.md), [Lumen](projects/lumen.md), [Whack-A-ML](projects/whack-a-ml.md), [Other projects](projects/other.md)
+- **Meta Quest (Meta XR SDK, XR Interaction Toolkit, OpenXR)**: [Omni-Reality](projects/omni-reality.md)
 - **Snap Spectacles**: [Eyecandy](projects/eyecandy.md)
+- **Google Cardboard**: [Other projects](projects/other.md) (VR ODM Gear)
 
 ## 3D and CAD
 
@@ -91,4 +100,4 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 
 ## Also used
 
-On his résumé or profile but not tied to a specific file here: Cursor, Claude Code, Bash, Java, OpenCV, Onshape.
+On his résumé or profile but not tied to a specific file here: Cursor, Claude Code, Bash, Java, Onshape.
