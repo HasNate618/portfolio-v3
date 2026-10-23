@@ -28,6 +28,7 @@ export function SeoJsonLd() {
         "TypeScript",
         "LLM agents",
         "Retrieval-augmented generation",
+        "Linux",
         "NixOS",
         "FastAPI",
         "React",

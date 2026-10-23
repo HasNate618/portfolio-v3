@@ -60,8 +60,8 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 
 ## Infrastructure
 
-- **Nix/NixOS (flakes)**: [NixOS homelab](projects/homelab.md)
 - **Linux**: [NixOS homelab](projects/homelab.md), [Cyberdeck](projects/cyberdeck.md)
+- **Nix/NixOS (flakes)**: [NixOS homelab](projects/homelab.md)
 - **Docker**: [NixOS homelab](projects/homelab.md), [Campus](projects/campus.md), [AWARE](projects/aware.md), [3D Western](experience/3d-western.md)
 - **AWS (EC2, S3)**: SE 3316A labs at Western, launching EC2 instances over SSH and storing files in S3
 - **Tailscale**: [NixOS homelab](projects/homelab.md)

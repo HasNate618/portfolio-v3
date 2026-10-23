@@ -14,7 +14,7 @@ skills:
   - group: Web & Data
     items: [React, Next.js, Tailwind, Three.js, FastAPI, Node.js, PostgreSQL (Supabase), MySQL, MongoDB]
   - group: Infra
-    items: [Nix/NixOS (flakes), Linux, Docker, AWS (EC2, S3), GitHub Actions, Tailscale, Caddy, Git, Jira, Confluence]
+    items: [Linux (NixOS), Nix flakes, Docker, AWS (EC2, S3), GitHub Actions, Tailscale, Caddy, Git, Jira, Confluence]
   - group: Hardware & 3D
     items: [Arduino, ESP32, Raspberry Pi, Unity (XR), Blender, Onshape, 3D printing]
 updated: 2026-10-22

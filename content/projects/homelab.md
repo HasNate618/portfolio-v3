@@ -2,9 +2,9 @@
 title: NixOS homelab
 type: project
 route: /projects/homelab
-description: A laptop and a home server defined in a single repo of Nix/NixOS config, from the services and networking to backups and monitoring.
+description: A two-machine Linux homelab defined in a single repo of Nix/NixOS config, from the services and networking to backups and monitoring.
 priority: start-here
-tags: [nixos, self-hosting, infrastructure, agents]
+tags: [nixos, linux, self-hosting, infrastructure, agents]
 related: [index.md, campus.md, aware.md, agntos.md, ../skills.md, ../local-ai.md]
 onThisPage: [tl;dr, Why NixOS, The two machines, What the server hosts, Networking and remote access, Storage and backups, Monitoring and upkeep, How changes get made, Guardrails, What I learned, What's next, Stack]
 id: homelab
@@ -16,7 +16,7 @@ updated: 2026-10-21
 ---
 # NixOS homelab
 
-My laptop (flow) and a home server I built from used parts (home) are both defined in a single repo of Nix/NixOS config. Every package, service, user and firewall rule is written down there, so each machine runs exactly what the config says, and any change is a diff I can read, review and roll back.
+My laptop (flow) and a home server I built from used parts (home) are both Linux machines defined in a single repo of Nix/NixOS config. Every package, service, user and firewall rule is written down there, so each machine runs exactly what the config says, and any change is a diff I can read, review and roll back.
 
 ## tl;dr
 

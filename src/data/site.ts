@@ -161,7 +161,7 @@ export const site: SiteContent = {
     {
       id: "homelab", name: "NixOS homelab", group: "featured", order: 2,
       dates: "May 2026 to present", displayRole: "solo",
-      covers: "My laptop and a home server built from used parts are both defined in a single repo of Nix/NixOS config, so every package, service and firewall rule is version-controlled and any change can be reviewed and rolled back. The server hosts my passwords, photos, files, git remote and AI services behind Caddy and Tailscale, backs up to a NAS every day, and pushes an alert when something fails. A Hermes Agent profile on each machine makes changes the way I do, by editing the config and rebuilding.",
+      covers: "My laptop and a home server built from used parts are both Linux machines defined in a single repo of Nix/NixOS config, so every package, service and firewall rule is version-controlled and any change can be reviewed and rolled back. The server hosts my passwords, photos, files, git remote and AI services behind Caddy and Tailscale, backs up to a NAS every day, and pushes an alert when something fails. A Hermes Agent profile on each machine makes changes the way I do, by editing the config and rebuilding.",
       limits: "No one else uses it. Every backup lives on one NAS with no off-site copy yet, and container images are not pinned to versions yet. The two agent profiles differ on purpose: the server profile waits for approval on a full diff, and the laptop profile commits directly and asks me to test.",
       media: [
         { src: "/projects/homelab-architecture.webp", alt: "Architecture diagram. A git repo holds one Nix flake with hosts, modules and sops-encrypted secrets, and both machines build from it. The laptop, flow, runs two Hermes Agent profiles, llama.cpp on an RTX 4060 and the desktop. The server, home, runs 35 containers and 10 native services and backs up to a NAS. Arrows show the homelab profile reaching the server over SSH, and the server's Bifrost gateway using the laptop's local models.", width: 1600, height: 1011 },
@@ -174,7 +174,7 @@ export const site: SiteContent = {
         { key: "machines", label: "machines, one NixOS flake", value: "2" },
         { key: "containers", label: "containers on the server", value: "35" },
       ],
-      stack: ["NixOS", "Nix flakes", "Docker", "Tailscale", "Caddy", "sops-nix"],
+      stack: ["Linux (NixOS)", "Nix flakes", "Docker", "Tailscale", "Caddy", "sops-nix"],
     },
     {
       id: "aware", name: "AWARE", group: "featured", order: 3,
