@@ -6,7 +6,7 @@ description: Software engineering internship at TeraGo, VP of Data/ML at 3D West
 priority: start-here
 tags: [experience]
 related: [index.md, ../skills.md]
-updated: 2026-10-16
+updated: 2026-10-23
 ---
 # Experience
 
@@ -32,7 +32,7 @@ Roles newest first.
 
 Western's Mars rover team.
 
-- Since Sep 2026: back on the software team, on AI and autonomy for the rover. Just getting started.
+- Since Sep 2026: back on the software team, on AI and autonomy for the rover, exploring ROS, robotics software, simulation, autonomous driving and robot arms.
 - 2024-25: built wireless camera streaming for the rover on the ESP32-CAM, and explored networking to a central hub and computer vision for navigation markers.
 
 ## WEFirst Robotics

@@ -6,13 +6,17 @@ description: Western's Mars rover team, where Nathan worked on camera streaming 
 priority: reference
 dates: "Sep 2024 to Apr 2025, rejoined Sep 2026"
 role: "Software team member"
-tags: [robotics, autonomy, esp32, computer-vision]
+tags: [robotics, autonomy, ros, simulation, esp32, computer-vision]
 related: [index.md, wefirst.md, ../skills.md]
-updated: 2026-10-16
+updated: 2026-10-23
 ---
 # Software team, WEMars
 
 WEMars is Western's Mars rover team. Nathan was on its software team from Sep 2024 to Apr 2025 and rejoined in Sep 2026 to work on AI and autonomy for the rover.
+
+## Since Sep 2026: AI and autonomy
+
+Back on the software team, working on AI and autonomy for the rover. Exploring ROS and the surrounding robotics software, robotics simulation, autonomous driving and robot arms.
 
 ## 2024-25: camera streaming and exploration
 

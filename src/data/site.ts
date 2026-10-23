@@ -126,7 +126,7 @@ export const site: SiteContent = {
       stats: [{ key: "dataset", label: "scraped 3D models", value: "4,620" }],
       stack: ["Python", "Blender", "Qwen3-VL-2B", "Shieldstral", "llama.cpp", "Docker"] },
     { id: "wemars", org: "WEMars", role: "Software team member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2024 to Apr 2025, rejoined Sep 2026", onResume: false, file: "/knowledgebase/experience/wemars.md",
-      summary: "Western's Mars rover team. I rejoined in Sep 2026 to work on AI and autonomy. In 2024-25 I built wireless ESP32-CAM streaming." },
+      summary: "Western's Mars rover team. I rejoined in Sep 2026 to work on AI and autonomy, exploring ROS, robotics software, simulation, autonomous driving and robot arms. In 2024-25 I built wireless ESP32-CAM streaming." },
     { id: "wefirst", org: "WEFirst Robotics", role: "Software Developer", location: "London, ON", terms: [{ start: "2026-01", end: "2026-04" }], dates: "Jan 2026 to Apr 2026", onResume: false, file: "/knowledgebase/experience/wefirst.md",
       summary: "Programmed the swerve drive to turn Xbox controller input into omnidirectional motion, tuned closed-loop control, and assembled the CAN bus drivetrain." },
     { id: "mcc", org: "Microcomputer Consulting Inc.", role: "IT Intern (part-time)", location: "Mississauga, ON", terms: [{ start: "2025-05", end: "2025-08" }], dates: "May 2025 to Aug 2025", onResume: false, file: "/knowledgebase/experience/mcc.md",
