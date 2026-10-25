@@ -19,12 +19,18 @@ test("home renders identity, seeking and the Campus card", () => {
 test("home shows an Also built row of three linked side projects", () => {
   const start = html.indexOf('id="also-built"');
   assert.ok(start !== -1, "the Also built heading is missing");
-  const row = html.slice(start, html.indexOf("</ul>", start));
-  for (const name of ["FLEXFIRE-X", "Omni-Reality", "Careerly"]) {
+  const row = html.slice(start, html.indexOf("All projects", start));
+  for (const name of ["Glyph", "Omni-Reality", "FLEXFIRE-X"]) {
     assert.ok(row.includes(name), `missing ${name}`);
   }
-  assert.equal(row.match(/<li/g)?.length, 3);
-  assert.equal(row.match(/<a /g)?.length, 3, "each entry links somewhere");
+  assert.ok(!row.includes("Careerly"), "Glyph took Careerly's place");
+  const items = row.split('<li class="relative flex flex-col').slice(1);
+  assert.equal(items.length, 3);
+  for (const item of items) {
+    assert.match(item, /after:absolute after:inset-0/, "the whole card follows its first link");
+    assert.match(item, /relative z-10 font-medium text-accent/, "the link row keeps its own targets");
+  }
+  assert.match(row, /github\.com\/HasNate618\/Glyph|WinGet|GitHub/);
   assert.ok(!row.includes("text-3xl"), "no stat tiles");
 });
 
@@ -57,15 +63,23 @@ test("the About page carries the short intro copy", () => {
   assert.doesNotMatch(html, /care about the boring parts too/);
 });
 
-test("the featured cards are compact: one image, one line, one link, no stack chips", () => {
+test("the featured cards are compact: one main image, one line, every link, no stack chips", () => {
   const projects = html.slice(html.indexOf('id="projects"'), html.indexOf('id="also-built"'));
   const campusCard = projects.match(/<li id="campus"[\s\S]*?Case study/)?.[0] ?? "";
   assert.ok(campusCard, "Campus should render as the first compact card, keeping the #campus anchor");
   assert.match(campusCard, /href="\/projects\/campus"/, "the title links to the case study");
   assert.doesNotMatch(projects, /rounded-full bg-accent\/10 px-3 py-1/, "no stack chips on home cards");
   assert.doesNotMatch(projects, /SQLite/, "the long covers text stays on /projects");
-  const thumbs = projects.match(/id="media-[^"]*-thumb"/g)?.length ?? 0;
-  assert.equal(thumbs, 4, "one thumbnail per featured card");
+  assert.doesNotMatch(projects, /Next image \(/, "no buried next-image links");
+  // Every image of every featured card has its own thumbnail or square.
+  for (const name of ["campus", "homelab", "aware", "carebridge"]) {
+    const count = (projects.match(new RegExp(`id="media-projects-${name}[^"]*-thumb"`, "g")) ?? []).length;
+    assert.ok(count >= 1, `${name} has no thumbnail`);
+  }
+  // AWARE shows its case study, then GitHub and Devpost.
+  const aware = projects.slice(projects.indexOf(">AWARE<"));
+  const row = aware.slice(0, aware.indexOf(">CareBridge<"));
+  assert.ok(row.indexOf("Case study") < row.indexOf("GitHub") && row.indexOf("GitHub") < row.indexOf("Devpost"), "all links, case study first");
 });
 
 test("the featured section links to real case studies, and only those", () => {

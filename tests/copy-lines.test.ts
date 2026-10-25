@@ -50,3 +50,14 @@ test("AWARE names only the models its code loads", () => {
   assert.doesNotMatch(local, removed);
   assert.doesNotMatch(fs.readFileSync("content/skills.md", "utf8"), /MediaPipe\*\*: \[AWARE\]/);
 });
+
+test("every card leads with a demo or screenshot, except where only a title image exists", () => {
+  // Campus media is on hold; CareBridge leads with its pitch slide by request;
+  // AgntOS has only a banner.
+  const exempt = new Set(["campus", "carebridge", "agntos"]);
+  for (const p of site.projects) {
+    if (exempt.has(p.id) || !p.media?.length) continue;
+    assert.doesNotMatch(p.media[0].alt, /title card|wordmark|logo|banner|project overview|^\w+ overview$/i, `${p.id} leads with ${p.media[0].alt}`);
+  }
+  assert.equal(getProject("campus")!.media![0].src, "/projects/campus-0.svg", "Campus media stays as it is");
+});

@@ -643,6 +643,54 @@ li {
 }
 
 /*
+ * Previous, next and close. Real links to the neighbouring overlays, so they
+ * work without script; LightboxKeys maps the arrow keys and swipes onto them.
+ * Fixed to the screen edges and large enough to hit with a thumb.
+ */
+.lightbox-nav,
+.lightbox-close {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background-color: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.lightbox-nav:hover,
+.lightbox-close:hover,
+.lightbox-nav:focus-visible,
+.lightbox-close:focus-visible {
+  background-color: rgb(0 0 0 / 0.8);
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.lightbox-prev {
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightbox-next {
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightbox-close {
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+/*
  * In-flight indicator. A ring with one lit segment reads as "working" even when
  * it stops turning, which is the state reduced-motion readers get.
  */

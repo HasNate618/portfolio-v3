@@ -9,24 +9,18 @@ import { site } from "../../src/data/site";
 const page = getPage("/projects")!;
 const html = renderToStaticMarkup(<ProjectsView page={page} />);
 
-test("projects renders three open sections, the archive and the awards", () => {
+test("projects renders three open sections and the awards, with no archive", () => {
   assert.equal(html.match(/<h2 /g)?.length, 4, "three section headings plus Hackathon awards");
   for (const h of [
     "Case studies",
     "Hardware, AR and VR",
     "Software, AI and games",
-    "Archive",
     "Hackathon awards",
   ]) {
     assert.ok(html.includes(h), `missing ${h}`);
   }
-});
-
-test("the archive is a native disclosure with a compact table", () => {
-  assert.match(html, /<details/);
-  assert.match(html, /<summary/);
-  assert.match(html, /earlier builds and team hackathon projects/);
-  assert.match(html, /<th scope="col"[^>]*>Role<\/th>/);
+  assert.doesNotMatch(html, /<details/);
+  assert.doesNotMatch(html, /Archive|older/i);
 });
 
 test("the full awards table lives at the bottom of the projects page", () => {
@@ -78,22 +72,28 @@ test("the case studies keep their hand-set order on top", () => {
   assert.ok(pos("CareBridge") < pos("Auralis"));
 });
 
-test("the archive runs newest first", () => {
-  const archive = html.slice(html.indexOf('<details id="archive"'), html.indexOf("</details>"));
-  const pos = (name: string) => archive.indexOf(`>${name}<`);
-  assert.ok(pos("VitalSign") < pos("Stupid Spotify") && pos("Stupid Spotify") < pos("Lumen"));
+test("the former archive projects sit in the software grid, ranked by score, with their links", () => {
+  const software = html.slice(html.indexOf('id="software-ai-and-games"'), html.indexOf('id="hardware-ar-and-vr"'));
+  for (const id of ["vitalsign", "agntos", "portfolio-v2", "stupid-spotify", "lumen"]) {
+    const project = site.projects.find((p) => p.id === id)!;
+    assert.ok(project.score, `${id} needs a score`);
+    assert.ok(software.includes(`>${project.name}<`), `${project.name} should be in the software grid`);
+    for (const link of project.links) assert.ok(software.includes(link.href), `${project.name} lost ${link.label}`);
+  }
+  const pos = (name: string) => software.indexOf(`>${name}<`);
+  assert.ok(pos("Lumen") < pos("ferret"), "awarded and live Lumen ties ferret and wins on the award");
 });
 
 test("only the case studies keep stack chips; the rest are a compact grid", () => {
   const studies = html.slice(html.indexOf('id="case-studies"'), html.indexOf('id="software-ai-and-games"'));
-  const rest = html.slice(html.indexOf('id="software-ai-and-games"'), html.indexOf('<details id="archive"'));
+  const rest = html.slice(html.indexOf('id="software-ai-and-games"'), html.indexOf('id="hackathon-awards"'));
   assert.match(studies, /rounded-full bg-accent\/10 px-3 py-1/, "case studies keep their stack");
   assert.doesNotMatch(rest, /rounded-full bg-accent\/10 px-3 py-1/, "no stack chips in the compact grid");
   assert.match(rest, /grid gap-4 sm:grid-cols-2/);
 });
 
 test("the compact grid hides no image: every image keeps an expanded view", () => {
-  for (const project of site.projects.filter((p) => p.group !== "archive")) {
+  for (const project of site.projects) {
     for (const item of project.media ?? []) {
       assert.ok(html.includes(`src="${item.src}"`) || html.includes(encodeURIComponent(item.src)), `${item.src} is no longer on the page`);
     }
@@ -104,20 +104,13 @@ test("the intro is one line: the team-credit note", () => {
   assert.doesNotMatch(html, /I build across the stack/);
 });
 
-test("the stronger archive builds sit in open sections, not the collapsed archive", () => {
-  const archive = html.slice(html.indexOf('<details id="archive"'), html.indexOf("</details>"));
-  for (const name of ["Careerly", "Cyberdeck", "NowAndThen", "Street Cleaner"]) {
-    assert.ok(!archive.includes(`>${name}<`), `${name} should not be in the archive`);
-  }
-});
-
 test("group labels are the capitalized display form, not the slugs", () => {
   assert.equal(GROUP_LABELS.ai, "AI and LLM");
   assert.doesNotMatch(html, />ai</);
 });
 
-test("team projects carry the honesty rule before any credit", () => {
-  const rule = html.indexOf("Most of my hackathon projects were team efforts");
+test("the solo or team note comes before any team credit", () => {
+  const rule = html.indexOf("Hackathon projects are marked solo or team.");
   const firstTeam = html.indexOf("Auralis");
   assert.ok(rule !== -1 && rule < firstTeam, "the honesty rule must precede team credits");
 });

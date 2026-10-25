@@ -17,9 +17,9 @@ export function cardLineFor(project: Project): string {
  * card with its stack lives on /projects for the case studies, and the chat
  * corpus carries every stack.
  *
- * `variant="home"` keeps only the first link ("Case study" when there is one)
- * and the one line. `variant="grid"` shows the full `covers` text, which is
- * already one or two sentences for these projects, and every link.
+ * Both variants list every link, case study first. `variant="home"` shows the
+ * one line; `variant="grid"` shows the full `covers` text, which is already
+ * one or two sentences for these projects.
  */
 export function CompactProjectCard({
   project,
@@ -30,8 +30,7 @@ export function CompactProjectCard({
   id?: string;
   variant: "home" | "grid";
 }) {
-  const links = projectLinks(project.id);
-  const first = links[0];
+  const first = projectLinks(project.id)[0];
   const award = awardFor(project.name);
 
   const title = first ? (
@@ -62,7 +61,7 @@ export function CompactProjectCard({
           : "border-rule bg-surface hover:border-accent/40"
       }`}
     >
-      <ProjectMedia media={project.media} limit={1} className="mb-3" />
+      <ProjectMedia media={project.media} variant="card" className="mb-3" />
       <h3 className="font-medium leading-snug text-fg">{title}</h3>
       <div className="mt-1">
         <ProjectMetaRow projectId={project.id} />
@@ -72,26 +71,7 @@ export function CompactProjectCard({
         {variant === "home" ? cardLineFor(project) : project.covers}
       </p>
       <div className="mt-auto pt-3 text-sm">
-        {variant === "home" ? (
-          first ? (
-            first.internal ? (
-              <Link href={first.href} className="relative z-10 font-medium text-accent hover:text-fg">
-                {first.label} <span aria-hidden="true">→</span>
-              </Link>
-            ) : (
-              <a
-                href={first.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative z-10 font-medium text-accent hover:text-fg"
-              >
-                {first.label} <span aria-hidden="true">→</span>
-              </a>
-            )
-          ) : null
-        ) : (
-          <LinkRow projectId={project.id} />
-        )}
+        <LinkRow projectId={project.id} />
       </div>
     </li>
   );

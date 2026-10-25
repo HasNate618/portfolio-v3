@@ -2,123 +2,168 @@ import Image from "next/image";
 import type { ProjectMedia as Media } from "@/data/site";
 import { slugify } from "@/lib/markdown";
 
+/** Small squares beside the main image on a compact card, at most. */
+const CARD_MINIS = 4;
+
 /**
- * A project's images as a row of small, uniform thumbnails, at desktop widths
- * only. Every image renders at the same size regardless of its intrinsic
- * dimensions — the box is fixed and `object-cover` crops — so a row of two and a
- * row of four still line up.
+ * A project's images, and an expanded view for each one.
  *
- * Clicking one opens it expanded, in place. The mechanism is CSS `:target`
- * rather than script: the thumbnail links to the overlay's fragment, the overlay
- * is revealed while that fragment is the target, and the back button closes it.
- * So the expansion works with JavaScript off, and nothing animates. The close
- * link targets the thumbnail's own id, which puts the reader back where they
- * were rather than at the top of the page.
+ * `variant="row"` (full cards and case studies) shows every image as a
+ * uniform 160x96 thumbnail. On wide screens they wrap onto more rows; on
+ * phones they stay on one row that scrolls sideways, so the card is only one
+ * thumbnail taller.
+ *
+ * `variant="card"` (compact cards) shows the main image at the same size with
+ * up to four small squares beside it, so the card is no taller than one
+ * thumbnail. If there are more images than fit, the last square says "+N"
+ * and opens the first image it leaves out.
+ *
+ * Every thumbnail opens its image expanded, in place. The mechanism is CSS
+ * `:target` rather than script, so it works with JavaScript off: the thumbnail
+ * links to the overlay's fragment, and the overlay shows while that fragment
+ * is the target. Each overlay has previous and next links and a counter, so
+ * the reader can walk through every image of the project from any one of
+ * them. LightboxKeys adds Escape, the arrow keys and swipe on top.
  */
 export function ProjectMedia({
   media,
   className = "",
-  limit,
+  variant = "row",
 }: {
   media?: Media[];
   className?: string;
-  /**
-   * Thumbnails to show. The rest still get an expanded view, reached by the
-   * "Next image" link in each caption, so a compact card hides no picture.
-   */
-  limit?: number;
+  variant?: "row" | "card";
 }) {
   if (!media?.length) return null;
-  const shown = limit ? Math.min(limit, media.length) : media.length;
-  const ids = media.map((item) => `media-${slugify(item.src)}`);
 
-  /*
-   * Phone widths get no images. The thumbnail is a 160x96 crop, so for a tall
-   * screenshot it is a fragment of the picture rather than a preview of it, and
-   * the row pushed the text a reader came for further down a narrow page.
-   *
-   * Hidden rather than left unrendered because the markup has to be identical at
-   * every width on a site that renders without script, and because next/image
-   * marks these lazy: an image with no box is never fetched, so a phone does not
-   * download them either.
-   */
+  const ids = media.map((item) => `media-${slugify(item.src)}`);
+  const thumbId = (index: number) => `${ids[index]}-thumb`;
+  const count = media.length;
+
+  // On a card: the main image, then the squares. A last square with more
+  // images behind it becomes "+N".
+  const minis = variant === "card" ? Math.min(count - 1, CARD_MINIS) : 0;
+  const overflow = variant === "card" ? count - 1 - minis : 0;
+  const hasThumb = (index: number) => variant === "row" || index <= minis;
+
+  const thumbnail = (item: Media, index: number, size: "main" | "mini", label?: string) => (
+    <a
+      id={thumbId(index)}
+      href={`#${ids[index]}`}
+      className="relative z-10 block cursor-zoom-in"
+      aria-label={label}
+    >
+      <Image
+        src={item.src}
+        alt={label ? "" : item.alt}
+        width={item.width}
+        height={item.height}
+        sizes={size === "main" ? "160px" : "56px"}
+        className={`${size === "main" ? "h-24 w-40" : "h-[2.75rem] w-14"} rounded-lg border border-rule transition-colors hover:border-accent ${
+          item.contain ? "bg-black/20 object-contain" : "object-cover"
+        }`}
+      />
+      {label ? (
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/60 text-xs font-bold text-white"
+        >
+          +{overflow + 1}
+        </span>
+      ) : null}
+    </a>
+  );
+
   return (
-    <ul className={`flex flex-wrap gap-2 max-lg:hidden ${className}`}>
+    <div className={className}>
+      {variant === "row" ? (
+        <ul className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+          {media.map((item, index) => (
+            <li key={item.src} className="shrink-0">{thumbnail(item, index, "main")}</li>
+          ))}
+        </ul>
+      ) : (
+        <div className="flex gap-2">
+          {thumbnail(media[0], 0, "main")}
+          {minis > 0 ? (
+            <ul className="grid grid-cols-2 content-start gap-x-1 gap-y-2" aria-label="More images">
+              {media.slice(1, minis + 1).map((item, offset) => {
+                const index = offset + 1;
+                const isMore = overflow > 0 && index === minis;
+                return (
+                  <li key={item.src}>
+                    {thumbnail(item, index, "mini", isMore ? `${overflow + 1} more images, starting with ${item.alt}` : undefined)}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : null}
+        </div>
+      )}
+
       {media.map((item, index) => {
         const id = ids[index];
-        const hasThumb = index < shown;
-        // A hidden image closes back to the first thumbnail, the one the reader opened.
-        const thumbId = hasThumb ? `${id}-thumb` : `${ids[0]}-thumb`;
-        const next = shown < media.length ? ids[(index + 1) % media.length] : undefined;
-
+        // An image with no thumbnail of its own closes back to the main one.
+        const back = hasThumb(index) ? thumbId(index) : thumbId(0);
+        const prev = ids[(index - 1 + count) % count];
+        const next = ids[(index + 1) % count];
         return (
-          <li key={item.src} className={hasThumb ? undefined : "contents"}>
-            {/*
-             * The image's own alt is the link's name: an aria-label saying
-             * "Expand:" would replace the description with an instruction.
-             */}
-            {hasThumb ? (
-              <a id={thumbId} href={`#${id}`} className="relative z-10 block cursor-zoom-in">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  width={item.width}
-                  height={item.height}
-                  sizes="160px"
-                  className={`h-24 w-40 rounded-lg border border-rule transition-colors hover:border-accent ${
-                    item.contain ? "bg-black/20 object-contain" : "object-cover"
-                  }`}
-                />
-              </a>
-            ) : null}
-
-            {/*
-             * The expanded view. Hidden until its fragment is targeted; the
-             * backdrop is one full-bleed close link, so a click anywhere outside
-             * the image dismisses it.
-             */}
-            <div id={id} className="lightbox" tabIndex={-1}>
-              <a
-                href={`#${thumbId}`}
-                className="lightbox-backdrop"
-                aria-label="Close the expanded image"
+          <div
+            key={item.src}
+            id={id}
+            className="lightbox"
+            tabIndex={-1}
+            role="dialog"
+            aria-label={`${item.alt}, image ${index + 1} of ${count}`}
+            data-thumb={back}
+            data-prev={count > 1 ? prev : undefined}
+            data-next={count > 1 ? next : undefined}
+          >
+            <a href={`#${back}`} className="lightbox-backdrop" aria-label="Close the expanded image" />
+            <figure className="lightbox-frame">
+              <Image
+                src={item.src}
+                alt={item.alt}
+                width={item.width}
+                height={item.height}
+                sizes="90vw"
+                className={`max-h-[75vh] max-w-[92vw] rounded-lg border border-rule ${
+                  item.contain ? "bg-black/20 object-contain" : "object-cover"
+                }`}
               />
-              <figure className="lightbox-frame">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  width={item.width}
-                  height={item.height}
-                  sizes="90vw"
-                  className={`max-h-[80vh] max-w-[92vw] rounded-lg border border-rule ${
-                    item.contain ? "bg-black/20 object-contain" : "object-cover"
-                  }`}
-                />
-                <figcaption className="mt-3 max-w-[60ch] text-center text-sm text-muted">
-                  {item.alt}.{" "}
-                  <a
-                    href={item.src}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium text-accent hover:text-fg"
-                  >
-                    Open the full-size file
-                  </a>
-                  {next ? (
-                    <>
-                      {" "}
-                      <span aria-hidden="true">·</span>{" "}
-                      <a href={`#${next}`} className="font-medium text-accent hover:text-fg">
-                        Next image ({((index + 1) % media.length) + 1} of {media.length})
-                      </a>
-                    </>
-                  ) : null}
-                </figcaption>
-              </figure>
-            </div>
-          </li>
+              <figcaption className="mt-3 max-w-[60ch] text-center text-sm text-white/80">
+                {count > 1 ? (
+                  <span className="mr-2 font-bold text-white">
+                    {index + 1} / {count}
+                  </span>
+                ) : null}
+                {item.alt}.{" "}
+                <a
+                  href={item.src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-white underline hover:text-accent"
+                >
+                  Open the full-size file
+                </a>
+              </figcaption>
+            </figure>
+            {count > 1 ? (
+              <>
+                <a href={`#${prev}`} className="lightbox-nav lightbox-prev" aria-label="Previous image">
+                  <span aria-hidden="true">‹</span>
+                </a>
+                <a href={`#${next}`} className="lightbox-nav lightbox-next" aria-label="Next image">
+                  <span aria-hidden="true">›</span>
+                </a>
+              </>
+            ) : null}
+            <a href={`#${back}`} className="lightbox-close" aria-label="Close the expanded image">
+              <span aria-hidden="true">×</span>
+            </a>
+          </div>
         );
       })}
-    </ul>
+    </div>
   );
 }

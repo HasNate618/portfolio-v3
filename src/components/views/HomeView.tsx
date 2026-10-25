@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { site, featuredProjects, leadProject, alsoBuiltProjects, awardFor } from "@/data/site";
 import { projectLinks } from "@/lib/project-links";
+import { LinkRow } from "@/components/LinkRow";
 import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import { getPage, type Page } from "@/lib/content";
 import { CompactProjectCard } from "@/components/CompactProjectCard";
@@ -118,9 +119,10 @@ export function HomeView({ page }: { page: Page }) {
       </ul>
 
       {/*
-       * Three small links under the featured cards, one per kind of work the
-       * cards above don't show, so the page doesn't read as AI only. No media,
-       * stack or stats: the full cards live on /projects.
+       * Three small cards under the featured ones, one per kind of work the
+       * cards above don't show, so the page doesn't read as AI only. The whole
+       * card follows its first link and the link row keeps its own targets.
+       * No media, stack or stats: the full cards live on /projects.
        */}
       <h3 id="also-built" className="mt-10 text-xs font-bold uppercase tracking-widest text-muted">
         Also built
@@ -132,7 +134,7 @@ export function HomeView({ page }: { page: Page }) {
           return (
             <li
               key={project.id}
-              className="relative rounded-lg border border-rule bg-surface p-4 transition-colors hover:border-accent/40"
+              className="relative flex flex-col rounded-lg border border-rule bg-surface p-4 transition-colors hover:border-accent/40"
             >
               <p className="text-xs uppercase tracking-wide text-muted">
                 {kind}
@@ -161,6 +163,9 @@ export function HomeView({ page }: { page: Page }) {
               </p>
               <p className="mt-1 text-sm leading-relaxed">{line}</p>
               {award ? <p className="mt-2 text-xs font-bold text-accent">{award.prize}</p> : null}
+              <div className="mt-auto pt-3 text-sm">
+                <LinkRow projectId={project.id} />
+              </div>
             </li>
           );
         })}

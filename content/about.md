@@ -6,7 +6,7 @@ priority: start-here
 dates: "Aug 2024 to present"
 tags: [profile, education, contact, recruiting]
 related: [now.md, local-ai.md, projects/campus.md, projects/homelab.md, experience/index.md]
-updated: 2026-10-22
+updated: 2026-10-25
 ---
 # About Nathan Espejo
 
@@ -24,7 +24,7 @@ Outside of AI I build for fun: games and 3D in Unity and Blender, AR/VR, and har
 - Program: 3rd-year Software Engineering at Western University, Dean's Honour List 2024 and 2025.
 - Roles: Software Engineering Intern at TeraGo; VP of Data/ML at 3D Western.
 - Start with: Campus, then the NixOS homelab and AWARE.
-- Outside AI: FLEXFIRE-X (hardware), Omni-Reality (VR) and Careerly (Unity).
+- Also built: Glyph (C#/.NET, on WinGet), Omni-Reality (VR) and FLEXFIRE-X (hardware).
 - Contact: nate.e.espejo@gmail.com or linkedin.com/in/nathan-espejo.
 
 ## Location

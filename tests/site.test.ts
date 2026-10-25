@@ -63,7 +63,7 @@ test("no project still carries tier, and highlights are the case studies", () =>
 
 test("every display group has at least one project", () => {
   const groups: ProjectGroup[] = [
-    "featured", "ai", "hardware", "xr", "tools", "games", "archive",
+    "featured", "ai", "hardware", "xr", "tools", "games",
   ];
   for (const g of groups) {
     assert.ok(site.projects.some((p) => p.group === g), `group ${g} is empty`);
@@ -144,9 +144,9 @@ test("3D Western states both titles and both windows", () => {
   assert.doesNotMatch(role.role, /promoted from/, "the flat phrasing is what misread");
 });
 
-test("every non-archive, non-case-study project has a score, and no case study or archive row does", () => {
+test("every project outside the case studies has a score, and no case study does", () => {
   for (const p of site.projects) {
-    const needs = p.group !== "featured" && p.group !== "archive";
+    const needs = p.group !== "featured";
     assert.equal(Boolean(p.score), needs, `${p.id} score presence`);
     if (p.score) {
       const { relevance, depth, award, shipped, ownership, recency } = p.score;

@@ -6,7 +6,7 @@ export type ProjectStat = { key: string; label: string; value: string; /** Hidde
 /** One row of the AWARE on-device model table. */
 export type ModelRow = { name: string; job: string; runtime: string };
 
-export type ProjectGroup = "featured" | "ai" | "hardware" | "xr" | "tools" | "games" | "archive";
+export type ProjectGroup = "featured" | "ai" | "hardware" | "xr" | "tools" | "games";
 
 /**
  * Home-page prominence. Distinct from `group`, which is how /projects files them.
@@ -63,8 +63,7 @@ export type Project = {
   /**
    * How strongly the project argues for an SWE internship. Sets the order of
    * the compact sections on /projects (highest total first). Layout only: not
-   * carried into the chat corpus. Case studies keep `order`; the archive sorts
-   * by date.
+   * carried into the chat corpus. Case studies keep `order` instead.
    */
   score?: ProjectScore;
 };
@@ -117,11 +116,6 @@ export function byScore(a: Project, b: Project): number {
     dateKey(b.dates) - dateKey(a.dates) ||
     a.order - b.order
   );
-}
-
-/** Newest first, then `order`. */
-export function byDate(a: Project, b: Project): number {
-  return dateKey(b.dates) - dateKey(a.dates) || a.order - b.order;
 }
 
 export type Experience = {
@@ -274,7 +268,8 @@ export const site: SiteContent = {
 
     // ── also building ─────────────────────────────────────────────────────
     {
-      id: "agntos", name: "AgntOS", group: "archive", order: 12,
+      id: "agntos", name: "AgntOS", group: "tools", order: 12,
+      score: { relevance: 2, depth: 1, award: 0, shipped: -1, ownership: 1, recency: 2 },
       dates: "2026", displayRole: "solo", displayStatus: "abandoned",
       covers: "An AI system just for configuring NixOS, with its own memory, inspired by running Hermes Agent on NixOS. I started it in Rust, then got impatient because I wanted to be on NixOS already. So I switched, ran Hermes on it, and it worked really well. That became my homelab.",
       media: [
@@ -300,10 +295,10 @@ export const site: SiteContent = {
       dates: "2026", displayRole: "solo",
       covers: "Leader-key command overlay for Windows, so you don't have to memorize shortcuts. Per-app bindings, YAML config, ships on WinGet.",
       media: [
-        { src: "/projects/glyph-0.webp", alt: "Glyph wordmark", width: 296, height: 77, contain: true },
-        { src: "/projects/glyph-1.webp", alt: "Glyph App Keymap", width: 1200, height: 832 },
         { src: "/projects/glyph-2.webp", alt: "Glyph App Overlay", width: 360, height: 677 },
+        { src: "/projects/glyph-1.webp", alt: "Glyph App Keymap", width: 1200, height: 832 },
         { src: "/projects/glyph-3.webp", alt: "Glyph Settings", width: 1200, height: 826 },
+        { src: "/projects/glyph-0.webp", alt: "Glyph wordmark", width: 296, height: 77, contain: true },
       ],
       file: "/knowledgebase/projects/glyph.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Glyph" }],
@@ -316,9 +311,9 @@ export const site: SiteContent = {
       dates: "Mar 2026", displayRole: "team project", event: "GenAI Genesis 2026",
       covers: "VS Code extension and FastAPI backend for running several coding agents in parallel, with a human approving the plan.",
       media: [
-        { src: "/projects/agenticarmy-0.webp", alt: "AgenticArmy Title Card", width: 1055, height: 1024 },
-        { src: "/projects/agenticarmy-1.webp", alt: "AgenticArmy Workflow Overview", width: 1200, height: 683 },
         { src: "/projects/agenticarmy-2.webp", alt: "AgenticArmy Multi-Agent View", width: 550, height: 534 },
+        { src: "/projects/agenticarmy-1.webp", alt: "AgenticArmy Workflow Overview", width: 1200, height: 683 },
+        { src: "/projects/agenticarmy-0.webp", alt: "AgenticArmy Title Card", width: 1055, height: 1024 },
       ],
       file: "/knowledgebase/projects/agenticarmy.md",
       links: [{ label: "Devpost", href: "https://devpost.com/software/agenticarmy" }, { label: "GitHub", href: "https://github.com/HasNate618/genai-genesis-2026" }],
@@ -362,9 +357,9 @@ export const site: SiteContent = {
       covers: "My first hackathon, done solo. An Android wildlife tracker: a TensorFlow CNN identifies the species and the sighting goes on a map.",
       cardLine: "An Android wildlife tracker: a TensorFlow CNN identifies the species and the sighting goes on a map.",
       media: [
-        { src: "/projects/animarker-0.webp", alt: "Animarker Overview", width: 1024, height: 500 },
         { src: "/projects/animarker-1.webp", alt: "Animarker Map View", width: 271, height: 573 },
         { src: "/projects/animarker-2.webp", alt: "Animarker Upload Screen", width: 271, height: 573 },
+        { src: "/projects/animarker-0.webp", alt: "Animarker Overview", width: 1024, height: 500 },
       ],
       file: "/knowledgebase/projects/animarker.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Animarker" }, { label: "Devpost", href: "https://devpost.com/software/endangered-animal-app" }],
@@ -379,11 +374,11 @@ export const site: SiteContent = {
       dates: "Nov 2025", displayRole: "team project", event: "Hack Western 12",
       covers: "3D virtual doctor with emotion detection and voice.",
       media: [
-        { src: "/projects/auralis-0.webp", alt: "Auralis Project Overview", width: 1024, height: 1024 },
-        { src: "/projects/auralis-1.webp", alt: "Auralis 3D Characters", width: 806, height: 422 },
         { src: "/projects/auralis-2.webp", alt: "Auralis Chat Interface", width: 806, height: 422 },
+        { src: "/projects/auralis-1.webp", alt: "Auralis 3D Characters", width: 806, height: 422 },
         { src: "/projects/auralis-3.webp", alt: "Auralis Summary View", width: 806, height: 546 },
         { src: "/projects/auralis-4.webp", alt: "Auralis Health Report", width: 806, height: 546 },
+        { src: "/projects/auralis-0.webp", alt: "Auralis Project Overview", width: 1024, height: 1024 },
       ],
       file: "/knowledgebase/projects/auralis.md",
       links: [{ label: "Live", href: "https://stop-googling-symptoms.tech" }, { label: "Devpost", href: "https://devpost.com/software/docai-evq74t" }, { label: "GitHub", href: "https://github.com/rickytang666/auralis" }],
@@ -406,12 +401,13 @@ export const site: SiteContent = {
       stack: ["React", "TypeScript", "Vite", "FastAPI", "Supabase", "Cohere", "ElevenLabs"],
     },
     {
-      id: "vitalsign", name: "VitalSign", group: "archive", order: 13,
+      id: "vitalsign", name: "VitalSign", group: "ai", order: 13,
+      score: { relevance: 3, depth: 2, award: 0, shipped: 0, ownership: 0, recency: 2 },
       dates: "Jan 2026", displayRole: "team project", event: "DeltaHacks 2026",
       covers: "Turns ASL gestures and facial expressions into speech that carries the emotion.",
       media: [
-        { src: "/projects/vitalsign-0.webp", alt: "VitalSign Title Card", width: 333, height: 222 },
         { src: "/projects/vitalsign-1.webp", alt: "VitalSign Demo", width: 1200, height: 554 },
+        { src: "/projects/vitalsign-0.webp", alt: "VitalSign Title Card", width: 333, height: 222 },
       ],
       file: "/knowledgebase/projects/vitalsign.md",
       links: [{ label: "Devpost", href: "https://devpost.com/software/vital-sign" }, { label: "GitHub", href: "https://github.com/liamma06/VitalSign" }],
@@ -438,8 +434,8 @@ export const site: SiteContent = {
       dates: "Sep 2025", displayRole: "team project", event: "Hack the North 2025",
       covers: "AR try-on of Shopify products on Snap Spectacles.",
       media: [
-        { src: "/projects/eyecandy-0.webp", alt: "Eyecandy title card", width: 806, height: 537 },
         { src: "/projects/eyecandy-1.webp", alt: "Eyecandy AR Demo", width: 1200, height: 675 },
+        { src: "/projects/eyecandy-0.webp", alt: "Eyecandy title card", width: 806, height: 537 },
       ],
       file: "/knowledgebase/projects/eyecandy.md",
       links: [{ label: "Devpost", href: "https://devpost.com/software/eye-candy" }, { label: "GitHub", href: "https://github.com/Duck-luv-pie/eyecandy" }],
@@ -447,14 +443,15 @@ export const site: SiteContent = {
       stack: ["Lens Studio", "TypeScript", "Snap Spectacles"],
     },
     {
-      id: "lumen", name: "Lumen", group: "archive", order: 16,
+      id: "lumen", name: "Lumen", group: "games", order: 16,
+      score: { relevance: 2, depth: 2, award: 2, shipped: 1, ownership: 0, recency: 1 },
       dates: "Aug 2025", displayRole: "team; I built the Unity mini-games", event: "TerraHacks 2025",
       covers: "Wellness companion that picks a mini-game from a mood check-in.",
       media: [
-        { src: "/projects/lumen-0.webp", alt: "Lumen title card", width: 333, height: 222 },
         { src: "/projects/lumen-1.webp", alt: "Lumen Mini Game", width: 1200, height: 701 },
         { src: "/projects/lumen-2.webp", alt: "Lumen Analytics", width: 1200, height: 726 },
         { src: "/projects/lumen-3.webp", alt: "Lumen Mini Game 2", width: 1200, height: 706 },
+        { src: "/projects/lumen-0.webp", alt: "Lumen title card", width: 333, height: 222 },
       ],
       file: "/knowledgebase/projects/lumen.md",
       links: [{ label: "Live", href: "https://llumen.netlify.app" }, { label: "Devpost", href: "https://devpost.com/software/lumen-qsgcn4" }, { label: "GitHub", href: "https://github.com/Dawgsrlife/lumen" }],
@@ -467,9 +464,9 @@ export const site: SiteContent = {
       dates: "Feb 2024", displayRole: "team project", event: "NSBEHacks 2024",
       covers: "Unity virtual job fair with AI mentors.",
       media: [
-        { src: "/projects/careerly-0.webp", alt: "Careerly title card", width: 333, height: 222 },
         { src: "/projects/careerly-1.webp", alt: "Careerly Demo", width: 806, height: 383 },
         { src: "/projects/careerly-2.webp", alt: "Careerly Professional View", width: 806, height: 382 },
+        { src: "/projects/careerly-0.webp", alt: "Careerly title card", width: 333, height: 222 },
       ],
       file: "/knowledgebase/projects/careerly.md",
       links: [{ label: "Devpost", href: "https://devpost.com/software/career-fair-xz0f67" }, { label: "GitHub", href: "https://github.com/she11fish/careerly" }],
@@ -498,8 +495,8 @@ export const site: SiteContent = {
       dates: "2025", displayRole: "solo",
       covers: "Forearm launcher inspired by Cyberpunk 2077. Flex your forearm and an EMG sensor fires it. Nine 3D-printed parts.",
       media: [
-        { src: "/projects/flexfire-x-0.webp", alt: "FLEXFIRE-X Demo Render", width: 1080, height: 768 },
         { src: "/projects/flexfire-x-1.webp", alt: "FLEXFIRE-X Demo", width: 701, height: 899 },
+        { src: "/projects/flexfire-x-0.webp", alt: "FLEXFIRE-X Demo Render", width: 1080, height: 768 },
         { src: "/projects/flexfire-x-2.webp", alt: "FLEXFIRE-X Exploded View", width: 1200, height: 675 },
         { src: "/projects/flexfire-x-3.webp", alt: "FLEXFIRE-X Launcher", width: 768, height: 1080 },
       ],
@@ -524,7 +521,8 @@ export const site: SiteContent = {
 
     // ── web and mobile ────────────────────────────────────────────────────
     {
-      id: "portfolio-v2", name: "Portfolio v2", group: "archive", order: 21,
+      id: "portfolio-v2", name: "Portfolio v2", group: "tools", order: 21,
+      score: { relevance: 2, depth: 2, award: 0, shipped: 0, ownership: 1, recency: 2 },
       dates: "2026", displayRole: "solo",
       covers: "The last version of this site: a WebGL ASCII ocean with a RAG chatbot. This version is plain text on purpose.",
       file: "/knowledgebase/projects/portfolio-v2.md",
@@ -538,8 +536,8 @@ export const site: SiteContent = {
       dates: "2025", displayRole: "course project",
       covers: "Android app for reporting hazards and routing around them.",
       media: [
-        { src: "/projects/saferoute-0.webp", alt: "SafeRoute title card", width: 999, height: 666 },
         { src: "/projects/saferoute-1.webp", alt: "SafeRoute User Flow", width: 1200, height: 1233 },
+        { src: "/projects/saferoute-0.webp", alt: "SafeRoute title card", width: 999, height: 666 },
       ],
       file: "/knowledgebase/projects/saferoute.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/SafeRoute" }],
@@ -591,8 +589,8 @@ export const site: SiteContent = {
       dates: "May 2023", displayRole: "team project", event: "GameHACKS 1.0",
       covers: "A drag-and-drop mobile game in Unity that teaches which bin each kind of waste goes in.",
       media: [
-        { src: "/projects/street-cleaner-0.webp", alt: "Street Cleaner How To Play", width: 1080, height: 1920 },
         { src: "/projects/street-cleaner-1.webp", alt: "Street Cleaner Gameplay", width: 1080, height: 1920 },
+        { src: "/projects/street-cleaner-0.webp", alt: "Street Cleaner How To Play", width: 1080, height: 1920 },
         { src: "/projects/street-cleaner-2.webp", alt: "Street Cleaner Results Screen", width: 1080, height: 1920 },
       ],
       links: [{ label: "Devpost", href: "https://devpost.com/software/street-cleaner" }, { label: "GitHub", href: "https://github.com/HasNate618/Street-Cleaner-Game" }],
@@ -611,7 +609,8 @@ export const site: SiteContent = {
       stats: [], stack: ["ESP32", "Arduino", "Python", "Node.js"],
     },
     {
-      id: "stupid-spotify", name: "Stupid Spotify", group: "archive", order: 28,
+      id: "stupid-spotify", name: "Stupid Spotify", group: "tools", order: 28,
+      score: { relevance: 2, depth: 1, award: 1, shipped: 1, ownership: 0, recency: 1 },
       dates: "Nov 2025", displayRole: "team project", event: "Stupid Hackathon @ Western",
       covers: "A deliberately bad Spotify clone. Its chatbot gaslights you about your music choices.",
       media: [
@@ -627,8 +626,8 @@ export const site: SiteContent = {
       dates: "2024", displayRole: "solo",
       covers: "An action mobile game in Unity where you take down ninjas with quick reflexes.",
       media: [
-        { src: "/projects/motaru-0.webp", alt: "Mōtaru Character Customization", width: 1080, height: 1920 },
         { src: "/projects/motaru-1.webp", alt: "Mōtaru Gameplay", width: 1080, height: 1920 },
+        { src: "/projects/motaru-0.webp", alt: "Mōtaru Character Customization", width: 1080, height: 1920 },
         { src: "/projects/motaru-2.webp", alt: "Mōtaru Second Level", width: 1080, height: 1920 },
       ],
       links: [],
@@ -698,9 +697,9 @@ export const site: SiteContent = {
   ],
   alsoUsed: ["Cursor", "Claude Code", "Bash", "Java", "Onshape"],
   alsoBuilt: [
-    { id: "flexfire-x", kind: "Hardware", line: "A forearm launcher that fires when an EMG sensor picks up a flex, with 3D-printed parts." },
+    { id: "glyph", kind: "Software", line: "A leader-key command overlay for Windows, built solo in C# and WPF and shipped on WinGet." },
     { id: "omni-reality", kind: "VR", line: "A mixed-reality assistant for the Quest 3S, built with my team." },
-    { id: "careerly", kind: "Unity", line: "A virtual job fair in Unity with AI mentors, built with my team." },
+    { id: "flexfire-x", kind: "Hardware", line: "A forearm launcher that fires when an EMG sensor picks up a flex, with 3D-printed parts." },
   ],
 };
 
