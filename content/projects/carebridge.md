@@ -10,7 +10,7 @@ role: team
 status: shipped
 tags: [ai, full-stack, healthcare]
 related: [index.md, ../awards.md, ../skills.md]
-updated: 2026-10-16
+updated: 2026-10-25
 ---
 # CareBridge
 
@@ -38,11 +38,11 @@ Patients check in by chat or voice. Each conversation becomes a structured summa
 
 ## How it works
 
-A React and TypeScript frontend talks to a FastAPI backend. Supabase stores the data, with row-level security and role-based access. Cohere reads the conversations, ElevenLabs handles voice, and risk flags combine keyword rules with model output.
+A React and TypeScript frontend talks to a FastAPI backend. Supabase stores the data, with row-level security and role-based access. Cohere replies in the chat and writes the summaries and timeline events, ElevenLabs handles voice, and risk flags come from keyword rules.
 
 ## Why
 
-A winter storm cut off a regional hospital, and missed referrals and follow-ups turned into emergencies. We picked that one coordination failure and built for it.
+Spark gave every team the same made-up case: a remote town cut off from its hospital by a winter storm, where missed referrals and follow-ups turned into emergencies. We picked that one coordination failure and built for it.
 
 ## Links
 

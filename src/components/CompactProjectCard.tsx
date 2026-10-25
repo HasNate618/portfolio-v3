@@ -61,7 +61,9 @@ export function CompactProjectCard({
           : "border-rule bg-surface hover:border-accent/40"
       }`}
     >
-      <ProjectMedia media={project.media} variant="card" className="mb-3" />
+      {/* On /projects the grid hides its images on phones to keep the page short;
+          they and their expanded views are there from the sm breakpoint up. Home keeps them. */}
+      <ProjectMedia media={project.media} variant="card" className={variant === "grid" ? "mb-3 max-sm:hidden" : "mb-3"} />
       <h3 className="font-medium leading-snug text-fg">{title}</h3>
       <div className="mt-1">
         <ProjectMetaRow projectId={project.id} />

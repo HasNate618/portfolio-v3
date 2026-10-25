@@ -155,3 +155,14 @@ test("every project outside the case studies has a score, and no case study does
     }
   }
 });
+
+test("the case studies are exactly the three with a page; CareBridge is a scored grid card that stays featured on Home", () => {
+  assert.deepEqual(highlightProjects().map((p) => p.id), ["campus", "homelab", "aware"]);
+  const carebridge = site.projects.find((p) => p.id === "carebridge")!;
+  assert.equal(carebridge.group, "ai");
+  assert.equal(carebridge.rank, "featured");
+  assert.ok(carebridge.score, "CareBridge needs a score in the grid");
+  assert.match(carebridge.covers, /made-up case/, "the storm was the hackathon's case, not a real event");
+  assert.match(carebridge.covers, /keyword rules/);
+  assert.doesNotMatch(carebridge.covers, /model output/);
+});

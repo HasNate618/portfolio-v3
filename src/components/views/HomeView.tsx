@@ -192,7 +192,7 @@ export function HomeView({ page }: { page: Page }) {
         Awards
       </h2>
       <p className="mt-4 max-w-[68ch] leading-relaxed">
-        {site.hackathons.awards} awards across {site.hackathons.entered} hackathons, all with teams.{" "}
+        {site.hackathons.awards} awards across {site.hackathons.entered} hackathons.{" "}
         <Link href="/projects#hackathon-awards" className="font-medium text-accent hover:text-fg">
           See the full list <span aria-hidden="true">→</span>
         </Link>

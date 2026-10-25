@@ -10,11 +10,11 @@ role: "solo"
 status: shipped
 tags: [developer-tools, desktop-software, productivity]
 related: [index.md, ../skills.md]
-updated: 2026-10-16
+updated: 2026-10-25
 ---
 # Glyph
 
-Leader-key command overlay for Windows with discoverable actions, per-app bindings, and custom themes. Built with C#, .NET and WPF.
+Leader-key command overlay for Windows with discoverable actions, per-app bindings, and custom themes. Built with C#, .NET and WPF. I used it while I was on Windows.
 
 ## Tech Stack
 
@@ -46,14 +46,14 @@ Glyph is a productivity tool that brings Vim-style leader key functionality to W
 
 4. **Custom Themes**
    - User-customizable appearance
-   - YAML-based configuration
-   - Extensible theme system
+   - JSON theme files, switchable live from the settings window
+   - Keymaps live in YAML, edited through the visual keymap editor
 
 ### Architecture
 
 - **Frontend**: WPF overlay window
 - **Backend**: Windows API hooks for application detection
-- **Config**: YAML files for bindings and themes
+- **Config**: YAML for bindings, JSON for themes
 - **Distribution**: WinGet package manager
 
 ## Links

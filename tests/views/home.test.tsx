@@ -154,3 +154,8 @@ test("each home experience entry is a short line plus its case study", () => {
   assert.match(section, /print-safety dataset/);
   assert.equal(section.match(/>Case study</g)?.length ?? section.match(/Case study/g)?.length, 2);
 });
+
+test("the awards line makes no team claim, since one award was solo", () => {
+  assert.match(html, /8 awards across 22 hackathons\./);
+  assert.doesNotMatch(html, /all with teams/);
+});

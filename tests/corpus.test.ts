@@ -6,8 +6,8 @@ import { site } from "../src/data/site";
 
 /*
  * The facts block is the projection of site.ts, and site.ts carries live
- * first-person fragments ("Ran alongside my TeraGo internship", "the post-event
- * work is mine"). The corpus is read as a claim about him and the prompt forbids
+ * first-person fragments ("Ran alongside my TeraGo internship", "built with my
+ * team"). The corpus is read as a claim about him and the prompt forbids
  * speaking as Nathan, so the block is turned around where it is projected.
  */
 test("the facts block never speaks as Nathan", () => {

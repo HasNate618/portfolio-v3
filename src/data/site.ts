@@ -79,7 +79,7 @@ export type Project = {
  *   prize, 3 an overall placing plus another prize.
  * - shipped -1 to 1: 1 live, published to a store or on a package manager,
  *   -1 abandoned.
- * - ownership 0-1: 1 when the work is all mine (solo, or the post-event work).
+ * - ownership 0-1: 1 for a solo project, 0 for a team project.
  * - recency 0-2: 2 for 2026, 1 for 2025, 0 for earlier.
  */
 export type ProjectScore = {
@@ -386,9 +386,10 @@ export const site: SiteContent = {
       stack: ["Next.js", "Three.js", "face-api.js", "FastAPI"],
     },
     {
-      id: "carebridge", name: "CareBridge", group: "featured", order: 4, rank: "featured",
+      id: "carebridge", name: "CareBridge", group: "ai", order: 4, rank: "featured",
+      score: { relevance: 3, depth: 2, award: 2, shipped: 0, ownership: 0, recency: 2 },
       dates: "Feb 2026", displayRole: "team project", event: "Spark 2026",
-      covers: "Overall 3rd at Spark 2026, built with my team. We started from a winter storm that cut off a regional hospital and led to missed referrals and follow-ups. Patients check in by chat or voice, and providers get one timeline with risk signals pulled from those conversations.",
+      covers: "Built with my team for the hackathon's made-up case of a town cut off from its hospital by a winter storm. Patients check in by chat or voice, and providers get one timeline with risk flags from keyword rules.",
       cardLine: "Patients check in by chat or voice, and providers get one timeline with risk signals pulled from those conversations.",
       media: [
         { src: "/projects/carebridge-2.webp", alt: "CareBridge Pitch Slide", width: 1200, height: 694 },
@@ -585,8 +586,8 @@ export const site: SiteContent = {
     },
     {
       id: "street-cleaner", name: "Street Cleaner", group: "games", order: 26,
-      score: { relevance: 1, depth: 1, award: 2, shipped: 0, ownership: 0, recency: 0 },
-      dates: "May 2023", displayRole: "team project", event: "GameHACKS 1.0",
+      score: { relevance: 1, depth: 1, award: 2, shipped: 0, ownership: 1, recency: 0 },
+      dates: "May 2023", displayRole: "solo", event: "GameHACKS 1.0",
       covers: "A drag-and-drop mobile game in Unity that teaches which bin each kind of waste goes in.",
       media: [
         { src: "/projects/street-cleaner-1.webp", alt: "Street Cleaner Gameplay", width: 1080, height: 1920 },
@@ -658,9 +659,9 @@ export const site: SiteContent = {
     },
     {
       id: "omni-reality", name: "Omni-Reality", group: "xr", order: 32,
-      score: { relevance: 2, depth: 3, award: 0, shipped: 0, ownership: 1, recency: 2 },
-      dates: "Sep 2026", displayRole: "team project; the post-event work is mine", event: "Hack the North 2026",
-      covers: "A mixed-reality assistant for the Quest 3S that answers in the room: SAM 2 highlights on the object you mean, guided steps, and furniture at life size. Built with my team, and I kept going on the spatial system after the event.",
+      score: { relevance: 2, depth: 3, award: 0, shipped: 0, ownership: 0, recency: 2 },
+      dates: "Sep 2026", displayRole: "team project", event: "Hack the North 2026",
+      covers: "A mixed-reality assistant for the Quest 3S that answers in the room: SAM 2 highlights on the object you mean, guided steps, and furniture at life size. Built with my team.",
       media: [
         { src: "/projects/omni-reality-0.webp", alt: "Guided Mode: a chips bag on a desk highlighted in blue, with the caption telling the user to move it to the trash. Screenshot by Tim Roch", width: 1200, height: 800 },
       ],
@@ -682,7 +683,7 @@ export const site: SiteContent = {
     { event: "TerraHacks", year: "2025", project: "Lumen", prize: "Best Use of MongoDB Atlas", role: "Team project; I built the Unity mini-games" },
     { event: "Hack the North", year: "2025", project: "Eyecandy", prize: "Snap Spectacles AR Runner Up", role: "Team project" },
     { event: "Spark", year: "2026", project: "CareBridge", prize: "Overall 3rd place", role: "Team project" },
-    { event: "GameHACKS 1.0", year: "2023", project: "Street Cleaner", prize: "Second Award", role: "Team project" },
+    { event: "GameHACKS 1.0", year: "2023", project: "Street Cleaner", prize: "Second Award", role: "Solo" },
     { event: "CTRL+HACK+DEL 2.0", year: "2026", project: "Object-Love-Interface", prize: "Best Useless Hack", role: "Team project" },
     { event: "Stupid Hackathon @ Western", year: "2025", project: "Stupid Spotify", prize: "Worst UX", role: "Team project" },
   ],

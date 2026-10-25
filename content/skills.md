@@ -7,7 +7,7 @@ dates: "2023 to present"
 role: "self"
 tags: [skills]
 related: [index.md, projects/index.md, experience/index.md]
-updated: 2026-10-24
+updated: 2026-10-25
 ---
 # Skills
 
@@ -55,7 +55,7 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **FastAPI**: [Campus](projects/campus.md), [AWARE](projects/aware.md), [AgenticArmy](projects/agenticarmy.md), [CareBridge](projects/carebridge.md)
 - **Node.js**: [NowAndThen](projects/nowandthen.md), [Other projects](projects/other.md)
 - **REST APIs**: [Campus](projects/campus.md), [AWARE](projects/aware.md), [CareBridge](projects/carebridge.md)
-- **WebSockets**: [Omni-Reality](projects/omni-reality.md), [AWARE](projects/aware.md)
+- **WebSockets**: [Omni-Reality](projects/omni-reality.md)
 - **SQLite**: [Campus](projects/campus.md), [AWARE](projects/aware.md)
 - **MongoDB**: [Lumen](projects/lumen.md)
 - **PostgreSQL (Supabase)**: [CareBridge](projects/carebridge.md)

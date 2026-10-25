@@ -8,11 +8,13 @@ dates: "Oct 2026 (approx.)"
 role: "solo"
 tags: [local-first, retrieval, rust, developer-tools]
 related: [index.md, ../local-ai.md]
-updated: 2026-10-17
+updated: 2026-10-25
 ---
 # ferret
 
 Local-first semantic file search. Ferret indexes text, images and PDF pages into one local SQLite file and searches it by meaning, keywords or filename, from the terminal, from fzf, from Quickshell or from an agent. It ships as one static Rust binary, with no daemon and no GUI.
+
+I built it because I wanted to make one, not because I needed it, and I don't use it.
 
 ## How it works
 

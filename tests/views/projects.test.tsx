@@ -28,10 +28,14 @@ test("the full awards table lives at the bottom of the projects page", () => {
   assert.match(html, /Hackathon awards:/);
 });
 
-test("winning projects wear the accent frame and a trophy badge", () => {
-  // Auralis won at Hack Western 12, so its card is framed differently.
-  assert.match(html, /border-accent\/50 bg-accent\/5/);
-  assert.match(html, /border-accent\/40 bg-accent\/10/);
+test("winning projects wear the accent frame and their prize", () => {
+  // Auralis won at Hack Western 12 and CareBridge placed 3rd at Spark, so their cards are framed differently.
+  for (const name of ["Auralis", "CareBridge"]) {
+    const at = html.indexOf(`>${name}<`);
+    const card = html.slice(html.lastIndexOf("relative flex flex-col rounded-lg border p-5", at), at);
+    assert.match(card, /border-accent\/50 bg-accent\/5/, `${name} is not framed`);
+  }
+  assert.match(html, /Overall 3rd place/);
 });
 
 test("every project in site.ts is rendered exactly once", () => {
@@ -61,15 +65,23 @@ test("software comes before hardware, and each compact section runs strongest fi
   assert.ok(at("Software, AI and games") !== -1 && at("Hardware, AR and VR") !== -1);
   assert.ok(at("Software, AI and games") < at("Hardware, AR and VR"), "software must come first");
   const pos = (name: string) => html.indexOf(`>${name}<`);
-  assert.ok(pos("Auralis") < pos("Glyph") && pos("Glyph") < pos("ferret"), "software order");
+  assert.ok(pos("CareBridge") < pos("Auralis") && pos("Auralis") < pos("Glyph") && pos("Glyph") < pos("ferret"), "software order");
   assert.ok(pos("ferret") < pos("Tic Tac Toe Ultimate"), "the small Unity games sit last");
   assert.ok(pos("Omni-Reality") < pos("FLEXFIRE-X") && pos("FLEXFIRE-X") < pos("VR ODM Gear Sim"), "hardware order");
 });
 
 test("the case studies keep their hand-set order on top", () => {
   const pos = (name: string) => html.indexOf(`>${name}<`);
-  assert.ok(pos("Campus") < pos("NixOS homelab") && pos("NixOS homelab") < pos("AWARE") && pos("AWARE") < pos("CareBridge"));
-  assert.ok(pos("CareBridge") < pos("Auralis"));
+  assert.ok(pos("Campus") < pos("NixOS homelab") && pos("NixOS homelab") < pos("AWARE"));
+  const studies = html.slice(html.indexOf('id="case-studies"'), html.indexOf('id="software-ai-and-games"'));
+  assert.equal(studies.match(/<h3/g)?.length, 3, "three case studies: Campus, homelab, AWARE");
+  assert.ok(!studies.includes(">CareBridge<"), "CareBridge has no case study page, so it sits in the grid");
+});
+
+test("compact grid images are hidden on phones only, and the grid still has every image", () => {
+  const software = html.slice(html.indexOf('id="software-ai-and-games"'), html.indexOf('id="hackathon-awards"'));
+  assert.match(software, /class="mb-3 max-sm:hidden"/);
+  assert.match(software, /CareBridge Pitch Slide/);
 });
 
 test("the former archive projects sit in the software grid, ranked by score, with their links", () => {

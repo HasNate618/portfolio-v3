@@ -9,7 +9,7 @@ status: shipped
 rank: archive
 tags: [mixed-reality, multimodal-ai, computer-vision, sam2, spatial-computing, unity, hackathon]
 related: [index.md, eyecandy.md, aware.md]
-updated: 2026-10-16
+updated: 2026-10-25
 ---
 # Omni-Reality
 
@@ -25,17 +25,15 @@ A mixed-reality assistant for the Meta Quest 3S, built at Hack the North 2026 by
 
 Unity on the Quest sends frames and speech to a Python coordinator over WebSockets. Qwen Omni, through Huawei's sponsored gateway, picks the object or plan. SAM 2 segments and tracks it. Gemini Live handles voice, with captions as a fallback.
 
-## After the hackathon
-
-I kept building on my repo from Sep 21 to 23: model output limited to scene ops validated against JSON Schema, placement anchored to capture-time pose, generated furniture fitted to a listing's stated size with one uniform scale, headset acknowledgements before speech, and a redacted audit ledger.
+The repo also limits model output to scene ops validated against JSON Schema, anchors placement to the pose at capture time, fits generated furniture to a listing's stated size with one uniform scale, acknowledges on the headset before speech, and keeps a redacted audit ledger.
 
 ## Credit
 
-Team project: Tim Roch, Wahib Barqawi, Zikora Chinedu and Nathan Espejo. The repo is mine. The site screenshot is by Tim Roch.
+Team project: Tim Roch, Wahib Barqawi, Zikora Chinedu and Nathan Espejo. The site screenshot is by Tim Roch.
 
 ## Links
 
 - GitHub: https://github.com/HasNate618/Omni-Reality
 - Devpost: https://devpost.com/software/omni-reality
 - Video: https://www.youtube.com/watch?v=4t_Sjc5_n_U
-- Fork with the original write-up: https://github.com/timothyroch/Omni-Reality
+- Tim Roch's repo with the original write-up: https://github.com/timothyroch/Omni-Reality

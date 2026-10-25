@@ -1,7 +1,6 @@
 /**
  * site.ts writes his summaries in his own voice: "My courses are spread across six
- * Brightspace pages", "the post-event work is mine", "team; I built the Unity
- * mini-games". Both surfaces that hand that text to the model, the profile card and
+ * Brightspace pages", "team; I built the Unity mini-games". Both surfaces that hand that text to the model, the profile card and
  * the corpus projection, are read as a claim about him, and the prompt forbids
  * speaking as Nathan. So the pronouns are turned around at the boundary instead of
  * being left for the model to trip on.

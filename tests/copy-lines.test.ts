@@ -61,3 +61,38 @@ test("every card leads with a demo or screenshot, except where only a title imag
   }
   assert.equal(getProject("campus")!.media![0].src, "/projects/campus-0.svg", "Campus media stays as it is");
 });
+
+test("Omni-Reality stays plainly a team project, with no claim about which part is his", () => {
+  const p = getProject("omni-reality")!;
+  assert.equal(p.displayRole, "team project");
+  assert.equal(p.score?.ownership, 0);
+  const md = fs.readFileSync("content/projects/omni-reality.md", "utf8");
+  for (const text of [p.covers, md]) {
+    assert.doesNotMatch(text, /post-event|after the (event|hackathon)|is mine|my repo|kept (going|building)/i);
+  }
+});
+
+test("Street Cleaner is solo everywhere it is listed", () => {
+  assert.equal(getProject("street-cleaner")!.displayRole, "solo");
+  assert.equal(getProject("street-cleaner")!.score?.ownership, 1);
+  assert.equal(site.awards.find((a) => a.project === "Street Cleaner")?.role, "Solo");
+  assert.match(fs.readFileSync("content/awards.md", "utf8"), /\| Second Award \| Solo \|/);
+});
+
+test("CareBridge copy: keyword-only risk flags and the storm as the hackathon's case", () => {
+  const md = fs.readFileSync("content/projects/carebridge.md", "utf8");
+  assert.doesNotMatch(md, /combine keyword rules with model output/);
+  assert.match(md, /risk flags come from keyword rules/);
+  assert.match(md, /made-up case/);
+});
+
+test("ferret and Glyph claim no current use or need", () => {
+  assert.match(fs.readFileSync("content/projects/ferret.md", "utf8"), /not because I needed it, and I don't use it/);
+  assert.match(fs.readFileSync("content/projects/glyph.md", "utf8"), /I used it while I was on Windows\./);
+});
+
+test("WebSockets is credited to Omni-Reality only, not AWARE", () => {
+  const line = fs.readFileSync("content/skills.md", "utf8").split("\n").find((l) => l.includes("**WebSockets**"))!;
+  assert.match(line, /Omni-Reality/);
+  assert.doesNotMatch(line, /AWARE/);
+});

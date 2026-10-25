@@ -7,7 +7,7 @@ dates: "2023 to 2026"
 role: "mixed"
 tags: [games, hardware, hackathons]
 related: [index.md, ../awards.md]
-updated: 2026-10-16
+updated: 2026-10-25
 ---
 # Other projects
 
@@ -16,7 +16,7 @@ Short entries for Nathan's smaller games, maker builds and joke hackathon projec
 ## Street Cleaner
 <a id="street-cleaner"></a>
 
-A mobile game that teaches players what kinds of waste items go in which bins through drag-and-drop gameplay. Built with Unity3D, C# and Blender. (GameHACKS 1.0, May 2023.)
+A mobile game that teaches players what kinds of waste items go in which bins through drag-and-drop gameplay. Built solo with Unity3D, C# and Blender. (GameHACKS 1.0, May 2023, Second Award.)
 
 - Devpost: https://devpost.com/software/street-cleaner
 - GitHub: https://github.com/HasNate618/Street-Cleaner-Game
