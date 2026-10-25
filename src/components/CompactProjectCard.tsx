@@ -1,0 +1,98 @@
+import Link from "next/link";
+import { awardFor, type Project } from "@/data/site";
+import { projectLinks } from "@/lib/project-links";
+import { ProjectMetaRow } from "@/components/ProjectMetaRow";
+import { LinkRow } from "@/components/LinkRow";
+import { ProjectMedia } from "@/components/ProjectMedia";
+
+/** The card's one line: `cardLine` where set, otherwise the first sentence of `covers`. */
+export function cardLineFor(project: Project): string {
+  const [first] = (project.cardLine ?? project.covers).split(". ");
+  return first.endsWith(".") ? first : `${first}.`;
+}
+
+/**
+ * A short card for a grid: one thumbnail, the name, the meta row (which keeps
+ * the solo or team label), one line and the links. No stack chips: the full
+ * card with its stack lives on /projects for the case studies, and the chat
+ * corpus carries every stack.
+ *
+ * `variant="home"` keeps only the first link ("Case study" when there is one)
+ * and the one line. `variant="grid"` shows the full `covers` text, which is
+ * already one or two sentences for these projects, and every link.
+ */
+export function CompactProjectCard({
+  project,
+  id,
+  variant,
+}: {
+  project: Project;
+  id?: string;
+  variant: "home" | "grid";
+}) {
+  const links = projectLinks(project.id);
+  const first = links[0];
+  const award = awardFor(project.name);
+
+  const title = first ? (
+    first.internal ? (
+      <Link href={first.href} className="hover:text-accent after:absolute after:inset-0 after:content-['']">
+        {project.name}
+      </Link>
+    ) : (
+      <a
+        href={first.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-accent after:absolute after:inset-0 after:content-['']"
+      >
+        {project.name}
+      </a>
+    )
+  ) : (
+    project.name
+  );
+
+  return (
+    <li
+      id={id}
+      className={`relative flex flex-col rounded-lg border p-5 transition-colors ${
+        award
+          ? "border-accent/50 bg-accent/5 hover:border-accent"
+          : "border-rule bg-surface hover:border-accent/40"
+      }`}
+    >
+      <ProjectMedia media={project.media} limit={1} className="mb-3" />
+      <h3 className="font-medium leading-snug text-fg">{title}</h3>
+      <div className="mt-1">
+        <ProjectMetaRow projectId={project.id} />
+      </div>
+      {award ? <p className="mt-1 text-xs font-bold text-accent">{award.prize}</p> : null}
+      <p className="mt-2 text-sm leading-relaxed">
+        {variant === "home" ? cardLineFor(project) : project.covers}
+      </p>
+      <div className="mt-auto pt-3 text-sm">
+        {variant === "home" ? (
+          first ? (
+            first.internal ? (
+              <Link href={first.href} className="relative z-10 font-medium text-accent hover:text-fg">
+                {first.label} <span aria-hidden="true">→</span>
+              </Link>
+            ) : (
+              <a
+                href={first.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative z-10 font-medium text-accent hover:text-fg"
+              >
+                {first.label} <span aria-hidden="true">→</span>
+              </a>
+            )
+          ) : null
+        ) : (
+          <LinkRow projectId={project.id} />
+        )}
+      </div>
+    </li>
+  );
+}

@@ -60,15 +60,79 @@ export type Project = {
   onResume?: boolean;
   /** Home-page prominence. Layout only: not carried into the chat corpus. */
   rank?: ProjectRank;
+  /**
+   * How strongly the project argues for an SWE internship. Sets the order of
+   * the compact sections on /projects (highest total first). Layout only: not
+   * carried into the chat corpus. Case studies keep `order`; the archive sorts
+   * by date.
+   */
+  score?: ProjectScore;
 };
+
+/**
+ * Each factor is a judgement from the data in this file (stack, links,
+ * awards, dates), so a change of mind is one number.
+ * - relevance 0-3: how close the work is to an SWE internship (3 = shipped
+ *   software in a mainstream stack, 1 = a game or a hardware toy).
+ * - depth 0-3: how much there is to it (3 = several systems or custom parts
+ *   working together, 1 = a single app or script).
+ * - award 0-3: 0 none, 1 a joke prize, 2 a sponsor, category or placing
+ *   prize, 3 an overall placing plus another prize.
+ * - shipped -1 to 1: 1 live, published to a store or on a package manager,
+ *   -1 abandoned.
+ * - ownership 0-1: 1 when the work is all mine (solo, or the post-event work).
+ * - recency 0-2: 2 for 2026, 1 for 2025, 0 for earlier.
+ */
+export type ProjectScore = {
+  relevance: number;
+  depth: number;
+  award: number;
+  shipped: number;
+  ownership: number;
+  recency: number;
+};
+
+export function scoreTotal(score?: ProjectScore): number {
+  if (!score) return 0;
+  return score.relevance + score.depth + score.award + score.shipped + score.ownership + score.recency;
+}
+
+const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
+/**
+ * A sortable number for a project's start date: year * 100 + month. A date
+ * with no month ("2026") sorts as month 0, after every dated month that year.
+ */
+export function dateKey(dates: string): number {
+  const year = Number(dates.match(/\d{4}/)?.[0] ?? 0);
+  const month = MONTHS.indexOf(dates.slice(0, 3).toLowerCase()) + 1;
+  return year * 100 + Math.max(month, 0);
+}
+
+/** Higher total first, then an awarded project, then the newer one, then `order`. */
+export function byScore(a: Project, b: Project): number {
+  return (
+    scoreTotal(b.score) - scoreTotal(a.score) ||
+    (b.score?.award ?? 0) - (a.score?.award ?? 0) ||
+    dateKey(b.dates) - dateKey(a.dates) ||
+    a.order - b.order
+  );
+}
+
+/** Newest first, then `order`. */
+export function byDate(a: Project, b: Project): number {
+  return dateKey(b.dates) - dateKey(a.dates) || a.order - b.order;
+}
 
 export type Experience = {
   /** Matches the content file id, for example `terago`. */
   id: string;
   org: string;
   role: string;
-  /** One or two sentences for the home page. Depth lives in the corpus doc. */
+  /** One or two sentences, carried into the chat corpus. Depth lives in the corpus doc. */
   summary?: string;
+  /** The home page's two-line version of `summary`. Layout only: not carried into the corpus. */
+  homeLine?: string;
   location: string;
   terms: { start: string; end: string | null }[];
   dates: string;
@@ -99,7 +163,7 @@ export type SiteContent = {
 export const site: SiteContent = {
   identity: {
     name: "Nathan Espejo",
-    headline: "Software engineer building full-stack, infrastructure and hardware projects, lately mostly LLM tooling. 3rd-year Software Engineering at Western.",
+    headline: "Software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Software Engineering at Western, graduating May 2028.",
     seeking: "Summer 2027 software engineering or applied AI internship",
     location: "Brampton and London, ON",
     year: "3rd year (2026-27)",
@@ -120,9 +184,11 @@ export const site: SiteContent = {
   experience: [
     { id: "terago", org: "TeraGo", role: "Software Engineering Intern", location: "Markham, ON", terms: [{ start: "2026-05", end: "2026-08" }], dates: "May 2026 to Aug 2026", onResume: true, file: "/knowledgebase/experience/terago.md",
       summary: "Built a prototype pipeline that uses a locally hosted LLM (Ollama) to turn unstructured emails into structured tickets, working end to end. Also built a Python RF channel-planning tool that shortlists clear frequencies for fixed-wireless links, and deployed an internal RAG assistant that answers engineers' technical questions from company documentation.",
+      homeLine: "Built a local-LLM prototype that turns unstructured emails into structured tickets, plus a Python RF channel-planning tool and an internal RAG assistant for engineers.",
       stack: ["Python", "Ollama", "RAG"] },
     { id: "3d-western", org: "3D Western", role: "Software Developer (Sep 2025 to Apr 2026), then VP of Data/ML (May 2026 to Aug 2026)", location: "London, ON", terms: [{ start: "2025-09", end: "2026-04" }, { start: "2026-05", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
       summary: "I was on the data team from Sep 2025, writing the render scripts and working on the 3D model scraping and the STL rendering pipeline, and as VP of Data/ML I co-led two data developers on a print-safety dataset and benchmark, tracking the work on a GitHub project board. We rendered the scraped models in Blender, checked every label with a VLM, and benchmarked small vision models as a safe-or-flag gate, where the best one, Qwen3-VL-2B, agreed with those labels on 84.2% of models with the filename visible. Ran alongside my TeraGo internship.",
+      homeLine: "On the data team since Sep 2025, writing render scripts and working on 3D model scraping. As VP of Data/ML I co-led a print-safety dataset and a benchmark of small vision models.",
       stats: [{ key: "dataset", label: "scraped 3D models", value: "4,620" }],
       stack: ["Python", "Blender", "Qwen3-VL-2B", "Shieldstral", "llama.cpp", "Docker"] },
     { id: "wemars", org: "WEMars", role: "Software team member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2024 to Apr 2025, rejoined Sep 2026", onResume: false, file: "/knowledgebase/experience/wemars.md",
@@ -137,7 +203,8 @@ export const site: SiteContent = {
     {
       id: "campus", name: "Campus", group: "featured", order: 1,
       dates: "Aug 2026 to present", displayRole: "solo",
-      covers: "My courses are spread across six Brightspace pages, so I built one place to check deadlines, study from slides and test a draft against the brief. Campus syncs everything into SQLite and answers from the course files with search that is lexical by default, with embeddings and a cross-encoder reranker switched on in config. Its agent logs every change it makes to my notes or due dates, and it runs on any OpenAI-compatible endpoint, local or hosted.",
+      covers: "My courses are spread across six Brightspace pages, so I built one place to check deadlines, study from slides and review my assignment drafts against the instructions. Campus syncs everything into SQLite and answers from the course files with search that is lexical by default, with embeddings and a cross-encoder reranker switched on in config. Its agent logs every change it makes to my notes or due dates, and it runs on any OpenAI-compatible endpoint, local or hosted.",
+      cardLine: "The AI agent I built that reads all six of my courses, so I can check deadlines, study from slides and review my assignment drafts against the instructions in one place.",
       limits: "The agent edits notes and due dates directly and logs every write with the before and after. Campus has no approval gate and no rollback; the NixOS homelab's server profile gates changes and rolls them back.",
       media: [
         { src: "/projects/campus-0.svg", alt: "Campus wordmark", width: 2221, height: 763, contain: true },
@@ -162,6 +229,7 @@ export const site: SiteContent = {
       id: "homelab", name: "NixOS homelab", group: "featured", order: 2,
       dates: "May 2026 to present", displayRole: "solo",
       covers: "My laptop and a home server built from used parts are both Linux machines defined in a single repo of Nix/NixOS config, so every package, service and firewall rule is version-controlled and any change can be reviewed and rolled back. The server hosts my passwords, photos, files, git remote and AI services behind Caddy and Tailscale, backs up to a NAS every day, and pushes an alert when something fails. A Hermes Agent profile on each machine makes changes the way I do, by editing the config and rebuilding.",
+      cardLine: "My laptop and a home server, both Linux machines defined in a single repo of Nix/NixOS config, so any change can be reviewed and rolled back.",
       limits: "No one else uses it. Every backup lives on one NAS with no off-site copy yet, and container images are not pinned to versions yet. The two agent profiles differ on purpose: the server profile waits for approval on a full diff, and the laptop profile commits directly and asks me to test.",
       media: [
         { src: "/projects/homelab-architecture.webp", alt: "Architecture diagram. A git repo holds one Nix flake with hosts, modules and sops-encrypted secrets, and both machines build from it. The laptop, flow, runs two Hermes Agent profiles, llama.cpp on an RTX 4060 and the desktop. The server, home, runs 35 containers and 10 native services and backs up to a NAS. Arrows show the homelab profile reaching the server over SSH, and the server's Bifrost gateway using the laptop's local models.", width: 1600, height: 1011 },
@@ -180,7 +248,7 @@ export const site: SiteContent = {
       id: "aware", name: "AWARE", group: "featured", order: 3,
       dates: "Jul 2026", displayRole: "solo", event: "Hack the 6ix 2026",
       covers: "A home-awareness device I built solo at Hack the 6ix 2026 on an $80 Arduino UNO Q, with a camera, a microphone and sensors feeding vision and audio models that all run on the board, so there is no cloud inference. You set automations in plain English, like \"when glass breaks after 10pm, alert me\", a small on-board LLM turns each one into a rule, and plain code checks the rules with no LLM in that loop.",
-      cardLine: "A home-awareness device on an Arduino UNO Q, with a camera, a microphone and sensors, and every model running on the board.",
+      cardLine: "A home-awareness device on an Arduino UNO Q running YOLOv8n vision, YAMNet audio, a MiniCPM LLM and Piper speech on the board, with no cloud inference.",
       media: [
         { src: "/projects/aware-0.webp", alt: "AWARE device on an Arduino UNO Q", width: 1200, height: 676 },
         { src: "/projects/aware-1.webp", alt: "AWARE web dashboard", width: 1200, height: 1122 },
@@ -193,13 +261,12 @@ export const site: SiteContent = {
         { key: "ruleTick", label: "rule checks, no LLM in that loop", value: "500 ms" },
         { key: "boardCost", label: "Arduino UNO Q, all inference on board", value: "$80" },
       ],
-      // Vision, audio, the small model and the board it all runs on: the four
-      // claims in the summary, and nothing else.
-      stack: ["Python 3.12", "YOLOv8n", "YAMNet", "Whisper-tiny", "MiniCPM5-1B (GGUF)", "Arduino UNO Q"],
+      // Only what the AWARE code loads: vision, audio, the small LLM, speech
+      // output, and the board it all runs on.
+      stack: ["Python 3.12", "YOLOv8n", "YAMNet", "MiniCPM5-1B (GGUF)", "Piper TTS", "Arduino UNO Q"],
       models: [
         { name: "YOLOv8n", job: "object detection", runtime: "ONNX on the Adreno 702 GPU, via QNN" },
         { name: "YAMNet", job: "sound events, 521 classes", runtime: "ONNX" },
-        { name: "Whisper-tiny", job: "speech to text", runtime: "on-device" },
         { name: "Piper TTS", job: "text to speech", runtime: "on-device" },
         { name: "MiniCPM5-1B (GGUF Q4_K_M)", job: "commands to rules, memory", runtime: "on-device" },
       ],
@@ -220,6 +287,7 @@ export const site: SiteContent = {
     },
     {
       id: "ferret", name: "ferret", group: "tools", order: 5,
+      score: { relevance: 3, depth: 2, award: 0, shipped: 0, ownership: 1, recency: 2 },
       dates: "Oct 2026 (approx.)", displayRole: "solo",
       covers: "Local-first semantic search over text, images and PDFs in Rust: hybrid vector, FTS5 and filename search fused with RRF.",
       file: "/knowledgebase/projects/ferret.md",
@@ -228,6 +296,7 @@ export const site: SiteContent = {
     },
     {
       id: "glyph", name: "Glyph", group: "tools", order: 6,
+      score: { relevance: 3, depth: 2, award: 0, shipped: 1, ownership: 1, recency: 2 },
       dates: "2026", displayRole: "solo",
       covers: "Leader-key command overlay for Windows, so you don't have to memorize shortcuts. Per-app bindings, YAML config, ships on WinGet.",
       media: [
@@ -243,6 +312,7 @@ export const site: SiteContent = {
     },
     {
       id: "agenticarmy", name: "AgenticArmy", group: "ai", order: 7,
+      score: { relevance: 3, depth: 2, award: 0, shipped: 0, ownership: 0, recency: 2 },
       dates: "Mar 2026", displayRole: "team project", event: "GenAI Genesis 2026",
       covers: "VS Code extension and FastAPI backend for running several coding agents in parallel, with a human approving the plan.",
       media: [
@@ -259,6 +329,7 @@ export const site: SiteContent = {
     // ── ai and ml ─────────────────────────────────────────────────────────
     {
       id: "gaming-mental-health-analyzer", name: "Gaming and Mental Health Analyzer", group: "ai", order: 8,
+      score: { relevance: 2, depth: 1, award: 0, shipped: 0, ownership: 0, recency: 2 },
       dates: "Mar 2026 (approx.)", displayRole: "team project", event: "Dataquest",
       covers: "scikit-learn models that predict five wellbeing risks from gaming habits, trained on a 1,000-row Kaggle dataset.",
       media: [
@@ -273,6 +344,7 @@ export const site: SiteContent = {
     },
     {
       id: "whack-a-ml", name: "Whack-A-ML", group: "ai", order: 9,
+      score: { relevance: 2, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 2 },
       dates: "2026", displayRole: "solo",
       covers: "A PPO agent learns to hit targets with a simulated arm in Unity, with curriculum learning.",
       media: [
@@ -285,6 +357,7 @@ export const site: SiteContent = {
     },
     {
       id: "animarker", name: "Animarker", group: "tools", order: 10,
+      score: { relevance: 2, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 0 },
       dates: "May 2023", displayRole: "solo", event: "Washington Justice Encode",
       covers: "My first hackathon, done solo. An Android wildlife tracker: a TensorFlow CNN identifies the species and the sighting goes on a map.",
       cardLine: "An Android wildlife tracker: a TensorFlow CNN identifies the species and the sighting goes on a map.",
@@ -302,6 +375,7 @@ export const site: SiteContent = {
     // ── hackathon team projects ───────────────────────────────────────────
     {
       id: "auralis", name: "Auralis", group: "ai", order: 11,
+      score: { relevance: 3, depth: 2, award: 2, shipped: 1, ownership: 0, recency: 1 },
       dates: "Nov 2025", displayRole: "team project", event: "Hack Western 12",
       covers: "3D virtual doctor with emotion detection and voice.",
       media: [
@@ -320,10 +394,11 @@ export const site: SiteContent = {
       id: "carebridge", name: "CareBridge", group: "featured", order: 4, rank: "featured",
       dates: "Feb 2026", displayRole: "team project", event: "Spark 2026",
       covers: "Overall 3rd at Spark 2026, built with my team. We started from a winter storm that cut off a regional hospital and led to missed referrals and follow-ups. Patients check in by chat or voice, and providers get one timeline with risk signals pulled from those conversations.",
+      cardLine: "Patients check in by chat or voice, and providers get one timeline with risk signals pulled from those conversations.",
       media: [
+        { src: "/projects/carebridge-2.webp", alt: "CareBridge Pitch Slide", width: 1200, height: 694 },
         { src: "/projects/carebridge-0.webp", alt: "CareBridge Provider Dashboard", width: 806, height: 564 },
         { src: "/projects/carebridge-1.webp", alt: "CareBridge Financials View", width: 1200, height: 913 },
-        { src: "/projects/carebridge-2.webp", alt: "CareBridge Pitch Slide", width: 1200, height: 694 },
       ],
       file: "/knowledgebase/projects/carebridge.md",
       links: [{ label: "Devpost", href: "https://devpost.com/software/care-bridge-ai" }, { label: "GitHub (teammate's repo)", href: "https://github.com/liamma06/Spark" }],
@@ -345,6 +420,7 @@ export const site: SiteContent = {
     },
     {
       id: "nowandthen", name: "NowAndThen", group: "tools", order: 14,
+      score: { relevance: 3, depth: 1, award: 0, shipped: 0, ownership: 0, recency: 2 },
       dates: "Jan 2026", displayRole: "team project", event: "UofTHacks 13",
       covers: "Map app for leaving geotagged posts, with AI summaries of places.",
       media: [
@@ -358,6 +434,7 @@ export const site: SiteContent = {
     },
     {
       id: "eyecandy", name: "Eyecandy", group: "xr", order: 15,
+      score: { relevance: 2, depth: 1, award: 2, shipped: 0, ownership: 0, recency: 1 },
       dates: "Sep 2025", displayRole: "team project", event: "Hack the North 2025",
       covers: "AR try-on of Shopify products on Snap Spectacles.",
       media: [
@@ -386,6 +463,7 @@ export const site: SiteContent = {
     },
     {
       id: "careerly", name: "Careerly", group: "ai", order: 17,
+      score: { relevance: 2, depth: 2, award: 3, shipped: 0, ownership: 0, recency: 0 },
       dates: "Feb 2024", displayRole: "team project", event: "NSBEHacks 2024",
       covers: "Unity virtual job fair with AI mentors.",
       media: [
@@ -402,6 +480,7 @@ export const site: SiteContent = {
     // ── hardware ──────────────────────────────────────────────────────────
     {
       id: "cyberdeck", name: "Cyberdeck", group: "hardware", order: 33,
+      score: { relevance: 1, depth: 1, award: 0, shipped: -1, ownership: 1, recency: 2 },
       dates: "2026", displayRole: "solo", displayStatus: "abandoned",
       covers: "A handheld Raspberry Pi 3B that boots straight into a terminal. I got the terminal setup and a stats screen working and modeled a case in Blender, then dropped it.",
       media: [
@@ -415,6 +494,7 @@ export const site: SiteContent = {
     },
     {
       id: "flexfire-x", name: "FLEXFIRE-X", group: "hardware", order: 19,
+      score: { relevance: 1, depth: 3, award: 0, shipped: 0, ownership: 1, recency: 1 },
       dates: "2025", displayRole: "solo",
       covers: "Forearm launcher inspired by Cyberpunk 2077. Flex your forearm and an EMG sensor fires it. Nine 3D-printed parts.",
       media: [
@@ -430,6 +510,7 @@ export const site: SiteContent = {
     },
     {
       id: "rubber-band-turret", name: "Rubber Band Turret", group: "hardware", order: 20,
+      score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 0 },
       dates: "2023", displayRole: "solo",
       covers: "Bluetooth turret I control from an Android app.",
       media: [
@@ -453,6 +534,7 @@ export const site: SiteContent = {
     },
     {
       id: "saferoute", name: "SafeRoute", group: "tools", order: 22,
+      score: { relevance: 3, depth: 1, award: 0, shipped: 0, ownership: 0, recency: 1 },
       dates: "2025", displayRole: "course project",
       covers: "Android app for reporting hazards and routing around them.",
       media: [
@@ -466,6 +548,7 @@ export const site: SiteContent = {
     },
     {
       id: "uwo-mealplan-calc", name: "UWO Mealplan Calc", group: "tools", order: 23,
+      score: { relevance: 2, depth: 1, award: 0, shipped: 1, ownership: 1, recency: 0 },
       dates: "2024", displayRole: "solo",
       covers: "Chrome extension that tracks meal plan spending.",
       media: [
@@ -480,6 +563,7 @@ export const site: SiteContent = {
     // ── games and smaller builds ──────────────────────────────────────────
     {
       id: "wasteland", name: "Wasteland", group: "hardware", order: 24,
+      score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 0, recency: 1 },
       dates: "Feb 2025", displayRole: "team project", event: "MakeUofT 2025",
       covers: "Horror game you play with a sensor glove.",
       media: [
@@ -491,6 +575,7 @@ export const site: SiteContent = {
     },
     {
       id: "vr-odm-gear-sim", name: "VR ODM Gear Sim", group: "xr", order: 25,
+      score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 0, recency: 0 },
       dates: "Sep 2023", displayRole: "team project", event: "Hack the North 2023",
       covers: "Cardboard VR sim with an Arduino glove controller.",
       media: [
@@ -502,6 +587,7 @@ export const site: SiteContent = {
     },
     {
       id: "street-cleaner", name: "Street Cleaner", group: "games", order: 26,
+      score: { relevance: 1, depth: 1, award: 2, shipped: 0, ownership: 0, recency: 0 },
       dates: "May 2023", displayRole: "team project", event: "GameHACKS 1.0",
       covers: "A drag-and-drop mobile game in Unity that teaches which bin each kind of waste goes in.",
       media: [
@@ -514,6 +600,7 @@ export const site: SiteContent = {
     },
     {
       id: "object-love-interface", name: "Object-Love-Interface", group: "hardware", order: 27,
+      score: { relevance: 1, depth: 1, award: 1, shipped: 0, ownership: 0, recency: 2 },
       dates: "Feb 2026", displayRole: "team project", event: "CTRL+HACK+DEL 2.0",
       covers: "IoT objects with voices and personalities.",
       media: [
@@ -536,6 +623,7 @@ export const site: SiteContent = {
     },
     {
       id: "motaru", name: "Mōtaru", group: "games", order: 29,
+      score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 0 },
       dates: "2024", displayRole: "solo",
       covers: "An action mobile game in Unity where you take down ninjas with quick reflexes.",
       media: [
@@ -548,6 +636,7 @@ export const site: SiteContent = {
     },
     {
       id: "zenith-tower", name: "Zenith Tower", group: "games", order: 30,
+      score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 0 },
       dates: "2024", displayRole: "solo",
       covers: "A fast mobile dungeon crawler in Unity, climbing an endless futuristic tower.",
       media: [
@@ -558,6 +647,7 @@ export const site: SiteContent = {
     },
     {
       id: "tic-tac-toe-ultimate", name: "Tic Tac Toe Ultimate", group: "games", order: 31,
+      score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 0 },
       dates: "2024", displayRole: "solo",
       covers: "Ultimate Tic Tac Toe for Android, built in Unity.",
       media: [
@@ -569,6 +659,7 @@ export const site: SiteContent = {
     },
     {
       id: "omni-reality", name: "Omni-Reality", group: "xr", order: 32,
+      score: { relevance: 2, depth: 3, award: 0, shipped: 0, ownership: 1, recency: 2 },
       dates: "Sep 2026", displayRole: "team project; the post-event work is mine", event: "Hack the North 2026",
       covers: "A mixed-reality assistant for the Quest 3S that answers in the room: SAM 2 highlights on the object you mean, guided steps, and furniture at life size. Built with my team, and I kept going on the spatial system after the event.",
       media: [

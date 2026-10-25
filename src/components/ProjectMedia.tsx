@@ -15,8 +15,22 @@ import { slugify } from "@/lib/markdown";
  * link targets the thumbnail's own id, which puts the reader back where they
  * were rather than at the top of the page.
  */
-export function ProjectMedia({ media, className = "" }: { media?: Media[]; className?: string }) {
+export function ProjectMedia({
+  media,
+  className = "",
+  limit,
+}: {
+  media?: Media[];
+  className?: string;
+  /**
+   * Thumbnails to show. The rest still get an expanded view, reached by the
+   * "Next image" link in each caption, so a compact card hides no picture.
+   */
+  limit?: number;
+}) {
   if (!media?.length) return null;
+  const shown = limit ? Math.min(limit, media.length) : media.length;
+  const ids = media.map((item) => `media-${slugify(item.src)}`);
 
   /*
    * Phone widths get no images. The thumbnail is a 160x96 crop, so for a tall
@@ -30,28 +44,33 @@ export function ProjectMedia({ media, className = "" }: { media?: Media[]; class
    */
   return (
     <ul className={`flex flex-wrap gap-2 max-lg:hidden ${className}`}>
-      {media.map((item) => {
-        const id = `media-${slugify(item.src)}`;
-        const thumbId = `${id}-thumb`;
+      {media.map((item, index) => {
+        const id = ids[index];
+        const hasThumb = index < shown;
+        // A hidden image closes back to the first thumbnail, the one the reader opened.
+        const thumbId = hasThumb ? `${id}-thumb` : `${ids[0]}-thumb`;
+        const next = shown < media.length ? ids[(index + 1) % media.length] : undefined;
 
         return (
-          <li key={item.src}>
+          <li key={item.src} className={hasThumb ? undefined : "contents"}>
             {/*
              * The image's own alt is the link's name: an aria-label saying
              * "Expand:" would replace the description with an instruction.
              */}
-            <a id={thumbId} href={`#${id}`} className="relative z-10 block cursor-zoom-in">
-              <Image
-                src={item.src}
-                alt={item.alt}
-                width={item.width}
-                height={item.height}
-                sizes="160px"
-                className={`h-24 w-40 rounded-lg border border-rule transition-colors hover:border-accent ${
-                  item.contain ? "bg-black/20 object-contain" : "object-cover"
-                }`}
-              />
-            </a>
+            {hasThumb ? (
+              <a id={thumbId} href={`#${id}`} className="relative z-10 block cursor-zoom-in">
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  width={item.width}
+                  height={item.height}
+                  sizes="160px"
+                  className={`h-24 w-40 rounded-lg border border-rule transition-colors hover:border-accent ${
+                    item.contain ? "bg-black/20 object-contain" : "object-cover"
+                  }`}
+                />
+              </a>
+            ) : null}
 
             {/*
              * The expanded view. Hidden until its fragment is targeted; the
@@ -85,6 +104,15 @@ export function ProjectMedia({ media, className = "" }: { media?: Media[]; class
                   >
                     Open the full-size file
                   </a>
+                  {next ? (
+                    <>
+                      {" "}
+                      <span aria-hidden="true">·</span>{" "}
+                      <a href={`#${next}`} className="font-medium text-accent hover:text-fg">
+                        Next image ({((index + 1) % media.length) + 1} of {media.length})
+                      </a>
+                    </>
+                  ) : null}
                 </figcaption>
               </figure>
             </div>

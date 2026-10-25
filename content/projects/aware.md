@@ -12,7 +12,7 @@ dates: "Jul 2026"
 role: solo
 status: shipped
 rank: featured
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 # AWARE
 
@@ -37,7 +37,7 @@ I built it solo, so every part is mine: the perception pipeline, the LLM rule co
 alt: A camera, microphone and sensors feed an always-on perception pipeline. A plain-English command goes through the on-device language model to become a rule. The rules engine checks every rule every 500 milliseconds and drives a speaker, LEDs, Telegram alerts and video clips.
 ```
 
-1. Perception, always on. YOLOv8n object detection at 2 Hz, plus BlazeFace, MediaPipe pose and hands, and MiDaS depth. YAMNet sorts sounds into 521 classes at 4 Hz. The STM32 microcontroller reads temperature, distance and motion, with Edge Impulse anomaly detection.
+1. Perception, always on. YOLOv8n object detection at 2 Hz, and YAMNet sorts sounds into 521 classes at 4 Hz. The STM32 microcontroller reads temperature, distance and motion.
 2. Reasoning, on demand. The LLM reads your command and calls create_rule() with "when" and "then" fields. A plain parser compiles those into triggers and actions.
 3. Rules, every 500 ms. The engine checks each rule against the latest perception data. The LLM is not involved.
 4. Action. Piper TTS on a Bluetooth speaker, LEDs, servo or relay control, Telegram alerts, video clips, and live dashboard updates.

@@ -140,7 +140,7 @@ test("the card never speaks as Nathan", () => {
  */
 test("a project with a model list states how many it runs", () => {
   const line = card.split("\n").find((entry) => /^- AWARE\b/.test(entry)) ?? "";
-  assert.match(line, /5 on-device models/, line);
+  assert.match(line, /4 on-device models/, line);
 });
 
 /*

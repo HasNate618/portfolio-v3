@@ -1,7 +1,7 @@
 ---
 title: "About Nathan Espejo"
 type: page
-description: About Nathan Espejo, a 3rd-year Software Engineering student at Western who builds full-stack, infrastructure and hardware projects, lately LLM tooling.
+description: About Nathan Espejo, Western Software Engineering, graduating May 2028, who builds full-stack apps, Linux infrastructure, hardware and AI systems.
 priority: start-here
 dates: "Aug 2024 to present"
 tags: [profile, education, contact, recruiting]

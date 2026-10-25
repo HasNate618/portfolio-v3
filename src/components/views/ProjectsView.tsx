@@ -1,8 +1,9 @@
-import { site, awardFor } from "@/data/site";
+import { site, awardFor, byScore, byDate } from "@/data/site";
 import type { Project, ProjectGroup } from "@/data/site";
 import { renderMarkdown, slugify, stripLeadingH1 } from "@/lib/markdown";
 import type { Page } from "@/lib/content";
 import { ProjectCard } from "@/components/ProjectCard";
+import { CompactProjectCard } from "@/components/CompactProjectCard";
 import { AwardsTable } from "@/components/AwardsTable";
 
 /**
@@ -20,21 +21,25 @@ export const GROUP_LABELS: Record<ProjectGroup, string> = {
 };
 
 /**
- * Hardware and XR come before AI so the page shows range before the area the
- * case studies already cover.
+ * Three open sections on the page. The case studies keep the full card and
+ * their hand-set `order`; the rest share a compact grid with no stack chips,
+ * under two merged headings, strongest first by `score` in site.ts. Software
+ * comes before hardware because the page is read for SWE internships.
  */
-const OPEN_GROUPS: ProjectGroup[] = ["featured", "hardware", "xr", "ai", "tools", "games"];
+export const SECTIONS: { label: string; groups: ProjectGroup[]; compact: boolean }[] = [
+  { label: GROUP_LABELS.featured, groups: ["featured"], compact: false },
+  { label: "Software, AI and games", groups: ["ai", "tools", "games"], compact: true },
+  { label: "Hardware, AR and VR", groups: ["hardware", "xr"], compact: true },
+];
 
 function byGroup(group: ProjectGroup): Project[] {
   return site.projects.filter((p) => p.group === group).sort((a, b) => a.order - b.order);
 }
 
-/**
- * Heading ids are slugify(label) so that OnThisPage, which slugifies the same
- * labels, cannot produce a dangling anchor.
- */
-function groupId(group: ProjectGroup): string {
-  return slugify(GROUP_LABELS[group]);
+/** Projects in a section: case studies by `order`, compact sections by score. */
+function inSection(section: { groups: ProjectGroup[]; compact: boolean }): Project[] {
+  const projects = section.groups.flatMap(byGroup);
+  return section.compact ? projects.sort(byScore) : projects;
 }
 
 export function ProjectsView({ page }: { page: Page }) {
@@ -48,16 +53,28 @@ export function ProjectsView({ page }: { page: Page }) {
         dangerouslySetInnerHTML={{ __html: renderMarkdown(stripLeadingH1(page.body, page.title)) }}
       />
 
-      {OPEN_GROUPS.map((group) => (
-        <section key={group} className="mt-16">
-          <h2 id={groupId(group)} className="section-label">
-            {GROUP_LABELS[group]}
+      {/*
+       * Heading ids are slugify(label) so that OnThisPage, which slugifies the
+       * same labels, cannot produce a dangling anchor.
+       */}
+      {SECTIONS.map((section) => (
+        <section key={section.label} className="mt-16">
+          <h2 id={slugify(section.label)} className="section-label">
+            {section.label}
           </h2>
-          <ul className="mt-6 flex flex-col gap-6">
-            {byGroup(group).map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </ul>
+          {section.compact ? (
+            <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+              {inSection(section).map((project) => (
+                <CompactProjectCard key={project.id} project={project} variant="grid" />
+              ))}
+            </ul>
+          ) : (
+            <ul className="mt-6 flex flex-col gap-6">
+              {inSection(section).map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </ul>
+          )}
         </section>
       ))}
 
@@ -65,7 +82,7 @@ export function ProjectsView({ page }: { page: Page }) {
         <summary className="cursor-pointer text-xs font-bold uppercase tracking-widest text-fg hover:text-accent">
           Archive: earlier builds and team hackathon projects
         </summary>
-        <ArchiveTable projects={byGroup("archive")} />
+        <ArchiveTable projects={byGroup("archive").sort(byDate)} />
       </details>
 
       <h2 id="hackathon-awards" className="section-label mt-16">

@@ -96,3 +96,36 @@ test("Jira is never credited to 3D Western, which used a GitHub project board", 
     assert.doesNotMatch(block, /Jira/i, `${file} ties Jira to 3D Western`);
   }
 });
+
+test("each job's bullets sit under that job's own heading, matched by name", () => {
+  const section = html.slice(html.indexOf('id="experience"'), html.indexOf('id="projects"'));
+  const terago = section.indexOf("· TeraGo</h3>");
+  const western = section.indexOf("· 3D Western</h3>");
+  assert.ok(terago !== -1 && western !== -1, "both role headings render");
+  const blockFor = (start: number) => {
+    const next = [terago, western].filter((p) => p > start).sort((a, b) => a - b)[0];
+    return section.slice(start, next ?? section.length);
+  };
+  assert.match(blockFor(terago), /prototype pipeline/);
+  assert.doesNotMatch(blockFor(terago), /print-safety/);
+  assert.match(blockFor(western), /print-safety/);
+  assert.doesNotMatch(blockFor(western), /prototype pipeline/);
+});
+
+test("each resume project gets the content subsection with its own name", () => {
+  for (const project of site.projects.filter((p) => p.onResume)) {
+    const start = html.indexOf(`>${project.name}</h3>`);
+    assert.ok(start !== -1, `missing ${project.name}`);
+  }
+  const homelab = html.slice(html.indexOf(">NixOS homelab</h3>"), html.indexOf(">AWARE</h3>"));
+  assert.match(homelab, /sops-nix/);
+  assert.doesNotMatch(homelab, /YOLOv8/);
+});
+
+test("the web resume mirrors the PDF: no stack chips, and each role title appears once", () => {
+  assert.doesNotMatch(html, /rounded-full bg-accent\/10 px-3 py-1/, "no stack chips on /resume");
+  for (const role of site.experience.filter((e) => e.onResume)) {
+    const count = html.split(role.role).length - 1;
+    assert.equal(count, 1, `the ${role.org} role title shows ${count} times`);
+  }
+});

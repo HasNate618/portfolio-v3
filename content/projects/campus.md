@@ -25,7 +25,7 @@ updated: 2026-10-16
 
 ## Why I built it
 
-My course material lives in Brightspace, spread across {{stat:campus.courses}} courses. I wanted one place to look up deadlines, study from the slides, and check a draft against the assignment brief, running on hardware I control.
+My course material lives in Brightspace, spread across {{stat:campus.courses}} courses. I wanted one place to look up deadlines, study from the slides, and review my assignment drafts against the instructions, running on hardware I control.
 
 I also wanted it to update my notes and due dates. That is only useful if I can see exactly what it changed, so every AI write is logged with the before and after.
 
@@ -60,7 +60,7 @@ alt: Brightspace syncs into SQLite and a local file store. Those files are split
 
 ## Results
 
-- I use it across {{stat:campus.courses}} courses for deadline lookups, studying from slides, and checking drafts against briefs.
+- I use it across {{stat:campus.courses}} courses for deadline lookups, studying from slides, and reviewing assignment drafts against the instructions.
 - As of early October 2026 it had synced just over 200 course files. I'm the only user, so that number is my course load, not adoption.
 - {{stat:campus.tests}} backend tests pass in CI on every push.
 - Retrieval and answer quality: evaluation in progress.

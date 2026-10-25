@@ -17,7 +17,7 @@ export function SeoJsonLd() {
       image: `${base}/og.png`,
       email: `mailto:${site.contact.email}`,
       jobTitle: "Software Engineering student",
-      description: "Software engineer building full-stack, infrastructure and hardware projects, lately mostly LLM tooling.",
+      description: "Software engineer building full-stack apps, Linux infrastructure, hardware and AI systems.",
       affiliation: { "@type": "CollegeOrUniversity", name: site.identity.education.school },
       homeLocation: { "@type": "Place", name: site.identity.location },
       sameAs: site.contact.links

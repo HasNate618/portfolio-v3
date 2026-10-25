@@ -6,7 +6,7 @@ priority: start-here
 dates: "Apr 2026 (approx.) to present"
 tags: [local-ai, inference, models, cost]
 related: [about.md, projects/aware.md, projects/campus.md, projects/homelab.md, experience/terago.md]
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 # Local and cost-aware AI
 
@@ -20,7 +20,7 @@ Most of Nathan's AI work runs on hosted API models, and he deliberately picks lo
 | Homelab (Hermes Agent profiles) | Low-cost hosted API models picked per task, plus llama.cpp as a local provider | Mostly hosted | Jun 2026 to present |
 | flow laptop | llama.cpp serving local GGUF models | Local | Apr 2026 (approx.) to present |
 | Homelab server | Open WebUI, a Bifrost gateway that routes between local and cloud models, Whisper speech-to-text | Mixed | May 2026 to present |
-| AWARE | YOLOv8n, YAMNet, Whisper-tiny, Piper TTS and a small GGUF LLM on an Arduino UNO Q | Local, on-device | Jul 2026 |
+| AWARE | YOLOv8n, YAMNet, Piper TTS and a small GGUF LLM (MiniCPM5-1B) on an Arduino UNO Q | Local, on-device | Jul 2026 |
 | TeraGo | Email-to-ticket prototype on Ollama that turns unstructured emails into structured tickets (working end to end) | Local | May to Aug 2026 |
 
 ## AWARE on-device

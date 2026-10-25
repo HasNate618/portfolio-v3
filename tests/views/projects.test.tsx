@@ -9,14 +9,12 @@ import { site } from "../../src/data/site";
 const page = getPage("/projects")!;
 const html = renderToStaticMarkup(<ProjectsView page={page} />);
 
-test("projects renders every group label", () => {
+test("projects renders three open sections, the archive and the awards", () => {
+  assert.equal(html.match(/<h2 /g)?.length, 4, "three section headings plus Hackathon awards");
   for (const h of [
     "Case studies",
-    "AI and LLM",
-    "Hardware and embedded",
-    "AR and VR",
-    "Tools and apps",
-    "Games",
+    "Hardware, AR and VR",
+    "Software, AI and games",
     "Archive",
     "Hackathon awards",
   ]) {
@@ -64,11 +62,46 @@ test("on-this-page entries resolve to real heading ids", () => {
   }
 });
 
-test("hardware and XR come before AI, and games have their own section", () => {
+test("software comes before hardware, and each compact section runs strongest first", () => {
   const at = (label: string) => html.indexOf(`id="${slugify(label)}"`);
-  assert.ok(at("Hardware and embedded") < at("AI and LLM"), "hardware must come before AI");
-  assert.ok(at("AR and VR") < at("AI and LLM"), "XR must come before AI");
-  assert.ok(at("Games") !== -1, "games section missing");
+  assert.ok(at("Software, AI and games") !== -1 && at("Hardware, AR and VR") !== -1);
+  assert.ok(at("Software, AI and games") < at("Hardware, AR and VR"), "software must come first");
+  const pos = (name: string) => html.indexOf(`>${name}<`);
+  assert.ok(pos("Auralis") < pos("Glyph") && pos("Glyph") < pos("ferret"), "software order");
+  assert.ok(pos("ferret") < pos("Tic Tac Toe Ultimate"), "the small Unity games sit last");
+  assert.ok(pos("Omni-Reality") < pos("FLEXFIRE-X") && pos("FLEXFIRE-X") < pos("VR ODM Gear Sim"), "hardware order");
+});
+
+test("the case studies keep their hand-set order on top", () => {
+  const pos = (name: string) => html.indexOf(`>${name}<`);
+  assert.ok(pos("Campus") < pos("NixOS homelab") && pos("NixOS homelab") < pos("AWARE") && pos("AWARE") < pos("CareBridge"));
+  assert.ok(pos("CareBridge") < pos("Auralis"));
+});
+
+test("the archive runs newest first", () => {
+  const archive = html.slice(html.indexOf('<details id="archive"'), html.indexOf("</details>"));
+  const pos = (name: string) => archive.indexOf(`>${name}<`);
+  assert.ok(pos("VitalSign") < pos("Stupid Spotify") && pos("Stupid Spotify") < pos("Lumen"));
+});
+
+test("only the case studies keep stack chips; the rest are a compact grid", () => {
+  const studies = html.slice(html.indexOf('id="case-studies"'), html.indexOf('id="software-ai-and-games"'));
+  const rest = html.slice(html.indexOf('id="software-ai-and-games"'), html.indexOf('<details id="archive"'));
+  assert.match(studies, /rounded-full bg-accent\/10 px-3 py-1/, "case studies keep their stack");
+  assert.doesNotMatch(rest, /rounded-full bg-accent\/10 px-3 py-1/, "no stack chips in the compact grid");
+  assert.match(rest, /grid gap-4 sm:grid-cols-2/);
+});
+
+test("the compact grid hides no image: every image keeps an expanded view", () => {
+  for (const project of site.projects.filter((p) => p.group !== "archive")) {
+    for (const item of project.media ?? []) {
+      assert.ok(html.includes(`src="${item.src}"`) || html.includes(encodeURIComponent(item.src)), `${item.src} is no longer on the page`);
+    }
+  }
+});
+
+test("the intro is one line: the team-credit note", () => {
+  assert.doesNotMatch(html, /I build across the stack/);
 });
 
 test("the stronger archive builds sit in open sections, not the collapsed archive", () => {

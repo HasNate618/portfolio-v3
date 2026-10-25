@@ -3,17 +3,24 @@ import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import type { Page } from "@/lib/content";
 import { ExperienceMetaRow } from "@/components/ExperienceMetaRow";
 import { ProjectMetaRow } from "@/components/ProjectMetaRow";
-import { StackList } from "@/components/StackList";
 import { monthYear } from "@/lib/dates";
 
-/** A `## Group` section, split into its `### Name` subsections in site.ts order. */
-function subsections(body: string, group: string): string[] {
+/**
+ * A `## Group` section, split into its `### Name` subsections and keyed by
+ * that heading. Callers look each body up by name (the role's org, the
+ * project's name), never by position: the content file and site.ts list the
+ * jobs in different orders, and pairing by index once put each job's bullets
+ * under the other job's heading.
+ */
+export function subsections(body: string, group: string): Map<string, string> {
   const part = body.split(/^## /m).find((chunk) => chunk.split("\n")[0].trim() === group);
-  if (!part) return [];
-  return part
-    .split(/^### /m)
-    .slice(1)
-    .map((chunk) => chunk.slice(chunk.indexOf("\n") + 1).trim());
+  const out = new Map<string, string>();
+  if (!part) return out;
+  for (const chunk of part.split(/^### /m).slice(1)) {
+    const name = chunk.split("\n")[0].trim();
+    out.set(name, chunk.slice(chunk.indexOf("\n") + 1).trim());
+  }
+  return out;
 }
 
 function Body({ source }: { source: string }) {
@@ -107,15 +114,16 @@ export function ResumeView({ page }: { page: Page }) {
         <h2 id="experience" className="section-label">
           Experience
         </h2>
-        {roles.map((role, index) => (
+        {roles.map((role) => (
           <div key={role.org} className="mt-6">
             <h3 className="font-medium text-fg">
               {role.role} · {role.org}
             </h3>
             <div className="mt-1">
-              <ExperienceMetaRow org={role.org} />
+              {/* The heading already names the role, so the meta row skips it. */}
+              <ExperienceMetaRow org={role.org} showRole={false} />
             </div>
-            <Body source={roleBodies[index] ?? ""} />
+            <Body source={roleBodies.get(role.org) ?? ""} />
           </div>
         ))}
       </section>
@@ -124,16 +132,13 @@ export function ResumeView({ page }: { page: Page }) {
         <h2 id="projects" className="section-label">
           Projects
         </h2>
-        {projects.map((project, index) => (
+        {projects.map((project) => (
           <div key={project.id} className="mt-6">
             <h3 className="font-medium text-fg">{project.name}</h3>
             <div className="mt-1">
               <ProjectMetaRow projectId={project.id} />
             </div>
-            <div className="mt-2">
-              <StackList projectId={project.id} />
-            </div>
-            <Body source={projectBodies[index] ?? ""} />
+            <Body source={projectBodies.get(project.name) ?? ""} />
           </div>
         ))}
       </section>

@@ -46,7 +46,7 @@ updated: 2026-10-22
 - Built an AI agent that reads all {{stat:campus.courses}} of my courses, syncing them from the LMS into SQLite with Playwright and running on any OpenAI-compatible endpoint, local or hosted.
 - Designed search over course files that is lexical by default with optional embeddings and reranking, and added a lexical SQL prefilter for exact phrases that scored below the semantic cutoff.
 - Wrote a {{stat:campus.tools}}-tool agent harness with an audit log for every AI write and a bounded tool loop, with {{stat:campus.tests}} backend tests in CI.
-- Use it across {{stat:campus.courses}} courses for deadline lookups, studying from course slides, and reviewing drafts against briefs.
+- Use it in {{stat:campus.courses}} courses for deadlines, studying from slides, and reviewing assignment drafts against the instructions.
 
 ### NixOS homelab
 

@@ -3,8 +3,7 @@ import { site, featuredProjects, leadProject, alsoBuiltProjects, awardFor } from
 import { projectLinks } from "@/lib/project-links";
 import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import { getPage, type Page } from "@/lib/content";
-import { ProjectCard } from "@/components/ProjectCard";
-import { AwardsTable } from "@/components/AwardsTable";
+import { CompactProjectCard } from "@/components/CompactProjectCard";
 
 /**
  * The home page carries the whole story: who he is, the newest roles, then the
@@ -20,7 +19,6 @@ import { AwardsTable } from "@/components/AwardsTable";
  * actual proof — far down the page.
  */
 const HOME_ROLES = 2;
-const HOME_AWARDS = ["Careerly", "Auralis", "Eyecandy", "CareBridge"];
 
 export function HomeView({ page }: { page: Page }) {
   const projects = [leadProject()!, ...featuredProjects()];
@@ -68,10 +66,10 @@ export function HomeView({ page }: { page: Page }) {
                 <p>
                   <span className="font-medium text-fg">{experience.role}</span>
                   <span className="text-muted"> · {experience.org}</span>
-                  <span className="text-muted"> · {experience.location}</span>
                 </p>
-                {experience.summary ? (
-                  <p className="mt-1 max-w-[68ch] leading-relaxed">{experience.summary}</p>
+                {/* Two lines here; the full summary and location live on /experience. */}
+                {experience.homeLine ?? experience.summary ? (
+                  <p className="mt-1 max-w-[68ch] leading-relaxed">{experience.homeLine ?? experience.summary}</p>
                 ) : null}
                 {href ? (
                   <p className="mt-1">
@@ -103,13 +101,17 @@ export function HomeView({ page }: { page: Page }) {
         Projects
       </h2>
 
-      {/* The lead project gets the same card as the rest; only its place in
-          the list sets it apart. */}
-      <ul className="mt-6 flex flex-col gap-6">
+      {/*
+       * Short cards: one image, the name, one line and the case study. The
+       * full cards, with their stack, live on /projects; repeating them here
+       * doubled the page.
+       */}
+      <ul className="mt-6 grid gap-4 sm:grid-cols-2">
         {projects.map((project) => (
-          <ProjectCard
+          <CompactProjectCard
             key={project.id}
             project={project}
+            variant="home"
             id={project.rank === "lead" ? project.id : undefined}
           />
         ))}
@@ -177,21 +179,20 @@ export function HomeView({ page }: { page: Page }) {
       </div>
 
       {/*
-       * Awards close the page: the hackathon record first, then the Dean's
-       * Honour List years, which come from the education entry rather than a
-       * second list so the two can never disagree.
+       * Awards close the page with one line and a link to the full table on
+       * /projects, then the Dean's Honour List years, which come from the
+       * education entry so the two can never disagree.
        */}
       <h2 id="awards" className="section-label mt-16">
         Awards
       </h2>
       <p className="mt-4 max-w-[68ch] leading-relaxed">
-        {site.hackathons.awards} awards across {site.hackathons.entered} hackathons, all with teams.
-        Four I&apos;d point to are below. The rest are on the projects page.
+        {site.hackathons.awards} awards across {site.hackathons.entered} hackathons, all with teams.{" "}
+        <Link href="/projects#hackathon-awards" className="font-medium text-accent hover:text-fg">
+          See the full list <span aria-hidden="true">→</span>
+        </Link>
       </p>
-      <div className="mt-6">
-        <AwardsTable awards={site.awards.filter((award) => HOME_AWARDS.includes(award.project))} />
-      </div>
-      <p className="mt-6 max-w-[68ch] leading-relaxed">
+      <p className="mt-3 max-w-[68ch] leading-relaxed">
         Off the hackathon circuit: {site.identity.education.honors} at{" "}
         {site.identity.education.school}.
       </p>

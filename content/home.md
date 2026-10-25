@@ -2,15 +2,11 @@
 title: Nathan Espejo
 type: page
 route: /
-description: Nathan Espejo, 3rd-year Software Engineering at Western, building full-stack, infrastructure and hardware projects, lately mostly LLM tooling.
+description: Nathan Espejo, software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Western Software Engineering, May 2028.
 priority: start-here
 onThisPage: [Experience, Projects, Awards]
-updated: 2026-10-22
+updated: 2026-10-24
 ---
 # Nathan Espejo
 
-Most of what I build lately is LLM tooling I use every day, and I put as much care into the parts around the model as the model itself, with tests running in CI, data that syncs cleanly and changes I can roll back. I'd rather pick a cheap model that does the job well than pay for the biggest one.
-
-Right now I'm using Campus, the AI agent I built that reads all six of my courses, and running a homelab of two Linux machines managed from a single repo, where every change is declared in config, reviewed and easy to roll back.
-
-Outside of AI I build for fun: games and 3D in Unity and Blender, AR/VR, and hardware with Arduino and ESP32.
+Most of what I build is LLM tooling I use daily, like Campus, the AI agent I built that reads all six of my courses. I also run a two-machine Linux (NixOS) homelab where every change is reviewed and easy to roll back. Outside of AI, I build games, 3D, AR/VR and hardware for fun.

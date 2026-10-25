@@ -143,3 +143,15 @@ test("3D Western states both titles and both windows", () => {
   assert.equal(role.terms.length, 2, "the two terms are separate windows");
   assert.doesNotMatch(role.role, /promoted from/, "the flat phrasing is what misread");
 });
+
+test("every non-archive, non-case-study project has a score, and no case study or archive row does", () => {
+  for (const p of site.projects) {
+    const needs = p.group !== "featured" && p.group !== "archive";
+    assert.equal(Boolean(p.score), needs, `${p.id} score presence`);
+    if (p.score) {
+      const { relevance, depth, award, shipped, ownership, recency } = p.score;
+      assert.ok(relevance >= 0 && relevance <= 3 && depth >= 0 && depth <= 3 && award >= 0 && award <= 3, p.id);
+      assert.ok(shipped >= -1 && shipped <= 1 && ownership >= 0 && ownership <= 1 && recency >= 0 && recency <= 2, p.id);
+    }
+  }
+});

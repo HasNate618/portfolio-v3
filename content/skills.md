@@ -7,7 +7,7 @@ dates: "2023 to present"
 role: "self"
 tags: [skills]
 related: [index.md, projects/index.md, experience/index.md]
-updated: 2026-10-23
+updated: 2026-10-24
 ---
 # Skills
 
@@ -27,7 +27,7 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **GGUF on-device LLMs**: [AWARE](projects/aware.md)
 - **YOLOv8**: [AWARE](projects/aware.md)
 - **ONNX**: [AWARE](projects/aware.md)
-- **MediaPipe**: [AWARE](projects/aware.md), [VitalSign](projects/vitalsign.md)
+- **MediaPipe**: [VitalSign](projects/vitalsign.md)
 - **face-api.js**: [Auralis](projects/auralis.md), [VitalSign](projects/vitalsign.md)
 - **PyTorch**: [Whack-A-ML](projects/whack-a-ml.md)
 - **Reinforcement learning (PPO)**: [Whack-A-ML](projects/whack-a-ml.md)
