@@ -175,7 +175,7 @@ const DEFAULT_ADJACENT = "What did Nathan build at TeraGo?";
 
 /** The next step in hiring a student, in the order it becomes relevant. */
 const PATH_TEMPLATES = [
-  "Is Nathan available for a Summer 2027 internship?",
+  "Is Nathan available for an internship starting May 2027?",
   "When does Nathan graduate?",
   "Where is Nathan's résumé?",
   "How can I contact Nathan?",

@@ -156,7 +156,7 @@ test("templates fill the three slots from the card alone", () => {
   assert.equal(chips.deeper.subject, "campus");
   assert.equal(chips.adjacent.question, "What did Nathan build at TeraGo?");
   assert.equal(chips.adjacent.subject, "terago");
-  assert.equal(chips.path.question, "Is Nathan available for a Summer 2027 internship?");
+  assert.equal(chips.path.question, "Is Nathan available for an internship starting May 2027?");
   assert.equal(chips.path.subject, "nathan");
   for (const slot of ["deeper", "adjacent", "path"] as ChipSlotName[]) {
     const chip = chips[slot];
@@ -194,9 +194,9 @@ test("a template already in the thread is skipped", () => {
 });
 
 test("the path line rotates with the thread and skips what was asked", () => {
-  assert.equal(templates({ pathIndex: 4 }).path.question, "Is Nathan available for a Summer 2027 internship?");
+  assert.equal(templates({ pathIndex: 4 }).path.question, "Is Nathan available for an internship starting May 2027?");
   assert.equal(
-    templates({ pathIndex: 0, asked: ["Is Nathan available for a Summer 2027 internship?"] }).path.question,
+    templates({ pathIndex: 0, asked: ["Is Nathan available for an internship starting May 2027?"] }).path.question,
     "When does Nathan graduate?",
   );
 });
@@ -205,7 +205,7 @@ test("a path chip is a hiring step, not an interview or a status update", () => 
   assert.deepEqual(
     validateChip({
       ...base,
-      question: "Is Nathan available for a Summer 2027 internship?",
+      question: "Is Nathan available for an internship starting May 2027?",
       subject: "nathan",
       slot: "path",
     }),

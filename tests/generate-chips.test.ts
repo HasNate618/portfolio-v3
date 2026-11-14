@@ -29,7 +29,7 @@ function chipSet(over: Partial<ChipSet> = {}): ChipSet {
   return {
     deeper: { question: "How does Nathan's Campus retrieve answers?", subject: "campus" },
     adjacent: { question: "What did Nathan build at TeraGo?", subject: "terago" },
-    path: { question: "Is Nathan available for a Summer 2027 internship?", subject: "nathan" },
+    path: { question: "Is Nathan available for an internship starting May 2027?", subject: "nathan" },
     ...over,
   };
 }
@@ -70,7 +70,7 @@ test("one rejected slot does not throw away the two that passed", () => {
   const result = applyChipPipeline(raw, { ...INPUTS, asked: ["Where is Nathan's résumé?"] });
   assert.equal(result.questions[0], raw.deeper.question);
   assert.equal(result.questions[1], raw.adjacent.question);
-  assert.equal(result.questions[2], "Is Nathan available for a Summer 2027 internship?");
+  assert.equal(result.questions[2], "Is Nathan available for an internship starting May 2027?");
 });
 
 test("the answer subject comes from the documents first", () => {

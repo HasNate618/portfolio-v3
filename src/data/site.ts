@@ -158,7 +158,7 @@ export const site: SiteContent = {
   identity: {
     name: "Nathan Espejo",
     headline: "Software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Software Engineering at Western, graduating May 2028.",
-    seeking: "Summer 2027 software engineering or applied AI internship",
+    seeking: "software engineering internship starting May 2027, summer or up to 16 months",
     location: "Brampton and London, ON",
     year: "3rd year (2026-27)",
     program: "Software Engineering",
@@ -220,7 +220,7 @@ export const site: SiteContent = {
       stack: ["Python", "FastAPI", "SQLite", "embeddings", "cross-encoder reranking", "React"],
     },
     {
-      id: "clank", name: "Clank", group: "featured", order: 2,
+      id: "clank", name: "Clank", group: "featured", order: 2, rank: "featured",
       dates: "Oct 2026 to present", displayRole: "solo",
       covers: "A small physical-AI experiment: one local 2B vision-language model hears a commercial VR game, looks at the frame the game just rendered, and decides what a simulated Unitree G1 humanoid should do next. So far it does one task step end to end: JobBot offers his card, the model decides to take it and finds it in the frame, the body reaches, and the game registers the grab. The whole stack, game included, runs on one GPU in about 6.5 GB of VRAM.",
       cardLine: "A local 2B vision-language model that hears a VR game, sees the frames it renders and drives a simulated humanoid to take a card inside it.",
@@ -406,7 +406,7 @@ export const site: SiteContent = {
       stack: ["Next.js", "Three.js", "face-api.js", "FastAPI"],
     },
     {
-      id: "carebridge", name: "CareBridge", group: "ai", order: 5, rank: "featured",
+      id: "carebridge", name: "CareBridge", group: "ai", order: 5,
       score: { relevance: 3, depth: 2, award: 2, shipped: 0, ownership: 0, recency: 2 },
       dates: "Feb 2026", displayRole: "team project", event: "Spark 2026",
       covers: "Built with my team for the hackathon's made-up case of a town cut off from its hospital by a winter storm. Patients check in by chat or voice, and providers get one timeline with risk flags from keyword rules.",

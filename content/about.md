@@ -10,7 +10,7 @@ updated: 2026-10-25
 ---
 # About Nathan Espejo
 
-3rd-year Software Engineering student at Western University (graduating May 2028), looking for a Summer 2027 software engineering or applied AI internship.
+3rd-year Software Engineering student at Western University (graduating May 2028), looking for a software engineering internship starting May 2027, summer or up to 16 months.
 
 Most of what I build lately is LLM tooling I use every day, and I put as much care into the parts around the model as the model itself, with tests running in CI, data that syncs cleanly and changes I can roll back. I'd rather pick a cheap model that does the job well than pay for the biggest one.
 
@@ -20,7 +20,7 @@ Outside of AI I build for fun: games and 3D in Unity and Blender, AR/VR, and har
 
 ## In short
 
-- Looking for: a Summer 2027 software engineering or applied AI internship.
+- Looking for: a software engineering internship starting May 2027, summer or up to 16 months.
 - Program: 3rd-year Software Engineering at Western University, Dean's Honour List 2024 and 2025.
 - Roles: Software Engineering Intern at TeraGo; VP of Data/ML at 3D Western.
 - Start with: Campus, then the NixOS homelab and AWARE.

@@ -13,7 +13,7 @@ test("an ordinary question is not", () => {
 /*
  * The reviewer's case: the visitor's last question was about fit, and this turn
  * is "tell me more". Without the history the prompt loses the hiring frame, and
- * the answer stops carrying the Summer 2027 and May 2028 facts.
+ * the answer stops carrying the May 2027 and May 2028 facts.
  */
 test("a follow-up in a hiring thread stays in the hiring frame", () => {
   const history = [
@@ -40,7 +40,7 @@ test("the résumé counts with or without its accents", () => {
 
 test("only the visitor's own turns count", () => {
   assert.equal(routeIntent("How does Campus retrieve?", [
-    { role: "assistant", content: "He is looking for a Summer 2027 internship." },
+    { role: "assistant", content: "He is looking for an internship starting May 2027." },
   ]), "general");
 });
 

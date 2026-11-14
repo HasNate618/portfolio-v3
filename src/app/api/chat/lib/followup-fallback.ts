@@ -7,7 +7,7 @@ export const STARTERS = [
   "What does Nathan build?",
   "What did Nathan build at TeraGo?",
   "What are Nathan's strongest projects?",
-  "Is Nathan looking for a Summer 2027 internship?",
+  "Is Nathan looking for an internship starting May 2027?",
 ] as const;
 
 /**

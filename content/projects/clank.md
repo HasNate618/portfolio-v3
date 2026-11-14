@@ -21,7 +21,7 @@ updated: 2026-11-14
 - The body is a simulated Unitree G1 in MuJoCo. The game sees its head and hands as a player, through OpenXR.
 - One task step works end to end: JobBot offers his card, the model decides to take it and finds it, the body reaches, and the game registers the grab.
 - The runs are not scored yet, so there is no success rate.
-- The whole stack, game included, runs on one GPU in {{stat:clank.vram}} of VRAM.
+- The whole stack, game included, runs on one GPU in about 6.5 GB of VRAM.
 
 ## Why I built it
 

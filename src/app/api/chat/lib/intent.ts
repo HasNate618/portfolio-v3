@@ -1,7 +1,7 @@
 /**
  * Whether the visitor is hiring.
  *
- * This changes one block of the prompt: a recruiter gets the fit, the Summer 2027
+ * This changes one block of the prompt: a recruiter gets the fit, the May 2027
  * internship and the May 2028 graduation tied to their need. The conversation,
  * not the sentence, is the unit: a visitor who says "tell me more" two turns after
  * asking whether Nathan is a fit is still asking about a role, so the last two

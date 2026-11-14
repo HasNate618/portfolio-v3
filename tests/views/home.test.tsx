@@ -9,7 +9,7 @@ const html = renderToStaticMarkup(<HomeView page={page} />);
 
 test("home renders identity, seeking and the Campus card", () => {
   assert.match(html, /Nathan Espejo/);
-  assert.match(html, /Summer 2027 software engineering or applied AI internship/);
+  assert.match(html, /software engineering internship starting May 2027, summer or up to 16 months/);
   assert.match(html, /, graduating May 2028\. Looking for a /);
   assert.match(html, /Campus/);
   assert.ok(!html.includes("text-3xl font-bold"), "cards carry no stat tiles");
@@ -54,7 +54,7 @@ test("home has exactly one h1", () => {
 });
 
 test("the seeking line comes from site.ts, not from the markdown", () => {
-  assert.ok(!page.body.includes("Summer 2027"), "seeking must not be restated in content");
+  assert.ok(!page.body.includes("May 2027"), "seeking must not be restated in content");
 });
 
 test("the About page carries the short intro copy", () => {
@@ -72,22 +72,21 @@ test("the featured cards are compact: one main image, one line, every link, no s
   assert.doesNotMatch(projects, /SQLite/, "the long covers text stays on /projects");
   assert.doesNotMatch(projects, /Next image \(/, "no buried next-image links");
   // Every image of every featured card has its own thumbnail or square.
-  for (const name of ["campus", "homelab", "aware", "carebridge"]) {
+  for (const name of ["campus", "clank", "homelab", "aware"]) {
     const count = (projects.match(new RegExp(`id="media-projects-${name}[^"]*-thumb"`, "g")) ?? []).length;
     assert.ok(count >= 1, `${name} has no thumbnail`);
   }
   // AWARE shows its case study, then GitHub and Devpost.
   const aware = projects.slice(projects.indexOf(">AWARE<"));
-  const row = aware.slice(0, aware.indexOf(">CareBridge<"));
+  const row = aware; // AWARE is the last featured card
   assert.ok(row.indexOf("Case study") < row.indexOf("GitHub") && row.indexOf("GitHub") < row.indexOf("Devpost"), "all links, case study first");
 });
 
 test("the featured section links to real case studies, and only those", () => {
-  for (const id of ["homelab", "aware"]) {
+  for (const id of ["clank", "homelab", "aware"]) {
     assert.ok(html.includes(`href="/projects/${id}"`), `missing case study link for ${id}`);
   }
-  // CareBridge is a featured card with no case-study route, so its title is
-  // plain text rather than a link that 404s.
+  // CareBridge moved off Home; it still has no case-study route to link.
   assert.ok(!html.includes('href="/projects/carebridge"'), "CareBridge has no case study page");
 });
 
@@ -120,8 +119,11 @@ test("home trims experience to the newest roles and links to the rest", () => {
   assert.match(html, /Show all experience/);
 });
 
-test("CareBridge, which has no case study, links to its first outward page", () => {
-  assert.match(html, /devpost\.com/);
+test("Home features Clank right after the lead, and CareBridge is off Home", () => {
+  const projects = html.slice(html.indexOf('id="projects"'), html.indexOf('id="also-built"'));
+  const at = (name: string) => projects.indexOf(`>${name}<`);
+  assert.ok(at("Campus") < at("Clank") && at("Clank") < at("NixOS homelab") && at("NixOS homelab") < at("AWARE"), "Campus, Clank, homelab, AWARE");
+  assert.ok(!projects.includes(">CareBridge<"), "CareBridge lives on /projects now");
 });
 
 test("the awards section closes the page with one line, a link to the table and the Dean's Honour List", () => {
@@ -142,10 +144,6 @@ test("the featured cards offer their case studies", () => {
   assert.match(html, /href="\/projects\/homelab"/);
 });
 
-test("CareBridge is an award-winning featured card", () => {
-  assert.match(html, /CareBridge/);
-  assert.match(html, /border-accent\/50 bg-accent\/5/);
-});
 
 test("each home experience entry is a short line plus its case study", () => {
   const section = html.slice(html.indexOf('id="experience"'), html.indexOf('id="projects"'));
