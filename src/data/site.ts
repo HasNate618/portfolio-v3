@@ -220,7 +220,27 @@ export const site: SiteContent = {
       stack: ["Python", "FastAPI", "SQLite", "embeddings", "cross-encoder reranking", "React"],
     },
     {
-      id: "homelab", name: "NixOS homelab", group: "featured", order: 2,
+      id: "clank", name: "Clank", group: "featured", order: 2,
+      dates: "Oct 2026 to present", displayRole: "solo",
+      covers: "A small physical-AI experiment: one local 2B vision-language model hears a commercial VR game, looks at the frame the game just rendered, and decides what a simulated Unitree G1 humanoid should do next. So far it does one task step end to end: JobBot offers his card, the model decides to take it and finds it in the frame, the body reaches, and the game registers the grab. The whole stack, game included, runs on one GPU in about 6.5 GB of VRAM.",
+      cardLine: "A local 2B vision-language model that hears a VR game, sees the frames it renders and drives a simulated humanoid to take a card inside it.",
+      limits: "One task step works end to end, and the runs are not scored yet, so there is no success rate. The body loop runs at 44.2 Hz against a 50 Hz design. NVIDIA's GEAR-SONIC and ARDY-G1 and Liquid AI's LFM3-Omni-2B run as published, with no training or fine-tuning. The body does not walk in the game yet.",
+      media: [
+        { src: "/projects/clank-0.webp", alt: "Clank's view inside Job Simulator: JobBot, a boxy robot with a green screen face, holds out his card to the player", width: 936, height: 526 },
+      ],
+      file: "/knowledgebase/projects/clank.md",
+      links: [{ label: "GitHub", href: "https://github.com/HasNate618/Clank" }],
+      stats: [
+        { key: "vram", label: "of VRAM for the whole stack, game included", value: "~6.5 GB" },
+        { key: "reach", label: "reach error at the hand, down from 49 to 79 mm", value: "12.2 mm" },
+        { key: "depth", label: "median depth copy out of the running game", value: "13.9 ms", home: false },
+        { key: "loop", label: "body loop, measured against a 50 Hz design", value: "44.2 Hz", home: false },
+      ],
+      // The brain first, then the body and the pipe into the game.
+      stack: ["Python", "LFM3-Omni-2B", "llama.cpp", "MuJoCo", "Vulkan (C, GLSL)", "OpenXR"],
+    },
+    {
+      id: "homelab", name: "NixOS homelab", group: "featured", order: 3,
       dates: "May 2026 to present", displayRole: "solo",
       covers: "My laptop and a home server built from used parts are both Linux machines defined in a single repo of Nix/NixOS config, so every package, service and firewall rule is version-controlled and any change can be reviewed and rolled back. The server hosts my passwords, photos, files, git remote and AI services behind Caddy and Tailscale, backs up to a NAS every day, and pushes an alert when something fails. A Hermes Agent profile on each machine makes changes the way I do, by editing the config and rebuilding.",
       cardLine: "My laptop and a home server, both Linux machines defined in a single repo of Nix/NixOS config, so any change can be reviewed and rolled back.",
@@ -239,7 +259,7 @@ export const site: SiteContent = {
       stack: ["Linux", "Nix flakes", "Docker", "Tailscale", "Caddy", "sops-nix"],
     },
     {
-      id: "aware", name: "AWARE", group: "featured", order: 3,
+      id: "aware", name: "AWARE", group: "featured", order: 4,
       dates: "Jul 2026", displayRole: "solo", event: "Hack the 6ix 2026",
       covers: "A home-awareness device I built solo at Hack the 6ix 2026 on an $80 Arduino UNO Q, with a camera, a microphone and sensors feeding vision and audio models that all run on the board, so there is no cloud inference. You set automations in plain English, like \"when glass breaks after 10pm, alert me\", a small on-board LLM turns each one into a rule, and plain code checks the rules with no LLM in that loop.",
       cardLine: "A home-awareness device on an Arduino UNO Q running YOLOv8n vision, YAMNet audio, a MiniCPM LLM and Piper speech on the board, with no cloud inference.",
@@ -268,7 +288,7 @@ export const site: SiteContent = {
 
     // ── also building ─────────────────────────────────────────────────────
     {
-      id: "agntos", name: "AgntOS", group: "tools", order: 12,
+      id: "agntos", name: "AgntOS", group: "tools", order: 13,
       score: { relevance: 2, depth: 1, award: 0, shipped: -1, ownership: 1, recency: 2 },
       dates: "2026", displayRole: "solo", displayStatus: "abandoned",
       covers: "An AI system just for configuring NixOS, with its own memory, inspired by running Hermes Agent on NixOS. I started it in Rust, then got impatient because I wanted to be on NixOS already. So I switched, ran Hermes on it, and it worked really well. That became my homelab.",
@@ -281,7 +301,7 @@ export const site: SiteContent = {
       stack: ["Rust", "NixOS"],
     },
     {
-      id: "ferret", name: "ferret", group: "tools", order: 5,
+      id: "ferret", name: "ferret", group: "tools", order: 6,
       score: { relevance: 3, depth: 2, award: 0, shipped: 0, ownership: 1, recency: 2 },
       dates: "Oct 2026 (approx.)", displayRole: "solo",
       covers: "Local-first semantic search over text, images and PDFs in Rust: hybrid vector, FTS5 and filename search fused with RRF.",
@@ -290,7 +310,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Rust", "SQLite FTS5", "llama.cpp"],
     },
     {
-      id: "glyph", name: "Glyph", group: "tools", order: 6,
+      id: "glyph", name: "Glyph", group: "tools", order: 7,
       score: { relevance: 3, depth: 2, award: 0, shipped: 1, ownership: 1, recency: 2 },
       dates: "2026", displayRole: "solo",
       covers: "Leader-key command overlay for Windows, so you don't have to memorize shortcuts. Per-app bindings, YAML config, ships on WinGet.",
@@ -306,7 +326,7 @@ export const site: SiteContent = {
       stack: ["C#", "WPF", "YAML", "WinGet"],
     },
     {
-      id: "agenticarmy", name: "AgenticArmy", group: "ai", order: 7,
+      id: "agenticarmy", name: "AgenticArmy", group: "ai", order: 8,
       score: { relevance: 3, depth: 2, award: 0, shipped: 0, ownership: 0, recency: 2 },
       dates: "Mar 2026", displayRole: "team project", event: "GenAI Genesis 2026",
       covers: "VS Code extension and FastAPI backend for running several coding agents in parallel, with a human approving the plan.",
@@ -323,7 +343,7 @@ export const site: SiteContent = {
 
     // ── ai and ml ─────────────────────────────────────────────────────────
     {
-      id: "gaming-mental-health-analyzer", name: "Gaming and Mental Health Analyzer", group: "ai", order: 8,
+      id: "gaming-mental-health-analyzer", name: "Gaming and Mental Health Analyzer", group: "ai", order: 9,
       score: { relevance: 2, depth: 1, award: 0, shipped: 0, ownership: 0, recency: 2 },
       dates: "Mar 2026 (approx.)", displayRole: "team project", event: "Dataquest",
       covers: "scikit-learn models that predict five wellbeing risks from gaming habits, trained on a 1,000-row Kaggle dataset.",
@@ -338,7 +358,7 @@ export const site: SiteContent = {
       stack: ["Python", "scikit-learn", "pandas"],
     },
     {
-      id: "whack-a-ml", name: "Whack-A-ML", group: "ai", order: 9,
+      id: "whack-a-ml", name: "Whack-A-ML", group: "ai", order: 10,
       score: { relevance: 2, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 2 },
       dates: "2026", displayRole: "solo",
       covers: "A PPO agent learns to hit targets with a simulated arm in Unity, with curriculum learning.",
@@ -351,7 +371,7 @@ export const site: SiteContent = {
       stack: ["Unity", "ML-Agents", "PPO", "C#"],
     },
     {
-      id: "animarker", name: "Animarker", group: "tools", order: 10,
+      id: "animarker", name: "Animarker", group: "tools", order: 11,
       score: { relevance: 2, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 0 },
       dates: "May 2023", displayRole: "solo", event: "Washington Justice Encode",
       covers: "My first hackathon, done solo. An Android wildlife tracker: a TensorFlow CNN identifies the species and the sighting goes on a map.",
@@ -369,7 +389,7 @@ export const site: SiteContent = {
 
     // ── hackathon team projects ───────────────────────────────────────────
     {
-      id: "auralis", name: "Auralis", group: "ai", order: 11,
+      id: "auralis", name: "Auralis", group: "ai", order: 12,
       score: { relevance: 3, depth: 2, award: 2, shipped: 1, ownership: 0, recency: 1 },
       dates: "Nov 2025", displayRole: "team project", event: "Hack Western 12",
       covers: "3D virtual doctor with emotion detection and voice.",
@@ -386,7 +406,7 @@ export const site: SiteContent = {
       stack: ["Next.js", "Three.js", "face-api.js", "FastAPI"],
     },
     {
-      id: "carebridge", name: "CareBridge", group: "ai", order: 4, rank: "featured",
+      id: "carebridge", name: "CareBridge", group: "ai", order: 5, rank: "featured",
       score: { relevance: 3, depth: 2, award: 2, shipped: 0, ownership: 0, recency: 2 },
       dates: "Feb 2026", displayRole: "team project", event: "Spark 2026",
       covers: "Built with my team for the hackathon's made-up case of a town cut off from its hospital by a winter storm. Patients check in by chat or voice, and providers get one timeline with risk flags from keyword rules.",
@@ -402,7 +422,7 @@ export const site: SiteContent = {
       stack: ["React", "TypeScript", "Vite", "FastAPI", "Supabase", "Cohere", "ElevenLabs"],
     },
     {
-      id: "vitalsign", name: "VitalSign", group: "ai", order: 13,
+      id: "vitalsign", name: "VitalSign", group: "ai", order: 14,
       score: { relevance: 3, depth: 2, award: 0, shipped: 0, ownership: 0, recency: 2 },
       dates: "Jan 2026", displayRole: "team project", event: "DeltaHacks 2026",
       covers: "Turns ASL gestures and facial expressions into speech that carries the emotion.",
@@ -416,7 +436,7 @@ export const site: SiteContent = {
       stack: ["MediaPipe", "face-api.js", "Python", "React"],
     },
     {
-      id: "nowandthen", name: "NowAndThen", group: "tools", order: 14,
+      id: "nowandthen", name: "NowAndThen", group: "tools", order: 15,
       score: { relevance: 3, depth: 1, award: 0, shipped: 0, ownership: 0, recency: 2 },
       dates: "Jan 2026", displayRole: "team project", event: "UofTHacks 13",
       covers: "Map app for leaving geotagged posts, with AI summaries of places.",
@@ -430,7 +450,7 @@ export const site: SiteContent = {
       stack: ["React Native", "Node.js", "MongoDB"],
     },
     {
-      id: "eyecandy", name: "Eyecandy", group: "xr", order: 15,
+      id: "eyecandy", name: "Eyecandy", group: "xr", order: 16,
       score: { relevance: 2, depth: 1, award: 2, shipped: 0, ownership: 0, recency: 1 },
       dates: "Sep 2025", displayRole: "team project", event: "Hack the North 2025",
       covers: "AR try-on of Shopify products on Snap Spectacles.",
@@ -444,7 +464,7 @@ export const site: SiteContent = {
       stack: ["Lens Studio", "TypeScript", "Snap Spectacles"],
     },
     {
-      id: "lumen", name: "Lumen", group: "games", order: 16,
+      id: "lumen", name: "Lumen", group: "games", order: 17,
       score: { relevance: 2, depth: 2, award: 2, shipped: 1, ownership: 0, recency: 1 },
       dates: "Aug 2025", displayRole: "team; I built the Unity mini-games", event: "TerraHacks 2025",
       covers: "Wellness companion that picks a mini-game from a mood check-in.",
@@ -460,7 +480,7 @@ export const site: SiteContent = {
       stack: ["Unity", "C#", "React", "TypeScript", "MongoDB Atlas"],
     },
     {
-      id: "careerly", name: "Careerly", group: "ai", order: 17,
+      id: "careerly", name: "Careerly", group: "ai", order: 18,
       score: { relevance: 2, depth: 2, award: 3, shipped: 0, ownership: 0, recency: 0 },
       dates: "Feb 2024", displayRole: "team project", event: "NSBEHacks 2024",
       covers: "Unity virtual job fair with AI mentors.",
@@ -477,7 +497,7 @@ export const site: SiteContent = {
 
     // ── hardware ──────────────────────────────────────────────────────────
     {
-      id: "cyberdeck", name: "Cyberdeck", group: "hardware", order: 33,
+      id: "cyberdeck", name: "Cyberdeck", group: "hardware", order: 34,
       score: { relevance: 1, depth: 1, award: 0, shipped: -1, ownership: 1, recency: 2 },
       dates: "2026", displayRole: "solo", displayStatus: "abandoned",
       covers: "A handheld Raspberry Pi 3B that boots straight into a terminal. I got the terminal setup and a stats screen working and modeled a case in Blender, then dropped it.",
@@ -491,7 +511,7 @@ export const site: SiteContent = {
       stack: ["Raspberry Pi", "Linux", "Python", "Blender"],
     },
     {
-      id: "flexfire-x", name: "FLEXFIRE-X", group: "hardware", order: 19,
+      id: "flexfire-x", name: "FLEXFIRE-X", group: "hardware", order: 20,
       score: { relevance: 1, depth: 3, award: 0, shipped: 0, ownership: 1, recency: 1 },
       dates: "2025", displayRole: "solo",
       covers: "Forearm launcher inspired by Cyberpunk 2077. Flex your forearm and an EMG sensor fires it. Nine 3D-printed parts.",
@@ -507,7 +527,7 @@ export const site: SiteContent = {
       stack: ["Arduino", "EMG sensors", "3D printing", "C++"],
     },
     {
-      id: "rubber-band-turret", name: "Rubber Band Turret", group: "hardware", order: 20,
+      id: "rubber-band-turret", name: "Rubber Band Turret", group: "hardware", order: 21,
       score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 0 },
       dates: "2023", displayRole: "solo",
       covers: "Bluetooth turret I control from an Android app.",
@@ -522,7 +542,7 @@ export const site: SiteContent = {
 
     // ── web and mobile ────────────────────────────────────────────────────
     {
-      id: "portfolio-v2", name: "Portfolio v2", group: "tools", order: 21,
+      id: "portfolio-v2", name: "Portfolio v2", group: "tools", order: 22,
       score: { relevance: 2, depth: 2, award: 0, shipped: 0, ownership: 1, recency: 2 },
       dates: "2026", displayRole: "solo",
       covers: "The last version of this site: a WebGL ASCII ocean with a RAG chatbot. This version is plain text on purpose.",
@@ -532,7 +552,7 @@ export const site: SiteContent = {
       stack: ["Next.js", "React Three Fiber", "GLSL", "Cohere"],
     },
     {
-      id: "saferoute", name: "SafeRoute", group: "tools", order: 22,
+      id: "saferoute", name: "SafeRoute", group: "tools", order: 23,
       score: { relevance: 3, depth: 1, award: 0, shipped: 0, ownership: 0, recency: 1 },
       dates: "2025", displayRole: "course project",
       covers: "Android app for reporting hazards and routing around them.",
@@ -546,7 +566,7 @@ export const site: SiteContent = {
       stack: ["Kotlin", "Android", "Google Maps API"],
     },
     {
-      id: "uwo-mealplan-calc", name: "UWO Mealplan Calc", group: "tools", order: 23,
+      id: "uwo-mealplan-calc", name: "UWO Mealplan Calc", group: "tools", order: 24,
       score: { relevance: 2, depth: 1, award: 0, shipped: 1, ownership: 1, recency: 0 },
       dates: "2024", displayRole: "solo",
       covers: "Chrome extension that tracks meal plan spending.",
@@ -561,7 +581,7 @@ export const site: SiteContent = {
 
     // ── games and smaller builds ──────────────────────────────────────────
     {
-      id: "wasteland", name: "Wasteland", group: "hardware", order: 24,
+      id: "wasteland", name: "Wasteland", group: "hardware", order: 25,
       score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 0, recency: 1 },
       dates: "Feb 2025", displayRole: "team project", event: "MakeUofT 2025",
       covers: "Horror game you play with a sensor glove.",
@@ -573,7 +593,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "Arduino", "C#"],
     },
     {
-      id: "vr-odm-gear-sim", name: "VR ODM Gear Sim", group: "xr", order: 25,
+      id: "vr-odm-gear-sim", name: "VR ODM Gear Sim", group: "xr", order: 26,
       score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 0, recency: 0 },
       dates: "Sep 2023", displayRole: "team project", event: "Hack the North 2023",
       covers: "Cardboard VR sim with an Arduino glove controller.",
@@ -585,7 +605,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "Arduino", "C#"],
     },
     {
-      id: "street-cleaner", name: "Street Cleaner", group: "games", order: 26,
+      id: "street-cleaner", name: "Street Cleaner", group: "games", order: 27,
       score: { relevance: 1, depth: 1, award: 2, shipped: 0, ownership: 1, recency: 0 },
       dates: "May 2023", displayRole: "solo", event: "GameHACKS 1.0",
       covers: "A drag-and-drop mobile game in Unity that teaches which bin each kind of waste goes in.",
@@ -598,7 +618,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "C#"],
     },
     {
-      id: "object-love-interface", name: "Object-Love-Interface", group: "hardware", order: 27,
+      id: "object-love-interface", name: "Object-Love-Interface", group: "hardware", order: 28,
       score: { relevance: 1, depth: 1, award: 1, shipped: 0, ownership: 0, recency: 2 },
       dates: "Feb 2026", displayRole: "team project", event: "CTRL+HACK+DEL 2.0",
       covers: "IoT objects with voices and personalities.",
@@ -610,7 +630,7 @@ export const site: SiteContent = {
       stats: [], stack: ["ESP32", "Arduino", "Python", "Node.js"],
     },
     {
-      id: "stupid-spotify", name: "Stupid Spotify", group: "tools", order: 28,
+      id: "stupid-spotify", name: "Stupid Spotify", group: "tools", order: 29,
       score: { relevance: 2, depth: 1, award: 1, shipped: 1, ownership: 0, recency: 1 },
       dates: "Nov 2025", displayRole: "team project", event: "Stupid Hackathon @ Western",
       covers: "A deliberately bad Spotify clone. Its chatbot gaslights you about your music choices.",
@@ -622,7 +642,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Next.js", "TypeScript"],
     },
     {
-      id: "motaru", name: "Mōtaru", group: "games", order: 29,
+      id: "motaru", name: "Mōtaru", group: "games", order: 30,
       score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 0 },
       dates: "2024", displayRole: "solo",
       covers: "An action mobile game in Unity where you take down ninjas with quick reflexes.",
@@ -635,7 +655,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "C#"],
     },
     {
-      id: "zenith-tower", name: "Zenith Tower", group: "games", order: 30,
+      id: "zenith-tower", name: "Zenith Tower", group: "games", order: 31,
       score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 0 },
       dates: "2024", displayRole: "solo",
       covers: "A fast mobile dungeon crawler in Unity, climbing an endless futuristic tower.",
@@ -646,7 +666,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "C#"],
     },
     {
-      id: "tic-tac-toe-ultimate", name: "Tic Tac Toe Ultimate", group: "games", order: 31,
+      id: "tic-tac-toe-ultimate", name: "Tic Tac Toe Ultimate", group: "games", order: 32,
       score: { relevance: 1, depth: 1, award: 0, shipped: 0, ownership: 1, recency: 0 },
       dates: "2024", displayRole: "solo",
       covers: "Ultimate Tic Tac Toe for Android, built in Unity.",
@@ -658,7 +678,7 @@ export const site: SiteContent = {
       stats: [], stack: ["Unity", "C#"],
     },
     {
-      id: "omni-reality", name: "Omni-Reality", group: "xr", order: 32,
+      id: "omni-reality", name: "Omni-Reality", group: "xr", order: 33,
       score: { relevance: 2, depth: 3, award: 0, shipped: 0, ownership: 0, recency: 2 },
       dates: "Sep 2026", displayRole: "team project", event: "Hack the North 2026",
       covers: "A mixed-reality assistant for the Quest 3S that answers in the room: SAM 2 highlights on the object you mean, guided steps, and furniture at life size. Built with my team.",

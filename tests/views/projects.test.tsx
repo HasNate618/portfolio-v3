@@ -72,9 +72,9 @@ test("software comes before hardware, and each compact section runs strongest fi
 
 test("the case studies keep their hand-set order on top", () => {
   const pos = (name: string) => html.indexOf(`>${name}<`);
-  assert.ok(pos("Campus") < pos("NixOS homelab") && pos("NixOS homelab") < pos("AWARE"));
+  assert.ok(pos("Campus") < pos("Clank") && pos("Clank") < pos("NixOS homelab") && pos("NixOS homelab") < pos("AWARE"));
   const studies = html.slice(html.indexOf('id="case-studies"'), html.indexOf('id="software-ai-and-games"'));
-  assert.equal(studies.match(/<h3/g)?.length, 3, "three case studies: Campus, homelab, AWARE");
+  assert.equal(studies.match(/<h3/g)?.length, 4, "four case studies: Campus, Clank, homelab, AWARE");
   assert.ok(!studies.includes(">CareBridge<"), "CareBridge has no case study page, so it sits in the grid");
 });
 
