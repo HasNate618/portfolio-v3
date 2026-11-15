@@ -19,8 +19,8 @@ import { site } from "@/data/site";
  */
 export const NAV_LINKS = [
   { href: "/", label: "About" },
-  { href: "/experience", label: "Experience" },
-  { href: "/projects", label: "Projects" },
+  { href: "/experience", label: "All experience" },
+  { href: "/projects", label: "All projects" },
   { href: "/resume", label: "Resume" },
 ] as const;
 
