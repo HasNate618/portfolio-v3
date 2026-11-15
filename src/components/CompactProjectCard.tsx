@@ -62,8 +62,14 @@ export function CompactProjectCard({
       }`}
     >
       {/* On /projects the grid hides its images on phones to keep the page short;
-          they and their expanded views are there from the sm breakpoint up. Home keeps them. */}
-      <ProjectMedia media={project.media} variant="card" className={variant === "grid" ? "mb-3 max-sm:hidden" : "mb-3"} />
+          they and their expanded views are there from the sm breakpoint up. Home keeps
+          them, and gives the picture the width of the card rather than a thumbnail. */}
+      <ProjectMedia
+        media={project.media}
+        variant="card"
+        large={variant === "home"}
+        className={variant === "grid" ? "mb-3 max-sm:hidden" : "mb-3"}
+      />
       <h3 className="font-medium leading-snug text-fg">{title}</h3>
       <div className="mt-1">
         <ProjectMetaRow projectId={project.id} />

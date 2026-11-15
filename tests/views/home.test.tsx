@@ -64,6 +64,7 @@ test("the featured projects reuse the /projects cards, whole-card clickable", ()
   assert.doesNotMatch(projects, /Next image \(/, "no buried next-image links");
   assert.equal(projects.match(/relative flex flex-col rounded-lg border p-5/g)?.length, 4, "the lead plus three featured projects");
   assert.equal(projects.match(/after:absolute after:inset-0/g)?.length, 4, "the whole card follows its title link");
+  assert.equal(projects.match(/h-auto w-full/g)?.length, 4, "home gives each picture the width of its card");
 });
 
 test("a card's images sit above the stretched title link, so they open the viewer", () => {

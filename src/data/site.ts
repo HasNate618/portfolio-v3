@@ -231,7 +231,7 @@ export const site: SiteContent = {
       id: "clank", name: "Clank", group: "featured", order: 2, rank: "featured",
       dates: "Oct 2026 to present", displayRole: "solo",
       covers: "A small physical-AI experiment: one local 2B vision-language model hears a commercial VR game, looks at the frame the game just rendered, and decides what a simulated Unitree G1 humanoid should do next. So far it does one task step end to end: JobBot offers his card, the model decides to take it and finds it in the frame, the body reaches, and the game registers the grab. The whole stack, game included, runs on one GPU in about 6.5 GB of VRAM.",
-      cardLine: "A local 2B vision-language model that hears a VR game, sees the frames it renders and drives a simulated humanoid to take a card inside it.",
+      cardLine: "Physical AI with a small brain: one local 2B VLM sees, hears and decides for a simulated humanoid playing an unmodified VR game through OpenXR.",
       limits: "One task step works end to end, and the runs are not scored yet, so there is no success rate. The body loop runs at 44.2 Hz against a 50 Hz design. NVIDIA's GEAR-SONIC and ARDY-G1 and Liquid AI's LFM3-Omni-2B run as published, with no training or fine-tuning. The body does not walk in the game yet.",
       media: [
         { src: "/projects/clank-0.webp", alt: "The run dashboard mid-grab: Job Simulator on the left, the simulated Unitree G1 on the right, and the run's diary of heard lines and decisions below", width: 1280, height: 960 },

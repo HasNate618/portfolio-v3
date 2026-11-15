@@ -16,7 +16,9 @@ const CARD_MINIS = 4;
  * `variant="card"` (compact cards) shows the main image at the same size with
  * up to four small squares beside it, so the card is no taller than one
  * thumbnail. If there are more images than fit, the last square says "+N"
- * and opens the first image it leaves out.
+ * and opens the first image it leaves out. Pass `large` where the card has room
+ * for a picture rather than a thumbnail: the main image then spans the card and
+ * the squares move to a row under it.
  *
  * Every thumbnail opens its image expanded, in place. The mechanism is CSS
  * `:target` rather than script, so it works with JavaScript off: the thumbnail
@@ -29,10 +31,13 @@ export function ProjectMedia({
   media,
   className = "",
   variant = "row",
+  large = false,
 }: {
   media?: Media[];
   className?: string;
   variant?: "row" | "card";
+  /** Card only: span the card with the main image instead of thumbnailing it. */
+  large?: boolean;
 }) {
   if (!media?.length) return null;
 
@@ -46,7 +51,7 @@ export function ProjectMedia({
   const overflow = variant === "card" ? count - 1 - minis : 0;
   const hasThumb = (index: number) => (variant === "row" ? true : index <= minis);
 
-  const thumbnail = (item: Media, index: number, size: "main" | "mini", label?: string) => (
+  const thumbnail = (item: Media, index: number, size: "main" | "mini" | "large", label?: string) => (
     <a
       id={thumbId(index)}
       href={`#${ids[index]}`}
@@ -58,9 +63,9 @@ export function ProjectMedia({
         alt={label ? "" : item.alt}
         width={item.width}
         height={item.height}
-        sizes={size === "main" ? "160px" : "56px"}
+        sizes={size === "large" ? "(min-width: 40rem) 24rem, 90vw" : size === "main" ? "160px" : "56px"}
         className={`rounded-lg border border-rule transition-colors hover:border-accent ${
-          size === "main" ? "h-24 w-40" : "h-[2.75rem] w-14"
+          size === "large" ? "h-auto w-full" : size === "main" ? "h-24 w-40" : "h-[2.75rem] w-14"
         } ${item.contain ? "bg-black/20 object-contain" : "object-cover"}`}
       />
       {label ? (
@@ -83,10 +88,17 @@ export function ProjectMedia({
           ))}
         </ul>
       ) : (
-        <div className="flex gap-2">
-          {thumbnail(media[0], 0, "main")}
+        <div className={large ? "flex flex-col gap-2" : "flex gap-2"}>
+          {thumbnail(media[0], 0, large ? "large" : "main")}
           {minis > 0 ? (
-            <ul className="grid grid-cols-2 content-start gap-x-1 gap-y-2" aria-label="More images">
+            <ul
+              className={
+                large
+                  ? "flex flex-wrap gap-2"
+                  : "grid grid-cols-2 content-start gap-x-1 gap-y-2"
+              }
+              aria-label="More images"
+            >
               {media.slice(1, minis + 1).map((item, offset) => {
                 const index = offset + 1;
                 const isMore = overflow > 0 && index === minis;
