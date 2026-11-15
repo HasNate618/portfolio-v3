@@ -109,6 +109,13 @@
   color-scheme: dark;
 }
 
+/* A step up in body size once the wide two-column layout has the room. */
+@media (min-width: 60rem) {
+  body {
+    font-size: 18px;
+  }
+}
+
 html {
   /*
    * Instant anchor jumps, not smooth scrolling: a half-second glide between
@@ -122,9 +129,9 @@ html {
 }
 
 body {
-  /* 16px floor for body copy. */
-  font-size: 16px;
-  line-height: 1.6;
+  /* 17px keeps the 16px floor with room to breathe; 18px once the sidebar is up. */
+  font-size: 17px;
+  line-height: 1.65;
   /* Transparent so the ambient glow below shows through. */
   background-color: transparent;
 }
@@ -191,26 +198,32 @@ li {
 }
 
 /*
- * Section labels: the small uppercase headings that divide a page. A quiet
- * hairline running out to the right gives each section a clear start, which
- * is what makes long pages scannable.
+ * Section headings: the words that divide a page. They used to be small
+ * uppercase labels with a hairline running out to the right, which read as
+ * decoration rather than as a heading; this is a real heading, set apart from
+ * body text by size and weight alone, in the same Inter as the rest of the
+ * site. No rule, no tracking, no caps.
  */
 .section-label {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  display: block;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-heading);
+}
+
+/*
+ * The quiet counterpart for labels that head a small panel rather than a
+ * section of prose — the "On this page" nav, which had inherited the section
+ * treatment and would otherwise compete with the headings it points at.
+ */
+.list-label {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-heading);
-}
-
-.section-label::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background-color: var(--color-rule);
 }
 
 :focus-visible {

@@ -13,7 +13,7 @@ import { SiteHeader } from "@/components/SiteHeader";
  */
 export function PageShell({ current, children }: { current: string; children: ReactNode }) {
   return (
-    <div className="mx-auto min-h-screen max-w-screen-xl lg:px-12">
+    <div className="mx-auto min-h-screen max-w-[96rem] lg:px-8 xl:px-12">
       {/* Renders nothing: it only listens, so the shell stays server-rendered. */}
       <LightboxKeys />
       <MobileTopBar current={current} />
@@ -25,7 +25,12 @@ export function PageShell({ current, children }: { current: string; children: Re
        * chat's height subtracts exactly this (see --chat-chrome in globals.css).
        */}
       <div className="px-6 pb-6 lg:px-0 lg:py-0">
-        <div className="lg:grid lg:grid-cols-[23rem_1fr] lg:gap-24">
+        {/*
+           * The sidebar is 26rem once there is room for it: below that the name
+           * wrapped mid-word pair at 20rem, and the content column is the one
+           * that should give first, not the identity.
+           */}
+        <div className="lg:grid lg:grid-cols-[22rem_1fr] lg:gap-10 xl:grid-cols-[26rem_1fr] xl:gap-16">
           <SiteHeader current={current} />
           <main id="content" className="page-enter-delayed pt-12 lg:py-24">{children}</main>
         </div>

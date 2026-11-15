@@ -38,3 +38,10 @@ test("a single image has no previous or next links", () => {
   const html = renderToStaticMarkup(<ProjectMedia media={one} />);
   assert.doesNotMatch(html, /Previous image/);
 });
+
+test("the hero variant shows one modest image but keeps every image reachable", () => {
+  const html = renderToStaticMarkup(<ProjectMedia media={auralis} variant="hero" />);
+  assert.equal(html.match(/id="media-[^"]*-thumb"/g)?.length, 1, "one thumbnail, not a row of them");
+  assert.match(html, /h-auto w-full max-w-\[26rem\]/, "it is capped well inside the column, not full width");
+  assert.equal(html.match(/<div id="media-[^"]+" class="lightbox"/g)?.length, auralis.length, "every image still opens");
+});

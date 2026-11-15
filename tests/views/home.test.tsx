@@ -16,22 +16,19 @@ test("home renders identity, seeking and the Campus card", () => {
   assert.doesNotMatch(html, /4,687/, "the exact chunk count is not published anywhere");
 });
 
-test("home shows an Also built row of three linked side projects", () => {
+test("home names the three side projects in one Also built line", () => {
   const start = html.indexOf('id="also-built"');
-  assert.ok(start !== -1, "the Also built heading is missing");
+  assert.ok(start !== -1, "the Also built line is missing");
   const row = html.slice(start, html.indexOf("All projects", start));
   for (const name of ["Glyph", "Omni-Reality", "FLEXFIRE-X"]) {
     assert.ok(row.includes(name), `missing ${name}`);
   }
   assert.ok(!row.includes("Careerly"), "Glyph took Careerly's place");
-  const items = row.split('<li class="relative flex flex-col').slice(1);
-  assert.equal(items.length, 3);
-  for (const item of items) {
-    assert.match(item, /after:absolute after:inset-0/, "the whole card follows its first link");
-    assert.match(item, /relative z-10 font-medium text-accent/, "the link row keeps its own targets");
-  }
-  assert.match(row, /github\.com\/HasNate618\/Glyph|WinGet|GitHub/);
-  assert.ok(!row.includes("text-3xl"), "no stat tiles");
+  assert.ok(!row.includes("<li"), "the Also built line is text, not cards");
+  assert.match(row, /github\.com\/HasNate618\/Glyph/, "the names link out");
+  assert.match(row, /\(software\)/);
+  assert.match(row, /\(vr\)/);
+  assert.match(row, /\(hardware\)/);
 });
 
 test("home names the work outside AI in one line", () => {
@@ -63,23 +60,17 @@ test("the About page carries the short intro copy", () => {
   assert.doesNotMatch(html, /care about the boring parts too/);
 });
 
-test("the featured cards are compact: one main image, one line, every link, no stack chips", () => {
+test("the featured projects render as a text list with one image each: linked name, one line", () => {
   const projects = html.slice(html.indexOf('id="projects"'), html.indexOf('id="also-built"'));
-  const campusCard = projects.match(/<li id="campus"[\s\S]*?Case study/)?.[0] ?? "";
-  assert.ok(campusCard, "Campus should render as the first compact card, keeping the #campus anchor");
-  assert.match(campusCard, /href="\/projects\/campus"/, "the title links to the case study");
-  assert.doesNotMatch(projects, /rounded-full bg-accent\/10 px-3 py-1/, "no stack chips on home cards");
+  const campusRow = projects.match(/<li id="campus"[\s\S]*?<\/li>/)?.[0] ?? "";
+  assert.ok(campusRow, "Campus should lead the list, keeping the #campus anchor");
+  assert.match(campusRow, /href="\/projects\/campus"/, "the name links to the case study");
+  assert.match(projects, /<img/, "each project keeps one image");
+  assert.doesNotMatch(projects, /rounded-full bg-accent\/10 px-3 py-1/, "no stack chips on home");
   assert.doesNotMatch(projects, /SQLite/, "the long covers text stays on /projects");
   assert.doesNotMatch(projects, /Next image \(/, "no buried next-image links");
-  // Every image of every featured card has its own thumbnail or square.
-  for (const name of ["campus", "clank", "homelab", "aware"]) {
-    const count = (projects.match(new RegExp(`id="media-projects-${name}[^"]*-thumb"`, "g")) ?? []).length;
-    assert.ok(count >= 1, `${name} has no thumbnail`);
-  }
-  // AWARE shows its case study, then GitHub and Devpost.
-  const aware = projects.slice(projects.indexOf(">AWARE<"));
-  const row = aware; // AWARE is the last featured card
-  assert.ok(row.indexOf("Case study") < row.indexOf("GitHub") && row.indexOf("GitHub") < row.indexOf("Devpost"), "all links, case study first");
+  const items = projects.match(/<li(\s|>)/g) ?? [];
+  assert.equal(items.length, 4, "the lead plus three featured projects");
 });
 
 test("the featured section links to real case studies, and only those", () => {
@@ -110,13 +101,13 @@ test("home on-this-page entries match the heading ids it renders", () => {
 });
 
 test("home trims experience to the newest roles and links to the rest", () => {
-  // The home page carries two roles now, then a button; the full record is its
+  // The home page carries two roles now, then a link; the full record is its
   // own page, covered by tests/views/experience.test.tsx.
   assert.match(html, /TeraGo/);
   assert.match(html, /3D Western/);
   assert.doesNotMatch(html, /WEMars/, "older roles belong to /experience");
   assert.match(html, /href="\/experience"/);
-  assert.match(html, /Show all experience/);
+  assert.match(html, /All experience/);
 });
 
 test("Home features Clank right after the lead, and CareBridge is off Home", () => {
@@ -151,6 +142,14 @@ test("each home experience entry is a short line plus its case study", () => {
   assert.match(section, /local-LLM prototype/);
   assert.match(section, /print-safety dataset/);
   assert.equal(section.match(/>Case study</g)?.length ?? section.match(/Case study/g)?.length, 2);
+});
+
+test("home experience puts the dates above the role instead of in a column", () => {
+  const section = html.slice(html.indexOf('id="experience"'), html.indexOf('id="projects"'));
+  assert.doesNotMatch(section, /grid-cols-\[10rem_1fr\]/, "the date column pushed every row sideways");
+  const terago = section.slice(section.indexOf(">May 2026 to Aug 2026<"), section.indexOf("</li>", section.indexOf("TeraGo")));
+  assert.ok(terago.length > 0, "the TeraGo dates should render");
+  assert.ok(terago.indexOf("Software Engineering Intern") > 0, "the role follows its dates");
 });
 
 test("the awards line makes no team claim, since one award was solo", () => {

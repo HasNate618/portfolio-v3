@@ -138,7 +138,7 @@ export type Experience = {
 };
 
 export type SiteContent = {
-  identity: { name: string; headline: string; positioning?: string; seeking: string; location: string; year: string; program: string; graduation: string;
+  identity: { name: string; tagline: string; headline: string; positioning?: string; seeking: string; location: string; year: string; program: string; graduation: string;
     education: { school: string; degree: string; honors: string; start: string; end: string; location: string } };
   contact: { email: string; links: { label: string; href: string }[] };
   experience: Experience[];
@@ -157,10 +157,16 @@ export type SiteContent = {
 export const site: SiteContent = {
   identity: {
     name: "Nathan Espejo",
+    /**
+     * The one quiet line under the name in the sidebar. Deliberately shorter
+     * than `headline`: the home intro already states the year, the school and
+     * the graduation date, so repeating them beside the name said it twice.
+     */
+    tagline: "Software engineer building AI, Linux and hardware projects.",
     headline: "Software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Software Engineering at Western, graduating May 2028.",
     seeking: "software engineering internship starting May 2027, summer or up to 16 months",
     location: "Brampton and London, ON",
-    year: "3rd year (2026-27)",
+    year: "Third year (2026-27)",
     program: "Software Engineering",
     graduation: "May 2028",
     education: { school: "Western University", degree: "Bachelor of Engineering Science in Software Engineering", honors: "Dean's Honour List (2024, 2025)", start: "2024-08", end: "2028-05", location: "London, ON" },

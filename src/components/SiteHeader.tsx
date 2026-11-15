@@ -81,21 +81,19 @@ export function SiteHeader({ current }: { current: string }) {
          * 12px below that edge.
          */}
         <div className={firstPageOnly ?? "max-lg:mt-12"}>
-          <p className="text-4xl font-bold tracking-tight text-fg sm:text-5xl">
+          {/*
+           * 36px below `xl`, 48px above it: the sidebar is 22rem at `lg`, where
+           * the name no longer fits on one line at 48px.
+           */}
+          <p className="text-4xl font-bold tracking-tight text-fg xl:text-5xl">
             <Link href="/" className="hover:text-accent">
               {site.identity.name}
             </Link>
           </p>
 
-          {/* Deliberately quiet: the name leads, this sets context without
-              competing with it for attention. */}
-          <p className="mt-3 max-w-md text-base leading-relaxed text-muted sm:text-lg">
-            {site.identity.headline}
-          </p>
-
-          {site.identity.positioning ? (
-            <p className="mt-4 max-w-xs leading-relaxed text-muted">{site.identity.positioning}</p>
-          ) : null}
+          {/* One line, deliberately quiet: the home intro carries the year,
+              the school and the graduation date, so this does not repeat them. */}
+          <p className="mt-3 max-w-md leading-relaxed text-muted">{site.identity.tagline}</p>
         </div>
 
         {/*

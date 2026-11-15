@@ -1,25 +1,60 @@
 import Link from "next/link";
-import { site, featuredProjects, leadProject, alsoBuiltProjects, awardFor } from "@/data/site";
+import { site, featuredProjects, leadProject, alsoBuiltProjects, awardFor, type Project } from "@/data/site";
 import { projectLinks } from "@/lib/project-links";
-import { LinkRow } from "@/components/LinkRow";
 import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import { getPage, type Page } from "@/lib/content";
-import { CompactProjectCard } from "@/components/CompactProjectCard";
+import { cardLineFor } from "@/components/CompactProjectCard";
+import { ProjectMedia } from "@/components/ProjectMedia";
 
 /**
  * The home page carries the whole story: who he is, the newest roles, then the
- * projects worth leading with.
+ * projects worth leading with. It is deliberately text-first — no cards, no
+ * boxes, no hairline buttons — but each project keeps one image, because a
+ * list of names alone gave no sense of what the work looks like.
  *
  * The ids on these sections are still load-bearing: the page's own "on this
  * page" list and any in-page link resolve against them, so renaming one breaks
  * a link. The header nav no longer points here — it goes to /experience and
  * /projects — so these are anchors, not navigation.
  *
- * Experience is deliberately partial here: the newest roles, then a button to
+ * Experience is deliberately partial here: the newest roles, then a link to
  * the full record. Five roles with their summaries pushed the projects — the
  * actual proof — far down the page.
  */
 const HOME_ROLES = 2;
+
+/** One entry of the home project list: image, linked name, dates, award, one line. */
+function ProjectLine({ project, anchor }: { project: Project; anchor?: string }) {
+  const link = projectLinks(project.id)[0];
+  const award = awardFor(project.name);
+  const name = link ? (
+    link.internal ? (
+      <Link href={link.href} className="hover:text-accent">
+        {project.name}
+      </Link>
+    ) : (
+      <a href={link.href} target="_blank" rel="noopener noreferrer" className="hover:text-accent">
+        {project.name}
+        <span className="sr-only"> (opens in a new tab)</span>
+      </a>
+    )
+  ) : (
+    project.name
+  );
+  return (
+    <li id={anchor}>
+      {/* One image above the text. Every image the project has stays reachable
+          through the expanded view the thumbnail opens. */}
+      <ProjectMedia media={project.media} variant="hero" className="mb-3" />
+      <p>
+        <span className="font-medium text-fg">{name}</span>
+        <span className="text-muted"> · {project.dates}</span>
+        {award ? <span className="font-medium text-accent"> · {award.prize}</span> : null}
+      </p>
+      <p className="mt-0.5 max-w-[68ch] leading-relaxed">{cardLineFor(project)}</p>
+    </li>
+  );
+}
 
 export function HomeView({ page }: { page: Page }) {
   const projects = [leadProject()!, ...featuredProjects()];
@@ -61,9 +96,12 @@ export function HomeView({ page }: { page: Page }) {
         {site.experience.slice(0, HOME_ROLES).map((experience) => {
           const href = caseStudyHref(experience.file);
           return (
-            <li key={experience.org} className="sm:grid sm:grid-cols-[10rem_1fr] sm:gap-4">
-              <span className="text-xs uppercase tracking-wide text-muted">{experience.dates}</span>
-              <div className="mt-1 sm:mt-0">
+            <li key={experience.org}>
+              {/* The dates used to sit in a 10rem column of their own, which
+                  made every row shift sideways as the reader scanned it. Above
+                  the role they read as a timestamp and the row stays one column. */}
+              <p className="text-sm text-muted">{experience.dates}</p>
+              <div className="mt-1">
                 <p>
                   <span className="font-medium text-fg">{experience.role}</span>
                   <span className="text-muted"> · {experience.org}</span>
@@ -87,119 +125,79 @@ export function HomeView({ page }: { page: Page }) {
       </ul>
 
       {/* The newest roles only; the whole record lives on its own page. */}
-      <div className="mt-6 flex items-center gap-4">
-        <span className="h-px flex-1 bg-rule" aria-hidden="true" />
-        <Link
-          href="/experience"
-          className="inline-block rounded-full border border-rule px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent"
-        >
-          Show all experience <span aria-hidden="true">→</span>
+      <p className="mt-6">
+        <Link href="/experience" className="font-medium text-accent hover:text-fg">
+          All experience <span aria-hidden="true">→</span>
         </Link>
-        <span className="h-px flex-1 bg-rule" aria-hidden="true" />
-      </div>
+      </p>
 
       <h2 id="projects" className="section-label mt-16">
         Projects
       </h2>
 
       {/*
-       * Short cards: one image, the name, one line and the case study. The
-       * full cards, with their stack, live on /projects; repeating them here
-       * doubled the page.
+       * A text list with one image per project: the name links out (case study
+       * first), one line of what it is. No card boxes, no stack chips, no link
+       * rows — the full cards live on /projects.
        */}
-      <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+      <ul className="mt-6 flex flex-col gap-10">
         {projects.map((project) => (
-          <CompactProjectCard
-            key={project.id}
-            project={project}
-            variant="home"
-            id={project.rank === "lead" ? project.id : undefined}
-          />
+          <ProjectLine key={project.id} project={project} anchor={project.rank === "lead" ? project.id : undefined} />
         ))}
       </ul>
 
       {/*
-       * Three small cards under the featured ones, one per kind of work the
-       * cards above don't show, so the page doesn't read as AI only. The whole
-       * card follows its first link and the link row keeps its own targets.
-       * No media, stack or stats: the full cards live on /projects.
+       * One line for the work the list above doesn't show, so the page doesn't
+       * read as AI only. The kind tag keeps the spread visible without cards.
        */}
-      <h3 id="also-built" className="mt-10 text-xs font-bold uppercase tracking-widest text-muted">
-        Also built
-      </h3>
-      <ul className="mt-4 grid gap-4 sm:grid-cols-3">
-        {alsoBuiltProjects().map(({ project, kind, line }) => {
+      <p id="also-built" className="mt-8 max-w-[68ch] leading-relaxed">
+        <span className="text-muted">Also built: </span>
+        {alsoBuiltProjects().map(({ project, kind }, index, all) => {
           const link = projectLinks(project.id)[0];
-          const award = awardFor(project.name);
           return (
-            <li
-              key={project.id}
-              className="relative flex flex-col rounded-lg border border-rule bg-surface p-4 transition-colors hover:border-accent/40"
-            >
-              <p className="text-xs uppercase tracking-wide text-muted">
-                {kind}
-                {project.event ? ` · ${project.event}` : ""}
-              </p>
-              <p className="mt-1 font-medium text-fg">
-                {link ? (
-                  link.internal ? (
-                    <Link href={link.href} className="hover:text-accent after:absolute after:inset-0 after:content-['']">
-                      {project.name}
-                    </Link>
-                  ) : (
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-accent after:absolute after:inset-0 after:content-['']"
-                    >
-                      {project.name}
-                      <span className="sr-only"> ({link.label}, opens in a new tab)</span>
-                    </a>
-                  )
+            <span key={project.id}>
+              {link ? (
+                link.internal ? (
+                  <Link href={link.href} className="text-accent hover:text-fg">
+                    {project.name}
+                  </Link>
                 ) : (
-                  project.name
-                )}
-              </p>
-              <p className="mt-1 text-sm leading-relaxed">{line}</p>
-              {award ? <p className="mt-2 text-xs font-bold text-accent">{award.prize}</p> : null}
-              <div className="mt-auto pt-3 text-sm">
-                <LinkRow projectId={project.id} />
-              </div>
-            </li>
+                  <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-accent hover:text-fg">
+                    {project.name}
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                )
+              ) : (
+                project.name
+              )}{" "}
+              <span className="text-muted">({kind.toLowerCase()})</span>
+              {index < all.length - 1 ? ", " : "."}
+            </span>
           );
         })}
-      </ul>
+      </p>
 
-      {/* The way to the full index, centred between hairlines. */}
-      <div className="mt-6 flex items-center gap-4">
-        <span className="h-px flex-1 bg-rule" aria-hidden="true" />
-        <Link
-          href="/projects"
-          className="inline-block rounded-full border border-rule px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:bg-accent/5 hover:text-accent"
-        >
+      {/* The way to the full index. */}
+      <p className="mt-6">
+        <Link href="/projects" className="font-medium text-accent hover:text-fg">
           All projects <span aria-hidden="true">→</span>
         </Link>
-        <span className="h-px flex-1 bg-rule" aria-hidden="true" />
-      </div>
+      </p>
 
       {/*
-       * Awards close the page with one line and a link to the full table on
-       * /projects, then the Dean's Honour List years, which come from the
-       * education entry so the two can never disagree.
+       * Awards close the page in one line: the hackathon count, the Dean's
+       * Honour List years (from the education entry, so the two can never
+       * disagree) and a link to the full table on /projects.
        */}
       <h2 id="awards" className="section-label mt-16">
         Awards
       </h2>
       <p className="mt-4 max-w-[68ch] leading-relaxed">
         {site.hackathons.awards} awards across {site.hackathons.entered} hackathons.{" "}
+        {site.identity.education.honors} at {site.identity.education.school}.{" "}
         <Link href="/projects#hackathon-awards" className="font-medium text-accent hover:text-fg">
-          See the full list <span aria-hidden="true">→</span>
+          Full list <span aria-hidden="true">→</span>
         </Link>
-      </p>
-      <p className="mt-3 max-w-[68ch] leading-relaxed">
-        Off the hackathon circuit: {site.identity.education.honors} at{" "}
-        {site.identity.education.school}.
       </p>
     </article>
   );

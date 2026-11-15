@@ -18,6 +18,10 @@ const CARD_MINIS = 4;
  * thumbnail. If there are more images than fit, the last square says "+N"
  * and opens the first image it leaves out.
  *
+ * `variant="hero"` shows one image at just over the width of a paragraph's
+ * measure, for the home page's text list: the reader still gets a picture, and
+ * every image stays one click away through the same expanded view.
+ *
  * Every thumbnail opens its image expanded, in place. The mechanism is CSS
  * `:target` rather than script, so it works with JavaScript off: the thumbnail
  * links to the overlay's fragment, and the overlay shows while that fragment
@@ -32,7 +36,7 @@ export function ProjectMedia({
 }: {
   media?: Media[];
   className?: string;
-  variant?: "row" | "card";
+  variant?: "row" | "card" | "hero";
 }) {
   if (!media?.length) return null;
 
@@ -44,9 +48,10 @@ export function ProjectMedia({
   // images behind it becomes "+N".
   const minis = variant === "card" ? Math.min(count - 1, CARD_MINIS) : 0;
   const overflow = variant === "card" ? count - 1 - minis : 0;
-  const hasThumb = (index: number) => variant === "row" || index <= minis;
+  const hasThumb = (index: number) =>
+    variant === "row" ? true : variant === "hero" ? index === 0 : index <= minis;
 
-  const thumbnail = (item: Media, index: number, size: "main" | "mini", label?: string) => (
+  const thumbnail = (item: Media, index: number, size: "main" | "mini" | "hero", label?: string) => (
     <a
       id={thumbId(index)}
       href={`#${ids[index]}`}
@@ -58,10 +63,10 @@ export function ProjectMedia({
         alt={label ? "" : item.alt}
         width={item.width}
         height={item.height}
-        sizes={size === "main" ? "160px" : "56px"}
-        className={`${size === "main" ? "h-24 w-40" : "h-[2.75rem] w-14"} rounded-lg border border-rule transition-colors hover:border-accent ${
-          item.contain ? "bg-black/20 object-contain" : "object-cover"
-        }`}
+        sizes={size === "hero" ? "(min-width: 60rem) 26rem, 90vw" : size === "main" ? "160px" : "56px"}
+        className={`rounded-lg border border-rule transition-colors hover:border-accent ${
+          size === "hero" ? "h-auto w-full max-w-[26rem]" : size === "main" ? "h-24 w-40" : "h-[2.75rem] w-14"
+        } ${item.contain ? "bg-black/20 object-contain" : "object-cover"}`}
       />
       {label ? (
         <span
@@ -82,6 +87,8 @@ export function ProjectMedia({
             <li key={item.src} className="shrink-0">{thumbnail(item, index, "main")}</li>
           ))}
         </ul>
+      ) : variant === "hero" ? (
+        thumbnail(media[0], 0, "hero")
       ) : (
         <div className="flex gap-2">
           {thumbnail(media[0], 0, "main")}

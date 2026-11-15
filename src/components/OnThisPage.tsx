@@ -6,7 +6,7 @@ export function OnThisPage({ items }: { items: string[] }) {
 
   return (
     <nav aria-label="On this page" className="rounded-lg border border-rule bg-surface p-5 text-sm">
-      <h2 className="section-label">On this page</h2>
+      <h2 className="list-label">On this page</h2>
       <ul className="mt-4 flex flex-col gap-2.5">
         {items.map((item) => (
           <li key={item}>
