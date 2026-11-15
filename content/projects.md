@@ -8,5 +8,3 @@ onThisPage: [Case studies, "Software, AI and games", "Hardware, AR and VR", Hack
 updated: 2026-10-25
 ---
 # Projects
-
-Hackathon projects are marked solo or team.

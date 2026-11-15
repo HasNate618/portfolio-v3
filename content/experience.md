@@ -10,8 +10,6 @@ updated: 2026-10-23
 ---
 # Experience
 
-Roles newest first.
-
 ## TeraGo
 
 - Built a prototype pipeline that uses a locally hosted LLM (Ollama) to turn unstructured emails into structured tickets, working end to end.

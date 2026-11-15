@@ -123,6 +123,12 @@ export type Experience = {
   id: string;
   org: string;
   role: string;
+  /**
+   * The role with the dates taken out, for the home page, where the dates are
+   * printed on their own line above it. Only needed where `role` spells out a
+   * term range or two roles — otherwise `role` is already short enough.
+   */
+  homeRole?: string;
   /** One or two sentences, carried into the chat corpus. Depth lives in the corpus doc. */
   summary?: string;
   /** The home page's two-line version of `summary`. Layout only: not carried into the corpus. */
@@ -147,11 +153,6 @@ export type SiteContent = {
   awards: SiteAward[];
   skills: { group: string; items: string[] }[];
   alsoUsed: string[];
-  /**
-   * The home page's "Also built" row: one project per kind of work the featured
-   * cards don't show. Ids point into `projects`, so names and links stay single-source.
-   */
-  alsoBuilt: { id: string; kind: string; line: string }[];
 };
 
 export const site: SiteContent = {
@@ -186,7 +187,7 @@ export const site: SiteContent = {
       summary: "Built a prototype pipeline that uses a locally hosted LLM (Ollama) to turn unstructured emails into structured tickets, working end to end. Also built a Python RF channel-planning tool that shortlists clear frequencies for fixed-wireless links, and deployed an internal RAG assistant that answers engineers' technical questions from company documentation.",
       homeLine: "Built a local-LLM prototype that turns unstructured emails into structured tickets, plus a Python RF channel-planning tool and an internal RAG assistant for engineers.",
       stack: ["Python", "Ollama", "RAG"] },
-    { id: "3d-western", org: "3D Western", role: "Software Developer (Sep 2025 to Apr 2026), then VP of Data/ML (May 2026 to Aug 2026)", location: "London, ON", terms: [{ start: "2025-09", end: "2026-04" }, { start: "2026-05", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
+    { id: "3d-western", org: "3D Western", role: "Software Developer (Sep 2025 to Apr 2026), then VP of Data/ML (May 2026 to Aug 2026)", homeRole: "Software Developer, then VP of Data/ML", location: "London, ON", terms: [{ start: "2025-09", end: "2026-04" }, { start: "2026-05", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
       summary: "I was on the data team from Sep 2025, writing the render scripts and working on the 3D model scraping and the STL rendering pipeline, and as VP of Data/ML I co-led two data developers on a print-safety dataset and benchmark, tracking the work on a GitHub project board. We rendered the scraped models in Blender, checked every label with a VLM, and benchmarked small vision models as a safe-or-flag gate, where the best one, Qwen3-VL-2B, agreed with those labels on 84.2% of models with the filename visible. Ran alongside my TeraGo internship.",
       homeLine: "On the data team since Sep 2025, writing render scripts and working on 3D model scraping. As VP of Data/ML I co-led a print-safety dataset and a benchmark of small vision models.",
       stats: [{ key: "dataset", label: "scraped 3D models", value: "4,620" }],
@@ -207,8 +208,9 @@ export const site: SiteContent = {
       cardLine: "The AI agent I built that reads all six of my courses, so I can check deadlines, study from slides and review my assignment drafts against the instructions in one place.",
       limits: "The agent edits notes and due dates directly and logs every write with the before and after. Campus has no approval gate and no rollback; the NixOS homelab's server profile gates changes and rolls them back.",
       media: [
-        { src: "/projects/campus-0.svg", alt: "Campus wordmark", width: 2221, height: 763, contain: true },
+        { src: "/projects/campus-0.webp", alt: "Campus chat: three expanded tool calls, the assignments due in the next two weeks, the late-penalty maths on a project proposal and a citation chip to lecture-01", width: 1600, height: 909 },
         { src: "/projects/campus-1.webp", alt: "Campus course hub and chat, with an exact citation", width: 1200, height: 675 },
+        { src: "/projects/campus-2.svg", alt: "Campus wordmark", width: 2221, height: 763, contain: true },
       ],
       file: "/knowledgebase/projects/campus.md",
       onResume: true,
@@ -232,7 +234,8 @@ export const site: SiteContent = {
       cardLine: "A local 2B vision-language model that hears a VR game, sees the frames it renders and drives a simulated humanoid to take a card inside it.",
       limits: "One task step works end to end, and the runs are not scored yet, so there is no success rate. The body loop runs at 44.2 Hz against a 50 Hz design. NVIDIA's GEAR-SONIC and ARDY-G1 and Liquid AI's LFM3-Omni-2B run as published, with no training or fine-tuning. The body does not walk in the game yet.",
       media: [
-        { src: "/projects/clank-0.webp", alt: "Clank's view inside Job Simulator: JobBot, a boxy robot with a green screen face, holds out his card to the player", width: 936, height: 526 },
+        { src: "/projects/clank-0.webp", alt: "The run dashboard mid-grab: Job Simulator on the left, the simulated Unitree G1 on the right, and the run's diary of heard lines and decisions below", width: 1280, height: 960 },
+        { src: "/projects/clank-1.webp", alt: "One turn of the loop: Job Simulator's audio and its colour-plus-depth frame feed one local 2B model that hears, decides and locates, and code turns the result into a reach the simulated G1 plays back into the game", width: 1600, height: 786 },
       ],
       file: "/knowledgebase/projects/clank.md",
       links: [{ label: "GitHub", href: "https://github.com/HasNate618/Clank" }],
@@ -723,11 +726,6 @@ export const site: SiteContent = {
     { group: "3D and CAD", items: ["Blender", "3D printing"] },
   ],
   alsoUsed: ["Cursor", "Claude Code", "Bash", "Java", "Onshape"],
-  alsoBuilt: [
-    { id: "glyph", kind: "Software", line: "A leader-key command overlay for Windows, built solo in C# and WPF and shipped on WinGet." },
-    { id: "omni-reality", kind: "VR", line: "A mixed-reality assistant for the Quest 3S, built with my team." },
-    { id: "flexfire-x", kind: "Hardware", line: "A forearm launcher that fires when an EMG sensor picks up a flex, with 3D-printed parts." },
-  ],
 };
 
 /** Case studies, in display order. /llms.txt uses this so the bot surface matches the projects page. */
@@ -757,14 +755,6 @@ export function featuredProjects(): Project[] {
 export function awardFor(projectName: string): SiteAward | undefined {
   const target = projectName.toLowerCase();
   return site.awards.find((award) => award.project.toLowerCase() === target);
-}
-
-/** The "Also built" projects with their label, in display order. Unknown ids are dropped. */
-export function alsoBuiltProjects(): { project: Project; kind: string; line: string }[] {
-  return site.alsoBuilt.flatMap(({ id, kind, line }) => {
-    const project = site.projects.find((p) => p.id === id);
-    return project ? [{ project, kind, line }] : [];
-  });
 }
 
 export function getProject(id: string): Project | undefined {

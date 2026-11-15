@@ -1,16 +1,15 @@
 import Link from "next/link";
-import { site, featuredProjects, leadProject, alsoBuiltProjects, awardFor, type Project } from "@/data/site";
-import { projectLinks } from "@/lib/project-links";
+import { site, featuredProjects, leadProject } from "@/data/site";
 import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import { getPage, type Page } from "@/lib/content";
-import { cardLineFor } from "@/components/CompactProjectCard";
-import { ProjectMedia } from "@/components/ProjectMedia";
+import { CompactProjectCard } from "@/components/CompactProjectCard";
 
 /**
  * The home page carries the whole story: who he is, the newest roles, then the
- * projects worth leading with. It is deliberately text-first — no cards, no
- * boxes, no hairline buttons — but each project keeps one image, because a
- * list of names alone gave no sense of what the work looks like.
+ * projects worth leading with. The projects reuse the cards from /projects
+ * rather than a second, thinner design: the card already stretches its title
+ * over the whole box, keeps its images on top of that link so they still open
+ * the viewer, and lists every outward link first.
  *
  * The ids on these sections are still load-bearing: the page's own "on this
  * page" list and any in-page link resolve against them, so renaming one breaks
@@ -22,39 +21,6 @@ import { ProjectMedia } from "@/components/ProjectMedia";
  * actual proof — far down the page.
  */
 const HOME_ROLES = 2;
-
-/** One entry of the home project list: image, linked name, dates, award, one line. */
-function ProjectLine({ project, anchor }: { project: Project; anchor?: string }) {
-  const link = projectLinks(project.id)[0];
-  const award = awardFor(project.name);
-  const name = link ? (
-    link.internal ? (
-      <Link href={link.href} className="hover:text-accent">
-        {project.name}
-      </Link>
-    ) : (
-      <a href={link.href} target="_blank" rel="noopener noreferrer" className="hover:text-accent">
-        {project.name}
-        <span className="sr-only"> (opens in a new tab)</span>
-      </a>
-    )
-  ) : (
-    project.name
-  );
-  return (
-    <li id={anchor}>
-      {/* One image above the text. Every image the project has stays reachable
-          through the expanded view the thumbnail opens. */}
-      <ProjectMedia media={project.media} variant="hero" className="mb-3" />
-      <p>
-        <span className="font-medium text-fg">{name}</span>
-        <span className="text-muted"> · {project.dates}</span>
-        {award ? <span className="font-medium text-accent"> · {award.prize}</span> : null}
-      </p>
-      <p className="mt-0.5 max-w-[68ch] leading-relaxed">{cardLineFor(project)}</p>
-    </li>
-  );
-}
 
 export function HomeView({ page }: { page: Page }) {
   const projects = [leadProject()!, ...featuredProjects()];
@@ -85,7 +51,7 @@ export function HomeView({ page }: { page: Page }) {
 
       <div
         className="rich-text mt-6 max-w-[68ch] leading-relaxed"
-        // pi-lens-ignore: dangerouslySetInnerHTML
+        // pi-lens-ignore: dangerously-set-inner-html
         dangerouslySetInnerHTML={{ __html: renderMarkdown(stripLeadingH1(page.body, page.title)) }}
       />
 
@@ -103,7 +69,7 @@ export function HomeView({ page }: { page: Page }) {
               <p className="text-sm text-muted">{experience.dates}</p>
               <div className="mt-1">
                 <p>
-                  <span className="font-medium text-fg">{experience.role}</span>
+                  <span className="font-medium text-fg">{experience.homeRole ?? experience.role}</span>
                   <span className="text-muted"> · {experience.org}</span>
                 </p>
                 {/* Two lines here; the full summary and location live on /experience. */}
@@ -136,46 +102,20 @@ export function HomeView({ page }: { page: Page }) {
       </h2>
 
       {/*
-       * A text list with one image per project: the name links out (case study
-       * first), one line of what it is. No card boxes, no stack chips, no link
-       * rows — the full cards live on /projects.
+       * The same cards /projects uses. The card already stretches its title
+       * link over the whole box, and its thumbnails sit above that link so they
+       * open the image viewer instead of following it.
        */}
-      <ul className="mt-6 flex flex-col gap-10">
+      <ul className="mt-6 grid gap-4 sm:grid-cols-2">
         {projects.map((project) => (
-          <ProjectLine key={project.id} project={project} anchor={project.rank === "lead" ? project.id : undefined} />
+          <CompactProjectCard
+            key={project.id}
+            project={project}
+            variant="home"
+            id={project.rank === "lead" ? project.id : undefined}
+          />
         ))}
       </ul>
-
-      {/*
-       * One line for the work the list above doesn't show, so the page doesn't
-       * read as AI only. The kind tag keeps the spread visible without cards.
-       */}
-      <p id="also-built" className="mt-8 max-w-[68ch] leading-relaxed">
-        <span className="text-muted">Also built: </span>
-        {alsoBuiltProjects().map(({ project, kind }, index, all) => {
-          const link = projectLinks(project.id)[0];
-          return (
-            <span key={project.id}>
-              {link ? (
-                link.internal ? (
-                  <Link href={link.href} className="text-accent hover:text-fg">
-                    {project.name}
-                  </Link>
-                ) : (
-                  <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-accent hover:text-fg">
-                    {project.name}
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </a>
-                )
-              ) : (
-                project.name
-              )}{" "}
-              <span className="text-muted">({kind.toLowerCase()})</span>
-              {index < all.length - 1 ? ", " : "."}
-            </span>
-          );
-        })}
-      </p>
 
       {/* The way to the full index. */}
       <p className="mt-6">

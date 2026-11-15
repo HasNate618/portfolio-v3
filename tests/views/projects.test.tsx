@@ -121,8 +121,10 @@ test("group labels are the capitalized display form, not the slugs", () => {
   assert.doesNotMatch(html, />ai</);
 });
 
-test("the solo or team note comes before any team credit", () => {
-  const rule = html.indexOf("Hackathon projects are marked solo or team.");
-  const firstTeam = html.indexOf("Auralis");
-  assert.ok(rule !== -1 && rule < firstTeam, "the honesty rule must precede team credits");
+test("each card labels its own solo or team credit", () => {
+  // The page-level note was removed; the label travels with each card instead,
+  // so a team credit can never appear without its qualifier.
+  assert.match(html, /Auralis/);
+  assert.match(html, /team project|solo/i);
+  assert.doesNotMatch(html, /marked solo or team/);
 });
