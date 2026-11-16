@@ -14,7 +14,7 @@
  *   `bg`, the lightest glow composite over it, and the bubble fill.
  *   `check:contrast` tests all four, so the toggle cannot surface an unreadable
  *   scheme.
- * - `glows` are the two ambient washes, painted as radial-gradients. Kept as
+ * - `glows` is the ambient wash, painted as radial-gradients. Kept as
  *   colour + alpha rather than a CSS string so the checker can composite them.
  */
 export type PaletteTokens = {
@@ -60,48 +60,45 @@ export type PaletteName = (typeof PALETTE_NAMES)[number];
 
 export const palettes: Record<PaletteName, Palette> = {
   moss: {
-    label: "Moss",
-    note: "Green on near-black. The default.",
+    label: "Slate",
+    note: "Vivid blue on near-black. The default.",
     tokens: {
-      bg: "#0a0e0c",
-      fg: "#e2e8e3",
+      bg: "#05070b",
+      fg: "#e2e7ec",
       // The dark scheme's headings stay at body ink: at this level of contrast a
-      // green would read as decoration rather than as a title.
-      heading: "#e2e8e3",
-      muted: "#9daaa1",
-      accent: "#8cc7a1",
-      rule: "rgba(226, 232, 227, 0.09)",
-      surface: "rgba(226, 232, 227, 0.03)",
-      bubble: { color: "#e2e8e3", alpha: 0.07 },
-      codeBg: "rgba(226, 232, 227, 0.08)",
+      // colour would read as decoration rather than as a title.
+      heading: "#e2e7ec",
+      muted: "#98a6bd",
+      accent: "#74b7ff",
+      rule: "rgba(226, 231, 236, 0.09)",
+      surface: "rgba(226, 231, 236, 0.015)",
+      bubble: { color: "#e2e7ec", alpha: 0.07 },
+      codeBg: "rgba(226, 231, 236, 0.08)",
       preBg: "rgba(0, 0, 0, 0.3)",
-      selectionFg: "#0d1a13",
-      scrollbar: "rgba(226, 232, 227, 0.18)",
-      glows: [
-        { color: "#8cc7a1", alpha: 0.05 },
-        { color: "#6fae86", alpha: 0.03 },
-      ],
+      selectionFg: "#0b1020",
+      scrollbar: "rgba(226, 231, 236, 0.18)",
+      glows: [{ color: "#74b7ff", alpha: 0.16 }],
       scheme: "dark",
     },
   },
   paper: {
     label: "Paper",
-    note: "Light scheme: warm cream page, warm ink, deep green accent. Cosy, not clinical.",
+    note: "Light scheme: warm cream page, warm ink, deep blue accent. Cosy, not clinical.",
     tokens: {
       bg: "#f8f6f1",
       fg: "#2b2823",
-      heading: "#24503a",
+      heading: "#1e3a8a",
       muted: "#6b6459",
-      accent: "#2f6b46",
+      accent: "#1d4ed8",
       rule: "rgba(43, 40, 35, 0.13)",
-      surface: "rgba(43, 40, 35, 0.03)",
+      surface: "rgba(43, 40, 35, 0.02)",
       bubble: { color: "#fffdf8", alpha: 0.8 },
       codeBg: "rgba(43, 40, 35, 0.06)",
       preBg: "rgba(43, 40, 35, 0.04)",
       selectionFg: "#faf7f1",
       scrollbar: "rgba(43, 40, 35, 0.25)",
       glows: [
-        { color: "#a3c9a8", alpha: 0.14 },
+        { color: "#4e82e8", alpha: 0.20 },
         { color: "#cbb37f", alpha: 0.08 },
       ],
       scheme: "light",

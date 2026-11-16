@@ -160,6 +160,14 @@ test("each home experience entry is a card of bullets plus its case study", () =
   );
   assert.match(section, /text-xl font-medium leading-snug text-fg/, "the role is the card's title");
   assert.match(section, /hover:text-fg after:absolute after:inset-0/);
+  // The border answers every card, so a hover always reads as "this box is
+  // live"; only a card with a link also fills, since the fill promises a click.
+  assert.equal(
+    section.match(/hover:bg-accent/g)?.length,
+    2,
+    "the fill follows the case study, not every card",
+  );
+  assert.equal(section.match(/hover:border-accent\/40/g)?.length, 5, "every card answers the pointer");
 });
 
 test("the line after the projects counts the rest and lands past the four shown", () => {

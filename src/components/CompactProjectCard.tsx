@@ -57,9 +57,9 @@ export function CompactProjectCard({
       id={id}
       className={`relative flex flex-col rounded-lg border p-5 transition-colors ${
         award
-          ? "border-accent/50 bg-accent/5 hover:border-accent"
+          ? "border-accent/50 bg-accent/[0.03] hover:border-accent"
           : "border-rule bg-surface hover:border-accent/40"
-      }`}
+      } ${first && (award ? "hover:bg-accent/[0.08]" : "hover:bg-accent/[0.06]")}`}
     >
       {/* On /projects the grid hides its images on phones to keep the page short;
           they and their expanded views are there from the sm breakpoint up. Home keeps

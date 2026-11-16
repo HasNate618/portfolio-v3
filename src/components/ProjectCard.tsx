@@ -41,9 +41,9 @@ export function ProjectCard({ project, id }: { project: Project; id?: string }) 
       id={id}
       className={`relative rounded-lg border p-6 transition-colors ${
         award
-          ? "border-accent/50 bg-accent/5 hover:border-accent"
+          ? "border-accent/50 bg-accent/[0.03] hover:border-accent"
           : "border-rule bg-surface hover:border-accent/40"
-      }`}
+      } ${first && (award ? "hover:bg-accent/[0.08]" : "hover:bg-accent/[0.06]")}`}
     >
       <div className="2xl:grid 2xl:grid-cols-[minmax(0,1fr)_27.5rem] 2xl:items-start 2xl:gap-8">
         <div className="min-w-0">

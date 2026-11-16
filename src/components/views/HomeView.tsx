@@ -92,7 +92,11 @@ export function HomeView({ page }: { page: Page }) {
           return (
             <li
               key={experience.org}
-              className="relative rounded-lg border border-rule bg-surface p-5 transition-colors hover:border-accent/40"
+              // The border answers the pointer on every card; only the two with a
+              // case study also fill, because the fill promises a click.
+              className={`relative rounded-lg border border-rule bg-surface p-5 transition-colors hover:border-accent/40 ${
+                href ? "hover:bg-accent/[0.06]" : ""
+              }`}
             >
               <p className="text-muted">{experience.org}</p>
               <h3 className="mt-1 text-xl font-medium leading-snug text-fg">{experience.role}</h3>

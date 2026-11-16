@@ -33,7 +33,7 @@ test("winning projects wear the accent frame and their prize", () => {
   for (const name of ["Auralis", "CareBridge"]) {
     const at = html.indexOf(`>${name}<`);
     const card = html.slice(html.lastIndexOf("relative flex flex-col rounded-lg border p-5", at), at);
-    assert.match(card, /border-accent\/50 bg-accent\/5/, `${name} is not framed`);
+    assert.match(card, /border-accent\/50 bg-accent\/\[0\.03\]/, `${name} is not framed`);
   }
   assert.match(html, /Overall 3rd place/);
 });
