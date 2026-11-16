@@ -3,6 +3,7 @@ import { site, featuredProjects, leadProject } from "@/data/site";
 import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import { getPage, type Page } from "@/lib/content";
 import { ProjectCard } from "@/components/ProjectCard";
+import { REST_OF_PROJECTS } from "@/components/views/ProjectsView";
 
 /**
  * The home page carries the whole story: who he is, the newest roles, then the
@@ -85,7 +86,7 @@ export function HomeView({ page }: { page: Page }) {
       <h2 id="experience" className="section-label mt-16">
         Experience
       </h2>
-      <ul className="mt-6 grid gap-6 2xl:grid-cols-2 2xl:gap-x-12">
+      <ul className="mt-6 flex flex-col gap-6">
         {site.experience.map((experience) => {
           const href = caseStudyHref(experience.file);
           return (
@@ -142,10 +143,17 @@ export function HomeView({ page }: { page: Page }) {
         ))}
       </ul>
 
-      {/* The way to the full index. */}
+      {/*
+       * The rest of the index. The anchor is the section after the case
+       * studies, so the four cards above are not shown again on arrival.
+       */}
       <p className="mt-6">
-        <Link href="/projects" className="font-medium text-accent hover:text-fg">
-          All projects <span aria-hidden="true">→</span>
+        <Link
+          href={`/projects${REST_OF_PROJECTS}`}
+          className="font-medium text-accent hover:text-fg"
+        >
+          and {site.projects.length - projects.length} more
+          <span aria-hidden="true"> →</span>
         </Link>
       </p>
 

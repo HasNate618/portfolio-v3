@@ -41,6 +41,13 @@ function inSection(section: { groups: ProjectGroup[]; compact: boolean }): Proje
   return section.compact ? projects.sort(byScore) : projects;
 }
 
+/**
+ * Where the projects the home page does not show begin. Derived from the second
+ * section rather than written out, so reordering the page cannot leave the home
+ * page pointing at a heading that moved.
+ */
+export const REST_OF_PROJECTS = `#${slugify(SECTIONS[1].label)}`;
+
 export function ProjectsView({ page }: { page: Page }) {
   return (
     <article>

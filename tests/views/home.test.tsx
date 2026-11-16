@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { renderToStaticMarkup } from "react-dom/server";
 import { HomeView } from "../../src/components/views/HomeView";
 import { getPage } from "../../src/lib/content";
+import { site } from "../../src/data/site";
 
 const page = getPage("/")!;
 const html = renderToStaticMarkup(<HomeView page={page} />);
@@ -112,7 +113,8 @@ test("home lists every role, because it is now the only experience page", () => 
   for (const org of ["WEMars", "TeraGo", "3D Western", "WEFirst Robotics", "Microcomputer Consulting Inc."]) {
     assert.match(experience, new RegExp(org.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `missing ${org}`);
   }
-  assert.match(experience, /2xl:grid-cols-2/, "two columns once there is room");
+  assert.match(experience, /mt-6 flex flex-col gap-6/, "one card per row, all the way down");
+  assert.doesNotMatch(experience, /grid-cols-2/, "no side-by-side roles");
   assert.doesNotMatch(html, /href="\/experience"/, "the index route is gone");
   assert.doesNotMatch(html, /All experience/, "and so is its link");
 });
@@ -158,6 +160,17 @@ test("each home experience entry is a card of bullets plus its case study", () =
   );
   assert.match(section, /text-xl font-medium leading-snug text-fg/, "the role is the card's title");
   assert.match(section, /hover:text-fg after:absolute after:inset-0/);
+});
+
+test("the line after the projects counts the rest and lands past the four shown", () => {
+  const rest = site.projects.length - 4;
+  assert.ok(html.includes(`and ${rest} more`), "the count excludes the cards above");
+  assert.match(
+    html,
+    /href="\/projects#software-ai-and-games"/,
+    "it opens the section after the case studies, not the top of the page",
+  );
+  assert.doesNotMatch(html, /All projects <span/, "the home page no longer offers the bare index");
 });
 
 test("each role card leads with the company, then the role, then where and when", () => {
