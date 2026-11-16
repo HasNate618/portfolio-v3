@@ -31,13 +31,10 @@ export function ProjectMedia({
   media,
   className = "",
   variant = "row",
-  large = false,
 }: {
   media?: Media[];
   className?: string;
-  variant?: "row" | "card";
-  /** Card only: span the card with the main image instead of thumbnailing it. */
-  large?: boolean;
+  variant?: "row" | "card" | "lead";
 }) {
   if (!media?.length) return null;
 
@@ -47,11 +44,12 @@ export function ProjectMedia({
 
   // On a card: the main image, then the squares. A last square with more
   // images behind it becomes "+N".
-  const minis = variant === "card" ? Math.min(count - 1, CARD_MINIS) : 0;
-  const overflow = variant === "card" ? count - 1 - minis : 0;
+  const thumbnailed = variant === "card" || variant === "lead";
+  const minis = thumbnailed ? Math.min(count - 1, CARD_MINIS) : 0;
+  const overflow = thumbnailed ? count - 1 - minis : 0;
   const hasThumb = (index: number) => (variant === "row" ? true : index <= minis);
 
-  const thumbnail = (item: Media, index: number, size: "main" | "mini" | "large", label?: string) => (
+  const thumbnail = (item: Media, index: number, size: "main" | "mini" | "lead" | "side", label?: string) => (
     <a
       id={thumbId(index)}
       href={`#${ids[index]}`}
@@ -63,9 +61,15 @@ export function ProjectMedia({
         alt={label ? "" : item.alt}
         width={item.width}
         height={item.height}
-        sizes={size === "large" ? "(min-width: 40rem) 24rem, 90vw" : size === "main" ? "160px" : "56px"}
+        sizes={size === "lead" ? "(min-width: 60rem) 30rem, 92vw" : size === "side" ? "112px" : size === "main" ? "160px" : "56px"}
         className={`rounded-lg border border-rule transition-colors hover:border-accent ${
-          size === "large" ? "h-auto w-full" : size === "main" ? "h-24 w-40" : "h-[2.75rem] w-14"
+          size === "lead"
+            ? "h-auto w-full max-w-[30rem]"
+            : size === "side"
+              ? "h-[4.5rem] w-28"
+              : size === "main"
+                ? "h-24 w-40"
+                : "h-[2.75rem] w-14"
         } ${item.contain ? "bg-black/20 object-contain" : "object-cover"}`}
       />
       {label ? (
@@ -87,18 +91,28 @@ export function ProjectMedia({
             <li key={item.src} className="shrink-0">{thumbnail(item, index, "main")}</li>
           ))}
         </ul>
-      ) : (
-        <div className={large ? "flex flex-col gap-2" : "flex gap-2"}>
-          {thumbnail(media[0], 0, large ? "large" : "main")}
+      ) : variant === "lead" ? (
+        <div className="flex flex-col gap-2">
+          {thumbnail(media[0], 0, "lead")}
           {minis > 0 ? (
-            <ul
-              className={
-                large
-                  ? "flex flex-wrap gap-2"
-                  : "grid grid-cols-2 content-start gap-x-1 gap-y-2"
-              }
-              aria-label="More images"
-            >
+            <ul className="flex flex-wrap gap-2" aria-label="More images">
+              {media.slice(1, minis + 1).map((item, offset) => {
+                const index = offset + 1;
+                const isMore = overflow > 0 && index === minis;
+                return (
+                  <li key={item.src}>
+                    {thumbnail(item, index, "side", isMore ? `${overflow + 1} more images, starting with ${item.alt}` : undefined)}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : null}
+        </div>
+      ) : (
+        <div className="flex gap-2">
+          {thumbnail(media[0], 0, "main")}
+          {minis > 0 ? (
+            <ul className="grid grid-cols-2 content-start gap-x-1 gap-y-2" aria-label="More images">
               {media.slice(1, minis + 1).map((item, offset) => {
                 const index = offset + 1;
                 const isMore = overflow > 0 && index === minis;

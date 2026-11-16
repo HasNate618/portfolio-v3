@@ -15,6 +15,14 @@ updated: 2026-11-14
 ---
 # Clank
 
+```video
+src: /projects/clank-demo.mp4
+poster: /projects/clank-0.webp
+width: 1280
+height: 960
+caption: One turn, live: the game on the left, the simulated G1 on the right and the run's diary underneath. JobBot asks for his card, the model hears the line and decides, and the body reaches for it.
+```
+
 ## tl;dr
 
 - One local 2B vision-language model, LFM3-Omni-2B, is the brain. It hears the game, sees the frame the game just rendered, remembers the run and decides what to do next.

@@ -2,25 +2,23 @@ import Link from "next/link";
 import { site, featuredProjects, leadProject } from "@/data/site";
 import { renderMarkdown, stripLeadingH1 } from "@/lib/markdown";
 import { getPage, type Page } from "@/lib/content";
-import { CompactProjectCard } from "@/components/CompactProjectCard";
+import { ProjectCard } from "@/components/ProjectCard";
 
 /**
  * The home page carries the whole story: who he is, the newest roles, then the
- * projects worth leading with. The projects reuse the cards from /projects
- * rather than a second, thinner design: the card already stretches its title
- * over the whole box, keeps its images on top of that link so they still open
- * the viewer, and lists every outward link first.
+ * projects worth leading with. The projects use the same card as the case
+ * studies on /projects: full width, the whole `covers` paragraph, one lead image
+ * and the stack, so home shows the work rather than a teaser for it.
  *
  * The ids on these sections are still load-bearing: the page's own "on this
  * page" list and any in-page link resolve against them, so renaming one breaks
  * a link. The header nav no longer points here — it goes to /experience and
  * /projects — so these are anchors, not navigation.
  *
- * Experience is deliberately partial here: the newest roles, then a link to
- * the full record. Five roles with their summaries pushed the projects — the
- * actual proof — far down the page.
+ * Experience is the whole record now, not a trimmed preview: the /experience
+ * index is gone and the header points at this section, so every role is here
+ * with its bullets and a link to its case study where one exists.
  */
-const HOME_ROLES = 2;
 
 export function HomeView({ page }: { page: Page }) {
   const projects = [leadProject()!, ...featuredProjects()];
@@ -43,59 +41,87 @@ export function HomeView({ page }: { page: Page }) {
       {/* The sidebar already shows the name at this size, so keep the heading for structure only. */}
       <h1 className="sr-only">{page.title}</h1>
 
-      <p className="max-w-[68ch] text-fg">
-        {site.identity.year} in {site.identity.program} at {site.identity.education.school}, graduating{" "}
-        {site.identity.graduation}. Looking for a{" "}
-        {site.identity.seeking}.
-      </p>
+      {/*
+       * Two columns once there is room for them. The measure stays at 68ch, so
+       * the extra width buys a second column of content rather than longer
+       * lines: the statement on the left, the facts it leaves out on the right.
+       */}
+      <div className="grid gap-8 2xl:grid-cols-[minmax(0,68ch)_minmax(0,1fr)] 2xl:gap-12">
+        <div>
+          <p className="max-w-[68ch] text-fg">
+            {site.identity.year} in {site.identity.program} at {site.identity.education.school}, graduating{" "}
+            {site.identity.graduation}. Looking for a{" "}
+            {site.identity.seeking}.
+          </p>
 
-      <div
-        className="rich-text mt-6 max-w-[68ch] leading-relaxed"
-        // pi-lens-ignore: dangerously-set-inner-html
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(stripLeadingH1(page.body, page.title)) }}
-      />
+          <div
+            className="rich-text mt-6 max-w-[68ch] leading-relaxed"
+            // pi-lens-ignore: dangerously-set-inner-html
+            dangerouslySetInnerHTML={{ __html: renderMarkdown(stripLeadingH1(page.body, page.title)) }}
+          />
+        </div>
+
+        {/* Facts the statement above does not already make. */}
+        <dl className="grid content-start gap-x-8 gap-y-4 text-sm sm:grid-cols-3 2xl:grid-cols-1 2xl:pt-1">
+          <div>
+            <dt className="font-medium text-fg">Based in</dt>
+            <dd className="text-muted">{site.identity.location}</dd>
+          </div>
+          <div>
+            <dt className="font-medium text-fg">Degree</dt>
+            <dd className="text-muted">{site.identity.education.degree}</dd>
+          </div>
+          <div>
+            <dt className="font-medium text-fg">Résumé</dt>
+            <dd>
+              <a href="/Nathan_Espejo_Resume.pdf" className="text-accent hover:text-fg">
+                PDF
+              </a>
+            </dd>
+          </div>
+        </dl>
+      </div>
 
       <h2 id="experience" className="section-label mt-16">
         Experience
       </h2>
-      <ul className="mt-6 flex flex-col gap-4">
-        {site.experience.slice(0, HOME_ROLES).map((experience) => {
+      <ul className="mt-6 grid gap-6 2xl:grid-cols-2 2xl:gap-x-12">
+        {site.experience.map((experience) => {
           const href = caseStudyHref(experience.file);
           return (
-            <li key={experience.org}>
-              {/* The dates used to sit in a 10rem column of their own, which
-                  made every row shift sideways as the reader scanned it. Above
-                  the role they read as a timestamp and the row stays one column. */}
-              <p className="text-sm text-muted">{experience.dates}</p>
-              <div className="mt-1">
-                <p>
-                  <span className="font-medium text-fg">{experience.homeRole ?? experience.role}</span>
-                  <span className="text-muted"> · {experience.org}</span>
+            <li
+              key={experience.org}
+              className="relative rounded-lg border border-rule bg-surface p-5 transition-colors hover:border-accent/40"
+            >
+              <p className="text-muted">{experience.org}</p>
+              <h3 className="mt-1 text-xl font-medium leading-snug text-fg">{experience.role}</h3>
+              <p className="mt-1 text-sm text-muted">
+                {experience.location} · {experience.dates}
+              </p>
+              {experience.homeLines?.length ? (
+                <ul className="mt-3 flex max-w-[68ch] list-disc flex-col gap-2 pl-5 leading-relaxed marker:text-muted">
+                  {experience.homeLines.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              ) : null}
+              {href ? (
+                <p className="mt-3">
+                  {/* Stretched over the card, so the whole row opens the case
+                      study and this stays the one link inside it. */}
+                  <Link
+                    href={href}
+                    className="text-accent hover:text-fg after:absolute after:inset-0 after:content-['']"
+                  >
+                    Read the case study
+                    <span aria-hidden="true"> →</span>
+                  </Link>
                 </p>
-                {/* Two lines here; the full summary and location live on /experience. */}
-                {experience.homeLine ?? experience.summary ? (
-                  <p className="mt-1 max-w-[68ch] leading-relaxed">{experience.homeLine ?? experience.summary}</p>
-                ) : null}
-                {href ? (
-                  <p className="mt-1">
-                    <Link href={href} className="text-accent hover:text-fg">
-                      Case study
-                      <span aria-hidden="true"> →</span>
-                    </Link>
-                  </p>
-                ) : null}
-              </div>
+              ) : null}
             </li>
           );
         })}
       </ul>
-
-      {/* The newest roles only; the whole record lives on its own page. */}
-      <p className="mt-6">
-        <Link href="/experience" className="font-medium text-accent hover:text-fg">
-          All experience <span aria-hidden="true">→</span>
-        </Link>
-      </p>
 
       <h2 id="projects" className="section-label mt-16">
         Projects
@@ -106,12 +132,11 @@ export function HomeView({ page }: { page: Page }) {
        * link over the whole box, and its thumbnails sit above that link so they
        * open the image viewer instead of following it.
        */}
-      <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+      <ul className="mt-6 flex flex-col gap-6">
         {projects.map((project) => (
-          <CompactProjectCard
+          <ProjectCard
             key={project.id}
             project={project}
-            variant="home"
             id={project.rank === "lead" ? project.id : undefined}
           />
         ))}

@@ -39,10 +39,16 @@ test("a single image has no previous or next links", () => {
   assert.doesNotMatch(html, /Previous image/);
 });
 
-test("a large card gives the main image the card's width and moves the squares under it", () => {
-  const html = renderToStaticMarkup(<ProjectMedia media={auralis} variant="card" large />);
-  assert.match(html, /h-auto w-full/, "the main image spans the card");
+test("the lead variant puts the other images in a smaller column beside it", () => {
+  const html = renderToStaticMarkup(<ProjectMedia media={auralis} variant="lead" />);
+  assert.match(html, /h-auto w-full max-w-\[30rem\]/, "the lead image is capped well inside the card");
   assert.doesNotMatch(html, /h-24 w-40/, "not the 160x96 card thumbnail");
-  assert.match(html, /flex flex-wrap gap-2/, "the squares sit in a row under it");
-  assert.equal(html.match(/id="media-[^"]*-thumb"/g)?.length, 5, "still the main image plus four squares");
+  assert.match(html, /h-\[4\.5rem\] w-28/, "the rest are smaller and sit beside it");
+  assert.match(html, /aria-label="More images"/, "they are labelled as a group");
+  assert.equal(html.match(/id="media-[^"]*-thumb"/g)?.length, 5, "the lead plus up to four beside it");
+  assert.equal(
+    html.match(/<div id="media-[^"]+" class="lightbox"/g)?.length,
+    auralis.length,
+    "every image still opens",
+  );
 });

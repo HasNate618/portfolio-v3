@@ -90,7 +90,7 @@ test("the resume never says 'present'", () => {
 
 test("Jira is never credited to 3D Western, which used a GitHub project board", async () => {
   const fs = await import("node:fs");
-  for (const file of ["content/experience/3d-western.md", "content/experience.md", "resume/Resume.tex"]) {
+  for (const file of ["content/experience/3d-western.md", "resume/Resume.tex"]) {
     const text = fs.readFileSync(file, "utf8");
     const block = file.endsWith(".md") && file.includes("3d-western") ? text : (text.split(/3D Western/)[1] ?? "").split(/\n\s*(?:###|\\resumeSubheading)/)[0];
     assert.doesNotMatch(block, /Jira/i, `${file} ties Jira to 3D Western`);

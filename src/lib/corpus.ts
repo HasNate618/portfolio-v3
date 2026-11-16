@@ -42,6 +42,12 @@ function projectFacts(p: Project): string[] {
 
 function experienceFacts(e: Experience): string[] {
   const lines = [`Dates: ${e.dates}`, `Role: ${e.role}`, `Location: ${e.location}`];
+  // A promotion is two windows under one title. Stating each term keeps an
+  // answer from dating the later title to the earlier start, which is what the
+  // flattened `role` string used to do.
+  if (e.terms.length > 1) {
+    for (const term of e.terms) lines.push(`Term: ${term.start} to ${term.end ?? "present"}`);
+  }
   for (const stat of e.stats ?? []) lines.push(`${stat.label}: ${stat.value}`);
   // Same reason as a project's card text: a role that is only a date, a title
   // and a stat is hard to retrieve and easy to paraphrase badly.

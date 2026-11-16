@@ -81,6 +81,10 @@ export function getMd(): AnyMd {
    *   `figure`   - an image under public/, from required `src:`, `alt:` and
    *                `caption:` lines, plus optional `width:`/`height:` so the
    *                page does not shift while the image loads
+   *   `video`    - a clip under public/, from required `src:`, `poster:` and
+   *                `caption:` lines, plus optional `width:`/`height:` for the
+   *                same reason, `captions:` for a WebVTT track and
+   *                `transcript:` for the spoken words as text
    *   anything else - an ordinary code block
    * Structured content stays in content files, and the pipeline owns the markup.
    */
@@ -158,6 +162,56 @@ export function getMd(): AnyMd {
         `<figcaption class="mt-3 max-w-[60ch] text-center text-sm text-muted">${esc(fields.caption)}${fullSize}</figcaption>`,
         "</figure>",
         "</div>\n",
+      ].join("");
+    }
+
+    if (kind === "video") {
+      const fields: Record<string, string> = {};
+      for (const line of lines) {
+        const match = /^([a-z]+):\s*(.*)$/.exec(line);
+        if (match) fields[match[1]] = match[2].trim();
+      }
+      for (const key of ["src", "poster", "caption"]) {
+        if (!fields[key]) throw new Error(`video fence is missing its \`${key}: \` line`);
+      }
+      // Same site-path rule as `figure`: a leading slash and not a second one,
+      // so a content file cannot hotlink or smuggle in a scheme.
+      for (const key of ["src", "poster", "captions"]) {
+        const value = fields[key];
+        if (value && !/^\/[^/]/.test(value)) {
+          throw new Error(`video fence \`${key}:\` must be a site path under public/, like /projects/clip.mp4`);
+        }
+      }
+
+      const sized = /^\d+$/.test(fields.width ?? "") && /^\d+$/.test(fields.height ?? "");
+      const size = sized ? ` width="${fields.width}" height="${fields.height}"` : "";
+      // The type has to be declared, or a browser will not guess from `<source>`
+      // when the server sends these as octet-stream.
+      const type = fields.src.endsWith(".webm") ? "video/webm" : "video/mp4";
+
+      /*
+       * No autoplay and no loop: the site has a standing rule that nothing
+       * animates by itself, and this clip carries the audio the demo is about.
+       * `preload="none"` plus the poster keeps a megabyte off the page until
+       * the reader asks for it, and `<p>` inside `<video>` is the fallback for
+       * a browser that cannot play it.
+       */
+      const track = fields.captions
+        ? `<track kind="captions" src="${esc(fields.captions)}" srclang="en" label="English" default />`
+        : "";
+      const transcript = fields.transcript
+        ? `<span class="mt-1 block">${esc(fields.transcript)}</span>`
+        : "";
+
+      return [
+        '<figure class="my-8">',
+        `<video controls preload="none" playsinline poster="${esc(fields.poster)}"${size} class="h-auto w-full rounded-lg border border-rule bg-black/20">`,
+        `<source src="${esc(fields.src)}" type="${type}" />`,
+        track,
+        `<p><a href="${esc(fields.src)}" class="font-medium text-accent hover:text-fg">Download the clip</a></p>`,
+        "</video>",
+        `<figcaption class="mt-2 text-sm text-muted">${esc(fields.caption)}${transcript}</figcaption>`,
+        "</figure>\n",
       ].join("");
     }
 

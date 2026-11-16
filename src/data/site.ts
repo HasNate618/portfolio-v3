@@ -123,16 +123,14 @@ export type Experience = {
   id: string;
   org: string;
   role: string;
-  /**
-   * The role with the dates taken out, for the home page, where the dates are
-   * printed on their own line above it. Only needed where `role` spells out a
-   * term range or two roles — otherwise `role` is already short enough.
-   */
-  homeRole?: string;
   /** One or two sentences, carried into the chat corpus. Depth lives in the corpus doc. */
   summary?: string;
-  /** The home page's two-line version of `summary`. Layout only: not carried into the corpus. */
-  homeLine?: string;
+  /**
+   * The home page's bullets: what the role actually involved. Layout plus depth
+   * for the one page that lists roles, so the case study keeps the long form.
+   * Not carried into the corpus, which reads `summary`.
+   */
+  homeLines?: string[];
   location: string;
   terms: { start: string; end: string | null }[];
   dates: string;
@@ -183,21 +181,40 @@ export const site: SiteContent = {
     ],
   },
   experience: [
+    { id: "wemars", org: "WEMars", role: "Software Team Member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2026 to Present", onResume: false, file: "/knowledgebase/experience/wemars.md",
+      summary: "Western's Mars rover team. I rejoined in Sep 2026 to work on AI and autonomy, exploring ROS, robotics software, simulation, autonomous driving and robot arms. In 2024-25 I built wireless ESP32-CAM streaming.",
+      homeLines: [
+        "Rejoined Western's Mars rover team to work on autonomy, where I'll be working with ROS 2, Nav2, Gazebo and a Jetson Orin.",
+        "In 2024-25, built wireless camera and video streaming on the ESP32-CAM for the rover.",
+        "Explored networking for reliable links to a central hub, and computer vision for spotting the markers used in navigation tasks.",
+      ] },
     { id: "terago", org: "TeraGo", role: "Software Engineering Intern", location: "Markham, ON", terms: [{ start: "2026-05", end: "2026-08" }], dates: "May 2026 to Aug 2026", onResume: true, file: "/knowledgebase/experience/terago.md",
       summary: "Built a prototype pipeline that uses a locally hosted LLM (Ollama) to turn unstructured emails into structured tickets, working end to end. Also built a Python RF channel-planning tool that shortlists clear frequencies for fixed-wireless links, and deployed an internal RAG assistant that answers engineers' technical questions from company documentation.",
-      homeLine: "Built a local-LLM prototype that turns unstructured emails into structured tickets, plus a Python RF channel-planning tool and an internal RAG assistant for engineers.",
+      homeLines: [
+        "Built a local-LLM pipeline that turns unstructured emails into structured tickets, plus a Python RF channel-planning tool for fixed-wireless links.",
+        "Deployed an internal RAG assistant for engineers and proposed a self-hosted LLM platform.",
+      ],
       stack: ["Python", "Ollama", "RAG"] },
-    { id: "3d-western", org: "3D Western", role: "Software Developer (Sep 2025 to Apr 2026), then VP of Data/ML (May 2026 to Aug 2026)", homeRole: "Software Developer, then VP of Data/ML", location: "London, ON", terms: [{ start: "2025-09", end: "2026-04" }, { start: "2026-05", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
+    { id: "3d-western", org: "3D Western", role: "VP of Data/ML (promoted from Software Developer)", location: "London, ON", terms: [{ start: "2025-09", end: "2026-04" }, { start: "2026-05", end: "2026-08" }], dates: "Sep 2025 to Aug 2026", onResume: true, file: "/knowledgebase/experience/3d-western.md",
       summary: "I was on the data team from Sep 2025, writing the render scripts and working on the 3D model scraping and the STL rendering pipeline, and as VP of Data/ML I co-led two data developers on a print-safety dataset and benchmark, tracking the work on a GitHub project board. We rendered the scraped models in Blender, checked every label with a VLM, and benchmarked small vision models as a safe-or-flag gate, where the best one, Qwen3-VL-2B, agreed with those labels on 84.2% of models with the filename visible. Ran alongside my TeraGo internship.",
-      homeLine: "On the data team since Sep 2025, writing render scripts and working on 3D model scraping. As VP of Data/ML I co-led a print-safety dataset and a benchmark of small vision models.",
+      homeLines: [
+        "Co-led two data developers on a print-safety dataset of 2,559 VLM-checked 3D models.",
+        "Benchmarked small vision models as a safe-or-flag gate for print uploads.",
+      ],
       stats: [{ key: "dataset", label: "scraped 3D models", value: "4,620" }],
       stack: ["Python", "Blender", "Qwen3-VL-2B", "Shieldstral", "llama.cpp", "Docker"] },
-    { id: "wemars", org: "WEMars", role: "Software team member", location: "London, ON", terms: [{ start: "2024-09", end: "2025-04" }, { start: "2026-09", end: null }], dates: "Sep 2024 to Apr 2025, rejoined Sep 2026", onResume: false, file: "/knowledgebase/experience/wemars.md",
-      summary: "Western's Mars rover team. I rejoined in Sep 2026 to work on AI and autonomy, exploring ROS, robotics software, simulation, autonomous driving and robot arms. In 2024-25 I built wireless ESP32-CAM streaming." },
     { id: "wefirst", org: "WEFirst Robotics", role: "Software Developer", location: "London, ON", terms: [{ start: "2026-01", end: "2026-04" }], dates: "Jan 2026 to Apr 2026", onResume: false, file: "/knowledgebase/experience/wefirst.md",
-      summary: "Programmed the swerve drive to turn Xbox controller input into omnidirectional motion, tuned closed-loop control, and assembled the CAN bus drivetrain." },
+      summary: "Programmed the swerve drive to turn Xbox controller input into omnidirectional motion, tuned closed-loop control, and assembled the CAN bus drivetrain.",
+      homeLines: [
+        "Programmed the swerve drive to turn Xbox controller input into omnidirectional motion.",
+        "Tuned closed-loop control for wheel heading and drive velocity in autonomous and teleop modes.",
+        "Assembled and wired the drivetrain, including CAN bus, motor controllers and encoder calibration.",
+      ] },
     { id: "mcc", org: "Microcomputer Consulting Inc.", role: "IT Intern (part-time)", location: "Mississauga, ON", terms: [{ start: "2025-05", end: "2025-08" }], dates: "May 2025 to Aug 2025", onResume: false, file: "/knowledgebase/experience/mcc.md",
-      summary: "Set up and deployed Windows workstations for client organizations." },
+      summary: "Set up and deployed Windows workstations for client organizations.",
+      homeLines: [
+        "Set up and deployed Windows workstations for client organizations, covering installation, accounts and software configuration.",
+      ] },
   ],
   projects: [
     // ── featured ──────────────────────────────────────────────────────────

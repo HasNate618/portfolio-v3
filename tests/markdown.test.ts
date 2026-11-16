@@ -147,6 +147,44 @@ test("a figure fence demands src, alt and caption, and a site-local path", () =>
   assert.throws(() => renderMarkdown(fence("src: //evil.test/x.png\nalt: A.\ncaption: C.")), /site/);
 });
 
+test("a video fence renders a controlled clip with a poster, never autoplaying", () => {
+  const html = renderMarkdown(
+    [
+      "```video",
+      "src: /projects/clip.mp4",
+      "poster: /projects/clip.webp",
+      "width: 1280",
+      "height: 960",
+      "caption: One turn, live.",
+      "transcript: He asks for the card.",
+      "```",
+    ].join("\n"),
+  );
+  assert.match(html, /<figure class="my-8">/);
+  assert.match(html, /<video controls preload="none" playsinline poster="\/projects\/clip\.webp" width="1280" height="960"/);
+  assert.match(html, /<source src="\/projects\/clip\.mp4" type="video\/mp4" \/>/);
+  assert.match(html, /<figcaption class="mt-2 text-sm text-muted">One turn, live\.<span class="mt-1 block">He asks for the card\.<\/span><\/figcaption>/);
+  // Nothing animates by itself: no autoplay, and no loop.
+  assert.doesNotMatch(html, /autoplay|loop=/);
+  assert.match(html, /<a href="\/projects\/clip\.mp4"[^>]*>Download the clip<\/a>/, "a browser that cannot play still gets the file");
+});
+
+test("a video fence demands src, poster and caption, and site-local paths", () => {
+  const fence = (body: string) => `\`\`\`video\n${body}\n\`\`\``;
+  assert.throws(() => renderMarkdown(fence("src: /a.mp4\nposter: /p.webp")), /caption/);
+  assert.throws(() => renderMarkdown(fence("src: /a.mp4\ncaption: C.")), /poster/);
+  assert.throws(() => renderMarkdown(fence("poster: /p.webp\ncaption: C.")), /src/);
+  assert.throws(() => renderMarkdown(fence("src: https://evil.test/a.mp4\nposter: /p.webp\ncaption: C.")), /site/);
+  assert.throws(() => renderMarkdown(fence("src: //evil.test/a.mp4\nposter: /p.webp\ncaption: C.")), /site/);
+});
+
+test("a video fence only emits a captions track when it is given one", () => {
+  const base = "src: /projects/clip.mp4\nposter: /projects/clip.webp\ncaption: C.";
+  assert.doesNotMatch(renderMarkdown(`\`\`\`video\n${base}\n\`\`\``), /<track/);
+  const withCaptions = renderMarkdown(`\`\`\`video\n${base}\ncaptions: /projects/clip.vtt\n\`\`\``);
+  assert.match(withCaptions, /<track kind="captions" src="\/projects\/clip\.vtt" srclang="en" label="English" default \/>/);
+});
+
 test("a figure fence reuses the project lightbox, ids included", () => {
   const html = renderMarkdown("```figure\nsrc: /projects/x.webp\nalt: A.\ncaption: C.\n```");
 

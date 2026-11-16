@@ -67,7 +67,6 @@ export function CompactProjectCard({
       <ProjectMedia
         media={project.media}
         variant="card"
-        large={variant === "home"}
         className={variant === "grid" ? "mb-3 max-sm:hidden" : "mb-3"}
       />
       <h3 className="font-medium leading-snug text-fg">{title}</h3>

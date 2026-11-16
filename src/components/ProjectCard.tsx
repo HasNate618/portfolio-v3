@@ -45,18 +45,25 @@ export function ProjectCard({ project, id }: { project: Project; id?: string }) 
           : "border-rule bg-surface hover:border-accent/40"
       }`}
     >
-      <h3 className="text-lg font-medium leading-snug text-fg">{title}</h3>
-      <div className="mt-1">
-        <ProjectMetaRow projectId={project.id} />
-      </div>
-      <AwardBadge projectName={project.name} />
-      <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
-      <ProjectMedia media={project.media} className="mt-3" />
-      <div className="mt-3">
-        <StackList projectId={project.id} />
-      </div>
-      <div className="mt-3">
-        <LinkRow projectId={project.id} />
+      <div className="2xl:grid 2xl:grid-cols-[minmax(0,1fr)_27.5rem] 2xl:items-start 2xl:gap-8">
+        <div className="min-w-0">
+          <h3 className="text-xl font-medium leading-snug text-fg">{title}</h3>
+          <div className="mt-1">
+            <ProjectMetaRow projectId={project.id} />
+          </div>
+          <AwardBadge projectName={project.name} />
+          <p className="mt-2 max-w-[68ch] leading-relaxed">{project.covers}</p>
+          <div className="mt-3">
+            <StackList projectId={project.id} />
+          </div>
+          <div className="mt-3">
+            <LinkRow projectId={project.id} />
+          </div>
+        </div>
+        {/* Wide enough for two columns, the text reads on the left and the
+            project's images take the right, instead of trailing under it with
+            the rest of the card left empty. */}
+        <ProjectMedia media={project.media} variant="lead" className="mt-3 2xl:mt-0 max-lg:hidden" />
       </div>
     </li>
   );

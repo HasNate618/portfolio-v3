@@ -31,7 +31,8 @@ test("home names the work outside AI in one line", () => {
 
 test("the home bio is two paragraphs of about 70 words, naming Linux (NixOS) and the graduation date", () => {
   const start = html.indexOf('<h1');
-  const bio = html.slice(start, html.indexOf('id="experience"'));
+  // Stop at the at-a-glance list: those facts sit beside the bio, not in it.
+  const bio = html.slice(start, html.indexOf("<dl"));
   const paragraphs = bio.match(/<p[\s>]/g)?.length ?? 0;
   assert.equal(paragraphs, 2, "bio should be two paragraphs");
   const words = bio.replace(/<[^>]+>/g, " ").split(/\s+/).filter((w) => /\w/.test(w)).length;
@@ -54,17 +55,16 @@ test("the About page carries the short intro copy", () => {
   assert.doesNotMatch(html, /care about the boring parts too/);
 });
 
-test("the featured projects reuse the /projects cards, whole-card clickable", () => {
+test("the featured projects are the full case-study cards, whole-card clickable", () => {
   const projects = html.slice(html.indexOf('id="projects"'), html.indexOf('id="awards"'));
-  assert.match(projects, /id="campus"/, "Campus leads the grid and keeps its #campus anchor");
+  assert.match(projects, /id="campus"/, "Campus leads the list and keeps its #campus anchor");
   assert.match(projects, /href="\/projects\/campus"/, "the title links to the case study");
   assert.match(projects, /<img/, "each card keeps its images");
-  assert.doesNotMatch(projects, /rounded-full bg-accent\/10 px-3 py-1/, "no stack chips on home");
-  assert.doesNotMatch(projects, /SQLite/, "the long covers text stays on /projects");
-  assert.doesNotMatch(projects, /Next image \(/, "no buried next-image links");
-  assert.equal(projects.match(/relative flex flex-col rounded-lg border p-5/g)?.length, 4, "the lead plus three featured projects");
+  assert.match(projects, /rounded-full bg-accent\/10 px-3 py-1/, "the case-study cards carry the stack");
+  assert.match(projects, /SQLite/, "and the full covers paragraph");
+  assert.equal(projects.match(/relative rounded-lg border p-6/g)?.length, 4, "the lead plus three featured projects");
   assert.equal(projects.match(/after:absolute after:inset-0/g)?.length, 4, "the whole card follows its title link");
-  assert.equal(projects.match(/h-auto w-full/g)?.length, 4, "home gives each picture the width of its card");
+  assert.equal(projects.match(/h-auto w-full/g)?.length, 4, "each card carries one lead image");
 });
 
 test("a card's images sit above the stretched title link, so they open the viewer", () => {
@@ -107,14 +107,14 @@ test("home on-this-page entries match the heading ids it renders", () => {
   }
 });
 
-test("home trims experience to the newest roles and links to the rest", () => {
-  // The home page carries two roles now, then a link; the full record is its
-  // own page, covered by tests/views/experience.test.tsx.
-  assert.match(html, /TeraGo/);
-  assert.match(html, /3D Western/);
-  assert.doesNotMatch(html, /WEMars/, "older roles belong to /experience");
-  assert.match(html, /href="\/experience"/);
-  assert.match(html, /All experience/);
+test("home lists every role, because it is now the only experience page", () => {
+  const experience = html.slice(html.indexOf('id="experience"'), html.indexOf('id="projects"'));
+  for (const org of ["WEMars", "TeraGo", "3D Western", "WEFirst Robotics", "Microcomputer Consulting Inc."]) {
+    assert.match(experience, new RegExp(org.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `missing ${org}`);
+  }
+  assert.match(experience, /2xl:grid-cols-2/, "two columns once there is room");
+  assert.doesNotMatch(html, /href="\/experience"/, "the index route is gone");
+  assert.doesNotMatch(html, /All experience/, "and so is its link");
 });
 
 test("Home features Clank right after the lead, and CareBridge is off Home", () => {
@@ -143,22 +143,30 @@ test("the featured cards offer their case studies", () => {
 });
 
 
-test("each home experience entry is a short line plus its case study", () => {
+test("each home experience entry is a card of bullets plus its case study", () => {
   const section = html.slice(html.indexOf('id="experience"'), html.indexOf('id="projects"'));
-  assert.doesNotMatch(section, /Qwen3-VL-2B/, "the long summary lives on /experience");
-  assert.match(section, /local-LLM prototype/);
-  assert.match(section, /print-safety dataset/);
-  assert.equal(section.match(/>Case study</g)?.length ?? section.match(/Case study/g)?.length, 2);
+  assert.doesNotMatch(section, /Qwen3-VL-2B/, "the benchmark detail stays on the case study");
+  assert.match(section, /ROS 2, Nav2, Gazebo and a Jetson Orin/, "the bullets carry the work");
+  assert.match(section, /2,559 VLM-checked 3D models/);
+  assert.equal(section.match(/Read the case study/g)?.length, 2, "TeraGo and 3D Western have case studies");
+  // Roles are cards, like the projects: a surface, a border, and the
+  // case-study link stretched over the whole box so the row is clickable.
+  assert.equal(
+    section.match(/relative rounded-lg border border-rule bg-surface p-5/g)?.length,
+    5,
+    "each of the five roles is a card",
+  );
+  assert.match(section, /text-xl font-medium leading-snug text-fg/, "the role is the card's title");
+  assert.match(section, /hover:text-fg after:absolute after:inset-0/);
 });
 
-test("home experience puts the dates above a short role line", () => {
+test("each role card leads with the company, then the role, then where and when", () => {
   const section = html.slice(html.indexOf('id="experience"'), html.indexOf('id="projects"'));
-  assert.doesNotMatch(section, /grid-cols-\[10rem_1fr\]/, "the date column pushed every row sideways");
-  // The dates print above, so the role must not spell them out a second time.
-  assert.doesNotMatch(section, /Software Developer \(Sep 2025/, "the role still carry its own dates");
-  assert.match(section, /Software Developer, then VP of Data\/ML/);
-  const terago = section.slice(section.indexOf(">May 2026 to Aug 2026<"));
-  assert.ok(terago.indexOf("Software Engineering Intern") > 0, "the role follows its dates");
+  const wemars = section.slice(section.indexOf("WEMars"), section.indexOf("TeraGo"));
+  assert.ok(wemars.indexOf("Software Team Member") > 0, "the role sits under the company");
+  assert.match(wemars, /London, ON · Sep 2026 to Present/, "and above where and when");
+  assert.match(section, /Markham, ON · May 2026 to Aug 2026/);
+  assert.match(section, /VP of Data\/ML \(promoted from Software Developer\)/);
 });
 
 test("the awards line makes no team claim, since one award was solo", () => {
