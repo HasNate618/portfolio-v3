@@ -147,18 +147,30 @@ export function ProjectMedia({
           >
             <a href={`#${back}`} className="lightbox-backdrop" aria-label="Close the expanded image" />
             <figure className="lightbox-frame">
-              <Image
-                src={item.src}
-                alt={item.alt}
-                width={item.width}
-                height={item.height}
-                /* Every image gets the same viewing box, so the file's own
-                   resolution cannot make one look large and the next tiny.
-                   object-contain keeps the aspect inside it. */
-                sizes="(min-width: 80rem) 72rem, 92vw"
-                className="h-[min(60vh,42rem)] w-[min(92vw,72rem)] rounded-lg border border-rule bg-black/20 object-contain"
-              />
-              <figcaption className="mt-3 max-w-[60ch] text-center text-sm text-white/80">
+              <div className="lightbox-stage">
+                {count > 1 ? (
+                  <a href={`#${prev}`} className="lightbox-nav lightbox-prev" aria-label="Previous image">
+                    <span aria-hidden="true">‹</span>
+                  </a>
+                ) : null}
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  width={item.width}
+                  height={item.height}
+                  /* A shared width is what makes the gallery consistent:
+                     height follows each file's aspect, so nothing is shrunk
+                     into a small letterboxed island. */
+                  sizes="(min-width: 80rem) 68rem, 88vw"
+                  className="h-auto min-w-0 flex-1 object-contain"
+                />
+                {count > 1 ? (
+                  <a href={`#${next}`} className="lightbox-nav lightbox-next" aria-label="Next image">
+                    <span aria-hidden="true">›</span>
+                  </a>
+                ) : null}
+              </div>
+              <figcaption className="mt-3 max-w-[80ch] rounded-lg bg-zinc-950 px-4 py-2.5 text-center text-sm leading-relaxed text-white">
                 {count > 1 ? (
                   <span className="mr-2 font-bold text-white">
                     {index + 1} / {count}
@@ -175,16 +187,6 @@ export function ProjectMedia({
                 </a>
               </figcaption>
             </figure>
-            {count > 1 ? (
-              <>
-                <a href={`#${prev}`} className="lightbox-nav lightbox-prev" aria-label="Previous image">
-                  <span aria-hidden="true">‹</span>
-                </a>
-                <a href={`#${next}`} className="lightbox-nav lightbox-next" aria-label="Next image">
-                  <span aria-hidden="true">›</span>
-                </a>
-              </>
-            ) : null}
             <a href={`#${back}`} className="lightbox-close" aria-label="Close the expanded image">
               <span aria-hidden="true">×</span>
             </a>

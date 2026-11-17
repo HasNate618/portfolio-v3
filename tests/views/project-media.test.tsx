@@ -23,13 +23,20 @@ test("each expanded image has previous, next, close and a counter that wrap arou
   assert.match(html, /aria-label="Next image"/);
   assert.match(html, /class="lightbox-close"/);
   assert.match(html, new RegExp(`1 / ${auralis.length}`));
+  // The steppers live in the image row, not at the edges of the screen.
+  const stage = html.indexOf('class="lightbox-stage"');
+  const caption = html.indexOf("<figcaption", stage);
+  assert.ok(stage > 0 && html.indexOf('class="lightbox-nav lightbox-prev"') > stage);
+  assert.ok(html.indexOf('class="lightbox-nav lightbox-next"') < caption);
 });
 
-test("every expanded image uses one viewing box, whatever its resolution", () => {
+test("every expanded image shares one width, whatever its resolution", () => {
   const html = renderToStaticMarkup(<ProjectMedia media={auralis} variant="card" />);
-  const boxes = html.match(/h-\[min\(60vh,42rem\)\] w-\[min\(92vw,72rem\)\]/g) ?? [];
-  assert.equal(boxes.length, auralis.length, "all images match, so no file renders large or tiny");
+  const boxes = html.match(/h-auto min-w-0 flex-1 object-contain/g) ?? [];
+  assert.equal(boxes.length, auralis.length, "all images scale to the same width, so none is tiny");
+  assert.doesNotMatch(html, /border border-rule bg-black\/20 object-contain/, "the viewer has no frame");
   assert.doesNotMatch(html, /max-h-\[75vh\]/, "the old intrinsic-size viewer is gone");
+  assert.match(html, /bg-zinc-950 px-4 py-2\.5/, "captions sit on an opaque panel");
 });
 
 test("more images than squares collapse into a +N square that opens the first hidden one", () => {

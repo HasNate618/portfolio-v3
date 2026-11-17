@@ -158,8 +158,10 @@ export function getMd(): AnyMd {
         `<div id="${overlayId}" class="lightbox" tabindex="-1">`,
         `<a href="#${thumbId}" class="lightbox-backdrop" aria-label="Close the expanded image"></a>`,
         '<figure class="lightbox-frame">',
-        `<img src="${esc(fields.src)}" alt="${esc(fields.alt)}"${size} decoding="async" class="h-[min(60vh,42rem)] w-[min(92vw,72rem)] rounded-lg border border-rule bg-black/20 object-contain" />`,
-        `<figcaption class="mt-3 max-w-[60ch] text-center text-sm text-muted">${esc(fields.caption)}${fullSize}</figcaption>`,
+        '<div class="lightbox-stage">',
+        `<img src="${esc(fields.src)}" alt="${esc(fields.alt)}"${size} decoding="async" class="h-auto min-w-0 flex-1 object-contain" />`,
+        "</div>",
+        `<figcaption class="mt-3 max-w-[80ch] rounded-lg bg-zinc-950 px-4 py-2.5 text-center text-sm leading-relaxed text-white">${esc(fields.caption)}${fullSize}</figcaption>`,
         "</figure>",
         "</div>\n",
       ].join("");

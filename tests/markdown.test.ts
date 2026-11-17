@@ -202,9 +202,11 @@ test("a figure fence reuses the project lightbox, ids included", () => {
   assert.match(html, /<figure class="lightbox-frame">/);
   assert.match(
     html,
-    /class="h-\[min\(60vh,42rem\)\] w-\[min\(92vw,72rem\)\] rounded-lg border border-rule bg-black\/20 object-contain"/,
-    "the expanded figure uses the same viewing box as a project image",
+    /class="h-auto min-w-0 flex-1 object-contain"/,
+    "the expanded figure uses the same width as a project image",
   );
+  assert.match(html, /class="lightbox-stage"/, "the image sits in the arrow row");
+  assert.match(html, /max-w-\[80ch\] rounded-lg bg-zinc-950 px-4 py-2\.5/, "captions get an opaque panel and more room");
   assert.match(html, /<a href="\/projects\/x\.webp" target="_blank" rel="noopener noreferrer"/);
 
   // The pair is a contract with LightboxKeys, which derives the thumbnail as

@@ -652,15 +652,28 @@ li {
 }
 
 /*
+ * The image and its two arrows share one row, so the arrows sit immediately
+ * beside the picture instead of at the edges of the screen. The stage carries
+ * the width; the arrows take their fixed share and the image gets the rest.
+ */
+.lightbox-stage {
+  display: flex;
+  width: min(88vw, 72rem);
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/*
  * Previous, next and close. Real links to the neighbouring overlays, so they
  * work without script; LightboxKeys maps the arrow keys and swipes onto them.
- * Fixed to the screen edges and large enough to hit with a thumb.
+ * The two steppers are in the flow now, while close stays pinned to the corner.
  */
 .lightbox-nav,
 .lightbox-close {
-  position: absolute;
   z-index: 1;
   display: flex;
+  flex: none;
   align-items: center;
   justify-content: center;
   width: 2.75rem;
@@ -673,6 +686,12 @@ li {
   text-decoration: none;
 }
 
+.lightbox-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
 .lightbox-nav:hover,
 .lightbox-close:hover,
 .lightbox-nav:focus-visible,
@@ -680,23 +699,6 @@ li {
   background-color: rgb(0 0 0 / 0.8);
   outline: 2px solid #fff;
   outline-offset: 2px;
-}
-
-.lightbox-prev {
-  left: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.lightbox-next {
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.lightbox-close {
-  top: 0.75rem;
-  right: 0.75rem;
 }
 
 /*
