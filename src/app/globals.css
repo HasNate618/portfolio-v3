@@ -24,7 +24,7 @@
    */
   --breakpoint-lg: 60rem;
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   --color-bg: #05070b;
   --color-fg: #e2e7ec;
@@ -168,8 +168,8 @@ h3 {
 
 /*
  * Headings carry the scheme's heading colour rather than body ink. In the light
- * scheme near-black headings read as harsh against the warm cream, so they are
- * a deep green there; in the dark scheme the heading colour is body ink and
+ * scheme near-black headings read as harsh against the cream, so they are a
+ * deep blue there; in the dark scheme the heading colour is body ink and
  * nothing changes. Unlayered on purpose: this has to reach the `text-fg`
  * utilities on component headings as well as the markup below.
  */

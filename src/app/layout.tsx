@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { SeoJsonLd } from "@/components/SeoJsonLd";
@@ -7,9 +7,9 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { siteMetadataBase } from "@/lib/site-url";
 import "./globals.css";
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-body",
   display: "swap",
 });
 
@@ -101,7 +101,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={manrope.variable}>
       <body className="font-sans text-fg antialiased">
         <Script id="theme-boot" strategy="beforeInteractive">
           {THEME_BOOT}
