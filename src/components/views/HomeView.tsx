@@ -104,7 +104,9 @@ export function HomeView({ page }: { page: Page }) {
                 {experience.location} · {experience.dates}
               </p>
               {experience.homeLines?.length ? (
-                <ul className="mt-3 flex max-w-[68ch] list-disc flex-col gap-2 pl-5 leading-relaxed marker:text-muted">
+                /* No 68ch cap: these cards span the content column, and a
+                   narrow column of bullets left a third of each card empty. */
+                <ul className="mt-3 flex list-disc flex-col gap-2 pl-5 leading-relaxed marker:text-muted">
                   {experience.homeLines.map((line) => (
                     <li key={line}>{line}</li>
                   ))}
@@ -148,16 +150,17 @@ export function HomeView({ page }: { page: Page }) {
       </ul>
 
       {/*
-       * The rest of the index. The anchor is the section after the case
-       * studies, so the four cards above are not shown again on arrival.
+       * The rest of the index. Styled as a button rather than another text
+       * link: it is the only way onward from the projects section, and a quiet
+       * underline was easy to miss at the end of four large cards.
        */}
-      <p className="mt-6">
+      <p className="mt-8">
         <Link
           href={`/projects${REST_OF_PROJECTS}`}
-          className="font-medium text-accent hover:text-fg"
+          className="inline-flex items-center gap-2 rounded-lg border border-accent/50 bg-accent/[0.06] px-5 py-3 font-medium text-accent transition-colors hover:border-accent hover:bg-accent/[0.12]"
         >
           and {site.projects.length - projects.length} more
-          <span aria-hidden="true"> →</span>
+          <span aria-hidden="true">→</span>
         </Link>
       </p>
 
