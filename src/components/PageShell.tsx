@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { LightboxKeys } from "@/components/LightboxKeys";
+import { NavOrigin } from "@/components/NavOrigin";
 import { MobileTopBar } from "@/components/MobileTopBar";
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -14,8 +15,9 @@ import { SiteHeader } from "@/components/SiteHeader";
 export function PageShell({ current, children }: { current: string; children: ReactNode }) {
   return (
     <div className="mx-auto min-h-screen max-w-[96rem] lg:px-8 xl:px-12">
-      {/* Renders nothing: it only listens, so the shell stays server-rendered. */}
+      {/* Renders nothing: they only listen, so the shell stays server-rendered. */}
       <LightboxKeys />
+      <NavOrigin />
       <MobileTopBar current={current} />
       {/*
        * Below `lg` the vertical rhythm is tighter than the desktop py-24, but the

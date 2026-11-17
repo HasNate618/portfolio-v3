@@ -25,6 +25,13 @@ test("each expanded image has previous, next, close and a counter that wrap arou
   assert.match(html, new RegExp(`1 / ${auralis.length}`));
 });
 
+test("every expanded image uses one viewing box, whatever its resolution", () => {
+  const html = renderToStaticMarkup(<ProjectMedia media={auralis} variant="card" />);
+  const boxes = html.match(/h-\[min\(60vh,42rem\)\] w-\[min\(92vw,72rem\)\]/g) ?? [];
+  assert.equal(boxes.length, auralis.length, "all images match, so no file renders large or tiny");
+  assert.doesNotMatch(html, /max-h-\[75vh\]/, "the old intrinsic-size viewer is gone");
+});
+
 test("more images than squares collapse into a +N square that opens the first hidden one", () => {
   const many = Array.from({ length: 8 }, (_, i) => ({ ...auralis[0], src: `/projects/x-${i}.webp`, alt: `Shot ${i}` }));
   const html = renderToStaticMarkup(<ProjectMedia media={many} variant="card" />);

@@ -7,12 +7,13 @@ import { StackList } from "@/components/StackList";
 import { LinkRow } from "@/components/LinkRow";
 import { ProjectMedia } from "@/components/ProjectMedia";
 import { AwardBadge } from "@/components/AwardBadge";
+import { CaseStudyBack } from "@/components/NavOrigin";
 import { getExperienceById, getProject } from "@/data/site";
 
 /**
- * Back and next are props so TeraGo can point at /experience while the project
- * case studies point at /projects. The meta row is chosen by the page, which is
- * what lets /experience/terago show an experience row instead of a project row.
+ * Back and next are props so TeraGo can point at the home experience section
+ * while the project case studies point at /projects. CaseStudyBack changes the
+ * latter to "about" when the reader came from home.
  */
 export function CaseStudy({
   page,
@@ -32,11 +33,7 @@ export function CaseStudy({
 
   return (
     <article>
-      <p className="text-sm">
-        <Link href={backHref} className="text-muted hover:text-accent">
-          <span aria-hidden="true">←</span> {backLabel}
-        </Link>
-      </p>
+      <CaseStudyBack href={backHref} label={backLabel} />
 
       <h1 className="mt-6 text-4xl font-bold tracking-tight text-fg sm:text-5xl">{page.title}</h1>
 

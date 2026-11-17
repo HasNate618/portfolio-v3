@@ -158,7 +158,7 @@ export function getMd(): AnyMd {
         `<div id="${overlayId}" class="lightbox" tabindex="-1">`,
         `<a href="#${thumbId}" class="lightbox-backdrop" aria-label="Close the expanded image"></a>`,
         '<figure class="lightbox-frame">',
-        `<img src="${esc(fields.src)}" alt="${esc(fields.alt)}"${size} decoding="async" class="max-h-[80vh] max-w-[92vw] rounded-lg border border-rule bg-white" />`,
+        `<img src="${esc(fields.src)}" alt="${esc(fields.alt)}"${size} decoding="async" class="h-[min(60vh,42rem)] w-[min(92vw,72rem)] rounded-lg border border-rule bg-black/20 object-contain" />`,
         `<figcaption class="mt-3 max-w-[60ch] text-center text-sm text-muted">${esc(fields.caption)}${fullSize}</figcaption>`,
         "</figure>",
         "</div>\n",

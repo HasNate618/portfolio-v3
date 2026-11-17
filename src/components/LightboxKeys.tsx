@@ -11,10 +11,22 @@ import { useEffect } from "react";
  * cannot: Escape to close, the left and right arrow keys and a horizontal
  * swipe to move between a project's images, and moving focus into the overlay
  * so a keyboard or screen-reader reader lands inside it.
+ *
+ * It also holds the reader's place. Fragment navigation scrolls to the target,
+ * and the close link points at the thumbnail, so without this the page jumps
+ * when an image opens or closes. With script on, the scroll offset is captured
+ * on the opening click and restored on every step and on close.
  */
 export function LightboxKeys() {
   useEffect(() => {
+    let savedScroll: number | null = null;
+
     const openOverlay = () => document.querySelector<HTMLElement>(".lightbox:target:not([data-closed])");
+
+    /** Restore the exact offset the reader had before they clicked the image. */
+    const restoreScroll = () => {
+      if (savedScroll !== null) window.scrollTo(0, savedScroll);
+    };
 
     const focusOpenOverlay = () => {
       const overlay = document.querySelector<HTMLElement>(".lightbox:target");
@@ -22,6 +34,7 @@ export function LightboxKeys() {
       // A previous Escape leaves its flag behind; opening again clears it.
       overlay.removeAttribute("data-closed");
       overlay.focus({ preventScroll: true });
+      restoreScroll();
     };
 
     const close = (overlay: HTMLElement) => {
@@ -35,14 +48,38 @@ export function LightboxKeys() {
       history.replaceState(null, "", `${location.pathname}${location.search}`);
       const thumb = thumbId ? document.getElementById(thumbId) : null;
       thumb?.focus({ preventScroll: true });
-      thumb?.scrollIntoView({ block: "nearest" });
+      // Not scrollIntoView: that anchor sits at the thumbnail, which can be
+      // above or below the reader's actual position by the time they close.
+      restoreScroll();
+      savedScroll = null;
     };
 
-    // Stepping replaces the history entry, so Back closes the viewer instead
+    // Step replaces the history entry, so Back closes the viewer instead
     // of walking back through every image the reader looked at.
     const step = (overlay: HTMLElement, direction: "prev" | "next") => {
       const target = overlay.dataset[direction];
       if (target) location.replace(`#${target}`);
+    };
+
+    // Capture before the browser handles the fragment click: hashchange fires
+    // after it has already scrolled, which is too late to remember the offset.
+    const onOpenClick = (event: MouseEvent) => {
+      const anchor = (event.target as Element | null)?.closest?.('a[href^="#"]');
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+      const target = document.getElementById(anchor.hash.slice(1));
+      if (!target?.classList.contains("lightbox")) return;
+      savedScroll = window.scrollY;
+    };
+
+    // The close links must stay real anchors for readers without script. With
+    // script, handle them here so the fragment never moves the page.
+    const onCloseClick = (event: MouseEvent) => {
+      const anchor = (event.target as Element | null)?.closest?.("a.lightbox-backdrop, a.lightbox-close");
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+      const overlay = anchor.closest<HTMLElement>(".lightbox");
+      if (!overlay) return;
+      event.preventDefault();
+      close(overlay);
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -76,6 +113,8 @@ export function LightboxKeys() {
       step(overlay, dx < 0 ? "next" : "prev");
     };
 
+    document.addEventListener("click", onOpenClick, true);
+    document.addEventListener("click", onCloseClick, true);
     window.addEventListener("hashchange", focusOpenOverlay);
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("touchstart", onTouchStart, { passive: true });
@@ -84,6 +123,8 @@ export function LightboxKeys() {
     focusOpenOverlay();
 
     return () => {
+      document.removeEventListener("click", onOpenClick, true);
+      document.removeEventListener("click", onCloseClick, true);
       window.removeEventListener("hashchange", focusOpenOverlay);
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("touchstart", onTouchStart);

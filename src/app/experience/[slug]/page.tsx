@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   return (
     <PageShell current={page.route}>
-      <CaseStudy page={page} backHref="/experience" backLabel="experience" />
+      <CaseStudy page={page} backHref="/#experience" backLabel="experience" />
     </PageShell>
   );
 }

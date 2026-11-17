@@ -623,12 +623,13 @@ li {
 /*
  * A fixed dark scrim rather than a themed wash: it has to read as "behind" in
  * both schemes, and the light scheme's own background would not dim anything.
+ * 0.7 is enough to separate the image from the page without blacking it out.
  * The whole thing is one link, so a click outside the image dismisses it.
  */
 .lightbox-backdrop {
   position: absolute;
   inset: 0;
-  background-color: rgb(0 0 0 / 0.85);
+  background-color: rgb(0 0 0 / 0.7);
 }
 
 /*

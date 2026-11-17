@@ -200,6 +200,11 @@ test("a figure fence reuses the project lightbox, ids included", () => {
     /<a href="#figure-projects-x-webp-thumb" class="lightbox-backdrop" aria-label="Close the expanded image"><\/a>/
   );
   assert.match(html, /<figure class="lightbox-frame">/);
+  assert.match(
+    html,
+    /class="h-\[min\(60vh,42rem\)\] w-\[min\(92vw,72rem\)\] rounded-lg border border-rule bg-black\/20 object-contain"/,
+    "the expanded figure uses the same viewing box as a project image",
+  );
   assert.match(html, /<a href="\/projects\/x\.webp" target="_blank" rel="noopener noreferrer"/);
 
   // The pair is a contract with LightboxKeys, which derives the thumbnail as

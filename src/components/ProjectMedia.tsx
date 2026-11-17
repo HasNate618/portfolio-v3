@@ -152,10 +152,11 @@ export function ProjectMedia({
                 alt={item.alt}
                 width={item.width}
                 height={item.height}
-                sizes="90vw"
-                className={`max-h-[75vh] max-w-[92vw] rounded-lg border border-rule ${
-                  item.contain ? "bg-black/20 object-contain" : "object-cover"
-                }`}
+                /* Every image gets the same viewing box, so the file's own
+                   resolution cannot make one look large and the next tiny.
+                   object-contain keeps the aspect inside it. */
+                sizes="(min-width: 80rem) 72rem, 92vw"
+                className="h-[min(60vh,42rem)] w-[min(92vw,72rem)] rounded-lg border border-rule bg-black/20 object-contain"
               />
               <figcaption className="mt-3 max-w-[60ch] text-center text-sm text-white/80">
                 {count > 1 ? (
