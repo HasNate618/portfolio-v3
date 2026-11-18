@@ -150,11 +150,11 @@ export function HomeView({ page }: { page: Page }) {
       </ul>
 
       {/*
-       * The rest of the index. A separator and a larger accent link make it
-       * findable without dressing one link up as a button the rest of the page
-       * does not use.
+       * The rest of the index, centred on its own line. Larger and underlined
+       * so it is findable, without a rule or button styling that no other link
+       * on the page uses.
        */}
-      <p className="mt-8 border-t border-rule pt-6 text-lg">
+      <p className="mt-8 text-center text-lg">
         <Link
           href={`/projects${REST_OF_PROJECTS}`}
           className="font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:text-fg hover:decoration-current"
