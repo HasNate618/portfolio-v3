@@ -75,7 +75,7 @@ test("figures resolve from site.ts rather than the markdown", () => {
 
 test("only roles and projects flagged onResume are listed", () => {
   assert.equal(site.experience.filter((e) => e.onResume).length, 2);
-  assert.equal(site.projects.filter((p) => p.onResume).length, 3);
+  assert.equal(site.projects.filter((p) => p.onResume).length, 4);
   assert.doesNotMatch(html, /WEMars/);
   assert.doesNotMatch(html, /Microcomputer/);
 });

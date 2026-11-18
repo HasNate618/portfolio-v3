@@ -19,7 +19,7 @@ skills:
     items: [Arduino, ESP32, Raspberry Pi, BLE, UART serial, Blender, Onshape, 3D printing]
   - group: Games & AR/VR
     items: [Unity, Meta Quest (Meta XR SDK, XR Interaction Toolkit, OpenXR), Snap Spectacles]
-updated: 2026-10-22
+updated: 2026-11-18
 ---
 # Résumé
 
@@ -30,7 +30,6 @@ updated: 2026-10-22
 - Co-led two data developers on the print-safety dataset and benchmark, tracking work on a GitHub project board.
 - Built a labelled dataset from {{stat:3D Western.dataset}} scraped 3D models, rendered in Blender with labels checked by a VLM.
 - Benchmarked small vision models as a binary safe-or-flag gate: 84.2% best agreement with VLM-checked labels.
-- On the data team since Sep 2025, writing the render scripts and working on the 3D model scraping and the STL rendering pipeline.
 
 ### TeraGo
 
@@ -45,8 +44,13 @@ updated: 2026-10-22
 
 - Built an AI agent that reads all {{stat:campus.courses}} of my courses, syncing them from the LMS into SQLite with Playwright and running on any OpenAI-compatible endpoint, local or hosted.
 - Designed search over course files that is lexical by default with optional embeddings and reranking, and added a lexical SQL prefilter for exact phrases that scored below the semantic cutoff.
-- Wrote a {{stat:campus.tools}}-tool agent harness with an audit log for every AI write and a bounded tool loop, with {{stat:campus.tests}} backend tests in CI.
+- Wrote a {{stat:campus.tools}}-tool agent harness with audit logging, a bounded tool loop and {{stat:campus.tests}} backend tests in CI.
 - Use it in {{stat:campus.courses}} courses for deadlines, studying from slides, and reviewing assignment drafts against the instructions.
+
+### Clank
+
+- Built a physical-AI agent whose brain is a local LFM3-Omni-2B vision-language model on llama.cpp that hears a VR game, sees each frame and decides what a simulated Unitree G1 does; the models run as published.
+- Wrote a Vulkan depth layer in C and GLSL ({{stat:clank.depth}} median) and a {{stat:clank.loop}} body loop (50 Hz design). One step works end to end and the game registers the grab; walking is sim only, with {{stat:clank.vram}} of VRAM on one GPU.
 
 ### NixOS homelab
 
