@@ -150,17 +150,17 @@ export function HomeView({ page }: { page: Page }) {
       </ul>
 
       {/*
-       * The rest of the index. Styled as a button rather than another text
-       * link: it is the only way onward from the projects section, and a quiet
-       * underline was easy to miss at the end of four large cards.
+       * The rest of the index. A separator and a larger accent link make it
+       * findable without dressing one link up as a button the rest of the page
+       * does not use.
        */}
-      <p className="mt-8">
+      <p className="mt-8 border-t border-rule pt-6 text-lg">
         <Link
           href={`/projects${REST_OF_PROJECTS}`}
-          className="inline-flex items-center gap-2 rounded-lg border border-accent/50 bg-accent/[0.06] px-5 py-3 font-medium text-accent transition-colors hover:border-accent hover:bg-accent/[0.12]"
+          className="font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:text-fg hover:decoration-current"
         >
           and {site.projects.length - projects.length} more
-          <span aria-hidden="true">→</span>
+          <span aria-hidden="true"> →</span>
         </Link>
       </p>
 
