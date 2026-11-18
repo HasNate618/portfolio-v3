@@ -47,7 +47,7 @@
 \addtolength{\evensidemargin}{-0.5in}
 \addtolength{\textwidth}{1in}
 \addtolength{\topmargin}{-.5in}
-\addtolength{\textheight}{1.0in}
+\addtolength{\textheight}{1.10in}
 
 \urlstyle{same}
 
@@ -67,7 +67,7 @@
 % Custom commands
 \newcommand{\resumeItem}[1]{
   \item\small{
-    {#1 \vspace{-2pt}}
+    {#1 \vspace{-4pt}}
   }
 }
 
@@ -120,19 +120,21 @@
   \resumeSubHeadingListStart
     \resumeSubheading
       {Western University}{London, ON}
-      {Bachelor of Engineering Science in Software Engineering, Dean's Honour List (2024, 2025)}{Aug 2024 - May 2028}
+      {Bachelor of Engineering Science in Software Engineering (Co-op)}{Aug 2024 - May 2028}
+    \resumeItemListStart
+      \resumeItem{Dean's Honour List (2024, 2025). Available for a co-op term starting May 2027, summer or up to 16 months.}
+    \resumeItemListEnd
   \resumeSubHeadingListEnd
 
 \section{Experience}
   \resumeSubHeadingListStart
     \resumeSubheading
-      {VP of Data/ML}{May 2026 - Aug 2026}
+      {VP of Data/ML (promoted from Software Developer)}{Sep 2025 - Aug 2026}
       {3D Western}{London, ON}
       \resumeItemListStart
         \resumeItem{Co-led two data developers on the print-safety dataset and benchmark, tracking work on a GitHub project board.}
         \resumeItem{Built a labelled dataset from 4,620 scraped 3D models, rendered in Blender with labels checked by a VLM.}
         \resumeItem{Benchmarked small vision models as a binary safe-or-flag gate: 84.2\% best agreement with VLM-checked labels.}
-        \resumeItem{On the data team since Sep 2025, writing the render scripts and working on the 3D model scraping and the STL rendering pipeline.}
       \resumeItemListEnd
 
     \resumeSubheading
@@ -153,8 +155,15 @@
         \resumeItemListStart
           \resumeItem{Built an AI agent that reads all six of my courses, syncing them from the LMS into SQLite with Playwright and running on any OpenAI-compatible endpoint, local or hosted.}
           \resumeItem{Designed search over course files that is lexical by default with optional embeddings and reranking, and added a lexical SQL prefilter for exact phrases that scored below the semantic cutoff.}
-          \resumeItem{Wrote a 20-tool agent harness with an audit log for every AI write and a bounded tool loop, with 403 backend tests in CI.}
+          \resumeItem{Wrote a 20-tool agent harness with audit logging, a bounded tool loop and 403 backend tests in CI.}
           \resumeItem{Use it in six courses for deadlines, studying from slides, and reviewing assignment drafts against the instructions.}
+        \resumeItemListEnd
+
+        \resumeProjectHeading
+        {\textbf{Clank} (solo) $|$ \emph{Python, C, GLSL/Vulkan, llama.cpp, MuJoCo, OpenXR}}{Oct 2026 - Present}
+        \resumeItemListStart
+          \resumeItem{Built a physical-AI agent whose brain is a local LFM3-Omni-2B vision-language model on llama.cpp that hears a VR game, sees each frame and decides what a simulated Unitree G1 does; the models run as published.}
+          \resumeItem{Wrote a Vulkan depth layer in C and GLSL (13.9 ms median) and a 44.2 Hz body loop (50 Hz design). One step works end to end and the game registers the grab; walking is sim only, with about 6.5 GB of VRAM on one GPU.}
         \resumeItemListEnd
 
         \resumeProjectHeading
@@ -169,14 +178,14 @@
         \resumeProjectHeading
         {\textbf{AWARE} (Hack the 6ix, solo) $|$ \emph{Python, YOLOv8, YAMNet, ONNX, Qualcomm QNN}}{Jul 2026}
         \resumeItemListStart
-          \resumeItem{Built a home-awareness device running YOLOv8 and YAMNet on an \$80 Arduino UNO Q, no cloud inference.}
+          \resumeItem{Built a home-awareness device running YOLOv8 and YAMNet on an Arduino UNO Q, with no cloud inference.}
           \resumeItem{Used an on-device LLM to compile commands like ``when glass breaks after 10pm alert me'' into deterministic rules, checked every 500 ms with no LLM in the loop.}
         \resumeItemListEnd
     \resumeSubHeadingListEnd
 
 \section{Hackathon Awards}
  \begin{itemize}[leftmargin=0.15in, label={}]
-    \small{\item{\textbf{8 awards in 22 hackathons}: NSBEHacks 3rd place, 1st for Cohere (Careerly) $|$ Hack Western Best AI Application with Cloudflare (Auralis) $|$ TerraHacks Best Use of MongoDB (Lumen) $|$ Spark 2026 3rd (CareBridge, contributor)}}
+    \small{\item{\textbf{8 awards in 22 hackathons}: NSBEHacks 3rd and 1st for Cohere (Careerly) $|$ Hack Western Best AI with Cloudflare (Auralis) $|$ TerraHacks Best Use of MongoDB (Lumen) $|$ Spark 2026 3rd (CareBridge)}}
  \end{itemize}
 
 \section{Technical Skills}
