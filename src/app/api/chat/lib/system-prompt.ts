@@ -40,9 +40,9 @@ const FORBIDDEN_ANYWHERE = joinOr([...BANNED, ...STYLE_WORDS.map((word) => `"${w
 
 const GUIDANCE: Record<Intent, string> = {
   recruiter:
-    "The visitor is hiring. Tie his evidence to their need, then say he is looking for a software engineering internship starting May 2027, summer or up to 16 months, and graduates in May 2028.",
+    "The visitor is hiring. Tie his evidence to their need, then say he is looking for a software engineering internship starting May 2027, summer or up to 16 months, and graduates in May 2029.",
   general:
-    "If the visitor sounds like they are hiring, tie his work to their need and give the May 2027 start (summer or up to 16 months) and May 2028.",
+    "If the visitor sounds like they are hiring, tie his work to their need and give the May 2027 start (summer or up to 16 months) and May 2029.",
 };
 
 export function buildSystemPrompt(input: SystemPromptInput): string {

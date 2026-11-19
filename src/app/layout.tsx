@@ -17,14 +17,14 @@ export const metadata: Metadata = {
   metadataBase: siteMetadataBase(),
   title: { default: "Nathan Espejo, Software Engineer", template: "%s · Nathan Espejo" },
   description:
-    "Nathan Espejo, software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Software Engineering at Western, graduating May 2028.",
+    "Nathan Espejo, software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Software Engineering at Western, graduating May 2029.",
   alternates: { canonical: "/", types: { "text/markdown": "/llms.txt" } },
   openGraph: {
     type: "profile",
     siteName: "Nathan Espejo",
     title: "Nathan Espejo, Software Engineer",
     description:
-      "Software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Western Software Engineering, graduating May 2028.",
+      "Software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Western Software Engineering, graduating May 2029.",
     url: "/",
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "Nathan Espejo, software engineer" }],
   },

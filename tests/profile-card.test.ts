@@ -21,7 +21,7 @@ test("the card restates site.ts rather than inventing", () => {
   for (const role of site.experience) {
     assert.match(card, new RegExp(escape(role.org)), `${role.org} is missing from the card`);
   }
-  assert.match(card, /May 2028/);
+  assert.match(card, /May 2029/);
   assert.match(card, /starting May 2027/);
   assert.match(card, new RegExp(escape(site.contact.email)));
   // The word list itself, not a copy of it: check:words scans tests/ too, so a

@@ -2,7 +2,7 @@
 title: Nathan Espejo
 type: page
 route: /
-description: Nathan Espejo, software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Western Software Engineering, May 2028.
+description: Nathan Espejo, software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Western Software Engineering, May 2029.
 priority: start-here
 onThisPage: [Experience, Projects, Awards]
 updated: 2026-10-24

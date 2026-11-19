@@ -51,7 +51,7 @@ test("the style line names every banned word and forbids hedging", () => {
 test("the recruiter variant carries both hiring facts", () => {
   const text = prompt({ intent: "recruiter" });
   assert.match(text, /May 2027/);
-  assert.match(text, /May 2028/);
+  assert.match(text, /May 2029/);
 });
 
 test("the general variant still mentions them without the hiring frame", () => {
