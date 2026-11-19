@@ -162,13 +162,13 @@ export const site: SiteContent = {
      * the graduation date, so repeating them beside the name said it twice.
      */
     tagline: "Software engineer building AI, Linux and hardware projects.",
-    headline: "Software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Software Engineering at Western, graduating May 2028.",
+    headline: "Software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Software Engineering at Western, graduating May 2029.",
     seeking: "software engineering internship starting May 2027, summer or up to 16 months",
     location: "Brampton and London, ON",
     year: "Third year (2026-27)",
     program: "Software Engineering",
-    graduation: "May 2028",
-    education: { school: "Western University", degree: "Bachelor of Engineering Science in Software Engineering", honors: "Dean's Honour List (2024, 2025)", start: "2024-08", end: "2028-05", location: "London, ON" },
+    graduation: "May 2029",
+    education: { school: "Western University", degree: "Bachelor of Engineering Science in Software Engineering", honors: "Dean's Honour List (2024, 2025)", start: "2024-08", end: "2029-05", location: "London, ON" },
   },
   contact: {
     email: "nate.e.espejo@gmail.com",

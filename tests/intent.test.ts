@@ -13,7 +13,7 @@ test("an ordinary question is not", () => {
 /*
  * The reviewer's case: the visitor's last question was about fit, and this turn
  * is "tell me more". Without the history the prompt loses the hiring frame, and
- * the answer stops carrying the May 2027 and May 2028 facts.
+ * the answer stops carrying the May 2027 and May 2029 facts.
  */
 test("a follow-up in a hiring thread stays in the hiring frame", () => {
   const history = [

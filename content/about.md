@@ -1,7 +1,7 @@
 ---
 title: "About Nathan Espejo"
 type: page
-description: About Nathan Espejo, Western Software Engineering, graduating May 2028, who builds full-stack apps, Linux infrastructure, hardware and AI systems.
+description: About Nathan Espejo, Western Software Engineering, graduating May 2029, who builds full-stack apps, Linux infrastructure, hardware and AI systems.
 priority: start-here
 dates: "Aug 2024 to present"
 tags: [profile, education, contact, recruiting]
@@ -10,7 +10,7 @@ updated: 2026-10-25
 ---
 # About Nathan Espejo
 
-Third-year Software Engineering student at Western University (graduating May 2028), looking for a software engineering internship starting May 2027, summer or up to 16 months.
+Third-year Software Engineering student at Western University (graduating May 2029), looking for a software engineering internship starting May 2027, summer or up to 16 months.
 
 Most of what I build lately is LLM tooling I use every day, and I put as much care into the parts around the model as the model itself, with tests running in CI, data that syncs cleanly and changes I can roll back. I'd rather pick a cheap model that does the job well than pay for the biggest one.
 
@@ -33,7 +33,7 @@ Brampton and London, ON.
 
 ## Education
 
-Western University, Bachelor of Engineering Science in Software Engineering, Aug 2024 to May 2028 (expected graduation May 2028). Dean's Honour List in 2024 and 2025.
+Western University, Bachelor of Engineering Science in Software Engineering, Aug 2024 to May 2029, co-op program. Dean's Honour List in 2024 and 2025.
 
 ## Links
 

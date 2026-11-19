@@ -11,7 +11,7 @@ const html = renderToStaticMarkup(<HomeView page={page} />);
 test("home renders identity, seeking and the Campus card", () => {
   assert.match(html, /Nathan Espejo/);
   assert.match(html, /software engineering internship starting May 2027, summer or up to 16 months/);
-  assert.match(html, /, graduating May 2028\. Looking for a /);
+  assert.match(html, /, graduating May 2029\. Looking for a /);
   assert.match(html, /Campus/);
   assert.ok(!html.includes("text-3xl font-bold"), "cards carry no stat tiles");
   assert.doesNotMatch(html, /4,687/, "the exact chunk count is not published anywhere");
@@ -39,7 +39,7 @@ test("the home bio is two paragraphs of about 70 words, naming Linux (NixOS) and
   const words = bio.replace(/<[^>]+>/g, " ").split(/\s+/).filter((w) => /\w/.test(w)).length;
   assert.ok(words >= 60 && words <= 85, `bio is ${words} words`);
   assert.match(bio, /Linux \(NixOS\)/);
-  assert.match(bio, /graduating May 2028/);
+  assert.match(bio, /graduating May 2029/);
 });
 
 test("home has exactly one h1", () => {

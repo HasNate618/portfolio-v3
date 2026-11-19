@@ -4,7 +4,7 @@ import fs from "node:fs";
 import { site, getProject } from "../src/data/site";
 
 const HEADLINE =
-  "Software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Software Engineering at Western, graduating May 2028.";
+  "Software engineer building full-stack apps, Linux infrastructure, hardware and AI systems. Software Engineering at Western, graduating May 2029.";
 
 test("the headline names Linux and the graduation date, everywhere it is quoted", () => {
   assert.equal(site.identity.headline, HEADLINE);
