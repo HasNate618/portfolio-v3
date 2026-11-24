@@ -723,7 +723,7 @@ export const site: SiteContent = {
       stack: ["Unity", "C#", "Meta Quest 3S", "SAM 2", "Qwen Omni", "Gemini Live", "Python", "WebSockets"],
     },
   ],
-  hackathons: { entered: 22, awards: 8 },
+  hackathons: { entered: 23, awards: 8 },
   awards: [
     { event: "NSBEHacks", year: "2024", project: "Careerly", prize: "3rd overall; Cohere's Challenge 1st place", role: "Team project" },
     { event: "Hack Western 12", year: "2025", project: "Auralis", prize: "Best AI Application Built with Cloudflare", role: "Team project" },

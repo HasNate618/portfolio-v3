@@ -128,7 +128,7 @@ test("Home features Clank right after the lead, and CareBridge is off Home", () 
 
 test("the awards section closes the page with one line, a link to the table and the Dean's Honour List", () => {
   assert.match(html, /id="awards"/);
-  assert.match(html, /8 awards across 22 hackathons/);
+  assert.match(html, /8 awards across 23 hackathons/);
   assert.match(html, /href="\/projects#hackathon-awards"/);
   assert.doesNotMatch(html, /<table/, "the full table lives on /projects");
   assert.match(html, /Dean&#x27;s Honour List \(2024, 2025\)/);
@@ -191,6 +191,6 @@ test("each role card leads with the company, then the role, then where and when"
 });
 
 test("the awards line makes no team claim, since one award was solo", () => {
-  assert.match(html, /8 awards across 22 hackathons\./);
+  assert.match(html, /8 awards across 23 hackathons\./);
   assert.doesNotMatch(html, /all with teams/);
 });

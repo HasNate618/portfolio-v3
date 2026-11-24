@@ -11,7 +11,7 @@ updated: 2026-10-25
 ---
 # Hackathon awards
 
-Nathan has won 8 awards across 22 hackathons. Seven were team projects and one (Street Cleaner) was solo, as the role column shows.
+Nathan has won 8 awards across 23 hackathons. Seven were team projects and one (Street Cleaner) was solo, as the role column shows.
 
 ## Awards
 
