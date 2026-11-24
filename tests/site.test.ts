@@ -120,14 +120,14 @@ test("the lead project is explicit data, not a hardcoded id in a view", () => {
 test("the featured cards are the ranked projects, in display order", () => {
   assert.deepEqual(
     featuredProjects().map((p) => p.id),
-    ["clank", "homelab", "aware"]
+    ["clank", "homelab", "aware", "beacon"]
   );
 });
 
 test("every ranked project exists and exactly one is the lead", () => {
   const ranked = site.projects.filter((p) => p.rank);
   assert.equal(ranked.filter((p) => p.rank === "lead").length, 1);
-  assert.equal(ranked.length, 4, "campus (lead) plus three featured");
+  assert.equal(ranked.length, 5, "campus (lead) plus four featured");
 });
 
 /*

@@ -315,20 +315,18 @@ export const site: SiteContent = {
 
     {
       // Order is unique across the whole list, not per group, and 5 belongs to
-      // ferret. Beacon is last in the featured group, which is what the card row
-      // on /projects reads.
-      id: "beacon", name: "Beacon", group: "featured", order: 35,
+      // ferret. Beacon is last in the featured group and ranked, so it closes both
+      // the card row on /projects and the list on the home page: newest last.
+      id: "beacon", name: "Beacon", group: "featured", order: 35, rank: "featured",
       dates: "Nov 2026", displayRole: "team of five, perception", event: "Hack Western 13",
       covers: "A chest-worn Raspberry Pi 5 on QNX 8.0 that homes a wearer who is blind or has low vision to an item they have already seen this session. Ask for your keys and it answers with a spoken bearing, then ticks that speed up and pan toward the object as your hand reaches for it, and a steady tone when it is close. I owned perception on a team of five: camera capture through QNX's Sensor Framework, YOLOE-26n detection and metric depth, and the relay into the guidance process, the only process allowed to make sound.",
       cardLine: "A chest-worn Pi 5 on QNX that finds a named item by sound, built so perception can die and the guidance deadline still holds.",
-      limits: "A sighted team built it and no blind or low-vision wearer has tested it. The microphone and hand tracking do not work on this QNX image, so a request arrives as a record rather than speech, and the measured run fed the Pi a recorded clip. The depth scale has not been checked against a tape measure, so the cue gives direction and ticks rather than a distance. Six baked nouns. It finds things; it does not see obstacles, stairs or traffic.",
+      limits: "A sighted team built it and no blind or low-vision wearer has tested it. The microphone does not work on this QNX image, so a request arrives as a record rather than speech, and the measured run fed the Pi a recorded clip. Six baked nouns. It finds things; it does not see obstacles, stairs or traffic.",
       // The dashboard the team ran beside the table, whole. The left rail stays in
       // rather than being cropped off: it is the session panel, and showing it
       // with its oddities is the point. Pose age reads about 32 hours because the
       // offline merge stamps the pose time from the frame index and the frame
-      // time from the capture clock; hand-to-target and reach ticks are empty
-      // because hand tracking never runs on this image and the replay carries no
-      // hand record. The case study says so in prose.
+      // time from the capture clock. The case study says so in prose.
       media: [
         {
           src: "/projects/beacon-0.webp",

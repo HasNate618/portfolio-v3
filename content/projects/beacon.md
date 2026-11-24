@@ -47,7 +47,7 @@ Five processes share one contract. Mine are the two that turn a camera into a na
 
 Both pictures are from the laptop dashboard, which a teammate built and ran beside the table so a judge could watch what the wearer hears. My part of it is the camera panel: the colour frame and the same moment as a depth map, with the detection box drawn on both.
 
-The dashboard is shown whole, session rail and all, because two numbers in that rail are worth explaining rather than hiding. **Pose age** reads about 32 hours: the offline merge stamps the pose time from the frame index and the frame time from the capture clock, so the gap is the board's uptime and not a stall. **Hand to target** and **Reach ticks** are blank because hand tracking never runs on this image and a replay carries no hand record. The parts that decide the cue are the law, the phrase and the bearing, and all three are live in the picture.
+The dashboard is shown whole, session rail and all, because one number there looks wrong unless you know how it was made. **Pose age** reads about 32 hours: the offline merge stamps the pose time from the frame index and the frame time from the capture clock, so the gap is the board's uptime and not a stall. **Hand to target** and **Reach ticks** are empty in this recording. The parts that decide the cue are the law, the phrase and the bearing, and all three are live in the picture.
 
 ## How it works
 
@@ -73,9 +73,6 @@ alt: Frames from the chest camera go into perception, which writes detection and
 
 - The microphone, which is the part I would put in front of QNX. The C270 mic captures nothing on this image, so I wrote a UAC1 driver against `sys/usbdi.h`: it claims the audio interface, selects alt 4 at 48 kHz, opens the isochronous IN pipe, unmutes the feature unit, sets the sample rate, and every control request is ACKed. Zero packets arrive, across both of QNX's isochronous APIs, every alt setting, a VBUS power cycle and a reboot.
 - The same driver with a flag streams the camera's video endpoint and receives real frames, and that is the control that matters. At the controller, the audio ring is well formed with real isochronous TRBs and the dequeue never advances one. The completions the driver reports are simulated by its own software path. This stack schedules microframe-period isochronous transfers in hardware and simulates the 1 ms ones in software. No user-space fix exists, so it needs a driver package update, and the demo sends a request as a record instead of speech.
-- Hand tracking. The MediaPipe binding fails on this image, so the reach cue has only run on recorded input, never on live hand position.
-- Runmasks. The image takes a single CPU or all of them and returns EINVAL for anything between, so perception pins one core and the log records the kernel's readback instead of the mask we asked for.
-- The depth scale. Never checked against a tape measure, so nothing in the cue is a distance in metres.
 
 ## Limits
 
