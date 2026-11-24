@@ -322,6 +322,24 @@ export const site: SiteContent = {
       covers: "A chest-worn Raspberry Pi 5 on QNX 8.0 that homes a wearer who is blind or has low vision to an item they have already seen this session. Ask for your keys and it answers with a spoken bearing, then ticks that speed up and pan toward the object as your hand reaches for it, and a steady tone when it is close. I owned perception on a team of five: camera capture through QNX's Sensor Framework, YOLOE-26n detection and metric depth, and the relay into the guidance process, the only process allowed to make sound.",
       cardLine: "A chest-worn Pi 5 on QNX that finds a named item by sound, built so perception can die and the guidance deadline still holds.",
       limits: "A sighted team built it and no blind or low-vision wearer has tested it. The microphone and hand tracking do not work on this QNX image, so a request arrives as a record rather than speech, and the measured run fed the Pi a recorded clip. The depth scale has not been checked against a tape measure, so the cue gives direction and ticks rather than a distance. Six baked nouns. It finds things; it does not see obstacles, stairs or traffic.",
+      // The dashboard the team ran beside the table. The crop is the guidance
+      // side: the left rail is the session panel, which in replay reads pose
+      // age against wall clock and shows hand-to-target empty because hand
+      // tracking never runs on this image.
+      media: [
+        {
+          src: "/projects/beacon-0.webp",
+          alt: "The Beacon dashboard in replay: the wearer at the centre of the room with the tracked bottle marked 2.57 m away, the law reading WALK, the cue \"Bottle is straight ahead.\" on screen, and the camera panel showing the colour frame above the same moment as a depth map",
+          width: 1240,
+          height: 927,
+        },
+        {
+          src: "/projects/beacon-1.webp",
+          alt: "The camera panel's depth frame: the room in false colour, the wearer standing at the far side and the bottle on the table boxed and labelled 2.61 m",
+          width: 348,
+          height: 200,
+        },
+      ],
       file: "/knowledgebase/projects/beacon.md",
       links: [
         { label: "Live site", href: "https://beaconeggandcheese.cooking/" },

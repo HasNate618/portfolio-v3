@@ -45,6 +45,8 @@ Five processes share one contract. Mine are the two that turn a camera into a na
 
 124 commits, more than anyone else on the team of five.
 
+Both pictures are from the laptop dashboard, which a teammate built and ran beside the table so a judge could watch what the wearer hears. My part of it is the camera panel: the colour frame and the same moment as a depth map, with the detection box drawn on both.
+
 ## How it works
 
 ```diagram beacon
