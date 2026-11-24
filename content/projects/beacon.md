@@ -47,6 +47,8 @@ Five processes share one contract. Mine are the two that turn a camera into a na
 
 Both pictures are from the laptop dashboard, which a teammate built and ran beside the table so a judge could watch what the wearer hears. My part of it is the camera panel: the colour frame and the same moment as a depth map, with the detection box drawn on both.
 
+The dashboard is shown whole, session rail and all, because two numbers in that rail are worth explaining rather than hiding. **Pose age** reads about 32 hours: the offline merge stamps the pose time from the frame index and the frame time from the capture clock, so the gap is the board's uptime and not a stall. **Hand to target** and **Reach ticks** are blank because hand tracking never runs on this image and a replay carries no hand record. The parts that decide the cue are the law, the phrase and the bearing, and all three are live in the picture.
+
 ## How it works
 
 ```diagram beacon

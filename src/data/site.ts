@@ -322,15 +322,18 @@ export const site: SiteContent = {
       covers: "A chest-worn Raspberry Pi 5 on QNX 8.0 that homes a wearer who is blind or has low vision to an item they have already seen this session. Ask for your keys and it answers with a spoken bearing, then ticks that speed up and pan toward the object as your hand reaches for it, and a steady tone when it is close. I owned perception on a team of five: camera capture through QNX's Sensor Framework, YOLOE-26n detection and metric depth, and the relay into the guidance process, the only process allowed to make sound.",
       cardLine: "A chest-worn Pi 5 on QNX that finds a named item by sound, built so perception can die and the guidance deadline still holds.",
       limits: "A sighted team built it and no blind or low-vision wearer has tested it. The microphone and hand tracking do not work on this QNX image, so a request arrives as a record rather than speech, and the measured run fed the Pi a recorded clip. The depth scale has not been checked against a tape measure, so the cue gives direction and ticks rather than a distance. Six baked nouns. It finds things; it does not see obstacles, stairs or traffic.",
-      // The dashboard the team ran beside the table. The crop is the guidance
-      // side: the left rail is the session panel, which in replay reads pose
-      // age against wall clock and shows hand-to-target empty because hand
-      // tracking never runs on this image.
+      // The dashboard the team ran beside the table, whole. The left rail stays in
+      // rather than being cropped off: it is the session panel, and showing it
+      // with its oddities is the point. Pose age reads about 32 hours because the
+      // offline merge stamps the pose time from the frame index and the frame
+      // time from the capture clock; hand-to-target and reach ticks are empty
+      // because hand tracking never runs on this image and the replay carries no
+      // hand record. The case study says so in prose.
       media: [
         {
           src: "/projects/beacon-0.webp",
-          alt: "The Beacon dashboard in replay: the wearer at the centre of the room with the tracked bottle marked 2.57 m away, the law reading WALK, the cue \"Bottle is straight ahead.\" on screen, and the camera panel showing the colour frame above the same moment as a depth map",
-          width: 1240,
+          alt: "The whole Beacon dashboard in replay: the session rail on the left naming the target bottle and the cue the wearer hears, the room at centre with the tracked bottle marked 2.57 m away and the law reading WALK beside the cue \"Bottle is straight ahead.\", the replay scrubber beneath, and the camera panel on the right with the colour frame above the same moment as a depth map",
+          width: 1600,
           height: 927,
         },
         {
