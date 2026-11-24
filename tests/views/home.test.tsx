@@ -63,9 +63,9 @@ test("the featured projects are the full case-study cards, whole-card clickable"
   assert.match(projects, /<img/, "each card keeps its images");
   assert.match(projects, /rounded-full bg-accent\/10 px-3 py-1/, "the case-study cards carry the stack");
   assert.match(projects, /SQLite/, "and the full covers paragraph");
-  assert.equal(projects.match(/relative rounded-lg border p-6/g)?.length, 4, "the lead plus three featured projects");
-  assert.equal(projects.match(/after:absolute after:inset-0/g)?.length, 4, "the whole card follows its title link");
-  assert.equal(projects.match(/h-auto w-full/g)?.length, 4, "each card carries one lead image");
+  assert.equal(projects.match(/relative rounded-lg border p-6/g)?.length, 5, "the lead plus four featured projects");
+  assert.equal(projects.match(/after:absolute after:inset-0/g)?.length, 5, "the whole card follows its title link");
+  assert.equal(projects.match(/h-auto w-full/g)?.length, 5, "each card carries one lead image");
 });
 
 test("a card's images sit above the stretched title link, so they open the viewer", () => {
@@ -122,7 +122,13 @@ test("home lists every role, because it is now the only experience page", () => 
 test("Home features Clank right after the lead, and CareBridge is off Home", () => {
   const projects = html.slice(html.indexOf('id="projects"'), html.indexOf('id="awards"'));
   const at = (name: string) => projects.indexOf(`>${name}<`);
-  assert.ok(at("Campus") < at("Clank") && at("Clank") < at("NixOS homelab") && at("NixOS homelab") < at("AWARE"), "Campus, Clank, homelab, AWARE");
+  assert.ok(
+    at("Campus") < at("Clank") &&
+      at("Clank") < at("NixOS homelab") &&
+      at("NixOS homelab") < at("AWARE") &&
+      at("AWARE") < at("Beacon"),
+    "Campus, Clank, homelab, AWARE, Beacon"
+  );
   assert.ok(!projects.includes(">CareBridge<"), "CareBridge lives on /projects now");
 });
 
@@ -171,7 +177,7 @@ test("each home experience entry is a card of bullets plus its case study", () =
 });
 
 test("the line after the projects counts the rest and lands past the four shown", () => {
-  const rest = site.projects.length - 4;
+  const rest = site.projects.length - 5;
   assert.ok(html.includes(`and ${rest} more`), "the count excludes the cards above");
   assert.match(
     html,

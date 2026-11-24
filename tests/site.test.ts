@@ -120,14 +120,14 @@ test("the lead project is explicit data, not a hardcoded id in a view", () => {
 test("the featured cards are the ranked projects, in display order", () => {
   assert.deepEqual(
     featuredProjects().map((p) => p.id),
-    ["clank", "homelab", "aware"]
+    ["clank", "homelab", "aware", "beacon"]
   );
 });
 
 test("every ranked project exists and exactly one is the lead", () => {
   const ranked = site.projects.filter((p) => p.rank);
   assert.equal(ranked.filter((p) => p.rank === "lead").length, 1);
-  assert.equal(ranked.length, 4, "campus (lead) plus three featured");
+  assert.equal(ranked.length, 5, "campus (lead) plus four featured");
 });
 
 /*
@@ -158,8 +158,8 @@ test("every project outside the case studies has a score, and no case study does
   }
 });
 
-test("the case studies are exactly the four with a page; CareBridge is a scored grid card, no longer featured on Home", () => {
-  assert.deepEqual(highlightProjects().map((p) => p.id), ["campus", "clank", "homelab", "aware"]);
+test("the case studies are exactly the five with a page; CareBridge is a scored grid card, no longer featured on Home", () => {
+  assert.deepEqual(highlightProjects().map((p) => p.id), ["campus", "clank", "homelab", "aware", "beacon"]);
   const carebridge = site.projects.find((p) => p.id === "carebridge")!;
   assert.equal(carebridge.group, "ai");
   assert.equal(carebridge.rank, undefined);

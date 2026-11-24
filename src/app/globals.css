@@ -798,6 +798,9 @@ li {
 }
 
 .flow-chip {
+  /* A pill is a word, not a line of text: "speech" must never break to
+     "speec" / "h" when the output column is narrow. */
+  white-space: nowrap;
   border: 1px solid var(--color-rule);
   border-radius: 9999px;
   padding: 0.1rem 0.5rem;

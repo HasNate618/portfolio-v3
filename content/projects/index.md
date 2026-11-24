@@ -5,7 +5,7 @@ description: An index of Nathan Espejo's documented software, applied AI, hardwa
 priority: reference
 tags: [projects]
 related: [../index.md, ../awards.md, ../skills.md, other.md]
-updated: 2026-10-16
+updated: 2026-11-24
 ---
 # Projects
 
@@ -17,6 +17,7 @@ Every project Nathan has documented, one file each, with a line on what it cover
 - [Clank](clank.md): How one local 2B vision-language model hears a VR game, sees its rendered frames and drives a simulated humanoid, what it does end to end today, and what it measured and what failed.
 - [NixOS homelab](homelab.md): How his two NixOS hosts are defined in a single repo: what the server hosts, networking and remote access over Tailscale, backups to a NAS, monitoring, and the Hermes Agent profiles that change the config.
 - [AWARE](aware.md): How AWARE runs vision, audio and a small LLM on one Arduino UNO Q, and how plain-English commands become deterministic rules.
+- [Beacon](beacon.md): A chest-worn Pi 5 on QNX that finds a named item by sound, the process split that keeps guidance on time when perception dies, and what the microphone bug turned out to be.
 - [CareBridge](carebridge.md): The CareBridge rural care platform from Spark 2026 (overall 3rd), built by a team; the repo is a teammate's (liamma06/Spark).
 
 ## Other projects
