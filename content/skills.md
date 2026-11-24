@@ -7,7 +7,7 @@ dates: "2023 to present"
 role: "self"
 tags: [skills]
 related: [index.md, projects/index.md, experience/index.md]
-updated: 2026-10-25
+updated: 2026-11-24
 ---
 # Skills
 
@@ -26,7 +26,7 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **llama.cpp**: [NixOS homelab](projects/homelab.md)
 - **GGUF on-device LLMs**: [AWARE](projects/aware.md)
 - **YOLOv8**: [AWARE](projects/aware.md)
-- **ONNX**: [AWARE](projects/aware.md)
+- **ONNX Runtime**: [AWARE](projects/aware.md), [Beacon](projects/beacon.md)
 - **MediaPipe**: [VitalSign](projects/vitalsign.md)
 - **face-api.js**: [Auralis](projects/auralis.md), [VitalSign](projects/vitalsign.md)
 - **PyTorch**: [Whack-A-ML](projects/whack-a-ml.md)
@@ -81,6 +81,7 @@ Nathan's skills grouped by area. Each one links to the project or role files whe
 - **Arduino**: [AWARE](projects/aware.md), [Other projects](projects/other.md)
 - **ESP32**: [WEMars](experience/wemars.md)
 - **Raspberry Pi**: [Cyberdeck](projects/cyberdeck.md)
+- **QNX 8.0 and real-time scheduling**: [Beacon](projects/beacon.md)
 - **BLE**: [Other projects](projects/other.md) (Rubber Band Turret and Wasteland)
 - **UART serial**: [AWARE](projects/aware.md)
 - **EMG sensors**: [FLEXFIRE-X](projects/flexfire-x.md)

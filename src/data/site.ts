@@ -313,6 +313,30 @@ export const site: SiteContent = {
       ],
     },
 
+    {
+      // Order is unique across the whole list, not per group, and 5 belongs to
+      // ferret. Beacon is last in the featured group, which is what the card row
+      // on /projects reads.
+      id: "beacon", name: "Beacon", group: "featured", order: 35,
+      dates: "Nov 2026", displayRole: "team of five, perception", event: "Hack Western 13",
+      covers: "A chest-worn Raspberry Pi 5 on QNX 8.0 that homes a wearer who is blind or has low vision to an item they have already seen this session. Ask for your keys and it answers with a spoken bearing, then ticks that speed up and pan toward the object as your hand reaches for it, and a steady tone when it is close. I owned perception on a team of five: camera capture through QNX's Sensor Framework, YOLOE-26n detection and metric depth, and the relay into the guidance process, the only process allowed to make sound.",
+      cardLine: "A chest-worn Pi 5 on QNX that finds a named item by sound, built so perception can die and the guidance deadline still holds.",
+      limits: "A sighted team built it and no blind or low-vision wearer has tested it. The microphone and hand tracking do not work on this QNX image, so a request arrives as a record rather than speech, and the measured run fed the Pi a recorded clip. The depth scale has not been checked against a tape measure, so the cue gives direction and ticks rather than a distance. Six baked nouns. It finds things; it does not see obstacles, stairs or traffic.",
+      file: "/knowledgebase/projects/beacon.md",
+      links: [
+        { label: "Live site", href: "https://beaconeggandcheese.cooking/" },
+        { label: "GitHub (teammate's repo)", href: "https://github.com/MattFrz/Beacon-Hack-Western-13-" },
+      ],
+      // Two things a reader can check: the deadline held, and perception is not
+      // fast. Depth is slow on purpose for the card and stays in the case study.
+      stats: [
+        { key: "deadline", label: "guidance deadline, held with perception killed", value: "60 Hz" },
+        { key: "detect", label: "YOLOE-26n per frame at 320 px", value: "62 ms" },
+        { key: "depth", label: "metric depth per frame, on the CPU", value: "456 ms", home: false },
+      ],
+      stack: ["C", "Python", "QNX 8.0", "ONNX Runtime", "OpenCV", "ctypes"],
+    },
+
     // ── also building ─────────────────────────────────────────────────────
     {
       id: "agntos", name: "AgntOS", group: "tools", order: 13,

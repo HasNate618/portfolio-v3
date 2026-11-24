@@ -122,6 +122,38 @@ export const DIAGRAMS: Record<string, FlowDiagram> = {
     ],
   },
 
+  /*
+   * Beacon. The top row is the live loop, and every box in it is a separate
+   * process: frames, perception, shared memory, and the guidance process that
+   * owns the speaker. The bottom row is the failure the split exists for, and
+   * the last box is the honest end of it: the cue stops rather than guessing.
+   */
+  beacon: {
+    colsWide: [
+      "minmax(0, 1fr)", A, "minmax(0, 1.25fr)", A, "minmax(0, 1fr)",
+      A, "minmax(0, 1fr)", A, "minmax(0, 0.85fr)",
+    ].join(" "),
+    colsNarrow: N,
+    items: [
+      node("C270 frames", "1 / 1 / 2 / 2", "1 / 1 / 2 / 2", { kind: "input", sub: "Sensor Framework" }),
+      arrow("1 / 2 / 2 / 3", "right", "2 / 1 / 3 / 2"),
+      node("perception", "1 / 3 / 2 / 4", "3 / 1 / 4 / 2", { sub: "YOLOE-26n + metric depth" }),
+      arrow("1 / 4 / 2 / 5", "right", "4 / 1 / 5 / 2"),
+      node("shared memory", "1 / 5 / 2 / 6", "5 / 1 / 6 / 2", { sub: "seqlocked, newest wins" }),
+      arrow("1 / 6 / 2 / 7", "right", "6 / 1 / 7 / 2"),
+      node("guided", "1 / 7 / 2 / 8", "7 / 1 / 8 / 2", { kind: "core", sub: "60 Hz, core 0" }),
+      arrow("1 / 8 / 2 / 9", "right", "8 / 1 / 9 / 2"),
+      node("", "1 / 9 / 2 / 10", "9 / 1 / 10 / 2", { kind: "output", chips: ["speech", "ticks", "tone"] }),
+
+      arrow("2 / 3 / 3 / 4", "down", "10 / 1 / 11 / 2"),
+      node("perception killed", "3 / 3 / 4 / 4", "11 / 1 / 12 / 2", { sub: "live, mid-run" }),
+      arrow("3 / 4 / 4 / 5", "right", "12 / 1 / 13 / 2"),
+      node("the cue holds", "3 / 5 / 4 / 6", "13 / 1 / 14 / 2", { sub: "last known place" }),
+      arrow("3 / 6 / 4 / 7", "right", "14 / 1 / 15 / 2"),
+      node("I lost the target", "3 / 7 / 4 / 8", "15 / 1 / 16 / 2", { kind: "output", sub: "never a guessed metre" }),
+    ],
+  },
+
   "terago-email": chain([
     { label: "email", kind: "input" },
     { label: "local LLM", sub: "Ollama", kind: "core" },
