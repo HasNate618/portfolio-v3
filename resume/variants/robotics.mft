@@ -1,0 +1,22 @@
+# Physical AI / robotics: perception, real-time, embodied agents.
+# Headings and bullets as Nathan wrote them in Nathan_Espejo_Resume_Physical_AI.tex.
+
+output robotics.pdf
+spacing loose
+
+section Education style=entries
+  entry education heading=longterm bullets=dhl,courses
+
+section Projects style=entries
+  entry beacon heading=base bullets=perception,ctypes,deadline
+  entry clank heading=robotics bullets=brain-rt,vulkan-rt,status-rt
+  entry aware heading=robotics bullets=device-rt,rules-rt
+  entry campus heading=base bullets=oneshot
+
+section Experience style=entries
+  entry wemars heading=current bullets=rejoin,cam
+  entry terago heading=intern bullets=email-short,rf-short
+  entry 3dwestern heading=promoted bullets=lead-campus,bench,print
+
+section Technical Skills style=prose
+  block skills robotics

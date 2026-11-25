@@ -1,5 +1,5 @@
 {
-  description = "LaTeX toolchain for resume/Resume.tex";
+  description = "LaTeX toolchain for the resume variants";
 
   # Ported from HasNate618/Resume, which this repo supersedes. The package list
   # is exactly what Resume.tex pulls in; texliveSmall plus these keeps the

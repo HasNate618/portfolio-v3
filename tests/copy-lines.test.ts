@@ -16,7 +16,7 @@ test("the headline names Linux and the graduation date, everywhere it is quoted"
 });
 
 test("Campus says what the drafts are checked against, in plain words, on the site and the resume", () => {
-  const files = ["src/data/site.ts", "content/projects/campus.md", "content/resume.md", "resume/Resume.tex"];
+  const files = ["src/data/site.ts", "content/projects/campus.md", "content/resume.md", "resume/entries/campus.tex"];
   for (const file of files) {
     const text = fs.readFileSync(file, "utf8");
     assert.doesNotMatch(text, /against (the )?(assignment )?briefs?\b/, `${file} still says "against the brief"`);

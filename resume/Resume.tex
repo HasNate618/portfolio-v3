@@ -47,7 +47,6 @@
 \addtolength{\evensidemargin}{-0.5in}
 \addtolength{\textwidth}{1in}
 \addtolength{\topmargin}{-.5in}
-\addtolength{\textheight}{1.10in}
 
 \urlstyle{same}
 
@@ -63,11 +62,18 @@
 % Ensure that generate pdf is machine readable/ATS parsable
 \pdfgentounicode=1
 
+% Spacing is a property of the variant, not of the person: a page with four
+% projects needs tighter gaps than one with three. variants/<name>.mft picks a
+% block from spacing.tex and these get overridden there.
+\newlength{\ResumeItemGap}\setlength{\ResumeItemGap}{-2pt}
+\newlength{\ResumeSubHeadingGap}\setlength{\ResumeSubHeadingGap}{-7pt}
+\newlength{\ResumeListEndGap}\setlength{\ResumeListEndGap}{-5pt}
+
 %-------------------------
 % Custom commands
 \newcommand{\resumeItem}[1]{
   \item\small{
-    {#1 \vspace{-4pt}}
+    {#1 \vspace{\ResumeItemGap}}
   }
 }
 
@@ -76,21 +82,21 @@
     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{#1} & #2 \\
       \textit{\small#3} & \textit{\small #4} \\
-    \end{tabular*}\vspace{-7pt}
+    \end{tabular*}\vspace{\ResumeSubHeadingGap}
 }
 
 \newcommand{\resumeSubSubheading}[2]{
     \item
     \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
       \textit{\small#1} & \textit{\small #2} \\
-    \end{tabular*}\vspace{-7pt}
+    \end{tabular*}\vspace{\ResumeSubHeadingGap}
 }
 
 \newcommand{\resumeProjectHeading}[2]{
     \item
     \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
       \small#1 & #2 \\
-    \end{tabular*}\vspace{-7pt}
+    \end{tabular*}\vspace{\ResumeSubHeadingGap}
 }
 
 \newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
@@ -100,11 +106,15 @@
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
 \newcommand{\resumeItemListStart}{\begin{itemize}}
-\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{\ResumeListEndGap}}
 
 %-------------------------------------------
 %%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+%%SPACING%%
+
+%%FACTS%%
 
 \begin{document}
 
@@ -116,87 +126,5 @@
     \href{https://nathanespejo.com}{\underline{nathanespejo.com}}
 \end{center}
 
-\section{Education}
-  \resumeSubHeadingListStart
-    \resumeSubheading
-      {Western University}{London, ON}
-      {Bachelor of Engineering Science in Software Engineering (Co-op)}{Aug 2024 - May 2029}
-    \resumeItemListStart
-      \resumeItem{Dean's Honour List (2024, 2025). Available from May 2027 for 4 to 16 months.}
-    \resumeItemListEnd
-  \resumeSubHeadingListEnd
-
-\section{Experience}
-  \resumeSubHeadingListStart
-    \resumeSubheading
-      {VP of Data/ML (promoted from Software Developer)}{Sep 2025 - Aug 2026}
-      {3D Western}{London, ON}
-      \resumeItemListStart
-        \resumeItem{Co-led two data developers on the print-safety dataset and benchmark, tracking work on a GitHub project board.}
-        \resumeItem{Built a labelled dataset from 4,620 scraped 3D models, rendered in Blender with labels checked by a VLM.}
-        \resumeItem{Benchmarked small vision models as a binary safe-or-flag gate: 84.2\% best agreement with VLM-checked labels.}
-      \resumeItemListEnd
-
-    \resumeSubheading
-      {Software Engineering Intern}{May 2026 - Aug 2026}
-      {TeraGo}{Markham, ON}
-      \resumeItemListStart
-        \resumeItem{Built a prototype pipeline that uses a locally hosted LLM (Ollama) to turn unstructured emails into structured tickets, working end to end.}
-        \resumeItem{Built a Python RF channel-planning tool with a command-line and web interface that shortlists clear frequencies for fixed-wireless links, with an automated validation suite.}
-        \resumeItem{Deployed an internal RAG assistant that answers engineers' technical questions from company documentation.}
-        \resumeItem{Researched and proposed a self-hosted LLM platform integrated with internal tools.}
-      \resumeItemListEnd
-  \resumeSubHeadingListEnd
-
-\section{Projects}
-    \resumeSubHeadingListStart
-        \resumeProjectHeading
-        {\textbf{Campus} $|$ \emph{Python, FastAPI, SQLite, React, TypeScript, Docker}}{Aug 2026 - Present}
-        \resumeItemListStart
-          \resumeItem{Built an AI agent that reads all six of my courses, syncing them from the LMS into SQLite with Playwright and running on any OpenAI-compatible endpoint, local or hosted.}
-          \resumeItem{Designed search over course files that is lexical by default with optional embeddings and reranking, and added a lexical SQL prefilter for exact phrases that scored below the semantic cutoff.}
-          \resumeItem{Wrote a 20-tool agent harness with audit logging, a bounded tool loop and 403 backend tests in CI.}
-          \resumeItem{Use it in six courses for deadlines, studying from slides, and reviewing assignment drafts against the instructions.}
-        \resumeItemListEnd
-
-        \resumeProjectHeading
-        {\textbf{Clank} $|$ \emph{Python, C, GLSL/Vulkan, llama.cpp, MuJoCo, OpenXR}}{Oct 2026 - Present}
-        \resumeItemListStart
-          \resumeItem{Built a physical-AI agent whose brain is a local LFM3-Omni-2B vision-language model on llama.cpp that hears a VR game, sees each frame and decides what a simulated Unitree G1 does; the models run as published.}
-          \resumeItem{Wrote a Vulkan depth layer in C and GLSL (13.9 ms median) and a 44.2 Hz body loop (50 Hz design). One step works end to end and the game registers the grab; walking is sim only, with about 6.5 GB of VRAM on one GPU.}
-        \resumeItemListEnd
-
-        \resumeProjectHeading
-        {\textbf{Homelab \& NixOS} $|$ \emph{NixOS, Nix flakes, Docker, Tailscale, Caddy}}{May 2026 - Present}
-        \resumeItemListStart
-          \resumeItem{Defined a laptop and home server in a single Nix/NixOS repo, so every change can be reviewed and rolled back.}
-          \resumeItem{Self-host passwords, photos, files, a git remote and AI services behind Caddy and Tailscale, with sops-nix secrets.}
-          \resumeItem{Set up daily NAS backups, uptime alerts, intrusion detection with CrowdSec, and split-horizon DNS.}
-          \resumeItem{Run a Hermes Agent per machine that edits only the config, with my approval required on the server.}
-        \resumeItemListEnd
-
-        \resumeProjectHeading
-        {\textbf{AWARE} (Hack the 6ix, solo) $|$ \emph{Python, YOLOv8, YAMNet, ONNX, Qualcomm QNN}}{Jul 2026}
-        \resumeItemListStart
-          \resumeItem{Built a home-awareness device running YOLOv8 and YAMNet on an Arduino UNO Q, with no cloud inference.}
-          \resumeItem{Used an on-device LLM to compile commands like ``when glass breaks after 10pm alert me'' into deterministic rules, checked every 500 ms with no LLM in the loop.}
-        \resumeItemListEnd
-    \resumeSubHeadingListEnd
-
-\section{Hackathon Awards}
- \begin{itemize}[leftmargin=0.15in, label={}]
-    \small{\item{\textbf{8 awards in 23 hackathons}: NSBEHacks 3rd and 1st for Cohere (Careerly) $|$ Hack Western Best AI with Cloudflare (Auralis) $|$ TerraHacks Best Use of MongoDB (Lumen) $|$ Spark 2026 3rd (CareBridge)}}
- \end{itemize}
-
-\section{Technical Skills}
- \begin{itemize}[leftmargin=0.15in, label={}]
-    \small{\item{
-        \textbf{Languages}{: Python, TypeScript/JavaScript, Java, C\#/.NET, C++, Kotlin (Android), SQL, Bash} \\
-        \textbf{AI/ML}{: LLM agents, tool calling, RAG, embeddings and reranking, MCP, VLMs, model evaluation, llama.cpp, Ollama, PyTorch, scikit-learn, pandas, YOLOv8, ONNX, MediaPipe, OpenCV} \\
-        \textbf{Web \& Data}{: React, Next.js, Node.js, FastAPI, REST APIs, Tailwind, Three.js, PostgreSQL, MySQL, MongoDB} \\
-        \textbf{Infra}{: Linux, Nix/NixOS (flakes), Docker, AWS (EC2, S3), GitHub Actions, pytest, Git, Jira, Confluence} \\
-        \textbf{Hardware \& 3D}{: Arduino, ESP32, Raspberry Pi, BLE, UART serial, Blender, Onshape, 3D printing} \\
-        \textbf{Games \& AR/VR}{: Unity, Meta Quest (Meta XR SDK, XR Interaction Toolkit, OpenXR), Snap Spectacles}
-    }}
- \end{itemize}
+%%BODY%%
 \end{document}

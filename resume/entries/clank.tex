@@ -1,0 +1,22 @@
+%!heading base
+\resumeProjectHeading
+  {\textbf{Clank} $|$ \emph{Python, C, GLSL/Vulkan, llama.cpp, MuJoCo, OpenXR}}{Oct 2026 - Present}
+
+%!heading robotics
+\resumeProjectHeading
+  {\href{https://github.com/HasNate618/Clank}{\textbf{Clank}} $|$ \emph{Python, C, GLSL/Vulkan, llama.cpp, MuJoCo, OpenXR}}{Oct 2026 - Present}
+
+%!bullet brain
+\resumeItem{Built a physical-AI agent whose brain is a local LFM3-Omni-2B vision-language model on llama.cpp that hears a VR game, sees each frame and decides what a simulated Unitree G1 does; the models run as published.}
+
+%!bullet vulkan
+\resumeItem{Wrote a Vulkan depth layer in C and GLSL (13.9 ms median) and a 44.2 Hz body loop (50 Hz design). One step works end to end and the game registers the grab; walking is sim only, with about 6.5 GB of VRAM on one GPU.}
+
+%!bullet brain-rt
+\resumeItem{Built a physical-AI agent whose brain is one local 2B VLM (LFM3-Omni-2B on llama.cpp) that hears a spoken request in a VR game, sees the rendered frame and decides what a simulated Unitree G1 does.}
+
+%!bullet vulkan-rt
+\resumeItem{Wrote a C/GLSL Vulkan layer that reads the game's depth in metres, and ran NVIDIA's ARDY-G1 and SONIC on MuJoCo to track the reach, relayed through Monado into the game's OpenXR.}
+
+%!bullet status-rt
+\resumeItem{One step works end to end and the game registers the grab, with no success rate yet; the whole stack, game included, runs on one GPU in about 6.5 GB of VRAM.}

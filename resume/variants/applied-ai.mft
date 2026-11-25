@@ -1,0 +1,26 @@
+# Applied AI / software engineering. The one the site serves, and the one the
+# site text in content/resume.md mirrors: keep the two in step.
+#
+# The default variant: build.sh with no argument builds this one.
+
+output applied-ai.pdf
+spacing medium
+
+section Education style=entries
+  entry education heading=longterm bullets=dhl
+
+section Experience style=entries
+  entry 3dwestern heading=promoted bullets=lead,render,bench
+  entry terago heading=intern bullets=email,rf,rag,proposal
+
+section Projects style=entries
+  entry campus heading=base bullets=sync,search,harness,usage
+  entry clank heading=base bullets=brain,vulkan
+  entry homelab heading=base bullets=repo,selfhost,backup,agent
+  entry aware heading=base bullets=device,rules
+
+section Hackathon Awards style=prose
+  block awards short
+
+section Technical Skills style=prose
+  block skills applied-ai

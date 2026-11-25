@@ -1,0 +1,12 @@
+%!heading base
+\resumeProjectHeading
+  {\href{https://github.com/MattFrz/Beacon-Hack-Western-13-}{\textbf{Beacon}} (Hack Western 13) $|$ \emph{C, Python, QNX 8.0, ONNX Runtime, OpenCV}}{Nov 2026}
+
+%!bullet perception
+\resumeItem{Built the perception stack for a chest-worn Raspberry Pi 5 on QNX 8.0 that homes a blind or low-vision wearer to a named item: YOLOE-26n detection at 62 ms, metric depth, no server in the loop.}
+
+%!bullet ctypes
+\resumeItem{Wrote a ctypes binding covering the full ONNX Runtime C API, because the QNX image ships the library without a Python binding and OpenCV's loader segfaults on the depth model.}
+
+%!bullet deadline
+\resumeItem{Held guidance to a 60 Hz deadline with zero misses while perception was killed and restarted mid-run; losing the target makes it say so rather than guess a distance.}

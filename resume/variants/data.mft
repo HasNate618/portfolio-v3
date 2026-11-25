@@ -1,0 +1,23 @@
+# Data engineering: ingestion, schemas, verification runs, operational databases.
+# As Nathan wrote it in Nathan_Espejo_Resume_DataEng.txt (2026-11-24).
+
+output data.pdf
+spacing medium
+
+section Education style=entries
+  entry education heading=longterm bullets=dhl
+
+section Experience style=entries
+  entry 3dwestern heading=promoted bullets=lead,render-detail,verify,bench
+  entry terago heading=intern bullets=email,rf,rag,proposal
+
+section Projects style=entries
+  entry campus heading=data bullets=sync-data,split-data,harness-data,usage
+  entry homelab heading=data bullets=repo,containers,backup-data,agent
+  entry aware heading=data bullets=device,eventlog
+
+section Hackathon Awards style=prose
+  block awards short
+
+section Technical Skills style=prose
+  block skills data

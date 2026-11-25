@@ -11,3 +11,11 @@ next-env.d.ts
 
 # eval:chat runs, which hold full answer bodies and cost money to make
 eval-out/
+
+# Résumé variant builds: only the published PDF in public/ is tracked.
+resume/dist/
+resume/*.aux
+resume/*.log
+resume/*.out
+resume/*.fls
+resume/*.fdb_latexmk
