@@ -61,7 +61,7 @@ Both limiters count in memory, so on serverless each instance keeps its own and 
 
 ## The résumé
 
-`resume/Resume.tex` is the source for `public/Nathan_Espejo_Resume.pdf`, the file the site serves. `npm run build:resume` compiles it, borrowing `latexmk` from `resume/flake.nix` when it is not on `PATH`. `content/resume.md` is the same résumé as text.
+`resume/Resume.tex` is a template with two holes in it. `resume/variants/<name>.mft` names the sections, entries and bullets one variant is made of, `resume/entries/` holds each block once under a name, and `resume/facts.tex` holds each figure once, so a wording can differ between variants without being typed twice. `npm run build:resume` assembles the default variant, `applied-ai`, into `public/Nathan_Espejo_Resume.pdf`, the file the site serves; `npm run build:resume:all` builds every variant into the gitignored `resume/dist/`, borrowing `latexmk` from `resume/flake.nix` when it is not on `PATH`. `content/resume.md` is the same résumé as text.
 
 ## Deploy
 

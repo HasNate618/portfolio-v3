@@ -1,0 +1,31 @@
+%!heading base
+\resumeProjectHeading
+  {\textbf{Campus} $|$ \emph{Python, FastAPI, SQLite, React, TypeScript, Docker}}{Aug 2026 - Present}
+
+%!heading data
+\resumeProjectHeading
+  {\textbf{Campus} $|$ \emph{Python, FastAPI, SQLite, Playwright, React, TypeScript, Docker}}{Aug 2026 - Present}
+
+%!bullet sync
+\resumeItem{Built an AI agent that reads all six of my courses, syncing them from the LMS into SQLite with Playwright and running on any OpenAI-compatible endpoint, local or hosted.}
+
+%!bullet sync-data
+\resumeItem{Built a sync pipeline that signs in to Brightspace with Playwright, copies course content into SQLite, and skips unchanged files by SHA-256 hash.}
+
+%!bullet search
+\resumeItem{Designed search over course files that is lexical by default with optional embeddings and reranking, and added a lexical SQL prefilter for exact phrases that scored below the semantic cutoff.}
+
+%!bullet split-data
+\resumeItem{Split course files into chunks for search that is lexical by default, with optional embeddings and reranking, and a SQL prefilter for exact phrases that scored below the semantic cutoff.}
+
+%!bullet harness
+\resumeItem{Wrote a \NTools-tool agent harness with audit logging, a bounded tool loop and \NTests{} backend tests in CI.}
+
+%!bullet harness-data
+\resumeItem{Wrote a \NTools-tool agent harness with an append-only audit log of every write and \NTests{} backend tests in CI.}
+
+%!bullet usage
+\resumeItem{Use it in six courses for deadlines, studying from slides, and reviewing assignment drafts against the instructions.}
+
+%!bullet oneshot
+\resumeItem{Built a self-hosted AI agent that reads all six of my courses from a local SQLite sync on any OpenAI-compatible endpoint, with an agent harness, an audit log for every write and \NTests{} backend tests in CI.}

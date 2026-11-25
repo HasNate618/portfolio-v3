@@ -27,7 +27,8 @@ npm run check:embeddings  # embedding cache freshness
 npm run check:render      # JS-off served HTML, against a running `npm start`
 npm run build-embeddings  # rebuild the chat RAG index (needs COHERE_API_KEY)
 npm run eval:chat         # the 20-question gate (needs COHERE_API_KEY; not in the default checks)
-npm run build:resume      # compile resume/Resume.tex into public/Nathan_Espejo_Resume.pdf
+npm run build:resume      # assemble applied-ai into public/Nathan_Espejo_Resume.pdf
+npm run build:resume:all  # every variant into resume/dist/
 ```
 
 `.tsx` tests need `TSX_TSCONFIG_PATH=tsconfig.test.json` (the `test` script sets this).
@@ -43,11 +44,19 @@ npm run build:resume      # compile resume/Resume.tex into public/Nathan_Espejo_
 | `src/lib/corpus.ts` | Projection from `content/` + `site.ts` facts into `/knowledgebase/*.md` and the chat RAG index. |
 | `src/lib/content.ts` | Page loader: `loadFrom`, `listPages`, `getPage`, frontmatter. |
 | `src/lib/markdown.ts` | `renderMarkdown`, `resolveStats`, `slugify`. Markdown-it is required lazily. |
-| `resume/` | The résumé source (`Resume.tex`, `flake.nix`, `build.sh`). See below. |
+| `resume/` | The résumé source: `Resume.tex` template, `entries/` (every block once), `variants/*.mft` (what each variant is made of), `facts.tex` (every figure once), `spacing.tex`, `assemble.py`, `build.sh`. See below. |
 
 ### The résumé
 
-The PDF at `public/Nathan_Espejo_Resume.pdf` is what the site serves, and `resume/Resume.tex` is its only source. Nothing else may edit either file by hand: run `npm run build:resume`, which compiles the `.tex` (borrowing `latexmk` from `resume/flake.nix` when it isn't on PATH) and copies the PDF over `public/`. Build artifacts land in the gitignored `resume/build/`.
+The PDF at `public/Nathan_Espejo_Resume.pdf` is what the site serves, and the variant source in `resume/` is its only source. Nothing may edit either by hand.
+
+There are three variants and one source. `resume/variants/applied-ai.mft` is the default and the only one published to `public/`; `robotics.mft` and `data.mft` build to the gitignored `resume/dist/` for sending to a particular posting.
+
+A variant is a manifest, not a document. It lists sections, then `entry <file> heading=<name> bullets=a,b,c` or `block <file> <name>`. `resume/entries/<file>.tex` holds every heading, bullet and block for that role or project, each tagged with a name (`%!bullet sync`), and `resume/facts.tex` holds every figure. That is why Campus can lead with the LMS sync on one variant and with the SQL schema on another without the sentence being typed twice, and why no figure can reach 22 in one place and 23 in another.
+
+To add a bullet, append one `%!bullet <name>` chunk to one entry file and name it in a manifest. To add a variant, write a manifest. `python3 resume/assemble.py --list` prints every bullet and which variants use it. `resume/spacing.tex` holds the spacing profiles a variant may name, because a page with four projects needs tighter gaps than one with three.
+
+Run `npm run build:resume` (or `:all`); artifacts land in the gitignored `resume/build/` and `resume/dist/`.
 
 The `HasNate618/Resume` repo is archived; it was the build workflow, not the source.
 
